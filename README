@@ -1,0 +1,7 @@
+
+Library for reading and writing configuration files with Qt (QtConfFile).
+
+
+COMPILING
+
+ * Juct run qmake and then make, as usually.
