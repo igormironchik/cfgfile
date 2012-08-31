@@ -31,8 +31,15 @@
 #ifndef QTCONFFILE__PRIVATE__TAG_HPP__INCLUDED
 #define QTCONFFILE__PRIVATE__TAG_HPP__INCLUDED
 
+// Qt include.
+#include <QtCore/QList>
+#include <QtCore/QScopedPointer>
+
 
 namespace QtConfFile {
+
+class Lexeme;
+
 
 //
 // Tag
@@ -40,6 +47,53 @@ namespace QtConfFile {
 
 //! Base class for the tags in the configuration file.
 class Tag {
+public:
+    friend class Parser;
+
+    //! List with children.
+    typedef QList< Tag* > ChildTagsList;
+
+    explicit Tag( const QString & name, bool isMandatory = false );
+    Tag( Tag & owner, const QString & name, bool isMandatory = false );
+
+    virtual ~Tag();
+
+    //! Add child tag.
+    void addChild( Tag & tag );
+
+    //! Remove child tag.
+    void removeChild( Tag & tag );
+
+    //! \return List with children.
+    const ChildTagsList & children() const;
+
+    //! \return Name of the tag.
+    const QString & name() const;
+
+    //! \return Is this tag mandatory?
+    bool isMandatory() const;
+
+    //! \return Is this tag defined?
+    bool isDefined() const;
+
+    //! Set "defined" property.
+    void setDefined( bool on = true );
+
+protected:
+    //! Called when tag parsing started.
+    virtual void onStart() = 0;
+
+    //! Called when tag parsing finished.
+    virtual void onFinish() = 0;
+
+    //! Called when lexeme found.
+    virtual void onLexeme( const Lexeme & lexeme ) = 0;
+
+private:
+    Q_DISABLE_COPY( Tag )
+
+    class TagPrivate;
+    QScopedPointer< TagPrivate > d;
 }; // class Tag
 
 } /* namespace QtConfFile */

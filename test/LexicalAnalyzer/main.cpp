@@ -56,19 +56,19 @@ private slots:
 			QLatin1String( "test_quotedLexeme1" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
-		QVERIFY( lex3.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
+        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex3.value(), QLatin1String( "lexeme" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex4 = analyzer.nextLexeme();
-		QVERIFY( lex4.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
+        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
 
 		QVERIFY( input.atEnd() == true );
 	}
@@ -84,19 +84,19 @@ private slots:
 			QLatin1String( "test_quotedLexeme2" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
-		QVERIFY( lex3.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
+        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex3.value(), QLatin1String( "lexeme" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex4 = analyzer.nextLexeme();
-		QVERIFY( lex4.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
+        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
 
 		QVERIFY( input.atEnd() == true );
 	}
@@ -112,19 +112,19 @@ private slots:
 			QLatin1String( "test_backSlahSequence" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
-		QVERIFY( lex3.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
+        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex3.value(), QLatin1String( "\n\r\t\"\\lexeme" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex4 = analyzer.nextLexeme();
-		QVERIFY( lex4.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
+        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
 
 		QVERIFY( input.atEnd() == true );
 	}
@@ -140,15 +140,15 @@ private slots:
 			QLatin1String( "test_wrongBackSlahSequence" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
 		try {
-			QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
+            QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
 			QVERIFY( true == false );
 		}
 		catch( const QtConfFile::Exception & x )
@@ -171,33 +171,33 @@ private slots:
 			QLatin1String( "test_oneLineComment" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
-		QVERIFY( lex3.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
+        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex3.value(), QLatin1String( "value1" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex4 = analyzer.nextLexeme();
-		QVERIFY( lex4.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
+        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex5 = analyzer.nextLexeme();
-		QVERIFY( lex5.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex5 = analyzer.nextLexeme();
+        QVERIFY( lex5.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex6 = analyzer.nextLexeme();
-		QVERIFY( lex6.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex6 = analyzer.nextLexeme();
+        QVERIFY( lex6.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex6.value(), QLatin1String( "secondTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex7 = analyzer.nextLexeme();
-		QVERIFY( lex7.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex7 = analyzer.nextLexeme();
+        QVERIFY( lex7.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex7.value(), QLatin1String( "value2" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex8 = analyzer.nextLexeme();
-		QVERIFY( lex8.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex8 = analyzer.nextLexeme();
+        QVERIFY( lex8.type() == QtConfFile::FinishTagLexeme );
 	}
 
 	void test_multiLineComment()
@@ -215,33 +215,33 @@ private slots:
 			QLatin1String( "test_multiLineComment" ) );
 		QtConfFile::LexicalAnalyzer analyzer( input );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex1 = analyzer.nextLexeme();
-		QVERIFY( lex1.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
+        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex2 = analyzer.nextLexeme();
-		QVERIFY( lex2.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
+        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex3 = analyzer.nextLexeme();
-		QVERIFY( lex3.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
+        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex3.value(), QLatin1String( "value1" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex4 = analyzer.nextLexeme();
-		QVERIFY( lex4.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
+        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex5 = analyzer.nextLexeme();
-		QVERIFY( lex5.type() == QtConfFile::LexicalAnalyzer::StartTagLexeme );
+        QtConfFile::Lexeme lex5 = analyzer.nextLexeme();
+        QVERIFY( lex5.type() == QtConfFile::StartTagLexeme );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex6 = analyzer.nextLexeme();
-		QVERIFY( lex6.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex6 = analyzer.nextLexeme();
+        QVERIFY( lex6.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex6.value(), QLatin1String( "secondTag" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex7 = analyzer.nextLexeme();
-		QVERIFY( lex7.type() == QtConfFile::LexicalAnalyzer::StringLexeme );
+        QtConfFile::Lexeme lex7 = analyzer.nextLexeme();
+        QVERIFY( lex7.type() == QtConfFile::StringLexeme );
 		QCOMPARE( lex7.value(), QLatin1String( "value2" ) );
 
-		QtConfFile::LexicalAnalyzer::Lexeme lex8 = analyzer.nextLexeme();
-		QVERIFY( lex8.type() == QtConfFile::LexicalAnalyzer::FinishTagLexeme );
+        QtConfFile::Lexeme lex8 = analyzer.nextLexeme();
+        QVERIFY( lex8.type() == QtConfFile::FinishTagLexeme );
 	}
 }; // class TestLexicalAnalyzer
 

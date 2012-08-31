@@ -44,7 +44,8 @@ static const QChar c_lineFeed = QChar( '\r' );
 // InputStream::InputStreamPrivate
 //
 
-struct InputStream::InputStreamPrivate {
+class InputStream::InputStreamPrivate {
+public:
 	InputStreamPrivate( QIODevice * dev, QTextCodec * codec,
 		const QString & fileName )
 		:	m_stream( dev )

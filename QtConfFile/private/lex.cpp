@@ -50,11 +50,46 @@ static const QChar c_lineFeed = QChar( '\r' );
 static const QChar c_verticalBar = QChar( '|' );
 static const QChar c_sharp = QChar( '#' );
 
+
+//
+// Lexeme
+//
+
+//! Lexeme.
+Lexeme::Lexeme( LexemeType type, const QString & value )
+    :	m_type( type )
+    ,	m_value( value )
+{
+}
+
+//! \return Lexeme type.
+LexemeType
+Lexeme::type() const
+{
+    return m_type;
+}
+
+//! \return Lexeme value.
+const QString &
+Lexeme::value() const
+{
+    return m_value;
+}
+
+//! \return Is lexeme a null lexeme.
+bool
+Lexeme::isNull() const
+{
+    return ( m_type == NullLexeme );
+}
+
+
 //
 // LexicalAnalyzer::LexicalAnalyzerPrivate
 //
 
-struct LexicalAnalyzer::LexicalAnalyzerPrivate {
+class LexicalAnalyzer::LexicalAnalyzerPrivate {
+public:
 	explicit LexicalAnalyzerPrivate( InputStream & stream )
 		:	m_stream( stream )
 	{
@@ -149,7 +184,7 @@ LexicalAnalyzer::~LexicalAnalyzer()
 {
 }
 
-LexicalAnalyzer::Lexeme
+Lexeme
 LexicalAnalyzer::nextLexeme()
 {
 	if( d->m_stream.atEnd() )
@@ -284,6 +319,12 @@ LexicalAnalyzer::nextLexeme()
 	}
 
 	return Lexeme( StringLexeme, result );
+}
+
+InputStream &
+LexicalAnalyzer::inputStream()
+{
+    return d->m_stream;
 }
 
 } /* namespace QtConfFile */

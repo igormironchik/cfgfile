@@ -37,7 +37,6 @@
 #include <QtCore/QDir>
 #include <QtCore/QTextStream>
 #include <QtCore/QString>
-#include <iostream>
 
 
 //

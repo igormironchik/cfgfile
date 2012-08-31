@@ -40,6 +40,48 @@ namespace QtConfFile {
 
 class InputStream;
 
+//
+// LexemeType
+//
+
+//! Type of the lexeme.
+enum LexemeType {
+    //! Null lexeme.
+    NullLexeme,
+    //! Start tag lexeme "{".
+    StartTagLexeme,
+    //! Finish tag lexeme "}".
+    FinishTagLexeme,
+    //! String lexeme.
+    StringLexeme
+}; // enum LexemeType
+
+
+//
+// Lexeme
+//
+
+//! Lexeme.
+class Lexeme {
+public:
+    Lexeme( LexemeType type, const QString & value );
+
+    //! \return Lexeme type.
+    LexemeType type() const;
+
+    //! \return Lexeme value.
+    const QString & value() const;
+
+    //! \return Is lexeme a null lexeme.
+    bool isNull() const;
+
+private:
+    //! Lexeme type.
+    LexemeType m_type;
+    //! Lexeme value.
+    QString m_value;
+}; // struct Lexeme
+
 
 //
 // LexicalAnalyzer
@@ -48,51 +90,6 @@ class InputStream;
 //! Lexicographical analyzer.
 class LexicalAnalyzer {
 public:
-	//! Type of the lexeme.
-	enum LexemeType {
-		//! Null lexeme.
-		NullLexeme,
-		//! Start tag lexeme "{".
-		StartTagLexeme,
-		//! Finish tag lexeme "}".
-		FinishTagLexeme,
-		//! String lexeme.
-		StringLexeme
-	}; // enum LexemeType
-
-	//! Lexeme.
-	struct Lexeme {
-		Lexeme( LexemeType type, const QString & value )
-			:	m_type( type )
-			,	m_value( value )
-		{
-		}
-
-		//! \return Lexeme type.
-		LexemeType type() const
-		{
-			return m_type;
-		}
-
-		//! \return Lexeme value.
-		const QString & value() const
-		{
-			return m_value;
-		}
-
-		//! \return Is lexeme a null lexeme.
-		bool isNull() const
-		{
-			return ( m_type == NullLexeme );
-		}
-
-	private:
-		//! Lexeme type.
-		LexemeType m_type;
-		//! Lexeme value.
-		QString m_value;
-	}; // struct Lexeme
-
 	explicit LexicalAnalyzer( InputStream & stream );
 	~LexicalAnalyzer();
 
@@ -103,10 +100,13 @@ public:
 	*/
 	Lexeme nextLexeme();
 
+    //! \return Input stream.
+    InputStream & inputStream();
+
 private:
 	Q_DISABLE_COPY( LexicalAnalyzer )
 
-	struct LexicalAnalyzerPrivate;
+    class LexicalAnalyzerPrivate;
 	QScopedPointer< LexicalAnalyzerPrivate > d;
 }; // class LexicalAnalyzer
 

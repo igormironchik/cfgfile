@@ -72,7 +72,7 @@ public:
 private:
 	Q_DISABLE_COPY( InputStream )
 
-	struct InputStreamPrivate;
+    class InputStreamPrivate;
 	QScopedPointer< InputStreamPrivate > d;
 }; // class InputStream
 
