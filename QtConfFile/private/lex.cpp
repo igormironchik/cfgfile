@@ -111,8 +111,6 @@ struct LexicalAnalyzer::LexicalAnalyzerPrivate {
 
 		while( ( ch != c_carriageReturn && ch != c_lineFeed ) && !m_stream.atEnd() )
 			ch = m_stream.get();
-
-		skipSpaces();
 	}
 
 	//! Skip multi-line comment.
@@ -131,8 +129,6 @@ struct LexicalAnalyzer::LexicalAnalyzerPrivate {
 
 			nextChar = m_stream.get();
 		}
-
-		skipSpaces();
 	}
 
 	InputStream & m_stream;
@@ -246,9 +242,23 @@ LexicalAnalyzer::nextLexeme()
 				QChar nextChar = d->m_stream.get();
 
 				if( nextChar == c_verticalBar )
+				{
 					d->skipOneLineComment();
+
+					if( firstSymbol )
+						d->skipSpaces();
+					else
+						break;
+				}
 				else if( nextChar == c_sharp )
+				{
 					d->skipMultiLineComment();
+
+					if( firstSymbol )
+						d->skipSpaces();
+					else
+						break;
+				}
 				else
 				{
 					result.append( ch );
