@@ -37,6 +37,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QTextStream>
 #include <QtCore/QString>
+#include <iostream>
 
 
 //
@@ -51,9 +52,10 @@ class TestRunner
 public:
 	TestRunner( char * appName )
 	{
-		QDir dir;
+		QDir dir( "." );
 		init( dir );
-		m_tests.removeOne( dir.absoluteFilePath( appName ) );
+        m_tests.removeOne( QDir::toNativeSeparators(
+            dir.absoluteFilePath( appName ) ) );
 	}
 
 	~TestRunner()
@@ -87,7 +89,8 @@ private:
 		QStringList executables = dir.entryList();
 
 		foreach( QString fileName, executables )
-			m_tests.append( dir.absoluteFilePath( fileName ) );
+            m_tests.append( QDir::toNativeSeparators(
+                dir.absoluteFilePath( fileName ) ) );
 
 		dir.setFilter( QDir::Dirs | QDir::NoSymLinks );
 
