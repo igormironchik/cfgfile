@@ -64,7 +64,10 @@ enum LexemeType {
 //! Lexeme.
 class Lexeme {
 public:
+	Lexeme();
     Lexeme( LexemeType type, const QString & value );
+
+	Lexeme & operator = ( const Lexeme & other );
 
     //! \return Lexeme type.
     LexemeType type() const;

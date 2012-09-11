@@ -34,6 +34,7 @@
 // Qt include.
 #include <QtCore/QList>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QString>
 
 
 namespace QtConfFile {
@@ -86,8 +87,8 @@ protected:
     //! Called when tag parsing finished.
     virtual void onFinish() = 0;
 
-    //! Called when lexeme found.
-    virtual void onLexeme( const Lexeme & lexeme ) = 0;
+	//! Called when string found.
+	virtual void onString( const QString & str ) = 0;
 
 private:
     Q_DISABLE_COPY( Tag )

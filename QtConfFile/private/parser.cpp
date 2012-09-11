@@ -32,8 +32,11 @@
 #include <QtConfFile/private/Parser>
 #include <QtConfFile/private/Lex>
 #include <QtConfFile/private/InputStream>
-#include <QtConfFile/private/Tag>
+#include <QtConfFile/Tag>
 #include <QtConfFile/Exceptions>
+
+// Qt include.
+#include <QtCore/QStack>
 
 
 namespace QtConfFile {
@@ -44,14 +47,135 @@ namespace QtConfFile {
 
 class Parser::ParserPrivate {
 public:
-    ParserPrivate( const Tag & tag, InputStream & stream )
+	ParserPrivate( Tag & tag, InputStream & stream )
         :   m_lex( stream )
         ,   m_tag( tag )
     {
     }
 
+	void startFirstTagParsing()
+	{
+		Lexeme lexeme = m_lex.nextLexeme();
+
+		if( lexeme.type() == NullLexeme )
+			throw Exception( QString( "Unexpected end of file. "
+				"In file \"%1\" on line %2." )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+		else if( lexeme.type() != StartTagLexeme )
+			throw Exception( QString( "Expected start curl brace, "
+				"but we've got \"%1\". In file \"%2\" on line %3." )
+					.arg( lexeme.value() )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+
+		lexeme = m_lex.nextLexeme();
+
+		if( !startTagParsing( lexeme, m_tag ) )
+			throw Exception( QString( "Unexpected tag name. "
+				"We expected \"%1\", but we've got \"%2\". "
+				"In file \"%3\" on line %4." )
+					.arg( m_tag.name() )
+					.arg( lexeme.value() )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+		else
+			m_tag.onStart();
+	}
+
+	bool startTagParsing( const Lexeme & lexeme, Tag & tag )
+	{
+		if( lexeme.type() == StartTagLexeme )
+			throw Exception( QString( "Unexpected start curl brace. "
+				"We expected tag name, but we've got start curl brace. "
+				"In file \"%1\" on line %2." )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+		else if( lexeme.type() == FinishTagLexeme )
+			throw Exception( QString( "Unexpected finish curl brace. "
+				"We expected tag name, but we've got finish curl brace. "
+				"In file \"%1\" on line %2." )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+		else if( lexeme.type() == NullLexeme )
+			throw Exception( QString( "Unexpected end of file. "
+				"In file \"%1\" on line %2." )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+		else if( tag.name() == lexeme.value() )
+		{
+			m_stack.push( &tag );
+
+			tag.onStart();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void startTagParsing( const Tag & parent,
+		const Tag::ChildTagsList & list )
+	{
+		Lexeme lexeme = m_lex.nextLexeme();
+
+		bool tagFound = false;
+
+		foreach( Tag * tag, list )
+		{
+			if( startTagParsing( lexeme, *tag ) )
+			{
+				tagFound = true;
+				break;
+			}
+		}
+
+		if( !tagFound )
+			throw Exception( QString( "Unexpected tag name. "
+				"We expected one child tag of tag \"%1\", "
+				"but we've got \"%2\". "
+				"In file \"%3\" on line %4." )
+					.arg( parent.name() )
+					.arg( lexeme.value() )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+	}
+
+	void checkParserStateAfterParsing()
+	{
+		if( !m_stack.isEmpty() )
+			throw Exception( QString( "Unexpected end of file. "
+				"Still unfinished tag \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( m_stack.top()->name() )
+					.arg( m_lex.inputStream().fileName() )
+					.arg( m_lex.inputStream().lineNumber() ) );
+
+		checkIsMandatoryTagsDefined();
+	}
+
+	void checkIsMandatoryTagsDefined()
+	{
+		if( !m_tag.isDefined() )
+			throw Exception( QString( "Undefined main tag: \"%1\"." )
+				.arg( m_tag.name() ) );
+
+		checkIsChildMandatoryTagsDefined( m_tag );
+	}
+
+	void checkIsChildMandatoryTagsDefined( const Tag & tag )
+	{
+		foreach( Tag * t, tag.children() )
+			checkIsChildMandatoryTagsDefined( *t );
+
+		if( tag.isMandatory() && !tag.isDefined() )
+			throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
+				.arg( tag.name() ) );
+	}
+
     LexicalAnalyzer m_lex;
-    const Tag & m_tag;
+	Tag & m_tag;
+	QStack< Tag* > m_stack;
 }; // class Parser::ParserPrivate
 
 
@@ -59,7 +183,7 @@ public:
 // Parser
 //
 
-Parser::Parser( const Tag & tag, InputStream & stream )
+Parser::Parser( Tag & tag, InputStream & stream )
     :   d( new ParserPrivate( tag, stream ) )
 {
 }
@@ -71,6 +195,37 @@ Parser::~Parser()
 void
 Parser::parse()
 {
+	d->startFirstTagParsing();
+
+	Lexeme lexeme = d->m_lex.nextLexeme();
+
+	while( !lexeme.isNull() )
+	{
+		if( !d->m_stack.isEmpty() )
+		{
+			if( lexeme.type() == StartTagLexeme )
+				d->startTagParsing( *d->m_stack.top(),
+					d->m_stack.top()->children() );
+			else if( lexeme.type() == StringLexeme )
+				d->m_stack.top()->onString( lexeme.value() );
+			else if( lexeme.type() == FinishTagLexeme )
+			{
+				d->m_stack.top()->onFinish();
+				d->m_stack.pop();
+			}
+		}
+		else
+			throw Exception( QString( "Unexpected content. "
+				"We've finished parsing, but we've got this: \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( lexeme.value() )
+					.arg( d->m_lex.inputStream().fileName() )
+					.arg( d->m_lex.inputStream().lineNumber() ) );
+
+		lexeme = d->m_lex.nextLexeme();
+	}
+
+	d->checkParserStateAfterParsing();
 }
 
 } /* namespace QtConfFile */

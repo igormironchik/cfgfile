@@ -48,7 +48,7 @@ class Tag;
 //! Parser of the configuration file.
 class Parser {
 public:
-    Parser( const Tag & tag, InputStream & stream );
+	Parser( Tag & tag, InputStream & stream );
     ~Parser();
 
     /*!

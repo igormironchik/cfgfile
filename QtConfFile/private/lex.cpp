@@ -55,28 +55,41 @@ static const QChar c_sharp = QChar( '#' );
 // Lexeme
 //
 
-//! Lexeme.
+Lexeme::Lexeme()
+	:	m_type( NullLexeme )
+{
+}
+
 Lexeme::Lexeme( LexemeType type, const QString & value )
     :	m_type( type )
     ,	m_value( value )
 {
 }
 
-//! \return Lexeme type.
+Lexeme &
+Lexeme::operator = ( const Lexeme & other )
+{
+	if( this != &other )
+	{
+		m_type = other.type();
+		m_value = other.value();
+	}
+
+	return *this;
+}
+
 LexemeType
 Lexeme::type() const
 {
     return m_type;
 }
 
-//! \return Lexeme value.
 const QString &
 Lexeme::value() const
 {
     return m_value;
 }
 
-//! \return Is lexeme a null lexeme.
 bool
 Lexeme::isNull() const
 {
