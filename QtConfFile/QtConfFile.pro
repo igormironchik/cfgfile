@@ -9,11 +9,11 @@ CONFIG += qt staticlib
 HEADERS += private/input_stream.hpp \
            private/lex.hpp \
            private/parser.hpp \
-           tag.hpp \
+           private/tag.hpp \
            exceptions.hpp
 
 SOURCES += private/input_stream.cpp \
            private/lex.cpp \
            private/parser.cpp \
-           tag.cpp \
+           private/tag.cpp \
            exceptions.cpp
