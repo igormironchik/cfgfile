@@ -36,7 +36,7 @@
 // QtConfFile include.
 #include <QtConfFile/private/InputStream>
 #include <QtConfFile/private/Parser>
-#include <QtConfFile/Tag>
+#include <QtConfFile/private/Tag>
 #include <QtConfFile/Exceptions>
 
 

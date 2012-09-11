@@ -29,7 +29,7 @@
 */
 
 // QtConfFile include.
-#include <QtConfFile/Tag>
+#include <QtConfFile/private/Tag>
 
 // Qt include.
 #include <QtCore/QString>

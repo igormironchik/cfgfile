@@ -32,7 +32,7 @@
 #include <QtConfFile/private/Parser>
 #include <QtConfFile/private/Lex>
 #include <QtConfFile/private/InputStream>
-#include <QtConfFile/Tag>
+#include <QtConfFile/private/Tag>
 #include <QtConfFile/Exceptions>
 
 // Qt include.
