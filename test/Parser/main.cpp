@@ -40,12 +40,12 @@
 #include <QtConfFile/Exceptions>
 
 
-class FirstTag
+class ThirdTag
 	:	public QtConfFile::Tag
 {
 public:
-	FirstTag()
-		:	QtConfFile::Tag( QString( "firstTag" ), true )
+	ThirdTag( Tag & owner )
+		:	QtConfFile::Tag( owner, QString( "thirdTag" ), false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -89,6 +89,124 @@ private:
 	bool m_started;
 	bool m_finished;
 	bool m_withString;
+}; // class ThirdTag
+
+
+class SecondTag
+	:	public QtConfFile::Tag
+{
+public:
+	SecondTag( Tag & owner )
+		:	QtConfFile::Tag( owner, QString( "secondTag" ), false )
+		,	m_started( false )
+		,	m_finished( false )
+		,	m_withString( false )
+		,	m_child( *this )
+	{
+	}
+
+	const ThirdTag & thirdTag() const
+	{
+		return m_child;
+	}
+
+	bool isStarted() const
+	{
+		return m_started;
+	}
+
+	bool isFinished() const
+	{
+		return m_finished;
+	}
+
+	bool isWithString() const
+	{
+		return m_withString;
+	}
+
+protected:
+	void onStart()
+	{
+		m_started = true;
+	}
+
+	void onFinish()
+	{
+		m_finished = true;
+	}
+
+	void onString( const QString & str )
+	{
+		Q_UNUSED( str )
+
+		m_withString = true;
+	}
+
+private:
+	bool m_started;
+	bool m_finished;
+	bool m_withString;
+	ThirdTag m_child;
+}; // class SecondTag
+
+
+class FirstTag
+	:	public QtConfFile::Tag
+{
+public:
+	FirstTag()
+		:	QtConfFile::Tag( QString( "firstTag" ), true )
+		,	m_started( false )
+		,	m_finished( false )
+		,	m_withString( false )
+		,	m_child( *this )
+	{
+	}
+
+	const SecondTag & secondTag() const
+	{
+		return m_child;
+	}
+
+	bool isStarted() const
+	{
+		return m_started;
+	}
+
+	bool isFinished() const
+	{
+		return m_finished;
+	}
+
+	bool isWithString() const
+	{
+		return m_withString;
+	}
+
+protected:
+	void onStart()
+	{
+		m_started = true;
+	}
+
+	void onFinish()
+	{
+		m_finished = true;
+	}
+
+	void onString( const QString & str )
+	{
+		Q_UNUSED( str )
+
+		m_withString = true;
+	}
+
+private:
+	bool m_started;
+	bool m_finished;
+	bool m_withString;
+	SecondTag m_child;
 }; // class FirstTag
 
 
@@ -118,7 +236,8 @@ private slots:
 		catch( QtConfFile::Exception & x )
 		{
 			QCOMPARE( x.whatAsQString(),
-				QLatin1String( "Undefined main tag: \"firstTag\"." ) );
+				QLatin1String( "Undefined main tag: \"firstTag\". "
+							   "In file \"test_configWithOneTag\"." ) );
 
 			firstTag.setDefined();
 		}
@@ -127,6 +246,16 @@ private slots:
 		QVERIFY( firstTag.isStarted() == true );
 		QVERIFY( firstTag.isFinished() == true );
 		QVERIFY( firstTag.isWithString() == true );
+
+		QVERIFY( firstTag.secondTag().isDefined() == false );
+		QVERIFY( firstTag.secondTag().isStarted() == false );
+		QVERIFY( firstTag.secondTag().isFinished() == false );
+		QVERIFY( firstTag.secondTag().isWithString() == false );
+
+		QVERIFY( firstTag.secondTag().thirdTag().isDefined() == false );
+		QVERIFY( firstTag.secondTag().thirdTag().isStarted() == false );
+		QVERIFY( firstTag.secondTag().thirdTag().isFinished() == false );
+		QVERIFY( firstTag.secondTag().thirdTag().isWithString() == false );
 	} // test_configWithOneTag
 }; // class TestParser
 
