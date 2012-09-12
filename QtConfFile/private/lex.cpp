@@ -121,10 +121,16 @@ public:
 	//! Skip spaces in the stream.
 	void skipSpaces()
 	{
+		if( m_stream.atEnd() )
+			return;
+
 		QChar ch = m_stream.get();
 
 		while( isSpaceChar( ch ) )
 		{
+			if( m_stream.atEnd() )
+				return;
+
 			ch = m_stream.get();
 		}
 
@@ -134,6 +140,13 @@ public:
 	//! Process back-slash sequence.
 	bool processBackSlash( QChar & ch )
 	{
+		if( m_stream.atEnd() )
+			throw Exception( QString( "Unexpected end of file. "
+				"Unfinished back slash sequence. "
+				"In file \"%1\" on line %2." )
+					 .arg( m_stream.fileName() )
+					 .arg( m_stream.lineNumber() ) );
+
 		ch = m_stream.get();
 
 		if( ch == c_n )
@@ -200,15 +213,15 @@ LexicalAnalyzer::~LexicalAnalyzer()
 Lexeme
 LexicalAnalyzer::nextLexeme()
 {
-	if( d->m_stream.atEnd() )
-		return Lexeme( NullLexeme, QString() );
-
 	QString result;
 
 	bool quotedLexeme = false;
 	bool firstSymbol = true;
 
 	d->skipSpaces();
+
+	if( d->m_stream.atEnd() )
+		return Lexeme( NullLexeme, QString() );
 
 	while( true )
 	{

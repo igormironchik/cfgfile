@@ -151,17 +151,6 @@ public:
 					.arg( m_lex.inputStream().fileName() )
 					.arg( m_lex.inputStream().lineNumber() ) );
 
-		checkIsMandatoryTagsDefined();
-	}
-
-	void checkIsMandatoryTagsDefined()
-	{
-		if( !m_tag.isDefined() )
-			throw Exception( QString( "Undefined main tag: \"%1\". "
-				"In file \"%2\"." )
-					.arg( m_tag.name() )
-					.arg( m_lex.inputStream().fileName() ) );
-
 		checkIsChildMandatoryTagsDefined( m_tag );
 	}
 
