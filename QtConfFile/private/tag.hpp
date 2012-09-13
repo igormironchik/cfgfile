@@ -80,6 +80,9 @@ public:
     //! Set "defined" property.
     void setDefined( bool on = true );
 
+	//! Print tag to the output.
+	virtual QString print( int indent = 0 ) const = 0;
+
 protected:
     //! Called when tag parsing started.
     virtual void onStart() = 0;

@@ -67,6 +67,11 @@ public:
 		return m_withString;
 	}
 
+	QString print( int indent = 0 ) const
+	{
+		return QString();
+	}
+
 protected:
 	void onStart()
 	{
@@ -123,6 +128,11 @@ public:
 	bool isWithString() const
 	{
 		return m_withString;
+	}
+
+	QString print( int indent = 0 ) const
+	{
+		return QString();
 	}
 
 protected:
@@ -182,6 +192,11 @@ public:
 	bool isWithString() const
 	{
 		return m_withString;
+	}
+
+	QString print( int indent = 0 ) const
+	{
+		return QString();
 	}
 
 protected:
