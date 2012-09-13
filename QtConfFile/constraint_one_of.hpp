@@ -31,4 +31,84 @@
 #ifndef QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
 #define QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
 
+// QtConfFile include.
+#include <QtConfFile/private/Constraint>
+
+// Qt include.
+#include <QtCore/QSet>
+
+
+namespace QtConfFile {
+
+//
+// ConstraintOneOf
+//
+
+//! Constraint that allowed values to be in the given list of values.
+template< class T >
+class ConstraintOneOf
+	:	public Constraint< T >
+{
+public:
+	ConstraintOneOf();
+
+	virtual ~ConstraintOneOf();
+
+	//! Add value to the list of values of the constraint.
+	void
+	addValue( const T & value );
+
+	//! Add value to the list of values of the constraint.
+	void
+	removeValue( const T & value );
+
+	/*!
+		Check value for correctness.
+
+		\return Was check successful?
+		\retval true If all is OK.
+		\retval false If value doen't correspond to the constraint.
+	*/
+	virtual bool
+	check( const T & value ) const;
+
+private:
+	//! List of allowed values.
+	QSet< T > m_list;
+}; // class ConstraintOneOf
+
+
+template< class T >
+ConstraintOneOf< T >::ConstraintOneOf()
+{
+}
+
+template< class T >
+ConstraintOneOf< T >::~ConstraintOneOf()
+{
+}
+
+template< class T >
+void
+ConstraintOneOf< T >::addValue( const T & value )
+{
+	m_list.insert( value );
+}
+
+template< class T >
+void
+ConstraintOneOf< T >::removeValue( const T & value )
+{
+	m_list.remove( value );
+}
+
+template< class T >
+bool
+ConstraintOneOf< T >::check( const T & value ) const
+{
+	return ( m_list.contains( value ) );
+}
+
+} /* namespace QtConfFile */
+
 #endif // QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED

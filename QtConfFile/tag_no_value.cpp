@@ -82,20 +82,28 @@ TagNoValue::print( int indent ) const
 }
 
 void
-TagNoValue::onStart()
+TagNoValue::onStart( const ParserInfo & info )
 {
+	Q_UNUSED( info )
 }
 
 void
-TagNoValue::onFinish()
+TagNoValue::onFinish( const ParserInfo & info )
 {
+	Q_UNUSED( info )
+
 	setDefined();
 }
 
 void
-TagNoValue::onString( const QString & str )
+TagNoValue::onString( const ParserInfo & info, const QString & str )
 {
-	throw Exception();
+	throw Exception( QString( "Tag \"%1\" doesn't allow any values. "
+		"But we've got this: \"%2\". In file \"%3\" on line %4." )
+			 .arg( name() )
+			 .arg( str )
+			 .arg( info.fileName() )
+			 .arg( info.lineNumber() ) );
 }
 
 } /* namespace QtConfFile */

@@ -36,6 +36,9 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QString>
 
+// QtConfFile include.
+#include <QtConfFile/private/ParserInfo>
+
 
 namespace QtConfFile {
 
@@ -85,13 +88,14 @@ public:
 
 protected:
     //! Called when tag parsing started.
-    virtual void onStart() = 0;
+	virtual void onStart( const ParserInfo & info ) = 0;
 
     //! Called when tag parsing finished.
-    virtual void onFinish() = 0;
+	virtual void onFinish( const ParserInfo & info ) = 0;
 
 	//! Called when string found.
-	virtual void onString( const QString & str ) = 0;
+	virtual void onString( const ParserInfo & info,
+		const QString & str ) = 0;
 
 private:
     Q_DISABLE_COPY( Tag )

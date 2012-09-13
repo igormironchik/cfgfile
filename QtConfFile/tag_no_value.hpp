@@ -56,13 +56,14 @@ public:
 
 protected:
 	//! Called when tag parsing started.
-	virtual void onStart();
+	virtual void onStart( const ParserInfo & info );
 
 	//! Called when tag parsing finished.
-	virtual void onFinish();
+	virtual void onFinish( const ParserInfo & info );
 
 	//! Called when string found.
-	virtual void onString( const QString & str );
+	virtual void onString( const ParserInfo & info,
+		const QString & str );
 }; // class TagNoValue
 
 } /* namespace QtConfFile */

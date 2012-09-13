@@ -80,7 +80,9 @@ public:
 					.arg( m_lex.inputStream().fileName() )
 					.arg( m_lex.inputStream().lineNumber() ) );
 		else
-			m_tag.onStart();
+			m_tag.onStart( ParserInfo(
+			   m_lex.inputStream().fileName(),
+			   m_lex.inputStream().lineNumber() ) );
 	}
 
 	bool startTagParsing( const Lexeme & lexeme, Tag & tag )
@@ -106,7 +108,9 @@ public:
 		{
 			m_stack.push( &tag );
 
-			tag.onStart();
+			tag.onStart( ParserInfo(
+				m_lex.inputStream().fileName(),
+				m_lex.inputStream().lineNumber() ) );
 
 			return true;
 		}
@@ -198,10 +202,15 @@ Parser::parse()
 				d->startTagParsing( *d->m_stack.top(),
 					d->m_stack.top()->children() );
 			else if( lexeme.type() == StringLexeme )
-				d->m_stack.top()->onString( lexeme.value() );
+				d->m_stack.top()->onString( ParserInfo(
+					d->m_lex.inputStream().fileName(),
+					d->m_lex.inputStream().lineNumber() ),
+						lexeme.value() );
 			else if( lexeme.type() == FinishTagLexeme )
 			{
-				d->m_stack.top()->onFinish();
+				d->m_stack.top()->onFinish( ParserInfo(
+					d->m_lex.inputStream().fileName(),
+					d->m_lex.inputStream().lineNumber() ) );
 				d->m_stack.pop();
 			}
 		}

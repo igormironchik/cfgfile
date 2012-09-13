@@ -69,22 +69,30 @@ public:
 
 	QString print( int indent = 0 ) const
 	{
+		Q_UNUSED( indent )
+
 		return QString();
 	}
 
 protected:
-	void onStart()
+	void onStart( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_started = true;
 	}
 
-	void onFinish()
+	void onFinish( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_finished = true;
 	}
 
-	void onString( const QString & str )
+	void onString( const QtConfFile::ParserInfo & info,
+		const QString & str )
 	{
+		Q_UNUSED( info )
 		Q_UNUSED( str )
 
 		m_withString = true;
@@ -132,22 +140,30 @@ public:
 
 	QString print( int indent = 0 ) const
 	{
+		Q_UNUSED( indent )
+
 		return QString();
 	}
 
 protected:
-	void onStart()
+	void onStart( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_started = true;
 	}
 
-	void onFinish()
+	void onFinish( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_finished = true;
 	}
 
-	void onString( const QString & str )
+	void onString( const QtConfFile::ParserInfo & info,
+		const QString & str )
 	{
+		Q_UNUSED( info )
 		Q_UNUSED( str )
 
 		m_withString = true;
@@ -196,22 +212,30 @@ public:
 
 	QString print( int indent = 0 ) const
 	{
+		Q_UNUSED( indent )
+
 		return QString();
 	}
 
 protected:
-	void onStart()
+	void onStart( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_started = true;
 	}
 
-	void onFinish()
+	void onFinish( const QtConfFile::ParserInfo & info )
 	{
+		Q_UNUSED( info )
+
 		m_finished = true;
 	}
 
-	void onString( const QString & str )
+	void onString( const QtConfFile::ParserInfo & info,
+		const QString & str )
 	{
+		Q_UNUSED( info )
 		Q_UNUSED( str )
 
 		m_withString = true;

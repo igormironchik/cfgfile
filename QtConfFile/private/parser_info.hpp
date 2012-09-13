@@ -28,4 +28,37 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef
+#ifndef QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED
+#define QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED
+
+// Qt include.
+#include <QtCore/QString>
+
+
+namespace QtConfFile {
+
+//
+// ParserInfo
+//
+
+//! Information about parsed file and current state of parsing.
+class ParserInfo {
+public:
+	ParserInfo( const QString & fileName, qint64 lineNumber );
+
+	//! \return File name.
+	const QString & fileName() const;
+
+	//! \return Line number.
+	qint64 lineNumber() const;
+
+private:
+	//! File name.
+	QString m_fileName;
+	//! Line number.
+	qint64 m_lineNumber;
+}; // class PraserInfo
+
+} /* namespace QtConfFile */
+
+#endif // QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED

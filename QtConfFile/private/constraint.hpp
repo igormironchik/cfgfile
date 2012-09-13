@@ -46,9 +46,15 @@ public:
 
 	virtual ~Constraint() {}
 
-	//! Check value for correctness.
-	virtual void
-	check( const T & value ) = 0;
+	/*!
+		Check value for correctness.
+
+		\return Was check successful?
+		\retval true If all is OK.
+		\retval false If value doen't correspond to the constraint.
+	*/
+	virtual bool
+	check( const T & value ) const = 0;
 }; // class Constraint
 
 } /* namespace QtConfFile */
