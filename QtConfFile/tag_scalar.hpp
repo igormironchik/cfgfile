@@ -213,22 +213,31 @@ void
 TagScalar< T >::onString( const ParserInfo & info,
 	const QString & str )
 {
-	T value = Format::fromString( info, str );
-
-	if( m_constraint )
+	if( !isDefined() )
 	{
-		if( !m_constraint->check( value ) )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"Value must match to the constraint. "
-				"In file \"%2\" on line %3." )
-					.arg( str )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+		T value = Format::fromString( info, str );
+
+		if( m_constraint )
+		{
+			if( !m_constraint->check( value ) )
+				throw Exception( QString( "Invalid value: \"%1\". "
+					"Value must match to the constraint. "
+					"In file \"%2\" on line %3." )
+						.arg( str )
+						.arg( info.fileName() )
+						.arg( info.lineNumber() ) );
+		}
+
+		m_value = value;
+
+		setDefined();
 	}
-
-	m_value = value;
-
-	setDefined();
+	else
+		throw Exception( QString( "Value for the tag \"%1\" already defined. "
+			"In file \"%2\" on line %3." )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
 }
 
 } /* namespace QtConfFile */
