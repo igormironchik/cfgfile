@@ -59,24 +59,27 @@ TagNoValue::print( int indent ) const
 {
 	QString result;
 
-	for( int i = 0; i < indent; ++i )
-		result.append( QLatin1String( "\t" ) );
-
-	result.append( QLatin1String( "{" ) );
-	result.append( name() );
-
-	if( !children().isEmpty() )
+	if( isDefined() )
 	{
-		result.append( QLatin1String( "\r\n" ) );
-
-		foreach( Tag * tag, children() )
-			result.append( tag->print( indent + 1 ) );
-
 		for( int i = 0; i < indent; ++i )
 			result.append( QLatin1String( "\t" ) );
-	}
 
-	result.append( QLatin1String( "}\r\n" ) );
+		result.append( QLatin1String( "{" ) );
+		result.append( name() );
+
+		if( !children().isEmpty() )
+		{
+			result.append( QLatin1String( "\r\n" ) );
+
+			foreach( Tag * tag, children() )
+				result.append( tag->print( indent + 1 ) );
+
+			for( int i = 0; i < indent; ++i )
+				result.append( QLatin1String( "\t" ) );
+		}
+
+		result.append( QLatin1String( "}\r\n" ) );
+	}
 
 	return result;
 }

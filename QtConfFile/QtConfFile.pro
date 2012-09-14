@@ -7,11 +7,13 @@ INCLUDEPATH += . ..
 CONFIG += qt staticlib
 
 HEADERS += private/constraint.hpp \
+           private/format.hpp \
            private/input_stream.hpp \
            private/lex.hpp \
            private/parser.hpp \
            private/parser_info.hpp \
            private/tag.hpp \
+           private/utils.hpp \
            constraint_min_max.hpp \
            constraint_one_of.hpp \
            exceptions.hpp \
@@ -25,5 +27,6 @@ SOURCES += private/input_stream.cpp \
            private/parser.cpp \
            private/parser_info.cpp \
            private/tag.cpp \
+           private/utils.cpp \
            exceptions.cpp \
            tag_no_value.cpp
