@@ -47,7 +47,7 @@ namespace QtConfFile {
 // TagScalarVector
 //
 
-//! Tag with multiply scalar values.
+//! Tag with multiple scalar values.
 template< class T >
 class TagScalarVector
 	:	public Tag
