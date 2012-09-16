@@ -35,7 +35,7 @@
 #include <QtConfFile/private/Tag>
 #include <QtConfFile/private/Constraint>
 #include <QtConfFile/private/Format>
-#include <QtConfFile/private/Utils>
+#include <QtConfFile/private/StringFormat>
 
 // Qt include.
 #include <QtCore/QVector>

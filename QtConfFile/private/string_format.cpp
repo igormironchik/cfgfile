@@ -29,7 +29,7 @@
 */
 
 // QtConfFile include.
-#include <QtConfFile/private/Utils>
+#include <QtConfFile/private/StringFormat>
 
 
 namespace QtConfFile {

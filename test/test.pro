@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 
 SUBDIRS = TestRunner \
           LexicalAnalyzer \
-          Parser
+          Parser \
+          Complex
