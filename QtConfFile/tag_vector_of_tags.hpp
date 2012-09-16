@@ -103,10 +103,12 @@ public:
 	void
 	queryOptValues( VectorOfTags & receiver );
 
+	//! \return List with children.
+	virtual const ChildTagsList & children() const;
+
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
-protected:
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 
@@ -158,7 +160,7 @@ TagVectorOfTags< T >::at( int index ) const
 }
 
 template< class T >
-const TagVectorOfTags< T >::VectorOfTags &
+const typename TagVectorOfTags< T >::VectorOfTags &
 TagVectorOfTags< T >::values() const
 {
 	return m_tags;
@@ -191,6 +193,18 @@ TagVectorOfTags< T >::queryOptValues( VectorOfTags & receiver )
 }
 
 template< class T >
+const Tag::ChildTagsList &
+TagVectorOfTags< T >::children() const
+{
+	static const Tag::ChildTagsList empty;
+
+	if( m_current )
+		return m_current->children();
+	else
+		return empty;
+}
+
+template< class T >
 QString
 TagVectorOfTags< T >::print( int indent ) const
 {
@@ -220,6 +234,18 @@ TagVectorOfTags< T >::onFinish( const ParserInfo & info )
 	m_current->onFinish( info );
 	m_tags.push_back( m_current );
 	m_current.clear();
+
+	foreach( Tag * tag, children() )
+	{
+		if( tag->isMandatory() && !tag->isDefined() )
+			throw Exception( QString( "Undefined mandatory tag: \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( tag->name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+	}
+
+	setDefined();
 }
 
 template< class T >

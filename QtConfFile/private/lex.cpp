@@ -217,6 +217,7 @@ LexicalAnalyzer::nextLexeme()
 
 	bool quotedLexeme = false;
 	bool firstSymbol = true;
+	bool skipComment = false;
 
 	d->skipSpaces();
 
@@ -304,6 +305,8 @@ LexicalAnalyzer::nextLexeme()
 
 				if( nextChar == c_verticalBar )
 				{
+					skipComment = true;
+
 					d->skipOneLineComment();
 
 					if( firstSymbol )
@@ -313,6 +316,8 @@ LexicalAnalyzer::nextLexeme()
 				}
 				else if( nextChar == c_sharp )
 				{
+					skipComment = true;
+
 					d->skipMultiLineComment();
 
 					if( firstSymbol )
@@ -341,7 +346,10 @@ LexicalAnalyzer::nextLexeme()
 				break;
 		}
 
-		firstSymbol = false;
+		if( !skipComment )
+			firstSymbol = false;
+		else
+			skipComment = false;
 	}
 
 	return Lexeme( StringLexeme, result );

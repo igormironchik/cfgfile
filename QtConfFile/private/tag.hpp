@@ -68,9 +68,6 @@ public:
     //! Remove child tag.
     void removeChild( Tag & tag );
 
-    //! \return List with children.
-    const ChildTagsList & children() const;
-
     //! \return Name of the tag.
     const QString & name() const;
 
@@ -83,10 +80,12 @@ public:
     //! Set "defined" property.
     void setDefined( bool on = true );
 
+	//! \return List with children.
+	virtual const ChildTagsList & children() const;
+
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const = 0;
 
-protected:
     //! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info ) = 0;
 

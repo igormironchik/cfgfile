@@ -28,43 +28,19 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
-#define QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
-
 // QtConfFile include.
-#include <QtConfFile/private/Tag>
+#include <QtConfFile/Exceptions>
+
+// Qt include.
+#include <QtTest/QtTest>
 
 
-namespace QtConfFile {
-
-//
-// TagNoValue
-//
-
-//! Tag without a value.
-class TagNoValue
-	:	public Tag
+class ComplexTest
+	:	public QObject
 {
-public:
-	explicit TagNoValue( const QString & name, bool isMandatory = false );
-	TagNoValue( Tag & owner, const QString & name, bool isMandatory = false );
+	Q_OBJECT
+}; // class ComplexTest
 
-	virtual ~TagNoValue();
+QTEST_MAIN( ComplexTest )
 
-	//! Print tag to the output.
-	virtual QString print( int indent = 0 ) const;
-
-	//! Called when tag parsing started.
-	virtual void onStart( const ParserInfo & info );
-
-	//! Called when tag parsing finished.
-	virtual void onFinish( const ParserInfo & info );
-
-	//! Called when string found.
-	virtual void onString( const ParserInfo & info,
-		const QString & str );
-}; // class TagNoValue
-
-} /* namespace QtConfFile */
-
-#endif // QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
+#include "main.moc"

@@ -101,7 +101,6 @@ public:
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
-protected:
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 
@@ -154,7 +153,7 @@ TagScalarVector< T >::at( int index ) const
 }
 
 template< class T >
-const TagScalarVector< T >::ValuesVector &
+const typename TagScalarVector< T >::ValuesVector &
 TagScalarVector< T >::values() const
 {
 	return m_values;
@@ -169,7 +168,7 @@ TagScalarVector< T >::setValue( const T & v )
 		if( !m_constraint->check( v ) )
 			throw Exception( QString( "Invalid value: \"%1\". "
 				"Value must match to the constraint." )
-					.arg( Format::toString( v ) ) );
+					.arg( Format< T >::toString( v ) ) );
 	}
 
 	m_values.push_back( v );
@@ -219,7 +218,7 @@ TagScalarVector< T >::print( int indent ) const
 		{
 			result.append( QLatin1String( " " ) );
 
-			QString value = Format::toString( v );
+			QString value = Format< T >::toString( v );
 			value = toQtConfFileFormat( value );
 
 			result.append( value );
@@ -253,7 +252,15 @@ template< class T >
 void
 TagScalarVector< T >::onFinish( const ParserInfo & info )
 {
-	Q_UNUSED( info )
+	foreach( Tag * tag, children() )
+	{
+		if( tag->isMandatory() && !tag->isDefined() )
+			throw Exception( QString( "Undefined mandatory tag: \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( tag->name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+	}
 }
 
 template< class T >
@@ -261,7 +268,7 @@ void
 TagScalarVector< T >::onString( const ParserInfo & info,
 	const QString & str )
 {
-	T value = Format::fromString( info, str );
+	T value = Format< T >::fromString( info, str );
 
 	if( m_constraint )
 	{

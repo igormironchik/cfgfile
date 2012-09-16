@@ -3,6 +3,8 @@ TEMPLATE = subdirs
 
 
 SUBDIRS = QtConfFile \
-          test
+          test \
+          example
 
 test.depends = QtConfFile
+example.depends = QtConfFile

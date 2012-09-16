@@ -93,7 +93,15 @@ TagNoValue::onStart( const ParserInfo & info )
 void
 TagNoValue::onFinish( const ParserInfo & info )
 {
-	Q_UNUSED( info )
+	foreach( Tag * tag, children() )
+	{
+		if( tag->isMandatory() && !tag->isDefined() )
+			throw Exception( QString( "Undefined mandatory tag: \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( tag->name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+	}
 
 	setDefined();
 }

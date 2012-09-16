@@ -28,43 +28,65 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
-#define QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
+// Example include.
+#include "cfg.hpp"
 
 // QtConfFile include.
-#include <QtConfFile/private/Tag>
+#include <QtConfFile/Utils>
+#include <QtConfFile/Exceptions>
+
+// Qt include.
+#include <QtCore/QDebug>
+#include <QtCore/QTextStream>
 
 
-namespace QtConfFile {
-
-//
-// TagNoValue
-//
-
-//! Tag without a value.
-class TagNoValue
-	:	public Tag
+int main( int argc, char ** argv )
 {
-public:
-	explicit TagNoValue( const QString & name, bool isMandatory = false );
-	TagNoValue( Tag & owner, const QString & name, bool isMandatory = false );
+	Q_UNUSED( argc )
+	Q_UNUSED( argv )
 
-	virtual ~TagNoValue();
+	TagConfiguration readTag;
 
-	//! Print tag to the output.
-	virtual QString print( int indent = 0 ) const;
+	try {
+		QtConfFile::readQtConfFile( readTag, QLatin1String( "../example.cfg" ) );
+	}
+	catch( const QtConfFile::Exception & x )
+	{
+		qDebug() << x.whatAsQString();
 
-	//! Called when tag parsing started.
-	virtual void onStart( const ParserInfo & info );
+		return 1;
+	}
 
-	//! Called when tag parsing finished.
-	virtual void onFinish( const ParserInfo & info );
+	Configuration cfg = readTag.configuration();
 
-	//! Called when string found.
-	virtual void onString( const ParserInfo & info,
-		const QString & str );
-}; // class TagNoValue
+	QTextStream out( stdout );
+	out << "Configuration is:" << endl;
+	out << "stringValue: " << cfg.m_stringValue << endl;
 
-} /* namespace QtConfFile */
+	if( !cfg.m_listOfStringValues.isEmpty() )
+	{
+		out << "listOfStringValues: ";
 
-#endif // QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
+		foreach( QString str, cfg.m_listOfStringValues )
+			out << str << " ";
+
+		out << endl;
+	}
+
+	out << "intValue: " << cfg.m_intValue << endl;
+
+	if( !cfg.m_vectorOfTags.isEmpty() )
+	{
+		int i = 1;
+
+		out << "vecOfTags:" << endl;
+
+		foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
+		{
+			out << "Pair " << i << ":" << endl;
+			out << "stringValue: " << pair.m_stringValue << endl;
+			out << "intValue: " << pair.m_intValue << endl;
+			++i;
+		}
+	}
+}

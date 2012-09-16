@@ -53,15 +53,19 @@ public:
     {
     }
 
-	void startFirstTagParsing()
+	bool startFirstTagParsing()
 	{
 		Lexeme lexeme = m_lex.nextLexeme();
 
-		if( lexeme.type() == NullLexeme )
+		if( m_tag.isMandatory() && lexeme.type() == NullLexeme )
 			throw Exception( QString( "Unexpected end of file. "
-				"In file \"%1\" on line %2." )
+				"Undefined mandatory tag \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( m_tag.name() )
 					.arg( m_lex.inputStream().fileName() )
 					.arg( m_lex.inputStream().lineNumber() ) );
+		else if( !m_tag.isMandatory() && lexeme.type() == NullLexeme )
+			return false;
 		else if( lexeme.type() != StartTagLexeme )
 			throw Exception( QString( "Expected start curl brace, "
 				"but we've got \"%1\". In file \"%2\" on line %3." )
@@ -83,6 +87,8 @@ public:
 			m_tag.onStart( ParserInfo(
 			   m_lex.inputStream().fileName(),
 			   m_lex.inputStream().lineNumber() ) );
+
+		return true;
 	}
 
 	bool startTagParsing( const Lexeme & lexeme, Tag & tag )
@@ -190,7 +196,8 @@ Parser::~Parser()
 void
 Parser::parse()
 {
-	d->startFirstTagParsing();
+	if( !d->startFirstTagParsing() )
+		return;
 
 	Lexeme lexeme = d->m_lex.nextLexeme();
 

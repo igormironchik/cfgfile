@@ -110,6 +110,12 @@ Tag::isMandatory() const
 bool
 Tag::isDefined() const
 {
+	foreach( Tag * tag, children() )
+	{
+		if( !tag->isDefined() )
+			return false;
+	}
+
     return d->m_isDefined;
 }
 
