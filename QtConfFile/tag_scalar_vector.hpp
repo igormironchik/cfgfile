@@ -226,7 +226,7 @@ TagScalarVector< T >::print( int indent ) const
 
 		if( !children().isEmpty() )
 		{
-			result.append( QLatin1String( "\r\n" ) );
+			result.append( QLatin1String( "\n" ) );
 
 			foreach( Tag * tag, children() )
 				result.append( tag->print( indent + 1 ) );
@@ -235,7 +235,7 @@ TagScalarVector< T >::print( int indent ) const
 				result.append( QLatin1String( "\t" ) );
 		}
 
-		result.append( QLatin1String( "}\r\n" ) );
+		result.append( QLatin1String( "}\n" ) );
 	}
 
 	return result;

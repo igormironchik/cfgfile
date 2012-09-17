@@ -48,7 +48,8 @@ int main( int argc, char ** argv )
 	TagConfiguration readTag;
 
 	try {
-		QtConfFile::readQtConfFile( readTag, QLatin1String( "../example.cfg" ) );
+		QtConfFile::readQtConfFile( readTag, QLatin1String( "../example.cfg" ),
+			QTextCodec::codecForName( "UTF-8" ) );
 	}
 	catch( const QtConfFile::Exception & x )
 	{
@@ -60,7 +61,7 @@ int main( int argc, char ** argv )
 	Configuration cfg = readTag.configuration();
 
 	QTextStream out( stdout );
-	out << "Configuration is:" << endl;
+	out << "We've loaded the configuration from file:" << endl;
 	out << "stringValue: " << cfg.m_stringValue << endl;
 
 	if( !cfg.m_listOfStringValues.isEmpty() )
@@ -89,4 +90,22 @@ int main( int argc, char ** argv )
 			++i;
 		}
 	}
+
+	out << endl << "And now we will save new configuration to file \"new.cfg\". "
+		"Look at it!" << endl;
+
+	TagConfiguration writeTag( cfg );
+
+	try {
+		QtConfFile::writeQtConfFile( writeTag, QLatin1String( "../new.cfg" ),
+			QTextCodec::codecForName( "UTF-8" ) );
+	}
+	catch( const QtConfFile::Exception & x )
+	{
+		qDebug() << x.whatAsQString();
+
+		return 1;
+	}
+
+	out << "All have been done!" << endl;
 }
