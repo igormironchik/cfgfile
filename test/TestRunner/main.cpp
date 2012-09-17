@@ -37,6 +37,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QTextStream>
 #include <QtCore/QString>
+#include <QtCore/QFileInfo>
 
 
 //
@@ -69,6 +70,7 @@ public slots:
 		foreach( QString testApp, m_tests )
 		{
 			QProcess process;
+			process.setWorkingDirectory( QFileInfo( testApp ).absolutePath() );
 			process.start( testApp );
 			process.waitForFinished();
 			stream << process.readAllStandardOutput();

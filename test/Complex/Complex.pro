@@ -4,7 +4,10 @@ TARGET =
 DESTDIR = .
 CONFIG += qtestlib console
 
-SOURCES += main.cpp
+HEADERS += cfg.hpp
+
+SOURCES += cfg.cpp \
+           main.cpp
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../../lib -lQtConfFile
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../lib -lQtConfFile

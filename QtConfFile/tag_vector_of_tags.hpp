@@ -238,9 +238,11 @@ TagVectorOfTags< T >::onFinish( const ParserInfo & info )
 	foreach( Tag * tag, children() )
 	{
 		if( tag->isMandatory() && !tag->isDefined() )
-			throw Exception( QString( "Undefined mandatory tag: \"%1\". "
-				"In file \"%2\" on line %3." )
+			throw Exception( QString( "Undefined child mandatory tag: \"%1\". "
+				"Where parent is: \"%2\". "
+				"In file \"%3\" on line %4." )
 					.arg( tag->name() )
+					.arg( name() )
 					.arg( info.fileName() )
 					.arg( info.lineNumber() ) );
 	}

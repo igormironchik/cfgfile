@@ -342,6 +342,8 @@ LexicalAnalyzer::nextLexeme()
 					"End of file riched. In file \"%1\" on line %2." )
 						 .arg( d->m_stream.fileName() )
 						 .arg( d->m_stream.lineNumber() ) );
+			else if( result.isEmpty() )
+				return Lexeme( NullLexeme, QString() );
 			else
 				break;
 		}
