@@ -52,6 +52,9 @@ static const QString c_finishMultiLineComment = QLatin1String( "#|" );
 
 QString toQtConfFileFormat( const QString & what )
 {
+	if( what.isEmpty() )
+		return QLatin1String( "\"\"" );
+
 	if( !what.contains( c_beginTag ) &&
 		!what.contains( c_endTag ) &&
 		!what.contains( c_quotes ) &&
