@@ -1,8 +1,8 @@
 
 TEMPLATE = app
-TARGET = 
 DESTDIR = .
 CONFIG += qtestlib console
+QT -= gui
 
 HEADERS += cfg.hpp
 

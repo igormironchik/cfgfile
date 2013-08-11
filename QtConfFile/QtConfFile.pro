@@ -5,6 +5,7 @@ DESTDIR = ../lib
 DEPENDPATH += . private
 INCLUDEPATH += . ..
 CONFIG += qt staticlib
+QT -= gui
 
 HEADERS += private/constraint.hpp \
            private/format.hpp \
