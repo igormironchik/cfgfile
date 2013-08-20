@@ -218,11 +218,172 @@
 <a name="l00249"></a>00249                 .arg( info.<a class="code" href="class_qt_conf_file_1_1_parser_info.html#255b55954982c92c9376d2466639e8cb">lineNumber</a>() ) );
 <a name="l00250"></a>00250 }
 <a name="l00251"></a>00251 
-<a name="l00252"></a>00252 } <span class="comment">/* namespace QtConfFile */</span>
-<a name="l00253"></a>00253 
-<a name="l00254"></a>00254 <span class="preprocessor">#endif // QTCONFFILE__TAG_SCALAR_HPP__INCLUDED</span>
+<a name="l00252"></a>00252 
+<a name="l00253"></a>00253 <span class="comment">//</span>
+<a name="l00254"></a>00254 <span class="comment">// TagScalar&lt; bool &gt;</span>
+<a name="l00255"></a>00255 <span class="comment">//</span>
+<a name="l00256"></a>00256 
+<a name="l00258"></a>00258 <span class="keyword">template</span>&lt;&gt;
+<a name="l00259"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html">00259</a> <span class="keyword">class </span><a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar</a>&lt; bool &gt;
+<a name="l00260"></a>00260     :   <span class="keyword">public</span> <a class="code" href="class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file.">Tag</a>
+<a name="l00261"></a>00261 {
+<a name="l00262"></a>00262 <span class="keyword">public</span>:
+<a name="l00263"></a>00263     <span class="keyword">explicit</span> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar</a>( <span class="keyword">const</span> QString &amp; <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>, <span class="keywordtype">bool</span> <a class="code" href="class_qt_conf_file_1_1_tag.html#8894ed57513bc47f29e215bacec1cc2a">isMandatory</a> = <span class="keyword">false</span> );
+<a name="l00264"></a>00264     <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar</a>( <a class="code" href="class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file.">Tag</a> &amp; owner, <span class="keyword">const</span> QString &amp; name, <span class="keywordtype">bool</span> <a class="code" href="class_qt_conf_file_1_1_tag.html#8894ed57513bc47f29e215bacec1cc2a">isMandatory</a> = <span class="keyword">false</span> );
+<a name="l00265"></a>00265 
+<a name="l00266"></a>00266     <span class="keyword">virtual</span> ~<a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar</a>();
+<a name="l00267"></a>00267 
+<a name="l00269"></a>00269     <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;
+<a name="l00270"></a>00270     <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#a02a3b351c4c5dfd4b1c184e1562e34a">value</a>() <span class="keyword">const</span>;
+<a name="l00271"></a>00271 
+<a name="l00273"></a>00273     <span class="keywordtype">void</span>
+<a name="l00274"></a>00274     <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#0d52e16694e39ed17e209a03513a1790" title="Set value.">setValue</a>( <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp; v );
+<a name="l00275"></a>00275 
+<a name="l00283"></a>00283     <span class="keywordtype">void</span>
+<a name="l00284"></a>00284     <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#8441901132228696a7e3c09e0b653b10" title="Query optional value.">queryOptValue</a>( <span class="keywordtype">bool</span> &amp; receiver );
+<a name="l00285"></a>00285 
+<a name="l00287"></a>00287     <span class="keyword">virtual</span> QString <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#07d6eafe9f9cf13504d6b20dbe0c4c91" title="Print tag to the output.">print</a>( <span class="keywordtype">int</span> indent = 0 ) <span class="keyword">const</span>;
+<a name="l00288"></a>00288 
+<a name="l00290"></a>00290     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#6bd4a6fc99a2cedac026ad081ee4faa7" title="Called when tag parsing started.">onStart</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info );
+<a name="l00291"></a>00291 
+<a name="l00293"></a>00293     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#06b82eabc5d3ad05e23732c5eb39a074" title="Called when tag parsing finished.">onFinish</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info );
+<a name="l00294"></a>00294 
+<a name="l00296"></a>00296     <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#6b4947f4a588d530f33bd9e54e57c171" title="Called when string found.">onString</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info,
+<a name="l00297"></a>00297         <span class="keyword">const</span> QString &amp; str );
+<a name="l00298"></a>00298 
+<a name="l00299"></a>00299 <span class="keyword">private</span>:
+<a name="l00301"></a>00301     <span class="keywordtype">bool</span> m_value;
+<a name="l00302"></a>00302 }; <span class="comment">// class TagScalar</span>
+<a name="l00303"></a>00303 
+<a name="l00304"></a>00304 
+<a name="l00305"></a>00305 <span class="keyword">inline</span>
+<a name="l00306"></a>00306 <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::TagScalar</a>( <span class="keyword">const</span> QString &amp; <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>, <span class="keywordtype">bool</span> <a class="code" href="class_qt_conf_file_1_1_tag.html#8894ed57513bc47f29e215bacec1cc2a">isMandatory</a> )
+<a name="l00307"></a>00307     :   <a class="code" href="class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file.">Tag</a>( name, isMandatory )
+<a name="l00308"></a>00308     ,   m_value( false )
+<a name="l00309"></a>00309 {
+<a name="l00310"></a>00310 }
+<a name="l00311"></a>00311 
+<a name="l00312"></a>00312 <span class="keyword">inline</span>
+<a name="l00313"></a>00313 TagScalar&lt; bool &gt;::TagScalar( Tag &amp; owner, <span class="keyword">const</span> QString &amp; <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>, <span class="keywordtype">bool</span> <a class="code" href="class_qt_conf_file_1_1_tag.html#8894ed57513bc47f29e215bacec1cc2a">isMandatory</a> )
+<a name="l00314"></a>00314     :   Tag( owner, name, isMandatory )
+<a name="l00315"></a>00315     ,   m_value( false )
+<a name="l00316"></a>00316 {
+<a name="l00317"></a>00317 }
+<a name="l00318"></a>00318 
+<a name="l00319"></a>00319 <span class="keyword">inline</span>
+<a name="l00320"></a>00320 TagScalar&lt; bool &gt;::~TagScalar()
+<a name="l00321"></a>00321 {
+<a name="l00322"></a>00322 }
+<a name="l00323"></a>00323 
+<a name="l00324"></a>00324 <span class="keyword">inline</span>
+<a name="l00325"></a>00325 <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp;
+<a name="l00326"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#7acfc72741ad8ad74dbdd2906660a319">00326</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::value</a>()<span class="keyword"> const</span>
+<a name="l00327"></a>00327 <span class="keyword"></span>{
+<a name="l00328"></a>00328     <span class="keywordflow">return</span> m_value;
+<a name="l00329"></a>00329 }
+<a name="l00330"></a>00330 
+<a name="l00331"></a>00331 <span class="keyword">inline</span>
+<a name="l00332"></a>00332 <span class="keywordtype">void</span>
+<a name="l00333"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#bb3ab0e911648e3be7fc5706df66f13f">00333</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::setValue</a>( <span class="keyword">const</span> <span class="keywordtype">bool</span> &amp; v )
+<a name="l00334"></a>00334 {
+<a name="l00335"></a>00335     m_value = v;
+<a name="l00336"></a>00336 
+<a name="l00337"></a>00337     <a class="code" href="class_qt_conf_file_1_1_tag.html#2f95cb15acc0c5ea853fcc234427006a" title="Set &amp;quot;defined&amp;quot; property.">setDefined</a>();
+<a name="l00338"></a>00338 }
+<a name="l00339"></a>00339 
+<a name="l00340"></a>00340 <span class="keyword">inline</span>
+<a name="l00341"></a>00341 <span class="keywordtype">void</span>
+<a name="l00342"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#d12a2c326bad147aa7dc2d27129d904f">00342</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::queryOptValue</a>( <span class="keywordtype">bool</span> &amp; receiver )
+<a name="l00343"></a>00343 {
+<a name="l00344"></a>00344     <span class="keywordflow">if</span>( <a class="code" href="class_qt_conf_file_1_1_tag.html#ba49823d2c3e7571f8dd89072d71c4b5">isDefined</a>() )
+<a name="l00345"></a>00345         receiver = m_value;
+<a name="l00346"></a>00346 }
+<a name="l00347"></a>00347 
+<a name="l00348"></a>00348 <span class="keyword">inline</span>
+<a name="l00349"></a>00349 QString
+<a name="l00350"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#5573fc364b411d323a71a6f7893503a8">00350</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::print</a>( <span class="keywordtype">int</span> indent )<span class="keyword"> const</span>
+<a name="l00351"></a>00351 <span class="keyword"></span>{
+<a name="l00352"></a>00352     QString result;
+<a name="l00353"></a>00353 
+<a name="l00354"></a>00354     <span class="keywordflow">if</span>( <a class="code" href="class_qt_conf_file_1_1_tag.html#ba49823d2c3e7571f8dd89072d71c4b5">isDefined</a>() )
+<a name="l00355"></a>00355     {
+<a name="l00356"></a>00356         <span class="keywordflow">for</span>( <span class="keywordtype">int</span> i = 0; i &lt; indent; ++i )
+<a name="l00357"></a>00357             result.append( QLatin1String( <span class="stringliteral">"\t"</span> ) );
+<a name="l00358"></a>00358 
+<a name="l00359"></a>00359         result.append( QLatin1String( <span class="stringliteral">"{"</span> ) );
+<a name="l00360"></a>00360         result.append( <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>() );
+<a name="l00361"></a>00361         result.append( QLatin1String( <span class="stringliteral">" "</span> ) );
+<a name="l00362"></a>00362 
+<a name="l00363"></a>00363         QString <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html#a02a3b351c4c5dfd4b1c184e1562e34a">value</a> = <a class="code" href="class_qt_conf_file_1_1_format.html" title="Format template value to the string and back.">Format&lt; bool &gt;::toString</a>( m_value );
+<a name="l00364"></a>00364         value = toQtConfFileFormat( value );
+<a name="l00365"></a>00365 
+<a name="l00366"></a>00366         result.append( value );
+<a name="l00367"></a>00367 
+<a name="l00368"></a>00368         <span class="keywordflow">if</span>( !<a class="code" href="class_qt_conf_file_1_1_tag.html#af5f3ccd45b0d74ad838bf0bce3daacc">children</a>().isEmpty() )
+<a name="l00369"></a>00369         {
+<a name="l00370"></a>00370             result.append( QLatin1String( <span class="stringliteral">"\n"</span> ) );
+<a name="l00371"></a>00371 
+<a name="l00372"></a>00372             <span class="keywordflow">foreach</span>( <a class="code" href="class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file.">Tag</a> * tag, <a class="code" href="class_qt_conf_file_1_1_tag.html#af5f3ccd45b0d74ad838bf0bce3daacc">children</a>() )
+<a name="l00373"></a>00373                 result.append( tag-&gt;<a class="code" href="class_qt_conf_file_1_1_tag.html#34d781efbe2e8f6a429a98ec87333b15" title="Print tag to the output.">print</a>( indent + 1 ) );
+<a name="l00374"></a>00374 
+<a name="l00375"></a>00375             <span class="keywordflow">for</span>( <span class="keywordtype">int</span> i = 0; i &lt; indent; ++i )
+<a name="l00376"></a>00376                 result.append( QLatin1String( <span class="stringliteral">"\t"</span> ) );
+<a name="l00377"></a>00377         }
+<a name="l00378"></a>00378 
+<a name="l00379"></a>00379         result.append( QLatin1String( <span class="stringliteral">"}\n"</span> ) );
+<a name="l00380"></a>00380     }
+<a name="l00381"></a>00381 
+<a name="l00382"></a>00382     <span class="keywordflow">return</span> result;
+<a name="l00383"></a>00383 }
+<a name="l00384"></a>00384 
+<a name="l00385"></a>00385 <span class="keyword">inline</span>
+<a name="l00386"></a>00386 <span class="keywordtype">void</span>
+<a name="l00387"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#87bee1acdf9c55b26cefc64dfd1010c2">00387</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::onStart</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info )
+<a name="l00388"></a>00388 {
+<a name="l00389"></a>00389     Q_UNUSED( info )
+<a name="l00390"></a>00390 }
+<a name="l00391"></a>00391 
+<a name="l00392"></a>00392 <span class="keyword">inline</span>
+<a name="l00393"></a>00393 <span class="keywordtype">void</span>
+<a name="l00394"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#9797c83168949cbfabc9f79fe532a4db">00394</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::onFinish</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info )
+<a name="l00395"></a>00395 {
+<a name="l00396"></a>00396     <span class="keywordflow">foreach</span>( <a class="code" href="class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file.">Tag</a> * tag, <a class="code" href="class_qt_conf_file_1_1_tag.html#af5f3ccd45b0d74ad838bf0bce3daacc">children</a>() )
+<a name="l00397"></a>00397     {
+<a name="l00398"></a>00398         <span class="keywordflow">if</span>( tag-&gt;<a class="code" href="class_qt_conf_file_1_1_tag.html#8894ed57513bc47f29e215bacec1cc2a">isMandatory</a>() &amp;&amp; !tag-&gt;<a class="code" href="class_qt_conf_file_1_1_tag.html#ba49823d2c3e7571f8dd89072d71c4b5">isDefined</a>() )
+<a name="l00399"></a>00399             <span class="keywordflow">throw</span> <a class="code" href="class_qt_conf_file_1_1_exception.html" title="Exception in the library.">Exception</a>( QString( <span class="stringliteral">"Undefined child mandatory tag: \"%1\". "</span>
+<a name="l00400"></a>00400                 <span class="stringliteral">"Where parent is: \"%2\". "</span>
+<a name="l00401"></a>00401                 <span class="stringliteral">"In file \"%3\" on line %4."</span> )
+<a name="l00402"></a>00402                     .arg( tag-&gt;<a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>() )
+<a name="l00403"></a>00403                     .arg( <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>() )
+<a name="l00404"></a>00404                     .arg( info.<a class="code" href="class_qt_conf_file_1_1_parser_info.html#94cd3266110ab25de094add27b09e8a0">fileName</a>() )
+<a name="l00405"></a>00405                     .arg( info.<a class="code" href="class_qt_conf_file_1_1_parser_info.html#255b55954982c92c9376d2466639e8cb">lineNumber</a>() ) );
+<a name="l00406"></a>00406     }
+<a name="l00407"></a>00407 }
+<a name="l00408"></a>00408 
+<a name="l00409"></a>00409 <span class="keyword">inline</span>
+<a name="l00410"></a>00410 <span class="keywordtype">void</span>
+<a name="l00411"></a><a class="code" href="class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html#45946faf0d92b674a280f7c5ebe5df27">00411</a> <a class="code" href="class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value.">TagScalar&lt; bool &gt;::onString</a>( <span class="keyword">const</span> <a class="code" href="class_qt_conf_file_1_1_parser_info.html" title="Information about parsed file and current state of parsing.">ParserInfo</a> &amp; info,
+<a name="l00412"></a>00412     <span class="keyword">const</span> QString &amp; str )
+<a name="l00413"></a>00413 {
+<a name="l00414"></a>00414     <span class="keywordflow">if</span>( !<a class="code" href="class_qt_conf_file_1_1_tag.html#ba49823d2c3e7571f8dd89072d71c4b5">isDefined</a>() )
+<a name="l00415"></a>00415     {
+<a name="l00416"></a>00416         m_value = <a class="code" href="class_qt_conf_file_1_1_format.html" title="Format template value to the string and back.">Format&lt; bool &gt;::fromString</a>( info, str );
+<a name="l00417"></a>00417 
+<a name="l00418"></a>00418         <a class="code" href="class_qt_conf_file_1_1_tag.html#2f95cb15acc0c5ea853fcc234427006a" title="Set &amp;quot;defined&amp;quot; property.">setDefined</a>();
+<a name="l00419"></a>00419     }
+<a name="l00420"></a>00420     <span class="keywordflow">else</span>
+<a name="l00421"></a>00421         <span class="keywordflow">throw</span> <a class="code" href="class_qt_conf_file_1_1_exception.html" title="Exception in the library.">Exception</a>( QString( <span class="stringliteral">"Value for the tag \"%1\" already defined. "</span>
+<a name="l00422"></a>00422             <span class="stringliteral">"In file \"%2\" on line %3."</span> )
+<a name="l00423"></a>00423                 .arg( <a class="code" href="class_qt_conf_file_1_1_tag.html#e69ce1c39b2608ff37e73a497db5f3f7">name</a>() )
+<a name="l00424"></a>00424                 .arg( info.<a class="code" href="class_qt_conf_file_1_1_parser_info.html#94cd3266110ab25de094add27b09e8a0">fileName</a>() )
+<a name="l00425"></a>00425                 .arg( info.<a class="code" href="class_qt_conf_file_1_1_parser_info.html#255b55954982c92c9376d2466639e8cb">lineNumber</a>() ) );
+<a name="l00426"></a>00426 }
+<a name="l00427"></a>00427 
+<a name="l00428"></a>00428 } <span class="comment">/* namespace QtConfFile */</span>
+<a name="l00429"></a>00429 
+<a name="l00430"></a>00430 <span class="preprocessor">#endif // QTCONFFILE__TAG_SCALAR_HPP__INCLUDED</span>
 </pre></div></div>
-<hr size="1"><address style="text-align: right;"><small>Generated on Mon Sep 17 18:20:40 2012 for QtConfFile by&nbsp;
+<hr size="1"><address style="text-align: right;"><small>Generated on Tue Aug 20 13:32:44 2013 for QtConfFile by&nbsp;
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border="0"></a> 1.5.6 </small></address>
 </body>

@@ -4,4 +4,5 @@ TEMPLATE = subdirs
 SUBDIRS = TestRunner \
           LexicalAnalyzer \
           Parser \
-          Complex
+		  Complex \
+		  BoolScalar

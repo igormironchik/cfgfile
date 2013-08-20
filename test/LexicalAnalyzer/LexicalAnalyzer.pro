@@ -1,7 +1,8 @@
 
 TEMPLATE = app
 DESTDIR = .
-CONFIG += qtestlib console
+CONFIG += console
+QT += testlib
 QT -= gui
 
 SOURCES += main.cpp

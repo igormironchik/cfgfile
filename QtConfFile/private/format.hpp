@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012 Igor Mironchik
+	Copyright (c) 2012 - 2013 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -67,6 +67,7 @@ public:
 	}
 }; // class Format
 
+
 template<>
 class Format< int > {
 public:
@@ -92,6 +93,7 @@ public:
 			return result;
 	}
 }; // class Format< int >
+
 
 template<>
 class Format< uint > {
@@ -119,6 +121,7 @@ public:
 	}
 }; // class Format< uint >
 
+
 template<>
 class Format< long > {
 public:
@@ -144,6 +147,7 @@ public:
 			return result;
 	}
 }; // class Format< long >
+
 
 template<>
 class Format< ulong > {
@@ -171,6 +175,7 @@ public:
 	}
 }; // class Format< ulong >
 
+
 template<>
 class Format< qlonglong > {
 public:
@@ -196,6 +201,7 @@ public:
 			return result;
 	}
 }; // class Format< qlonglong >
+
 
 template<>
 class Format< qulonglong > {
@@ -223,6 +229,7 @@ public:
 	}
 }; // class Format< qulonglong >
 
+
 template<>
 class Format< double > {
 public:
@@ -249,6 +256,7 @@ public:
 	}
 }; // class Format< double >
 
+
 template<>
 class Format< QString > {
 public:
@@ -264,6 +272,39 @@ public:
 		Q_UNUSED( info )
 
 		return value;
+	}
+}; // class Format< double >
+
+
+static const QString c_on = QLatin1String( "on" );
+static const QString c_off = QLatin1String( "off" );
+static const QString c_true = QLatin1String( "true" );
+static const QString c_false = QLatin1String( "false" );
+static const QString c_1 = QLatin1String( "1" );
+static const QString c_0 = QLatin1String( "0" );
+
+template<>
+class Format< bool > {
+public:
+	//! Format value to string.
+	static QString toString( const bool & value )
+	{
+		return ( value ? QLatin1String( "true" ) : QLatin1String( "false" ) );
+	}
+
+	//! Format value from string.
+	static bool fromString( const ParserInfo & info, const QString & value )
+	{
+		if( value == c_on || value == c_true || value == c_1 )
+			return true;
+		else if( value == c_off || value == c_false || value == c_0 )
+			return false;
+		else
+			throw Exception( QString( "Invalid value: \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( value )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
 	}
 }; // class Format< double >
 

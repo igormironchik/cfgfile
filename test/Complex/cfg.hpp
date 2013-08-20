@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
-#define QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
+#ifndef QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
+#define QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
 
 // QtConfFile include.
 #include <QtConfFile/TagNoValue>
@@ -171,4 +171,4 @@ private:
 	QtConfFile::TagVectorOfTags< TagVecOfTags > m_vecOfTags;
 }; // class TagConfiguration
 
-#endif // QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
+#endif // QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
