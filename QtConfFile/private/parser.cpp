@@ -161,17 +161,31 @@ public:
 					.arg( m_lex.inputStream().fileName() )
 					.arg( m_lex.inputStream().lineNumber() ) );
 
-		checkIsChildMandatoryTagsDefined( m_tag );
+		checkIsChildMandatoryTagsDefined( m_tag, true );
 	}
 
-	void checkIsChildMandatoryTagsDefined( const Tag & tag )
+	void checkIsChildMandatoryTagsDefined( const Tag & tag, bool first = false )
 	{
-		foreach( Tag * t, tag.children() )
-			checkIsChildMandatoryTagsDefined( *t );
+		if( first )
+		{
+			if( tag.isMandatory() && !tag.isDefined() )
+				throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
+					.arg( tag.name() ) );
 
-		if( tag.isMandatory() && !tag.isDefined() )
+			foreach( Tag * t, tag.children() )
+				checkIsChildMandatoryTagsDefined( *t );
+		}
+		else if( tag.isMandatory() && !tag.isDefined() )
+		{
 			throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
 				.arg( tag.name() ) );
+		}
+
+		if( tag.isMandatory() )
+		{
+			foreach( Tag * t, tag.children() )
+				checkIsChildMandatoryTagsDefined( *t );
+		}
 	}
 
     LexicalAnalyzer m_lex;
