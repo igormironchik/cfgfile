@@ -1,6 +1,0 @@
-<area shape="rect" href="$class_qt_conf_file_1_1_tag.html" title="Base class for the tags in the configuration file." alt="" coords="5,107,117,133">
-<area shape="rect" href="$class_qt_conf_file_1_1_tag_no_value.html" title="Tag without a value." alt="" coords="196,5,356,32">
-<area shape="rect" href="$class_qt_conf_file_1_1_tag_scalar.html" title="Tag with scalar value." alt="" coords="187,56,365,83">
-<area shape="rect" href="$class_qt_conf_file_1_1_tag_scalar_3_01bool_01_4.html" title="Tag with bool value." alt="" coords="179,107,373,133">
-<area shape="rect" href="$class_qt_conf_file_1_1_tag_scalar_vector.html" title="Tag with multiple scalar values." alt="" coords="168,157,384,184">
-<area shape="rect" href="$class_qt_conf_file_1_1_tag_vector_of_tags.html" title="Tag with multiple instancies of the given tag." alt="" coords="165,208,387,235">
