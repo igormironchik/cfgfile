@@ -108,7 +108,7 @@ public:
 	static uint fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toUInt( &ok );
+		uint result = value.toUInt( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
@@ -135,7 +135,7 @@ public:
 	static long fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toLong( &ok );
+		long result = value.toLong( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
@@ -162,7 +162,7 @@ public:
 	static ulong fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toULong( &ok );
+		ulong result = value.toULong( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
@@ -189,7 +189,7 @@ public:
 	static qlonglong fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toLongLong( &ok );
+		qlonglong result = value.toLongLong( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
@@ -216,7 +216,7 @@ public:
 	static qulonglong fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toULongLong( &ok );
+		qulonglong result = value.toULongLong( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
@@ -243,7 +243,7 @@ public:
 	static double fromString( const ParserInfo & info, const QString & value )
 	{
 		bool ok = false;
-		int result = value.toDouble( &ok );
+		double result = value.toDouble( &ok );
 
 		if( !ok )
 			throw Exception( QString( "Invalid value: \"%1\". "
