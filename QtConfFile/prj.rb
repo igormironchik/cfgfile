@@ -3,6 +3,10 @@ require 'mxx_ru/cpp/qt5'
 
 Mxx_ru::Cpp::lib_target {
 
+	rtl_mode( Mxx_ru::Cpp::RTL_SHARED )
+	rtti_mode( Mxx_ru::Cpp::RTTI_ENABLED )
+	threading_mode( Mxx_ru::Cpp::THREADING_MULTI )
+
 	target( "lib/QtConfFile" )
 	
 	qt = generator( MxxRu::Cpp::Qt5.new( self ) )
