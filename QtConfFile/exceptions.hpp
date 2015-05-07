@@ -50,7 +50,7 @@ class Exception
 {
 public:
 	explicit Exception( const QString & what );
-	~Exception();
+	~Exception() throw();
 
 	//! \return Reason of the exception.
 	const QString & whatAsQString() const;

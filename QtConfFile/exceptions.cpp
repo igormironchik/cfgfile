@@ -44,7 +44,7 @@ Exception::Exception( const QString & what )
 {
 }
 
-Exception::~Exception()
+Exception::~Exception() throw()
 {
 }
 
