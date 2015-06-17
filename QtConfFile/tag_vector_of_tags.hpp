@@ -33,6 +33,7 @@
 
 // QtConfFile include.
 #include <QtConfFile/private/Tag>
+#include <QtConfFile/Exceptions>
 
 // Qt include.
 #include <QtCore/QVector>
