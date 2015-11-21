@@ -184,11 +184,17 @@ public:
 
 		QChar nextChar = m_stream.get();
 
-		while( ( ch != c_sharp && nextChar != c_verticalBar ) && !m_stream.atEnd() )
+		if( ch == c_sharp && nextChar == c_verticalBar )
+			return;
+
+		while( !m_stream.atEnd() )
 		{
 			ch = nextChar;
 
 			nextChar = m_stream.get();
+
+			if( ch == c_sharp && nextChar == c_verticalBar )
+				break;
 		}
 	}
 

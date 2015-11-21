@@ -204,6 +204,13 @@ template< class T >
 void
 TagScalar< T >::onFinish( const ParserInfo & info )
 {
+	if( !isDefined() )
+		throw Exception( QString( "Undefined value of tag: \"%1\". "
+			"In file \"%2\" on line %3." )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
+
 	foreach( Tag * tag, children() )
 	{
 		if( tag->isMandatory() && !tag->isDefined() )
@@ -393,6 +400,13 @@ inline
 void
 TagScalar< bool >::onFinish( const ParserInfo & info )
 {
+	if( !isDefined() )
+		throw Exception( QString( "Undefined value of tag: \"%1\". "
+			"In file \"%2\" on line %3." )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
+
 	foreach( Tag * tag, children() )
 	{
 		if( tag->isMandatory() && !tag->isDefined() )

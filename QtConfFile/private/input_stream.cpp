@@ -67,11 +67,13 @@ public:
 			if( nextChar == c_carriageReturn )
 			{
 				ch == nextChar;
+
 				return true;
 			}
 			else
 			{
-				m_stream.seek( m_stream.pos() - 1 );
+				m_returnedChar = nextChar;
+
 				return true;
 			}
 		}
@@ -82,6 +84,7 @@ public:
 	QTextStream m_stream;
 	qint64 m_lineNumber;
 	QString m_fileName;
+	QChar m_returnedChar;
 }; // struct InputStream::InputStreamPrivate
 
 
@@ -102,6 +105,18 @@ InputStream::~InputStream()
 QChar
 InputStream::get()
 {
+	if( !d->m_returnedChar.isNull() )
+	{
+		QChar ch = d->m_returnedChar;
+
+		d->m_returnedChar = QChar();
+
+		if( d->isNewLine( ch ) )
+			++d->m_lineNumber;
+
+		return ch;
+	}
+
 	QChar ch = 0x00;
 
 	d->m_stream >> ch;
@@ -118,7 +133,7 @@ InputStream::putBack( QChar ch )
 	if( ch == c_carriageReturn || ch == c_lineFeed )
 		--d->m_lineNumber;
 
-	d->m_stream.seek( d->m_stream.pos() - 1 );
+	d->m_returnedChar = ch;
 }
 
 qint64
