@@ -75,7 +75,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../all_is_ok.cfg" ) );
+				QLatin1String( "all_is_ok.cfg" ) );
 
 			checkConfig( cfg );
 		}
@@ -91,7 +91,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../all_is_ok_with_comments.cfg" ) );
+				QLatin1String( "all_is_ok_with_comments.cfg" ) );
 
 			checkConfig( cfg );
 		}
@@ -107,14 +107,15 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../inconsistency_to_string_constraint.cfg" ) );
+				QLatin1String( "inconsistency_to_string_constraint.cfg" ) );
 
 			QVERIFY( true == false );
 		}
 		catch( const QtConfFile::Exception & x )
 		{
 			QCOMPARE( QLatin1String( "Invalid value: \"str4\". Value must match "
-				"to the constraint. In file \"../inconsistency_to_string_constraint.cfg\" "
+				"to the constraint in tag \"listOfStringValues\". "
+				"In file \"inconsistency_to_string_constraint.cfg\" "
 				"on line 3." ), x.whatAsQString() );
 		}
 	} // testIncosistencyToStringConstraint
@@ -123,14 +124,15 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../inconsistency_to_int_constraint.cfg" ) );
+				QLatin1String( "inconsistency_to_int_constraint.cfg" ) );
 
 			QVERIFY( true == false );
 		}
 		catch( const QtConfFile::Exception & x )
 		{
 			QCOMPARE( QLatin1String( "Invalid value: \"200\". Value must match "
-				"to the constraint. In file \"../inconsistency_to_int_constraint.cfg\" "
+				"to the constraint in tag \"intValue\". "
+				"In file \"inconsistency_to_int_constraint.cfg\" "
 				"on line 4." ), x.whatAsQString() );
 		}
 	} // testIncosistencyToIntConstraint
@@ -139,7 +141,7 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../undefined_child_mandatory_tag.cfg" ) );
+				QLatin1String( "undefined_child_mandatory_tag.cfg" ) );
 
 			QVERIFY( true == false );
 		}
@@ -147,7 +149,7 @@ private slots:
 		{
 			QCOMPARE( QLatin1String( "Undefined child mandatory tag: \"stringValue\". "
 				"Where parent is: \"vecOfTags\". "
-				"In file \"../undefined_child_mandatory_tag.cfg\" on line 8." ),
+				"In file \"undefined_child_mandatory_tag.cfg\" on line 8." ),
 				x.whatAsQString() );
 		}
 	} // testUndefinedChildMandatoryTag
@@ -156,7 +158,7 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../undefined_mandatory_tag.cfg" ) );
+				QLatin1String( "undefined_mandatory_tag.cfg" ) );
 
 			QVERIFY( true == false );
 		}
@@ -164,7 +166,7 @@ private slots:
 		{
 			QCOMPARE( QLatin1String( "Undefined child mandatory tag: \"stringValue\". "
 				"Where parent is: \"cfg\". "
-				"In file \"../undefined_mandatory_tag.cfg\" on line 14." ),
+				"In file \"undefined_mandatory_tag.cfg\" on line 14." ),
 				x.whatAsQString() );
 		}
 	} // testUndefinedMandatoryTag
@@ -173,14 +175,14 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../empty_file.cfg" ) );
+				QLatin1String( "empty_file.cfg" ) );
 
 			QVERIFY( true == false );
 		}
 		catch( const QtConfFile::Exception & x )
 		{
 			QCOMPARE( QLatin1String( "Unexpected end of file. Undefined "
-				"mandatory tag \"cfg\". In file \"../empty_file.cfg\" on line 1." ),
+				"mandatory tag \"cfg\". In file \"empty_file.cfg\" on line 1." ),
 				x.whatAsQString() );
 		}
 	} // testEmptyFile

@@ -167,8 +167,9 @@ TagScalarVector< T >::setValue( const T & v )
 	{
 		if( !m_constraint->check( v ) )
 			throw Exception( QString( "Invalid value: \"%1\". "
-				"Value must match to the constraint." )
-					.arg( Format< T >::toString( v ) ) );
+				"Value must match to the constraint in tag \"%2\"." )
+					.arg( Format< T >::toString( v ) )
+					.arg( name() ) );
 	}
 
 	m_values.push_back( v );
@@ -276,9 +277,10 @@ TagScalarVector< T >::onString( const ParserInfo & info,
 	{
 		if( !m_constraint->check( value ) )
 			throw Exception( QString( "Invalid value: \"%1\". "
-				"Value must match to the constraint. "
-				"In file \"%2\" on line %3." )
+				"Value must match to the constraint in tag \"%2\". "
+				"In file \"%3\" on line %4." )
 					.arg( str )
+					.arg( name() )
 					.arg( info.fileName() )
 					.arg( info.lineNumber() ) );
 	}

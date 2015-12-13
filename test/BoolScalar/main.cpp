@@ -64,7 +64,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../all_is_ok_with_true_and_false.cfg" ) );
+				QLatin1String( "all_is_ok_with_true_and_false.cfg" ) );
 
 			checkConfig( cfg );
 		}
@@ -80,7 +80,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../all_is_ok_with_on_and_off.cfg" ) );
+				QLatin1String( "all_is_ok_with_on_and_off.cfg" ) );
 
 			checkConfig( cfg );
 		}
@@ -96,7 +96,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../all_is_ok_with_1_and_0.cfg" ) );
+				QLatin1String( "all_is_ok_with_1_and_0.cfg" ) );
 
 			checkConfig( cfg );
 		}
@@ -112,7 +112,7 @@ private slots:
 	{
 		try {
 			Configuration cfg = loadConfig(
-				QLatin1String( "../false_instead_of_true.cfg" ) );
+				QLatin1String( "false_instead_of_true.cfg" ) );
 
 			QCOMPARE( cfg.m_withTrue, false );
 			QCOMPARE( cfg.m_withFalse, false );
@@ -129,14 +129,14 @@ private slots:
 	{
 		try {
 			loadConfig(
-				QLatin1String( "../invalid_value.cfg" ) );
+				QLatin1String( "invalid_value.cfg" ) );
 
 			QVERIFY( true == false );
 		}
 		catch( const QtConfFile::Exception & x )
 		{
 			QCOMPARE( QLatin1String( "Invalid value: \"123\". "
-				"In file \"../invalid_value.cfg\" on line 2." ),
+				"In file \"invalid_value.cfg\" on line 2." ),
 				x.whatAsQString() );
 		}
 	} // testInvalidValue

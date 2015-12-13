@@ -3,6 +3,7 @@ TEMPLATE = app
 TARGET = example
 DESTDIR = .
 CONFIG += console
+QT -= gui
 
 HEADERS += cfg.hpp
 

@@ -145,7 +145,10 @@ InputStream::lineNumber() const
 bool
 InputStream::atEnd() const
 {
-	return d->m_stream.atEnd();
+	if( d->m_returnedChar.isNull() )
+		return d->m_stream.atEnd();
+	else
+		return false;
 }
 
 const QString &
