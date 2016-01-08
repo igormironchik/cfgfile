@@ -4,10 +4,12 @@ TEMPLATE = subdirs
 
 SUBDIRS = QtConfFile \
           test \
-          example
+          example \
+          generator
 
 test.depends = QtConfFile
 example.depends = QtConfFile
+generator.depends = QtConfFile
 
 libDir.commands = mkdir lib
 
