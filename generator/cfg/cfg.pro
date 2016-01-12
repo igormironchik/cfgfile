@@ -10,5 +10,5 @@ HEADERS += cfg.hpp
 
 SOURCES += cfg.cpp
 
-INCLUDEPATH += $$PWD/../../QtConfFile
-DEPENDPATH += $$PWD/../../QtConfFile
+INCLUDEPATH += $$PWD/../..
+DEPENDPATH += $$PWD/../..

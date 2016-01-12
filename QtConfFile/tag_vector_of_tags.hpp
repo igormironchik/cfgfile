@@ -225,6 +225,7 @@ void
 TagVectorOfTags< T >::onStart( const ParserInfo & info )
 {
 	m_current = PointerToTag( new T( name(), isMandatory() ) );
+	m_current->setParent( parent() );
 	m_current->onStart( info );
 }
 

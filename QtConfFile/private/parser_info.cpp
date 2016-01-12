@@ -38,9 +38,11 @@ namespace QtConfFile {
 // ParserInfo
 //
 
-ParserInfo::ParserInfo( const QString & fileName, qint64 lineNumber )
+ParserInfo::ParserInfo( const QString & fileName, qint64 lineNumber,
+	qint64 columnNumber )
 	:	m_fileName( fileName )
 	,	m_lineNumber( lineNumber )
+	,	m_columnNumber( columnNumber )
 {
 }
 
@@ -54,6 +56,13 @@ qint64
 ParserInfo::lineNumber() const
 {
 	return m_lineNumber;
+}
+
+
+qint64
+ParserInfo::columnNumber() const
+{
+	return m_columnNumber;
 }
 
 } /* namespace QtConfFile */

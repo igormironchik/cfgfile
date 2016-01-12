@@ -47,6 +47,9 @@ public:
         :   m_name( name )
         ,   m_isMandatory( isMandatory )
         ,   m_isDefined( false )
+		,	m_parent( 0 )
+		,	m_lineNumber( -1 )
+		,	m_columnNumber( -1 )
     {
     }
 
@@ -54,6 +57,9 @@ public:
     bool m_isMandatory;
     bool m_isDefined;
     Tag::ChildTagsList m_childTags;
+	const Tag * m_parent;
+	qint64 m_lineNumber;
+	qint64 m_columnNumber;
 }; // class Tag::TagPrivate
 
 
@@ -80,13 +86,29 @@ void
 Tag::addChild( Tag & tag )
 {
     if( !d->m_childTags.contains( &tag ) )
+	{
         d->m_childTags.append( &tag );
+		tag.setParent( this );
+	}
 }
 
 void
 Tag::removeChild( Tag & tag )
 {
     d->m_childTags.removeOne( &tag );
+	tag.setParent( 0 );
+}
+
+const Tag *
+Tag::parent() const
+{
+	return d->m_parent;
+}
+
+void
+Tag::setParent( const Tag * p )
+{
+	d->m_parent = p;
 }
 
 const Tag::ChildTagsList &
@@ -123,6 +145,38 @@ void
 Tag::setDefined( bool on )
 {
     d->m_isDefined = on;
+}
+
+qint64
+Tag::lineNumber() const
+{
+	return d->m_lineNumber;
+}
+
+qint64
+Tag::columnNumber() const
+{
+	return d->m_columnNumber;
+}
+
+void
+Tag::onStart( const ParserInfo & info )
+{
+	d->m_lineNumber = info.lineNumber();
+	d->m_columnNumber = info.columnNumber();
+}
+
+bool
+Tag::isAnyChildDefined() const
+{
+	ChildTagsList::ConstIterator it = children().constBegin();
+	ChildTagsList::ConstIterator last = children().constEnd();
+
+	for( ; it != last; ++it )
+		if( (*it)->isDefined() )
+			return true;
+
+	return false;
 }
 
 } /* namespace QtConfFile */

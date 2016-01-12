@@ -246,7 +246,7 @@ template< class T >
 void
 TagScalarVector< T >::onStart( const ParserInfo & info )
 {
-	Q_UNUSED( info )
+	Tag::onStart( info );
 }
 
 template< class T >
@@ -271,6 +271,15 @@ void
 TagScalarVector< T >::onString( const ParserInfo & info,
 	const QString & str )
 {
+	if( isAnyChildDefined() )
+		throw Exception( QString( "Value \"%1\" for tag \"%2\" "
+			"must be defined before any child tag."
+			"In file \"%3\" on line %4." )
+				.arg( str )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
+
 	T value = Format< T >::fromString( info, str );
 
 	if( m_constraint )

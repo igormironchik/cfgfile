@@ -87,7 +87,7 @@ TagNoValue::print( int indent ) const
 void
 TagNoValue::onStart( const ParserInfo & info )
 {
-	Q_UNUSED( info )
+	Tag::onStart( info );
 }
 
 void

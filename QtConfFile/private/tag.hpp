@@ -68,6 +68,9 @@ public:
     //! Remove child tag.
     void removeChild( Tag & tag );
 
+	//! \return Parent tag.
+	const Tag * parent() const;
+
     //! \return Name of the tag.
     const QString & name() const;
 
@@ -80,6 +83,12 @@ public:
     //! Set "defined" property.
     void setDefined( bool on = true );
 
+	//! \return Line number.
+	qint64 lineNumber() const;
+
+	//! \return Column number.
+	qint64 columnNumber() const;
+
 	//! \return List with children.
 	virtual const ChildTagsList & children() const;
 
@@ -87,7 +96,7 @@ public:
 	virtual QString print( int indent = 0 ) const = 0;
 
     //! Called when tag parsing started.
-	virtual void onStart( const ParserInfo & info ) = 0;
+	virtual void onStart( const ParserInfo & info );
 
     //! Called when tag parsing finished.
 	virtual void onFinish( const ParserInfo & info ) = 0;
@@ -95,6 +104,15 @@ public:
 	//! Called when string found.
 	virtual void onString( const ParserInfo & info,
 		const QString & str ) = 0;
+
+protected:
+	template< class T > friend class TagVectorOfTags;
+
+	//! Set parent tag.
+	void setParent( const Tag * p );
+
+	//! \return Is any child tag defined?
+	bool isAnyChildDefined() const;
 
 private:
     Q_DISABLE_COPY( Tag )

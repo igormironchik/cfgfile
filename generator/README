@@ -11,75 +11,85 @@ Let's say you need data class with one QString field then you should write
 following configuration file, for example:
 
 {forGeneration
-  {namespace NamespaceName
-    {class NameOfTheClass
-      {base tagNoValue}
+	{namespace NamespaceName
+		{class NameOfTheClass
+			{base tagNoValue}
       
-      {tagScalar QString
-	{name fieldWithQString}
-      }
-    }
-  }
+			{tagScalar QString
+				{name fieldWithQString}
+			}
+		}
+	}
 }
 
-Each configuration file for generator must has one {forGeneration} tag and all nested
-tags must be defined in this tag. There you can use {namespace} tag for generation
-data classes and tags in the specified C++ namespace. Namespaces can be nested. To
-declare data class and tag for it you should use {class} tag. {class} tag must has
-{base} tag to define base class of the configuration tag. {base} tag can has
-following values: tagNoValue, tagScalar, tagScalarVector, tagVectorOfTags or
-name of the already defined class with namespace. To define field in data
-class you can use following tags: {tagScalar} for scalar tag, {tagNoValue} for
-no-value tag, {tagScalarVector} for vector of scalar values, {tag} for already defined
-tag, {tagVectorOfTags} for vector of already defined tags.
+Each configuration file for generator must has one {forGeneration} tag and all
+nested tags must be defined in this tag. There you can use {namespace} tag for
+generation data classes and tags in the specified C++ namespace. Namespaces can
+be nested. To declare data class and tag for it you should use {class} tag.
+{class} tag must has {base} tag to define base class of the configuration tag.
+{base} tag can has following values: tagNoValue, tagScalar, tagScalarVector,
+tagVectorOfTags or name of the already defined class with namespace. To define
+field in data class you can use following tags: {tagScalar} for scalar tag,
+{tagNoValue} for no-value tag, {tagScalarVector} for vector of scalar values,
+{tag} for already defined tag, {tagVectorOfTags} for vector of already defined
+tags.
 
-{tagScalar}, {tagScalarVector} require C++ type as value. In this situation C++ type
-should be defined as string, that mean that, for example, unsigned int C++ type
-should be declared as "unsigned int".
+{tagScalar}, {tagScalarVector} require C++ type as value. In this situation C++
+type should be defined as string, that mean that, for example, unsigned int C++
+type should be declared as "unsigned int".
 
-{tag} and {tagVectorOfTags} require class name with namespace if it is exist. Namespace and
-class name should be separated with ::
+{tag} and {tagVectorOfTags} require class name with namespace if it is exist.
+Namespace and class name should be separated with ::
 
 All of field tags must have {name} tag with name of the field as value.
 
 All of field tags can have {minMaxConstraint} or {oneOfConstraint} to define
-constraint for the field's value. {minMaxConstraint} require two values, and
-{oneOfConstraint} require list of values. For example, {minMaxConstraint 0 100},
-{oneOfConstraint one two three}.
+constraint for the field's value. {minMaxConstraint} require two tags
+{min <string>} and {max <string>}, and {oneOfConstraint} require list of values.
+For example, {minMaxConstraint 0 100}, {oneOfConstraint one two three}.
 
 In the above example will be generated similar to the following header file.
 
 namespace NamespaceName {
 
-  //
-  // NameOfTheClass
-  //
+//
+// NameOfTheClass
+//
   
-  class NameOfTheClass {
-  public:
-    c_tors();
-    ~d_tor();
+class NameOfTheClass {
+public:
+	c_tors();
+	~d_tor();
     
-    //! \return fieldWithQString value.
-    const QString & fieldWithQString() const;
-    //! Set fieldWithQString value.
-    void setFieldWithQString( const QString & value );
-  }; // class NameOfTheClass
+	//! \return fieldWithQString value.
+	const QString & fieldWithQString() const;
+	//! Set fieldWithQString value.
+	void setFieldWithQString( const QString & value );
+}; // class NameOfTheClass
   
   
-  //
-  // TagNameOfTheClass
-  //
+//
+// TagNameOfTheClass
+//
   
-  class TagNameOfTheClass
-    :	public QtConfFile::TagNoValue
-  {
-  public:
-    c_tors();
-    ~d_tor();
+class TagNameOfTheClass
+	:	public QtConfFile::TagNoValue
+{
+public:
+	c_tors();
+	~d_tor();
     
-    //! \return Configuration.
-    NameOfTheClass getCfg() const;
-  }; // class TagNameOfTheClass
+	//! \return Configuration.
+	NameOfTheClass getCfg() const;
+}; // class TagNameOfTheClass
   
 } // namespace NamespaceName
+
+Additionally you can use custome data structures and tags in the generator.
+For this you can use {globalInclude <string>} and {relativeInclude <string>}
+tags. When using such includes in C++ code will be added corresponding
+include directives. And checking of classes' and namespaces' names will be
+turned off. And one more restriction is that that class's name for tag
+must be equal to Tag + Name, i.e. if data structure names Data then class for
+tag must be named TagData and be placed in the same namespace as Data class/
+structure.

@@ -50,6 +50,7 @@ public:
 		const QString & fileName )
 		:	m_stream( dev )
 		,	m_lineNumber( 1 )
+		,	m_columnNumber( 1 )
 		,	m_fileName( fileName )
 	{
 		m_stream.setCodec( codec );
@@ -83,6 +84,7 @@ public:
 
 	QTextStream m_stream;
 	qint64 m_lineNumber;
+	qint64 m_columnNumber;
 	QString m_fileName;
 	QChar m_returnedChar;
 }; // struct InputStream::InputStreamPrivate
@@ -105,6 +107,8 @@ InputStream::~InputStream()
 QChar
 InputStream::get()
 {
+	++d->m_columnNumber;
+
 	if( !d->m_returnedChar.isNull() )
 	{
 		QChar ch = d->m_returnedChar;
@@ -112,7 +116,10 @@ InputStream::get()
 		d->m_returnedChar = QChar();
 
 		if( d->isNewLine( ch ) )
+		{
 			++d->m_lineNumber;
+			d->m_columnNumber = 1;
+		}
 
 		return ch;
 	}
@@ -122,7 +129,10 @@ InputStream::get()
 	d->m_stream >> ch;
 
 	if( d->isNewLine( ch ) )
+	{
 		++d->m_lineNumber;
+		d->m_columnNumber = 1;
+	}
 
 	return ch;
 }
@@ -130,6 +140,8 @@ InputStream::get()
 void
 InputStream::putBack( QChar ch )
 {
+	--d->m_columnNumber;
+
 	if( ch == c_carriageReturn || ch == c_lineFeed )
 		--d->m_lineNumber;
 
@@ -140,6 +152,12 @@ qint64
 InputStream::lineNumber() const
 {
 	return d->m_lineNumber;
+}
+
+qint64
+InputStream::columnNumber() const
+{
+	return d->m_columnNumber;
 }
 
 bool

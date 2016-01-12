@@ -198,7 +198,7 @@ template< class T >
 void
 TagScalar< T >::onStart( const ParserInfo & info )
 {
-	Q_UNUSED( info )
+	Tag::onStart( info );
 }
 
 template< class T >
@@ -232,6 +232,15 @@ TagScalar< T >::onString( const ParserInfo & info,
 {
 	if( !isDefined() )
 	{
+		if( isAnyChildDefined() )
+			throw Exception( QString( "Value \"%1\" for tag \"%2\" "
+				"must be defined before any child tag."
+				"In file \"%3\" on line %4." )
+					.arg( str )
+					.arg( name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+
 		T value = Format< T >::fromString( info, str );
 
 		if( m_constraint )
@@ -429,6 +438,15 @@ TagScalar< bool >::onString( const ParserInfo & info,
 {
 	if( !isDefined() )
 	{
+		if( isAnyChildDefined() )
+			throw Exception( QString( "Value \"%1\" for tag \"%2\" "
+				"must be defined before any child tag."
+				"In file \"%3\" on line %4." )
+					.arg( str )
+					.arg( name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+
 		m_value = Format< bool >::fromString( info, str );
 
 		setDefined();

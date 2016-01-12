@@ -106,6 +106,12 @@ public:
     //! \return Input stream.
     InputStream & inputStream();
 
+	//! \return Line number.
+	qint64 lineNumber() const;
+
+	//! \return Column number.
+	qint64 columnNumber() const;
+
 private:
 	Q_DISABLE_COPY( LexicalAnalyzer )
 

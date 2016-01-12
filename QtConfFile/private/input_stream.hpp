@@ -63,6 +63,9 @@ public:
 	//! \return Line number.
 	qint64 lineNumber() const;
 
+	//! \return Column number.
+	qint64 columnNumber() const;
+
 	//! \return Is stream at end?
 	bool atEnd() const;
 

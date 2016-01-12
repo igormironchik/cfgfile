@@ -85,8 +85,9 @@ public:
 					.arg( m_lex.inputStream().lineNumber() ) );
 		else
 			m_tag.onStart( ParserInfo(
-			   m_lex.inputStream().fileName(),
-			   m_lex.inputStream().lineNumber() ) );
+				m_lex.inputStream().fileName(),
+				m_lex.lineNumber(),
+				m_lex.columnNumber() ) );
 
 		return true;
 	}
@@ -116,7 +117,8 @@ public:
 
 			tag.onStart( ParserInfo(
 				m_lex.inputStream().fileName(),
-				m_lex.inputStream().lineNumber() ) );
+				m_lex.lineNumber(),
+				m_lex.columnNumber() ) );
 
 			return true;
 		}
@@ -225,13 +227,15 @@ Parser::parse()
 			else if( lexeme.type() == StringLexeme )
 				d->m_stack.top()->onString( ParserInfo(
 					d->m_lex.inputStream().fileName(),
-					d->m_lex.inputStream().lineNumber() ),
+					d->m_lex.lineNumber(),
+					d->m_lex.columnNumber() ),
 						lexeme.value() );
 			else if( lexeme.type() == FinishTagLexeme )
 			{
 				d->m_stack.top()->onFinish( ParserInfo(
 					d->m_lex.inputStream().fileName(),
-					d->m_lex.inputStream().lineNumber() ) );
+					d->m_lex.lineNumber(),
+					d->m_lex.columnNumber() ) );
 				d->m_stack.pop();
 			}
 		}

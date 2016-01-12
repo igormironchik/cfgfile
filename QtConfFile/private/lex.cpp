@@ -105,6 +105,8 @@ class LexicalAnalyzer::LexicalAnalyzerPrivate {
 public:
 	explicit LexicalAnalyzerPrivate( InputStream & stream )
 		:	m_stream( stream )
+		,	m_lineNumber( m_stream.lineNumber() )
+		,	m_columnNumber( m_stream.columnNumber() )
 	{
 	}
 
@@ -199,6 +201,8 @@ public:
 	}
 
 	InputStream & m_stream;
+	qint64 m_lineNumber;
+	qint64 m_columnNumber;
 }; // struct LexicalAnalyzer::LexicalAnalyzerPrivate
 
 
@@ -226,6 +230,9 @@ LexicalAnalyzer::nextLexeme()
 	bool skipComment = false;
 
 	d->skipSpaces();
+
+	d->m_lineNumber = d->m_stream.lineNumber();
+	d->m_columnNumber = d->m_stream.columnNumber();
 
 	if( d->m_stream.atEnd() )
 		return Lexeme( NullLexeme, QString() );
@@ -367,6 +374,18 @@ InputStream &
 LexicalAnalyzer::inputStream()
 {
     return d->m_stream;
+}
+
+qint64
+LexicalAnalyzer::lineNumber() const
+{
+	return d->m_lineNumber;
+}
+
+qint64
+LexicalAnalyzer::columnNumber() const
+{
+	return d->m_columnNumber;
 }
 
 } /* namespace QtConfFile */

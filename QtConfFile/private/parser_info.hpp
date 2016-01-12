@@ -44,7 +44,8 @@ namespace QtConfFile {
 //! Information about parsed file and current state of parsing.
 class ParserInfo {
 public:
-	ParserInfo( const QString & fileName, qint64 lineNumber );
+	ParserInfo( const QString & fileName, qint64 lineNumber,
+		qint64 columnNumber );
 
 	//! \return File name.
 	const QString & fileName() const;
@@ -52,11 +53,16 @@ public:
 	//! \return Line number.
 	qint64 lineNumber() const;
 
+	//! \return Column number.
+	qint64 columnNumber() const;
+
 private:
 	//! File name.
 	QString m_fileName;
 	//! Line number.
 	qint64 m_lineNumber;
+	//! Column number.
+	qint64 m_columnNumber;
 }; // class PraserInfo
 
 } /* namespace QtConfFile */
