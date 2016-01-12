@@ -67,8 +67,13 @@ public slots:
 	{
 		QTextStream stream( stdout );
 
+		int i = 0;
+		bool failed = false;
+
 		foreach( QString testApp, m_tests )
 		{
+			++i;
+
 			QProcess process;
 			process.setWorkingDirectory( QFileInfo( testApp ).absolutePath() );
 			process.start( testApp );
@@ -77,8 +82,19 @@ public slots:
 			stream << process.readAllStandardError();
 
 			if( process.exitCode() != 0 )
+			{
+				stream << QString( "\n\nFailed test %1 out of %2." )
+					.arg( i ).arg( m_tests.size() );
+
+				failed = true;
+
 				break;
+			}
 		}
+
+		if( !failed )
+			stream << QString( "\n\nPassed %1 out of %2 tests." )
+				.arg( i ).arg( m_tests.size() );
 
 		QCoreApplication::quit();
 	}
