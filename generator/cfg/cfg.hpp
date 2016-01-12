@@ -28,6 +28,9 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
+#ifndef QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
+#define QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
+
 // QtConfFile include.
 #include <QtConfFile/TagNoValue>
 #include <QtConfFile/TagScalar>
@@ -83,6 +86,8 @@ static const QString c_globalIncludeTagName = QLatin1String( "globalInclude" );
 //! Relative include tag's name.
 static const QString c_relativeIncludeTagName =
 	QLatin1String( "relativeInclude" );
+//! Required tag name.
+static const QString c_requiredTagName = QLatin1String( "required" );
 
 
 //
@@ -227,6 +232,11 @@ public:
 	//! Set column number.
 	void setColumnNumber( qint64 num );
 
+	//! \return Is field required?
+	bool isRequired() const;
+	//! Set requreid.
+	void setRequired( bool on = true );
+
 private:
 	//! Type
 	FieldType m_type;
@@ -240,6 +250,8 @@ private:
 	qint64 m_lineNumber;
 	//! Column number.
 	qint64 m_columnNumber;
+	//! Is required?
+	bool m_isRequired;
 }; // class Field
 
 
@@ -453,15 +465,22 @@ public:
 	//! Model must be prepared before calling this method.
 	void check() const;
 
-private:
 	//! Find next class.
 	ConstClassPointer nextClass( quint64 index ) const;
+
+	//! \return Is included something?
+	bool isIncluded() const;
+
+	//! \return Macro for include guard.
+	const QString & includeGuard() const;
+	//! Set include guard.
+	void setIncludeGuard( const QString & guard );
+
+private:
 	//! Check class.
 	void checkClass( const Class & c,
 		QStringList & prevDefinedClasses,
 		bool included ) const;
-	//! \return Is included something?
-	bool isIncluded() const;
 
 private:
 	//! Root namespace, i.e. ::
@@ -470,6 +489,8 @@ private:
 	QStringList m_globalIncludes;
 	//! List of relative includes.
 	QStringList m_relativeIncludes;
+	//! Include guard.
+	QString m_includeGuard;
 
 	//! Prepared data.
 	QMap< quint64, ConstClassPointer > m_indexes;
@@ -538,6 +559,8 @@ private:
 	TagMinMaxConstraint m_minMaxConstraint;
 	//! One of constraint.
 	TagOneOfConstraint m_oneOfConstraint;
+	//! Is required?
+	QtConfFile::TagNoValue m_isRequired;
 }; // class TagField
 
 
@@ -601,7 +624,7 @@ private:
 
 //! Tag for Model.
 class TagModel
-	:	public QtConfFile::TagNoValue
+	:	public QtConfFile::TagScalar< QString >
 {
 public:
 	TagModel();
@@ -628,3 +651,5 @@ private:
 } /* namespace Generator */
 
 } /* namespace QtConfFile */
+
+#endif // QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED

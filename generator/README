@@ -10,7 +10,7 @@ with following format:
 Let's say you need data class with one QString field then you should write
 following configuration file, for example:
 
-{forGeneration
+{forGeneration ifndefMacro
 	{namespace NamespaceName
 		{class NameOfTheClass
 			{base tagNoValue}
@@ -42,6 +42,8 @@ type should be declared as "unsigned int".
 Namespace and class name should be separated with ::
 
 All of field tags must have {name} tag with name of the field as value.
+
+Fields can have {required} tag to mark field as required.
 
 All of field tags can have {minMaxConstraint} or {oneOfConstraint} to define
 constraint for the field's value. {minMaxConstraint} require two tags

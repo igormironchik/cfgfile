@@ -125,6 +125,7 @@ OneOfConstraint::values() const
 Field::Field()
 	:	m_lineNumber( -1 )
 	,	m_columnNumber( -1 )
+	,	m_isRequired( false )
 {
 }
 
@@ -139,6 +140,7 @@ Field::Field( const Field & other )
 	,	m_constraint( other.constraint() )
 	,	m_lineNumber( other.lineNumber() )
 	,	m_columnNumber( other.columnNumber() )
+	,	m_isRequired( other.isRequired() )
 {
 }
 
@@ -153,6 +155,7 @@ Field::operator = ( const Field & other )
 		m_constraint = other.constraint();
 		m_lineNumber = other.lineNumber();
 		m_columnNumber = other.columnNumber();
+		m_isRequired = other.isRequired();
 	}
 
 	return *this;
@@ -240,6 +243,18 @@ void
 Field::setColumnNumber( qint64 num )
 {
 	m_columnNumber = num;
+}
+
+bool
+Field::isRequired() const
+{
+	return m_isRequired;
+}
+
+void
+Field::setRequired( bool on )
+{
+	m_isRequired = on;
 }
 
 
@@ -616,6 +631,7 @@ Model::Model( const Model & other )
 	:	m_root( other.rootNamespace() )
 	,	m_globalIncludes( other.globalIncludes() )
 	,	m_relativeIncludes( other.relativeIncludes() )
+	,	m_includeGuard( other.includeGuard() )
 {
 }
 
@@ -627,6 +643,7 @@ Model::operator = ( const Model & other )
 		m_root = other.rootNamespace();
 		m_globalIncludes = other.globalIncludes();
 		m_relativeIncludes = other.relativeIncludes();
+		m_includeGuard = other.includeGuard();
 	}
 
 	return *this;
@@ -916,6 +933,18 @@ Model::isIncluded() const
 	return ( !m_globalIncludes.isEmpty() || !m_relativeIncludes.isEmpty() );
 }
 
+const QString &
+Model::includeGuard() const
+{
+	return m_includeGuard;
+}
+
+void
+Model::setIncludeGuard( const QString & guard )
+{
+	m_includeGuard = guard;
+}
+
 
 //
 // TagMinMaxConstraint
@@ -971,6 +1000,7 @@ TagField::TagField( const QString & name, bool isMandatory )
 	,	m_name( *this, c_fieldNameTagName, true )
 	,	m_minMaxConstraint( *this )
 	,	m_oneOfConstraint( *this )
+	,	m_isRequired( *this, c_requiredTagName, false )
 {
 }
 
@@ -1015,6 +1045,9 @@ TagField::cfg() const
 	f.setName( m_name.value() );
 	f.setLineNumber( lineNumber() );
 	f.setColumnNumber( columnNumber() );
+
+	if( m_isRequired.isDefined() )
+		f.setRequired();
 
 	if( m_minMaxConstraint.isDefined() && m_oneOfConstraint.isDefined() )
 	{
@@ -1156,7 +1189,7 @@ TagNamespace::cfg() const
 //
 
 TagModel::TagModel()
-	:	QtConfFile::TagNoValue( c_mainCfgTagName, true )
+	:	QtConfFile::TagScalar< QString > ( c_mainCfgTagName, true )
 	,	m_rootNamespace( *this, c_namespaceTagName, false )
 	,	m_rootClasses( *this, c_classTagName, false )
 	,	m_globalIncludes( *this, c_globalIncludeTagName, false )
@@ -1172,6 +1205,7 @@ Model
 TagModel::cfg() const
 {
 	Model m;
+	m.setIncludeGuard( value() );
 
 	if( m_rootNamespace.isDefined() )
 	{
