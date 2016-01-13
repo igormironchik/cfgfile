@@ -36,6 +36,7 @@
 #include <QtConfFile/TagScalar>
 #include <QtConfFile/TagVectorOfTags>
 #include <QtConfFile/TagScalarVector>
+#include <QtConfFile/ConstraintOneOf>
 
 // Qt include.
 #include <QList>
@@ -610,6 +611,8 @@ public:
 private:
 	//! Value type.
 	QtConfFile::TagScalar< QString > m_valueType;
+	//! Constraint.
+	QtConfFile::ConstraintOneOf< QString > m_constraint;
 }; // class TagBaseClass
 
 

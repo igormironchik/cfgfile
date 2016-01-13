@@ -823,9 +823,10 @@ Model::nextClass( quint64 index ) const
 		return 0;
 }
 
-static inline QString fullName( const Class & c )
+static inline QString fullName( const Class & c,
+	const QString & startName = QString() )
 {
-	QString name = c.name();
+	QString name = ( startName.isEmpty() ? c.name() : startName );
 
 	const Namespace * nm = c.parentNamespace();
 
@@ -901,25 +902,6 @@ Model::checkClass( const Class & c,
 				.arg( QString::number( c.lineNumber() ) )
 				.arg( QString::number( c.columnNumber() ) ) );
 
-	const QString & base = c.baseName();
-
-	if( !included )
-	{
-		if( base != c_scalarTagName && base != c_noValueTagName &&
-			base != c_scalarVectorTagName && base != c_vectorOfTagsTagName )
-		{
-			if( !checkIsClassDefined( base, className, prevDefinedClasses ) )
-			{
-				throw QtConfFile::Exception( QString( "Base class \"%1\" "
-					"of class \"%2\" wasn't defined. Line %3, column %4." )
-						.arg( base )
-						.arg( className )
-						.arg( QString::number( c.lineNumber() ) )
-						.arg( QString::number( c.columnNumber() ) ) );
-			}
-		}
-	}
-
 	prevDefinedClasses.append( className );
 
 	QStringList fields;
@@ -940,8 +922,8 @@ Model::checkClass( const Class & c,
 		{
 			if( f.type() == Field::CustomTagFieldType )
 			{
-				if( !checkIsClassDefined( f.valueType(), className,
-					prevDefinedClasses ) )
+				if( !checkIsClassDefined( fullName( c, f.valueType() ),
+					className, prevDefinedClasses ) )
 				{
 					throw QtConfFile::Exception( QString( "Value type \"%1\" of "
 						"member \"%2\" of class \"%3\" "
@@ -1157,6 +1139,12 @@ TagBaseClass::TagBaseClass( QtConfFile::Tag & owner, const QString & name,
 	:	QtConfFile::TagScalar< QString > ( owner, name, isMandatory )
 	,	m_valueType( *this, c_valueTypeTagName, false )
 {
+	m_constraint.addValue( c_scalarTagName );
+	m_constraint.addValue( c_noValueTagName );
+	m_constraint.addValue( c_scalarVectorTagName );
+	m_constraint.addValue( c_vectorOfTagsTagName );
+
+	setConstraint( &m_constraint );
 }
 
 TagBaseClass::~TagBaseClass()

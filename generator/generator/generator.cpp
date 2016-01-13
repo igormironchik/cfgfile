@@ -101,7 +101,7 @@ static inline void startNamespaces( QTextStream & stream,
 static inline void closeNamespace( QTextStream & stream,
 	NamespaceStack & stack )
 {
-	stream << QLatin1String( "} /* " )
+	stream << QLatin1String( "} /* namespace " )
 		<< stack.top()->name()
 		<< QLatin1String( " */\n\n" );
 
@@ -419,7 +419,7 @@ static inline void generateDataClass( QTextStream & stream,
 		if( f.type() != Cfg::Field::NoValueFieldType )
 		{
 			stream << QLatin1String( "\tconst " )
-				<< generateTypeOfData( f ) << QLatin1String( "& " )
+				<< generateTypeOfData( f ) << QLatin1String( " & " )
 				<< f.name() << QLatin1String( "() const\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
@@ -606,6 +606,8 @@ static inline void generateCfgSet( QTextStream & stream,
 				break;
 		}
 	}
+
+	stream << QLatin1String( "\n\t\tsetDefined();\n" );
 } // generateCfgSet
 
 
@@ -724,7 +726,7 @@ static inline void generateTagClass( QTextStream & stream,
 
 	stream << QLatin1String( "\t" ) << tagClassName
 		<< QLatin1String( "()\n"
-						  "\t\t:\tpublic " )
+						  "\t\t:\t" )
 		<< baseTag << QLatin1String( "( QLatin1String( \"" )
 		<< tagName << QLatin1String( "\" ), true )\n" );
 
@@ -740,7 +742,7 @@ static inline void generateTagClass( QTextStream & stream,
 	stream << QLatin1String( "\texplicit " ) << tagClassName
 		<< QLatin1String( "( const " ) << c->name()
 		<< QLatin1String( " & cfg )\n"
-						  "\t\t:\tpublic " )
+						  "\t\t:\t" )
 		<< baseTag << QLatin1String( "( QLatin1String( \"" )
 		<< tagName << QLatin1String( "\" ), true )\n" );
 
@@ -757,7 +759,7 @@ static inline void generateTagClass( QTextStream & stream,
 	// 3
 	stream << QLatin1String( "\t" ) << tagClassName
 		<< QLatin1String( "( const QString & name, bool isMandatory )\n" )
-		<< QLatin1String( "\t\t:\tpublic " )
+		<< QLatin1String( "\t\t:\t" )
 		<< baseTag << QLatin1String( "( name, isMandatory )\n" );
 
 	generateTagFieldsInCtor( stream, c );
@@ -772,7 +774,7 @@ static inline void generateTagClass( QTextStream & stream,
 	stream << QLatin1String( "\t" ) << tagClassName
 		<< QLatin1String( "( QtConfFile::Tag & owner, const QString & name, "
 						  "bool isMandatory )\n" )
-		<< QLatin1String( "\t\t:\tpublic " )
+		<< QLatin1String( "\t\t:\t" )
 		<< baseTag << QLatin1String( "( owner, name, isMandatory )\n" );
 
 	generateTagFieldsInCtor( stream, c );
@@ -798,7 +800,7 @@ static inline void generateTagClass( QTextStream & stream,
 
 	generateCfgInit( stream, c );
 
-	stream << QLatin1String( "\t\treturn c;\n"
+	stream << QLatin1String( "\n\t\treturn c;\n"
 							 "\t}\n\n" );
 
 	// setter.

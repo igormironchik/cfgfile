@@ -1,7 +1,6 @@
 
 // Qt include.
 #include <QCoreApplication>
-#include <QDebug>
 #include <QFileInfo>
 #include <QFile>
 #include <QTextStream>
@@ -104,23 +103,25 @@ static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
 	ForGeneration data( input.value().toString(),
 		output.value().toString() );
 
+	QTextStream stream( stdout );
+
 	if( data.inputFile().isEmpty() )
 	{
-		qDebug() << QLatin1String( "Please specify input file." );
+		stream << QLatin1String( "Please specify input file." );
 
 		exit( 1 );
 	}
 
 	if( !QFileInfo( data.inputFile() ).exists() )
 	{
-		qDebug() << QLatin1String( "Specified input file doesn't exist." );
+		stream << QLatin1String( "Specified input file doesn't exist." );
 
 		exit( 1 );
 	}
 
 	if( data.outputFile().isEmpty() )
 	{
-		qDebug() << QLatin1String( "Please specify output file." );
+		stream << QLatin1String( "Please specify output file." );
 
 		exit( 1 );
 	}
@@ -142,7 +143,9 @@ int main( int argc, char ** argv )
 	}
 	catch( const QtArgBaseException & x )
 	{
-		qDebug() << x.whatAsQString();
+		QTextStream stream( stdout );
+
+		stream << x.whatAsQString();
 
 		return 1;
 	}
@@ -163,7 +166,9 @@ int main( int argc, char ** argv )
 	}
 	catch( const QtConfFile::Exception & x )
 	{
-		qDebug() << x.whatAsQString();
+		QTextStream stream( stdout );
+
+		stream << x.whatAsQString();
 
 		return 1;
 	}
@@ -184,7 +189,9 @@ int main( int argc, char ** argv )
 	}
 	else
 	{
-		qDebug() << QLatin1String( "Couldn't open output file for writting." );
+		QTextStream stream( stdout );
+
+		stream << QLatin1String( "Couldn't open output file for writting." );
 
 		return 1;
 	}
