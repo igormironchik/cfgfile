@@ -12,8 +12,10 @@ SOURCES += generator.cpp \
 
 unix|win32: LIBS += -L$$OUT_PWD/../../lib/ -lQtConfFile.Generator.Cfg -lQtConfFile
 
-INCLUDEPATH += $$PWD/.. $$PWD/../..
-DEPENDPATH += $$PWD/.. $$PWD/../..
+INCLUDEPATH += $$PWD/.. $$PWD/../.. $$PWD/../../QtArg
+DEPENDPATH += $$PWD/.. $$PWD/../.. $$PWD/../../QtArg
+
+include( ../../QtArg/QtArg/qtarg.pri )
 
 win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../../lib/QtConfFile.Generator.Cfg.lib \
 									$$OUT_PWD/../../lib/QtConfFile.lib

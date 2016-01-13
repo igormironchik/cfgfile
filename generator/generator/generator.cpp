@@ -81,6 +81,20 @@ typedef QStack< ConstNamespacePointer > NamespaceStack;
 
 
 //
+// startNamespaces
+//
+
+static inline void startNamespaces( QTextStream & stream,
+	NamespaceStack & stack )
+{
+	foreach( const ConstNamespacePointer & n, stack )
+		stream << QLatin1String( "namespace " )
+			<< n->name()
+			<< QLatin1String( " {\n\n" );
+} // closeNamespaces
+
+
+//
 // closeNamespace
 //
 
@@ -103,7 +117,7 @@ static inline void generateIncludes( QTextStream & stream,
 	const QStringList & globalIncludes,
 	const QStringList & relativeIncludes )
 {
-	stream << QLatin1String( "// QtConfFile include."
+	stream << QLatin1String( "// QtConfFile include.\n"
 							 "#include <QtConfFile/TagNoValue>\n"
 							 "#include <QtConfFile/TagScalar>\n"
 							 "#include <QtConfFile/TagScalarVector>\n"
@@ -172,7 +186,7 @@ static inline QString generateBaseTagClassName( const QString & base,
 
 static inline QString generateTagNameFromClassName( const QString & name )
 {
-	return ( QString( "set" ) + name.at( 0 ).toLower() +
+	return ( name.at( 0 ).toLower() +
 		name.right( name.length() - 1 ) );
 } // generateTagNameFromClassName
 
@@ -788,7 +802,7 @@ static inline void generateTagClass( QTextStream & stream,
 							 "\t}\n\n" );
 
 	// setter.
-	stream << QLatin1String( "\t void setCfg( const " )
+	stream << QLatin1String( "\tvoid setCfg( const " )
 		<< c->name() << QLatin1String( " & cfg )\n"
 									   "\t{\n" );
 
@@ -860,7 +874,11 @@ CppGenerator::generate( QTextStream & stream ) const
 				closeNamespace( stream, nms );
 
 			if( nms.isEmpty() )
+			{
 				nms.swap( tmp );
+
+				startNamespaces( stream, nms );
+			}
 		}
 		else
 		{

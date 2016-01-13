@@ -827,15 +827,17 @@ static inline QString fullName( const Class & c )
 {
 	QString name = c.name();
 
-	const Namespace * nm = 0;
+	const Namespace * nm = c.parentNamespace();
 
-	while( ( nm = c.parentNamespace() ) )
+	while( nm )
 	{
 		if( !nm->name().isEmpty() )
 		{
 			name.prepend( c_namespaceSeparator );
 			name.prepend( nm->name() );
 		}
+
+		nm = nm->parentNamespace();
 	}
 
 	return name;
