@@ -15,7 +15,8 @@ following configuration file, for example:
 		{class NameOfTheClass
 			{base tagNoValue}
       
-			{tagScalar QString
+			{tagScalar
+				{valueType QString}
 				{name fieldWithQString}
 			}
 		}

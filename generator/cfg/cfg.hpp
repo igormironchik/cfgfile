@@ -88,6 +88,10 @@ static const QString c_relativeIncludeTagName =
 	QLatin1String( "relativeInclude" );
 //! Required tag name.
 static const QString c_requiredTagName = QLatin1String( "required" );
+//! Default value tag name.
+static const QString c_defaultValueTagName = QLatin1String( "defaultValue" );
+//! Value type tag name.
+static const QString c_valueTypeTagName = QLatin1String( "valueType" );
 
 
 //
@@ -237,6 +241,11 @@ public:
 	//! Set requreid.
 	void setRequired( bool on = true );
 
+	//! \return Default value for the field.
+	const QString & defaultValue() const;
+	//! Set default value.
+	void setDefaultValue( const QString & value );
+
 private:
 	//! Type
 	FieldType m_type;
@@ -252,6 +261,8 @@ private:
 	qint64 m_columnNumber;
 	//! Is required?
 	bool m_isRequired;
+	//! Default value.
+	QString m_defaultValue;
 }; // class Field
 
 
@@ -282,6 +293,11 @@ public:
 	const QString & baseName() const;
 	//! Set base class name.
 	void setBaseName( const QString & n );
+
+	//! \return Base value type.
+	const QString & baseValueType() const;
+	//! Set base value type.
+	void setBaseValueType( const QString & t );
 
 	//! \return all fields.
 	const QList< Field > & fields() const;
@@ -327,6 +343,8 @@ private:
 	QString m_name;
 	//! Base class name.
 	QString m_baseName;
+	//! Base value type.
+	QString m_baseValueType;
 	//! Fields.
 	QList< Field > m_fields;
 	//! Line number.
@@ -543,7 +561,7 @@ public:
 
 //! Tag for Field.
 class TagField
-	:	public QtConfFile::TagScalar< QString >
+	:	public QtConfFile::TagNoValue
 {
 public:
 	TagField( const QString & name, bool isMandatory );
@@ -552,16 +570,47 @@ public:
 	//! \return Field.
 	Field cfg() const;
 
+	//! Called when tag parsing finished.
+	void onFinish( const ParserInfo & info );
+
 private:
 	//! Name.
 	QtConfFile::TagScalar< QString > m_name;
+	//! Value type.
+	QtConfFile::TagScalar< QString > m_valueType;
 	//! Min-max constraint.
 	TagMinMaxConstraint m_minMaxConstraint;
 	//! One of constraint.
 	TagOneOfConstraint m_oneOfConstraint;
 	//! Is required?
 	QtConfFile::TagNoValue m_isRequired;
+	//! Default value.
+	QtConfFile::TagScalar< QString > m_defaultValue;
 }; // class TagField
+
+
+//
+// TagBaseClass
+//
+
+class TagBaseClass
+	:	public QtConfFile::TagScalar< QString >
+{
+public:
+	TagBaseClass( QtConfFile::Tag & owner, const QString & name,
+		bool isMandatory );
+	~TagBaseClass();
+
+	//! \return Value type.
+	QString valueType() const;
+
+	//! Called when tag parsing finished.
+	void onFinish( const ParserInfo & info );
+
+private:
+	//! Value type.
+	QtConfFile::TagScalar< QString > m_valueType;
+}; // class TagBaseClass
 
 
 //
@@ -581,7 +630,7 @@ public:
 
 private:
 	//! Base class name.
-	QtConfFile::TagScalar< QString > m_baseClassName;
+	TagBaseClass m_baseClassName;
 	//! Scalar tags.
 	QtConfFile::TagVectorOfTags< TagField > m_scalarTags;
 	//! No-value tags.

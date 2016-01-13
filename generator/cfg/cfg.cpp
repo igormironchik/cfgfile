@@ -141,6 +141,7 @@ Field::Field( const Field & other )
 	,	m_lineNumber( other.lineNumber() )
 	,	m_columnNumber( other.columnNumber() )
 	,	m_isRequired( other.isRequired() )
+	,	m_defaultValue( other.defaultValue() )
 {
 }
 
@@ -156,6 +157,7 @@ Field::operator = ( const Field & other )
 		m_lineNumber = other.lineNumber();
 		m_columnNumber = other.columnNumber();
 		m_isRequired = other.isRequired();
+		m_defaultValue = other.defaultValue();
 	}
 
 	return *this;
@@ -257,6 +259,18 @@ Field::setRequired( bool on )
 	m_isRequired = on;
 }
 
+const QString &
+Field::defaultValue() const
+{
+	return m_defaultValue;
+}
+
+void
+Field::setDefaultValue( const QString & value )
+{
+	m_defaultValue = value;
+}
+
 
 //
 // Class
@@ -277,6 +291,7 @@ Class::~Class()
 Class::Class( const Class & other )
 	:	m_name( other.name() )
 	,	m_baseName( other.baseName() )
+	,	m_baseValueType( other.baseValueType() )
 	,	m_fields( other.fields() )
 	,	m_lineNumber( other.lineNumber() )
 	,	m_columnNumber( other.columnNumber() )
@@ -291,6 +306,7 @@ Class::operator = ( const Class & other )
 	{
 		m_name = other.name();
 		m_baseName = other.baseName();
+		m_baseValueType = other.baseValueType();
 		m_fields = other.fields();
 		m_lineNumber = other.lineNumber();
 		m_columnNumber = other.columnNumber();
@@ -328,6 +344,18 @@ void
 Class::setBaseName( const QString & n )
 {
 	m_baseName = n;
+}
+
+const QString &
+Class::baseValueType() const
+{
+	return m_baseValueType;
+}
+
+void
+Class::setBaseValueType( const QString & t )
+{
+	m_baseValueType = t;
 }
 
 const QList< Field > &
@@ -996,11 +1024,13 @@ TagOneOfConstraint::cfg() const
 //
 
 TagField::TagField( const QString & name, bool isMandatory )
-	:	QtConfFile::TagScalar< QString > ( name, isMandatory )
+	:	QtConfFile::TagNoValue( name, isMandatory )
 	,	m_name( *this, c_fieldNameTagName, true )
+	,	m_valueType( *this, c_valueTypeTagName, false )
 	,	m_minMaxConstraint( *this )
 	,	m_oneOfConstraint( *this )
 	,	m_isRequired( *this, c_requiredTagName, false )
+	,	m_defaultValue( *this, c_defaultValueTagName, false )
 {
 }
 
@@ -1041,13 +1071,20 @@ TagField::cfg() const
 {
 	Field f;
 	f.setType( fieldTypeFromString( name() ) );
-	f.setValueType( value() );
 	f.setName( m_name.value() );
 	f.setLineNumber( lineNumber() );
 	f.setColumnNumber( columnNumber() );
 
+	if( m_valueType.isDefined() )
+		f.setValueType( m_valueType.value() );
+
 	if( m_isRequired.isDefined() )
 		f.setRequired();
+
+	if( m_defaultValue.isDefined() )
+		f.setDefaultValue( m_defaultValue.value() );
+	else if( f.type() == Field::NoValueFieldType )
+		f.setDefaultValue( QLatin1String( "false" ) );
 
 	if( m_minMaxConstraint.isDefined() && m_oneOfConstraint.isDefined() )
 	{
@@ -1082,6 +1119,80 @@ TagField::cfg() const
 	return f;
 }
 
+void
+TagField::onFinish( const ParserInfo & info )
+{
+	switch( fieldTypeFromString( name() ) )
+	{
+		case Field::ScalarFieldType :
+		case Field::ScalarVectorFieldType :
+		case Field::VectorOfTagsFieldType :
+		{
+			if( !m_valueType.isDefined() )
+				throw QtConfFile::Exception( QString( "Undefined required "
+					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
+						.arg( c_valueTypeTagName )
+						.arg( name() )
+						.arg( QString::number( info.lineNumber() ) )
+						.arg( QString::number( info.columnNumber() ) ) );
+		}
+			break;
+
+		default :
+			break;
+	}
+
+	QtConfFile::TagNoValue::onFinish( info );
+}
+
+
+//
+// TagBaseClass
+//
+
+TagBaseClass::TagBaseClass( QtConfFile::Tag & owner, const QString & name,
+	bool isMandatory )
+	:	QtConfFile::TagScalar< QString > ( owner, name, isMandatory )
+	,	m_valueType( *this, c_valueTypeTagName, false )
+{
+}
+
+TagBaseClass::~TagBaseClass()
+{
+}
+
+QString
+TagBaseClass::valueType() const
+{
+	return m_valueType.value();
+}
+
+void
+TagBaseClass::onFinish( const ParserInfo & info )
+{
+	switch( fieldTypeFromString( value() ) )
+	{
+		case Field::ScalarFieldType :
+		case Field::ScalarVectorFieldType :
+		case Field::VectorOfTagsFieldType :
+		{
+			if( !m_valueType.isDefined() )
+				throw QtConfFile::Exception( QString( "Undefined required "
+					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
+						.arg( c_valueTypeTagName )
+						.arg( value() )
+						.arg( QString::number( info.lineNumber() ) )
+						.arg( QString::number( info.columnNumber() ) ) );
+		}
+			break;
+
+		default :
+			break;
+	}
+
+	QtConfFile::TagScalar< QString >::onFinish( info );
+}
+
 
 //
 // TagClass
@@ -1108,6 +1219,7 @@ TagClass::cfg() const
 	Class c;
 	c.setName( value() );
 	c.setBaseName( m_baseClassName.value() );
+	c.setBaseValueType( m_baseClassName.valueType() );
 	c.setLineNumber( lineNumber() );
 	c.setColumnNumber( columnNumber() );
 
