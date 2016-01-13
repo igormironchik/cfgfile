@@ -72,7 +72,17 @@ CppGenerator::~CppGenerator()
 {
 }
 
+
+//
+// NamespaceStack
+//
+
 typedef QStack< ConstNamespacePointer > NamespaceStack;
+
+
+//
+// closeNamespace
+//
 
 static inline void closeNamespace( QTextStream & stream,
 	NamespaceStack & stack )
@@ -82,7 +92,12 @@ static inline void closeNamespace( QTextStream & stream,
 		<< QLatin1String( " */\n\n" );
 
 	stack.pop();
-}
+} // closeNamespace
+
+
+//
+// generateIncludes
+//
 
 static inline void generateIncludes( QTextStream & stream,
 	const QStringList & globalIncludes,
@@ -98,6 +113,9 @@ static inline void generateIncludes( QTextStream & stream,
 							 "#include <QtConfFile/Exceptions>\n"
 							 "#include <QtConfFile/Utils>\n\n" );
 
+	stream << QLatin1String( "// Qt include.\n" )
+		<< QLatin1String( "#include <QList>\n\n" );
+
 	foreach( const QString & incl, globalIncludes )
 		stream << QLatin1String( "#include <" )
 			<< incl << QLatin1String( ">\n" );
@@ -111,13 +129,23 @@ static inline void generateIncludes( QTextStream & stream,
 
 	if( !relativeIncludes.isEmpty() )
 		stream << QLatin1String( "\n" );
-}
+} // generateIncludes
+
+
+//
+// generateSetterMethodName
+//
 
 static inline QString generateSetterMethodName( const QString & name )
 {
 	return ( QString( "set" ) + name.at( 0 ).toUpper() +
 		name.right( name.length() - 1 ) );
-}
+} // generateSetterMethodName
+
+
+//
+// generateBaseTagClassName
+//
 
 static inline QString generateBaseTagClassName( const QString & base,
 	const QString & valueType )
@@ -135,13 +163,23 @@ static inline QString generateBaseTagClassName( const QString & base,
 				QLatin1String( " >" );
 	else
 		return base;
-}
+} // generateBaseTagClassName
+
+
+//
+// generateTagNameFromClassName
+//
 
 static inline QString generateTagNameFromClassName( const QString & name )
 {
 	return ( QString( "set" ) + name.at( 0 ).toLower() +
 		name.right( name.length() - 1 ) );
-}
+} // generateTagNameFromClassName
+
+
+//
+// boolToString
+//
 
 static inline QString boolToString( bool value )
 {
@@ -149,7 +187,12 @@ static inline QString boolToString( bool value )
 		return QLatin1String( "true" );
 	else
 		return QLatin1String( "false" );
-}
+} // boolToString
+
+
+//
+// generateTagFieldsInCtor
+//
 
 static inline void generateTagFieldsInCtor( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -192,7 +235,12 @@ static inline void generateTagFieldsInCtor( QTextStream & stream,
 			}
 		}
 	}
-}
+} // generateTagFieldsInCtor
+
+
+//
+// generateConstraintsInCtor
+//
 
 static inline void generateConstraintsInCtor( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -237,7 +285,12 @@ static inline void generateConstraintsInCtor( QTextStream & stream,
 			}
 		}
 	}
-}
+} // generateConstraintsInCtor
+
+
+//
+// generateTypeOfData
+//
 
 static inline QString generateTypeOfData( const Cfg::Field & f )
 {
@@ -257,7 +310,12 @@ static inline QString generateTypeOfData( const Cfg::Field & f )
 		default :
 			return QLatin1String( "void" );
 	}
-}
+} // generateTypeOfData
+
+
+//
+// generateDataClass
+//
 
 static inline void generateDataClass( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -394,7 +452,12 @@ static inline void generateDataClass( QTextStream & stream,
 
 	stream << QLatin1String( "}; // class " ) << c->name()
 		<< QLatin1String( "\n\n\n" );
-}
+} // generateDataClass
+
+
+//
+// generateCfgInit
+//
 
 static inline void generateCfgInit( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -459,7 +522,12 @@ static inline void generateCfgInit( QTextStream & stream,
 				break;
 		}
 	}
-}
+} // generateCfgInit
+
+
+//
+// generateCfgSet
+//
 
 static inline void generateCfgSet( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -524,7 +592,12 @@ static inline void generateCfgSet( QTextStream & stream,
 				break;
 		}
 	}
-}
+} // generateCfgSet
+
+
+//
+// generatePrivateTagMembers
+//
 
 static inline void generatePrivateTagMembers( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -603,7 +676,12 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 			}
 		}
 	}
-}
+} // generatePrivateTagMembers
+
+
+//
+// generateTagClass
+//
 
 static inline void generateTagClass( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -725,7 +803,12 @@ static inline void generateTagClass( QTextStream & stream,
 
 	stream << QLatin1String( "}; // class " )
 		<< tagClassName << QLatin1String( "\n\n" );
-}
+} // generateTagClass
+
+
+//
+// generateCppClasses
+//
 
 static inline void generateCppClasses( QTextStream & stream,
 	Cfg::ConstClassPointer c )
@@ -733,7 +816,7 @@ static inline void generateCppClasses( QTextStream & stream,
 	generateDataClass( stream, c );
 
 	generateTagClass( stream, c );
-}
+} // generateCppClasses
 
 void
 CppGenerator::generate( QTextStream & stream ) const
