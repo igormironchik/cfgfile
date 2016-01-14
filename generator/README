@@ -44,7 +44,7 @@ Namespace and class name should be separated with ::
 
 All of field tags must have {name} tag with name of the field as value. If
 {base} defined with tagScalar or tagScalarVector then {valueType} and {name}
-must be defined. {base tagNoValue} is not neccessary, if {base} is not defined
+must be defined. {base tagNoValue} is not necessary, if {base} is not defined
 then tagNoValue will be used as base class.
 
 Fields can have {required} tag to mark field as required.
