@@ -1,5 +1,5 @@
 
-This is generator of C++ header and implementation (*.cpp) files from
+This is generator of C++ header file from
 declarative description of the configuration file. By configuration file
 assumes configuration file in QtConfFile format. In generated header will
 be declared all necessary classes of data and configuration tags.
@@ -24,12 +24,13 @@ following configuration file, for example:
 }
 
 Each configuration file for generator must has one {forGeneration} tag and all
-nested tags must be defined in this tag. There you can use {namespace} tag for
+nested tags must be defined in this tag. {forGeneration} tag require string for
+#ifndef directive (include guard). There you can use {namespace} tag for
 generation data classes and tags in the specified C++ namespace. Namespaces can
-be nested. To declare data class and tag for it you should use {class} tag.
+be nested. To declare data class and tag you should use {class} tag.
 {class} tag can has {base} tag to define base class of the configuration tag.
 {base} tag can has following values: tagNoValue, tagScalar, tagScalarVector.
-tagNoValue is not necessary in this case. To define field in data class you can
+tagNoValue is not mandatory in this case. To define field in data class you can
 use following tags: {tagScalar} for scalar tag, {tagNoValue} for no-value tag,
 {tagScalarVector} for vector of scalar values, {tag} for already defined tag,
 {tagVectorOfTags} for vector of already defined tags.
@@ -52,7 +53,8 @@ Fields can have {required} tag to mark field as required.
 All of field tags can have {minMaxConstraint} or {oneOfConstraint} to define
 constraint for the field's value. {minMaxConstraint} require two tags
 {min <string>} and {max <string>}, and {oneOfConstraint} require list of values.
-For example, {minMaxConstraint 0 100}, {oneOfConstraint one two three}.
+For example, {minMaxConstraint {min 0} {max 100}},
+{oneOfConstraint one two three}.
 
 In the above example will be generated similar to the following header file.
 
