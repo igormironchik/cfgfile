@@ -48,7 +48,7 @@ int main( int argc, char ** argv )
 	TagConfiguration readTag;
 
 	try {
-		QtConfFile::readQtConfFile( readTag, QLatin1String( "../example.cfg" ),
+		QtConfFile::readQtConfFile( readTag, QLatin1String( "example.cfg" ),
 			QTextCodec::codecForName( "UTF-8" ) );
 	}
 	catch( const QtConfFile::Exception & x )
@@ -97,7 +97,7 @@ int main( int argc, char ** argv )
 	TagConfiguration writeTag( cfg );
 
 	try {
-		QtConfFile::writeQtConfFile( writeTag, QLatin1String( "../new.cfg" ),
+		QtConfFile::writeQtConfFile( writeTag, QLatin1String( "new.cfg" ),
 			QTextCodec::codecForName( "UTF-8" ) );
 	}
 	catch( const QtConfFile::Exception & x )
