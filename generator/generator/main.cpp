@@ -107,21 +107,21 @@ static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
 
 	if( data.inputFile().isEmpty() )
 	{
-		stream << QLatin1String( "Please specify input file." );
+		stream << QLatin1String( "Please specify input file." ) << endl;
 
 		exit( 1 );
 	}
 
 	if( !QFileInfo( data.inputFile() ).exists() )
 	{
-		stream << QLatin1String( "Specified input file doesn't exist." );
+		stream << QLatin1String( "Specified input file doesn't exist." ) << endl;
 
 		exit( 1 );
 	}
 
 	if( data.outputFile().isEmpty() )
 	{
-		stream << QLatin1String( "Please specify output file." );
+		stream << QLatin1String( "Please specify output file." ) << endl;
 
 		exit( 1 );
 	}
@@ -145,7 +145,7 @@ int main( int argc, char ** argv )
 	{
 		QTextStream stream( stdout );
 
-		stream << x.whatAsQString();
+		stream << x.whatAsQString() << endl;
 
 		return 1;
 	}
@@ -168,7 +168,7 @@ int main( int argc, char ** argv )
 	{
 		QTextStream stream( stdout );
 
-		stream << x.whatAsQString();
+		stream << x.whatAsQString() << endl;
 
 		return 1;
 	}
@@ -191,7 +191,8 @@ int main( int argc, char ** argv )
 	{
 		QTextStream stream( stdout );
 
-		stream << QLatin1String( "Couldn't open output file for writting." );
+		stream << QLatin1String( "Couldn't open output file for writting." )
+			<< endl;
 
 		return 1;
 	}
