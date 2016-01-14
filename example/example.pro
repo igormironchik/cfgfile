@@ -2,5 +2,5 @@
 TEMPLATE = subdirs
 
 
-SUBDIRS = simple
-
+SUBDIRS = simple \
+		  generator

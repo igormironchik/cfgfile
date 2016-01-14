@@ -8,7 +8,7 @@ SUBDIRS = QtConfFile \
           generator
 
 test.depends = QtConfFile
-example.depends = QtConfFile
+example.depends = QtConfFile generator
 generator.depends = QtConfFile
 
 libDir.commands = mkdir lib

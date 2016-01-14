@@ -1,0 +1,23 @@
+
+{forGeneration GENERATED
+	{namespace generator
+		{class A
+			{tagScalar
+				{valueType QString}
+				{name stringField}
+			}
+		}
+
+		{class B
+			{base tagScalar
+				{valueType int}
+				{name integerField}
+			}
+
+			{tagVectorOfTags
+				{valueType A}
+				{name aVector}
+			}
+		}
+	}
+}

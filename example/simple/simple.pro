@@ -1,6 +1,6 @@
 
 TEMPLATE = app
-TARGET = example
+TARGET = example.simple
 DESTDIR = .
 CONFIG += console
 QT -= gui
