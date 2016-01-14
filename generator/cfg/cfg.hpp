@@ -247,6 +247,11 @@ public:
 	//! Set default value.
 	void setDefaultValue( const QString & value );
 
+	//! \return Is this field the base of class?
+	bool isBase() const;
+	//! Set that this field is the base of class.
+	void setBase( bool on = true );
+
 private:
 	//! Type
 	FieldType m_type;
@@ -264,6 +269,8 @@ private:
 	bool m_isRequired;
 	//! Default value.
 	QString m_defaultValue;
+	//! Is base of class?
+	bool m_isBase;
 }; // class Field
 
 
@@ -605,6 +612,9 @@ public:
 	//! \return Value type.
 	QString valueType() const;
 
+	//! \return Field.
+	Field cfg() const;
+
 	//! Called when tag parsing finished.
 	void onFinish( const ParserInfo & info );
 
@@ -613,6 +623,16 @@ private:
 	QtConfFile::TagScalar< QString > m_valueType;
 	//! Constraint.
 	QtConfFile::ConstraintOneOf< QString > m_constraint;
+	//! Name.
+	QtConfFile::TagScalar< QString > m_name;
+	//! Min-max constraint.
+	TagMinMaxConstraint m_minMaxConstraint;
+	//! One of constraint.
+	TagOneOfConstraint m_oneOfConstraint;
+	//! Is required?
+	QtConfFile::TagNoValue m_isRequired;
+	//! Default value.
+	QtConfFile::TagScalar< QString > m_defaultValue;
 }; // class TagBaseClass
 
 

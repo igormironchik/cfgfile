@@ -126,6 +126,7 @@ Field::Field()
 	:	m_lineNumber( -1 )
 	,	m_columnNumber( -1 )
 	,	m_isRequired( false )
+	,	m_isBase( false )
 {
 }
 
@@ -142,6 +143,7 @@ Field::Field( const Field & other )
 	,	m_columnNumber( other.columnNumber() )
 	,	m_isRequired( other.isRequired() )
 	,	m_defaultValue( other.defaultValue() )
+	,	m_isBase( other.isBase() )
 {
 }
 
@@ -158,6 +160,7 @@ Field::operator = ( const Field & other )
 		m_columnNumber = other.columnNumber();
 		m_isRequired = other.isRequired();
 		m_defaultValue = other.defaultValue();
+		m_isBase = other.isBase();
 	}
 
 	return *this;
@@ -271,13 +274,26 @@ Field::setDefaultValue( const QString & value )
 	m_defaultValue = value;
 }
 
+bool
+Field::isBase() const
+{
+	return m_isBase;
+}
+
+void
+Field::setBase( bool on )
+{
+	m_isBase = on;
+}
+
 
 //
 // Class
 //
 
 Class::Class()
-	:	m_lineNumber( -1 )
+	:	m_baseName( c_noValueTagName )
+	,	m_lineNumber( -1 )
 	,	m_columnNumber( -1 )
 	,	m_index( 0 )
 	,	m_parent( 0 )
@@ -1050,6 +1066,34 @@ static inline void throwConstraintRedefinition( const QString & className,
 			.arg( QString::number( columnNumber ) ) );
 }
 
+static inline void checkConstraints( const QtConfFile::Tag & c1,
+	const QtConfFile::Tag & c2,
+	const QString & className, const QString& fieldName )
+{
+	if( c1.isDefined() && c2.isDefined() )
+	{
+		if( c1.lineNumber() == c2.lineNumber() )
+		{
+			if( c1.columnNumber() > c2.columnNumber() )
+				throwConstraintRedefinition( className, fieldName,
+					c1.lineNumber(),
+					c1.columnNumber() );
+			else
+				throwConstraintRedefinition( className, fieldName,
+					c2.lineNumber(),
+					c2.columnNumber() );
+		}
+		else if( c1.lineNumber() > c2.lineNumber() )
+			throwConstraintRedefinition( className, fieldName,
+				c1.lineNumber(),
+				c1.columnNumber() );
+		else
+			throwConstraintRedefinition( className, fieldName,
+				c2.lineNumber(),
+				c2.columnNumber() );
+	}
+}
+
 Field
 TagField::cfg() const
 {
@@ -1070,30 +1114,10 @@ TagField::cfg() const
 	else if( f.type() == Field::NoValueFieldType )
 		f.setDefaultValue( QLatin1String( "false" ) );
 
-	if( m_minMaxConstraint.isDefined() && m_oneOfConstraint.isDefined() )
-	{
-		const TagClass * c = static_cast< const TagClass* > ( parent() );
+	const TagClass * c = static_cast< const TagClass* > ( parent() );
 
-		if( m_minMaxConstraint.lineNumber() == m_oneOfConstraint.lineNumber() )
-		{
-			if( m_minMaxConstraint.columnNumber() > m_oneOfConstraint.columnNumber() )
-				throwConstraintRedefinition( c->value(), m_name.value(),
-					m_minMaxConstraint.lineNumber(),
-					m_minMaxConstraint.columnNumber() );
-			else
-				throwConstraintRedefinition( c->value(), m_name.value(),
-					m_oneOfConstraint.lineNumber(),
-					m_oneOfConstraint.columnNumber() );
-		}
-		else if( m_minMaxConstraint.lineNumber() > m_oneOfConstraint.lineNumber() )
-			throwConstraintRedefinition( c->value(), m_name.value(),
-				m_minMaxConstraint.lineNumber(),
-				m_minMaxConstraint.columnNumber() );
-		else
-			throwConstraintRedefinition( c->value(), m_name.value(),
-				m_oneOfConstraint.lineNumber(),
-				m_oneOfConstraint.columnNumber() );
-	}
+	checkConstraints( m_minMaxConstraint, m_oneOfConstraint,
+		c->name(), m_name.value() );
 
 	if( m_minMaxConstraint.isDefined() )
 		f.setConstraint( m_minMaxConstraint.cfg() );
@@ -1138,11 +1162,15 @@ TagBaseClass::TagBaseClass( QtConfFile::Tag & owner, const QString & name,
 	bool isMandatory )
 	:	QtConfFile::TagScalar< QString > ( owner, name, isMandatory )
 	,	m_valueType( *this, c_valueTypeTagName, false )
+	,	m_name( *this, c_fieldNameTagName, false )
+	,	m_minMaxConstraint( *this )
+	,	m_oneOfConstraint( *this )
+	,	m_isRequired( *this, c_requiredTagName, false )
+	,	m_defaultValue( *this, c_defaultValueTagName, false )
 {
 	m_constraint.addValue( c_scalarTagName );
 	m_constraint.addValue( c_noValueTagName );
 	m_constraint.addValue( c_scalarVectorTagName );
-	m_constraint.addValue( c_vectorOfTagsTagName );
 
 	setConstraint( &m_constraint );
 }
@@ -1155,6 +1183,38 @@ QString
 TagBaseClass::valueType() const
 {
 	return m_valueType.value();
+}
+
+Field
+TagBaseClass::cfg() const
+{
+	Field f;
+	f.setBase( true );
+	f.setType( fieldTypeFromString( value() ) );
+	f.setName( m_name.value() );
+	f.setLineNumber( lineNumber() );
+	f.setColumnNumber( columnNumber() );
+
+	if( m_valueType.isDefined() )
+		f.setValueType( m_valueType.value() );
+
+	if( m_isRequired.isDefined() )
+		f.setRequired();
+
+	if( m_defaultValue.isDefined() )
+		f.setDefaultValue( m_defaultValue.value() );
+
+	const TagClass * c = static_cast< const TagClass* > ( parent() );
+
+	checkConstraints( m_minMaxConstraint, m_oneOfConstraint,
+		c->name(), m_name.value() );
+
+	if( m_minMaxConstraint.isDefined() )
+		f.setConstraint( m_minMaxConstraint.cfg() );
+	else if( m_oneOfConstraint.isDefined() )
+		f.setConstraint( m_oneOfConstraint.cfg() );
+
+	return f;
 }
 
 void
@@ -1170,7 +1230,15 @@ TagBaseClass::onFinish( const ParserInfo & info )
 				throw QtConfFile::Exception( QString( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
 						.arg( c_valueTypeTagName )
-						.arg( value() )
+						.arg( c_baseClassTagName )
+						.arg( QString::number( info.lineNumber() ) )
+						.arg( QString::number( info.columnNumber() ) ) );
+
+			if( !m_name.isDefined() )
+				throw QtConfFile::Exception( QString( "Undefined required "
+					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
+						.arg( c_fieldNameTagName )
+						.arg( c_baseClassTagName )
 						.arg( QString::number( info.lineNumber() ) )
 						.arg( QString::number( info.columnNumber() ) ) );
 		}
@@ -1190,7 +1258,7 @@ TagBaseClass::onFinish( const ParserInfo & info )
 
 TagClass::TagClass( const QString & name, bool isMandatory )
 	:	QtConfFile::TagScalar< QString > ( name, isMandatory )
-	,	m_baseClassName( *this, c_baseClassTagName, true )
+	,	m_baseClassName( *this, c_baseClassTagName, false )
 	,	m_scalarTags( *this, c_scalarTagName, false )
 	,	m_noValueTags( *this, c_noValueTagName, false )
 	,	m_scalarVectorTags( *this, c_scalarVectorTagName, false )
@@ -1208,8 +1276,19 @@ TagClass::cfg() const
 {
 	Class c;
 	c.setName( value() );
-	c.setBaseName( m_baseClassName.value() );
-	c.setBaseValueType( m_baseClassName.valueType() );
+
+	if( m_baseClassName.isDefined() )
+	{
+		c.setBaseName( m_baseClassName.value() );
+
+		if( c.baseName() != c_noValueTagName )
+		{
+			c.setBaseValueType( m_baseClassName.valueType() );
+
+			c.addField( m_baseClassName.cfg() );
+		}
+	}
+
 	c.setLineNumber( lineNumber() );
 	c.setColumnNumber( columnNumber() );
 
