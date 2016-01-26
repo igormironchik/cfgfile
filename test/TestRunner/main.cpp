@@ -94,7 +94,7 @@ public slots:
 
 		if( !failed )
 			stream << QString( "\n\nPassed %1 out of %2 tests." )
-				.arg( i ).arg( m_tests.size() );
+				.arg( i ).arg( m_tests.size() ) << endl;
 
 		QCoreApplication::quit();
 	}

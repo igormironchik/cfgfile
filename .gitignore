@@ -5,3 +5,4 @@
 /**/*.o
 /**/*.a
 /**/*.lib
+/**/QtConfFile.pro.user*

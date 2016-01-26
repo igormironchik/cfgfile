@@ -42,6 +42,7 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QMap>
+#include <QStringList>
 
 
 namespace QtConfFile {
