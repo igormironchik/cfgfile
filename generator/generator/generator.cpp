@@ -158,6 +158,25 @@ static inline QString generateSetterMethodName( const QString & name )
 
 
 //
+// generateTagClassName
+//
+
+static inline QString generateTagClassName( const QString & name )
+{
+	const int pos = name.lastIndexOf( Cfg::c_namespaceSeparator );
+
+	QString res = ( pos == -1 ? QString() :
+		name.left( pos + Cfg::c_namespaceSeparator.length() ) );
+	res.append( QLatin1String( "Tag" ) );
+	res.append( ( pos == -1 ? name :
+		name.right( name.length() - pos -
+			Cfg::c_namespaceSeparator.length() ) ) );
+
+	return res;
+}
+
+
+//
 // generateBaseTagClassName
 //
 
@@ -176,7 +195,7 @@ static inline QString generateBaseTagClassName( const QString & base,
 		return QString( "QtConfFile::TagVectorOfTags< " ) + valueType +
 				QLatin1String( " >" );
 	else
-		return QString::fromLatin1( "Tag" ) + base;
+		return generateTagClassName( base );
 } // generateBaseTagClassName
 
 
@@ -577,25 +596,6 @@ static inline void generateCfgInit( QTextStream & stream,
 
 
 //
-// generateTagClassName
-//
-
-static inline QString generateTagClassName( const QString & name )
-{
-	const int pos = name.lastIndexOf( Cfg::c_namespaceSeparator );
-
-	QString res = ( pos == -1 ? QString() :
-		name.left( pos + Cfg::c_namespaceSeparator.length() ) );
-	res.append( QLatin1String( "Tag" ) );
-	res.append( ( pos == -1 ? name :
-		name.right( name.length() - pos -
-			Cfg::c_namespaceSeparator.length() ) ) );
-
-	return res;
-}
-
-
-//
 // generateCfgSet
 //
 
@@ -741,8 +741,9 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 
 				case Cfg::Field::CustomTagFieldType :
 				{
-					stream << QLatin1String( "\tTag" )
-						<< f.valueType() << QLatin1String( " m_" )
+					stream << QLatin1String( "\t" )
+						<< generateTagClassName( f.valueType() )
+						<< QLatin1String( " m_" )
 						<< f.name() << QLatin1String( ";\n" );
 				}
 					break;
