@@ -176,7 +176,7 @@ static inline QString generateBaseTagClassName( const QString & base,
 		return QString( "QtConfFile::TagVectorOfTags< " ) + valueType +
 				QLatin1String( " >" );
 	else
-		return base;
+		return QString::fromLatin1( "Tag" ) + base;
 } // generateBaseTagClassName
 
 
@@ -741,7 +741,7 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 
 				case Cfg::Field::CustomTagFieldType :
 				{
-					stream << QLatin1String( "\t" )
+					stream << QLatin1String( "\tTag" )
 						<< f.valueType() << QLatin1String( " m_" )
 						<< f.name() << QLatin1String( ";\n" );
 				}
