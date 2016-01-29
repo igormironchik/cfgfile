@@ -931,7 +931,7 @@ CppGenerator::generate( QTextStream & stream ) const
 
 	Cfg::ConstClassPointer c = 0;
 
-	const QString guard = m_model.includeGuard() + QLatin1String( "_INCLUDED" );
+	const QString guard = m_model.includeGuard() + QLatin1String( "__INCLUDED" );
 
 	stream << QLatin1String( "\n#ifndef " ) << guard
 		<< QLatin1String( "\n#define " ) << guard
