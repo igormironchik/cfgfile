@@ -924,6 +924,34 @@ Model::checkClass( const Class & c,
 
 	foreach( const Field & f, c.fields() )
 	{
+		if( f.isBase() )
+		{
+			switch( f.type() )
+			{
+				case Field::ScalarFieldType :
+				case Field::ScalarVectorFieldType :
+				{
+					if( f.name().isEmpty() )
+						throw QtConfFile::Exception( QString(
+							"Base of class field's name is empty. "
+							"Line %1, column %2." )
+								.arg( QString::number( f.lineNumber() ) )
+								.arg( QString::number( f.columnNumber() ) ) );
+				}
+					break;
+
+				default :
+					break;
+			}
+		}
+		else if( f.name().isEmpty() )
+			throw QtConfFile::Exception( QString(
+				"Field name of class \"%1\" "
+				"Line %2, column %3." )
+					.arg( className )
+					.arg( QString::number( f.lineNumber() ) )
+					.arg( QString::number( f.columnNumber() ) ) );
+
 		if( fields.contains( f.name() ) )
 			throw QtConfFile::Exception( QString( "Field \"%1\" "
 				"already defined in class \"%2\". Line %3, column %4." )
