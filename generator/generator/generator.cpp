@@ -456,6 +456,14 @@ static inline void generateDataClass( QTextStream & stream,
 				<< f.name() << QLatin1String( ";\n"
 											  "\t}\n" );
 
+			stream << QLatin1String( "\t" )
+				<< generateTypeOfData( f ) << QLatin1String( " & " )
+				<< f.name() << QLatin1String( "()\n"
+											  "\t{\n"
+											  "\t\treturn m_" )
+				<< f.name() << QLatin1String( ";\n"
+											  "\t}\n" );
+
 			stream << QLatin1String( "\tvoid " )
 				<< generateSetterMethodName( f.name() )
 				<< QLatin1String( "( const " ) << generateTypeOfData( f )
