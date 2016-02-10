@@ -456,6 +456,14 @@ static inline void generateDataClass( QTextStream & stream,
 				<< f.name() << QLatin1String( ";\n"
 											  "\t}\n" );
 
+			stream << QLatin1String( "\t" )
+				<< generateTypeOfData( f ) << QLatin1String( " & " )
+				<< f.name() << QLatin1String( "()\n"
+											  "\t{\n"
+											  "\t\treturn m_" )
+				<< f.name() << QLatin1String( ";\n"
+											  "\t}\n" );
+
 			stream << QLatin1String( "\tvoid " )
 				<< generateSetterMethodName( f.name() )
 				<< QLatin1String( "( const " ) << generateTypeOfData( f )
@@ -645,7 +653,10 @@ static inline void generateCfgSet( QTextStream & stream,
 						<< QLatin1String( " >::PointerToTag p(\n" )
 						<< QLatin1String( "\t\t\t\tnew " )
 						<< generateTagClassName( f.valueType() )
-						<< QLatin1String( "() );\n\n" )
+						<< QLatin1String( "( \"" )
+						<< f.name() << QLatin1String( "\", " )
+						<< boolToString( f.isRequired() )
+						<< QLatin1String( " ) );\n\n" )
 						<< QLatin1String( "\t\t\tp->setCfg( v );\n\n" )
 						<< QLatin1String( "\t\t\tm_" ) << f.name()
 						<< QLatin1String( ".setValue( p );\n" )
@@ -931,7 +942,7 @@ CppGenerator::generate( QTextStream & stream ) const
 
 	Cfg::ConstClassPointer c = 0;
 
-	const QString guard = m_model.includeGuard() + QLatin1String( "_INCLUDED" );
+	const QString guard = m_model.includeGuard() + QLatin1String( "__INCLUDED" );
 
 	stream << QLatin1String( "\n#ifndef " ) << guard
 		<< QLatin1String( "\n#define " ) << guard
