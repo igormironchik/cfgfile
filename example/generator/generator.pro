@@ -16,7 +16,8 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = HEADERS
 
-generate_cfg.commands = ../../qtconffile.generator -i ${QMAKE_FILE_IN} \
+generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../qtconffile.generator ) ) \
+-i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
