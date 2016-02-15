@@ -551,14 +551,20 @@ static inline void generateCfgInit( QTextStream & stream,
 				case Cfg::Field::VectorOfTagsFieldType :
 				{
 					stream << QLatin1String( "\n\t\tQList< " )
-						<< f.valueType() << QLatin1String( " > list;\n\n" )
+						<< f.valueType() << QLatin1String( " > " )
+						<< generateTagNameFromClassName( f.valueType() )
+						<< QLatin1String( "List;\n\n" )
 						<< QLatin1String( "\t\tfor( int i = 0; i < m_" )
 						<< f.name() << QLatin1String( ".size(); ++i )\n" )
-						<< QLatin1String( "\t\t\tlist.append( m_" ) << f.name()
+						<< QLatin1String( "\t\t\t" )
+						<< generateTagNameFromClassName( f.valueType() )
+						<< QLatin1String( "List.append( m_" ) << f.name()
 						<< QLatin1String( ".at( i ).getCfg() );\n\n" )
 						<< QLatin1String( "\t\tc." )
 						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( list );\n" );
+						<< QLatin1String( "( " )
+						<< generateTagNameFromClassName( f.valueType() )
+						<< QLatin1String( "List );\n" );
 				}
 					break;
 
