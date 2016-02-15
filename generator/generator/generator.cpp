@@ -552,17 +552,20 @@ static inline void generateCfgInit( QTextStream & stream,
 				{
 					stream << QLatin1String( "\n\t\tQList< " )
 						<< f.valueType() << QLatin1String( " > " )
+						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
 						<< QLatin1String( "List;\n\n" )
 						<< QLatin1String( "\t\tfor( int i = 0; i < m_" )
 						<< f.name() << QLatin1String( ".size(); ++i )\n" )
 						<< QLatin1String( "\t\t\t" )
+						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
 						<< QLatin1String( "List.append( m_" ) << f.name()
 						<< QLatin1String( ".at( i ).getCfg() );\n\n" )
 						<< QLatin1String( "\t\tc." )
 						<< generateSetterMethodName( f.name() )
 						<< QLatin1String( "( " )
+						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
 						<< QLatin1String( "List );\n" );
 				}
