@@ -532,7 +532,9 @@ static inline void generateCfgInit( QTextStream & stream,
 
 				case Cfg::Field::ScalarFieldType :
 				{
-					stream << QLatin1String( "\t\tc." )
+					stream << QLatin1String( "\n\t\tif( m_" )
+						<< f.name() << QLatin1String( ".isDefined() )\n"
+								"\t\t\tc." )
 						<< generateSetterMethodName( f.name() )
 						<< QLatin1String( "( m_" )
 						<< f.name() << QLatin1String( ".value() );\n" );
@@ -541,7 +543,9 @@ static inline void generateCfgInit( QTextStream & stream,
 
 				case Cfg::Field::ScalarVectorFieldType :
 				{
-					stream << QLatin1String( "\t\tc." )
+					stream << QLatin1String( "\n\t\tif( m_" )
+						<< f.name() << QLatin1String( ".isDefined() )\n"
+								"\t\t\tc." )
 						<< generateSetterMethodName( f.name() )
 						<< QLatin1String( "( m_" )
 						<< f.name() << QLatin1String( ".values().toList() );\n" );
@@ -550,30 +554,36 @@ static inline void generateCfgInit( QTextStream & stream,
 
 				case Cfg::Field::VectorOfTagsFieldType :
 				{
-					stream << QLatin1String( "\n\t\tQList< " )
+					stream << QLatin1String( "\n\t\tif( m_" )
+						   << f.name() << QLatin1String( ".isDefined() )\n"
+								   "\t\t{\n" )
+						<< QLatin1String( "\t\t\tQList< " )
 						<< f.valueType() << QLatin1String( " > " )
 						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
 						<< QLatin1String( "List;\n\n" )
-						<< QLatin1String( "\t\tfor( int i = 0; i < m_" )
+						<< QLatin1String( "\t\t\tfor( int i = 0; i < m_" )
 						<< f.name() << QLatin1String( ".size(); ++i )\n" )
-						<< QLatin1String( "\t\t\t" )
+						<< QLatin1String( "\t\t\t\t" )
 						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
 						<< QLatin1String( "List.append( m_" ) << f.name()
 						<< QLatin1String( ".at( i ).getCfg() );\n\n" )
-						<< QLatin1String( "\t\tc." )
+						<< QLatin1String( "\t\t\tc." )
 						<< generateSetterMethodName( f.name() )
 						<< QLatin1String( "( " )
 						<< f.name() << QLatin1String( "_" )
 						<< generateTagNameFromClassName( f.valueType() )
-						<< QLatin1String( "List );\n" );
+						<< QLatin1String( "List );\n" )
+						<< QLatin1String( "\t\t}\n" );
 				}
 					break;
 
 				case Cfg::Field::CustomTagFieldType :
 				{
-					stream << QLatin1String( "\t\tc." )
+					stream << QLatin1String( "\n\t\tif( m_" )
+						<< f.name() << QLatin1String( ".isDefined() )\n"
+								"\t\t\tc." )
 						<< generateSetterMethodName( f.name() )
 						<< QLatin1String( "( m_" )
 						<< f.name() << QLatin1String( ".getCfg() );\n" );
@@ -904,7 +914,7 @@ static inline void generateTagClass( QTextStream & stream,
 		<< QLatin1String( " getCfg() const\n"
 						  "\t{\n"
 						  "\t\t" ) << c->name()
-		<< QLatin1String( " c;\n\n" );
+		<< QLatin1String( " c;\n" );
 
 	generateCfgInit( stream, c );
 
