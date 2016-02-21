@@ -459,6 +459,252 @@ TagScalar< bool >::onString( const ParserInfo & info,
 				.arg( info.lineNumber() ) );
 }
 
+
+//
+// TagScalar< QString >
+//
+
+//! Tag with bool value.
+template<>
+class TagScalar< QString >
+	:	public Tag
+{
+public:
+	explicit TagScalar( const QString & name, bool isMandatory = false );
+	TagScalar( Tag & owner, const QString & name, bool isMandatory = false );
+
+	virtual ~TagScalar();
+
+	//! \return Value of the tag.
+	const QString &
+	value() const;
+
+	//! Set value.
+	void
+	setValue( const QString & v );
+
+	/*!
+		Query optional value.
+
+		If isDefined() is true then \a receiver
+		will be initialized with value of the tag,
+		otherwise nothing with \a receiver will happen.
+	*/
+	void
+	queryOptValue( QString & receiver );
+
+	//! Set constraint for the tag's value.
+	void
+	setConstraint( Constraint< QString > * c );
+
+	//! Print tag to the output.
+	virtual QString print( int indent = 0 ) const;
+
+	//! Called when tag parsing started.
+	virtual void onStart( const ParserInfo & info );
+
+	//! Called when tag parsing finished.
+	virtual void onFinish( const ParserInfo & info );
+
+	//! Called when string found.
+	virtual void onString( const ParserInfo & info,
+		const QString & str );
+
+private:
+	//! Value of the tag.
+	QString m_value;
+	//! Constraint.
+	Constraint< QString > * m_constraint;
+}; // class TagScalar
+
+inline
+TagScalar< QString >::TagScalar( const QString & name, bool isMandatory )
+	:	Tag( name, isMandatory )
+	,	m_constraint( 0 )
+{
+}
+
+inline
+TagScalar< QString >::TagScalar( Tag & owner, const QString & name, bool isMandatory )
+	:	Tag( owner, name, isMandatory )
+	,	m_constraint( 0 )
+{
+}
+
+inline
+TagScalar< QString >::~TagScalar()
+{
+}
+
+inline
+const QString &
+TagScalar< QString >::value() const
+{
+	return m_value;
+}
+
+inline
+void
+TagScalar< QString >::setValue( const QString & v )
+{
+	if( m_constraint )
+	{
+		if( !m_constraint->check( v ) )
+			throw Exception( QString( "Invalid value: \"%1\". "
+				"Value must match to the constraint in tag \"%2\"." )
+					.arg( Format< QString >::toString( v ) )
+					.arg( name() ) );
+	}
+
+	m_value = v;
+
+	setDefined();
+}
+
+inline
+void
+TagScalar< QString >::queryOptValue( QString & receiver )
+{
+	if( isDefined() )
+		receiver = m_value;
+}
+
+inline
+void
+TagScalar< QString >::setConstraint( Constraint< QString > * c )
+{
+	m_constraint = c;
+}
+
+static const int c_maxStringLength = 80;
+
+inline
+QString
+TagScalar< QString >::print( int indent ) const
+{
+	QString result;
+
+	if( isDefined() )
+	{
+		for( int i = 0; i < indent; ++i )
+			result.append( QLatin1String( "\t" ) );
+
+		result.append( QLatin1String( "{" ) );
+		result.append( name() );
+		result.append( QLatin1String( " " ) );
+
+		QString value = Format< QString >::toString( m_value );
+
+		const int sections = ( value.length() / c_maxStringLength +
+			( value.length() % c_maxStringLength > 0 ? 1 : 0 ) );
+
+		if( sections )
+		{
+			const QString spaces = QString( name().length() + 2,
+				QLatin1Char( ' ' ) );
+
+			for( int i = 0; i < sections; ++i )
+			{
+				if( i > 0 )
+				{
+					result.append( QLatin1String( "\n" ) );
+
+					for( int i = 0; i < indent; ++i )
+						result.append( QLatin1String( "\t" ) );
+
+					result.append( spaces );
+				}
+
+				const QString tmp = toQtConfFileFormat(
+					value.mid( i * c_maxStringLength, c_maxStringLength ) );
+
+				result.append( tmp );
+			}
+		}
+		else
+			result.append( QLatin1String( "\"\"" ) );
+
+		if( !children().isEmpty() )
+		{
+			result.append( QLatin1String( "\n" ) );
+
+			foreach( Tag * tag, children() )
+				result.append( tag->print( indent + 1 ) );
+
+			for( int i = 0; i < indent; ++i )
+				result.append( QLatin1String( "\t" ) );
+		}
+
+		result.append( QLatin1String( "}\n" ) );
+	}
+
+	return result;
+}
+
+inline
+void
+TagScalar< QString >::onStart( const ParserInfo & info )
+{
+	Tag::onStart( info );
+}
+
+inline
+void
+TagScalar< QString >::onFinish( const ParserInfo & info )
+{
+	if( m_constraint )
+	{
+		if( !m_constraint->check( m_value ) )
+			throw Exception( QString( "Invalid value: \"%1\". "
+				"Value must match to the constraint in tag \"%2\". "
+				"In file \"%3\" on line %4." )
+					.arg( m_value )
+					.arg( name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+	}
+
+	if( !isDefined() )
+		throw Exception( QString( "Undefined value of tag: \"%1\". "
+			"In file \"%2\" on line %3." )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
+
+	foreach( Tag * tag, children() )
+	{
+		if( tag->isMandatory() && !tag->isDefined() )
+			throw Exception( QString( "Undefined child mandatory tag: \"%1\". "
+				"Where parent is: \"%2\". "
+				"In file \"%3\" on line %4." )
+					.arg( tag->name() )
+					.arg( name() )
+					.arg( info.fileName() )
+					.arg( info.lineNumber() ) );
+	}
+}
+
+inline
+void
+TagScalar< QString >::onString( const ParserInfo & info,
+	const QString & str )
+{
+	if( isAnyChildDefined() )
+		throw Exception( QString( "Value \"%1\" for tag \"%2\" "
+			"must be defined before any child tag."
+			"In file \"%3\" on line %4." )
+				.arg( str )
+				.arg( name() )
+				.arg( info.fileName() )
+				.arg( info.lineNumber() ) );
+
+	const QString value = Format< QString >::fromString( info, str );
+
+	m_value.append( value );
+
+	setDefined();
+}
+
 } /* namespace QtConfFile */
 
 #endif // QTCONFFILE__TAG_SCALAR_HPP__INCLUDED
