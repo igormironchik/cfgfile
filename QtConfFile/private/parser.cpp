@@ -37,6 +37,7 @@
 
 // Qt include.
 #include <QtCore/QStack>
+
 #include <QDomDocument>
 
 
@@ -61,7 +62,7 @@ public:
 	}
 
 	//! Do parsing.
-	virtual void parse() = 0;
+	virtual void parse( const QString & fileName ) = 0;
 
 protected:
 
@@ -126,7 +127,7 @@ public:
 	}
 
 	//! Do parsing.
-	void parse()
+	void parse( const QString & fileName )
 	{
 		if( !startFirstTagParsing() )
 			return;
@@ -142,14 +143,14 @@ public:
 						m_stack.top()->children() );
 				else if( lexeme.type() == StringLexeme )
 					m_stack.top()->onString( ParserInfo(
-						m_lex.inputStream().fileName(),
+						fileName,
 						m_lex.lineNumber(),
 						m_lex.columnNumber() ),
 							lexeme.value() );
 				else if( lexeme.type() == FinishTagLexeme )
 				{
 					m_stack.top()->onFinish( ParserInfo(
-						m_lex.inputStream().fileName(),
+						fileName,
 						m_lex.lineNumber(),
 						m_lex.columnNumber() ) );
 					m_stack.pop();
@@ -160,7 +161,7 @@ public:
 					"We've finished parsing, but we've got this: \"%1\". "
 					"In file \"%2\" on line %3." )
 						.arg( lexeme.value() )
-						.arg( m_lex.inputStream().fileName() )
+						.arg( fileName )
 						.arg( m_lex.inputStream().lineNumber() ) );
 
 			lexeme = m_lex.nextLexeme();
@@ -201,11 +202,6 @@ private:
 					.arg( lexeme.value() )
 					.arg( m_lex.inputStream().fileName() )
 					.arg( m_lex.inputStream().lineNumber() ) );
-		else
-			m_tag.onStart( ParserInfo(
-				m_lex.inputStream().fileName(),
-				m_lex.lineNumber(),
-				m_lex.columnNumber() ) );
 
 		return true;
 	}
@@ -296,8 +292,125 @@ public:
 	}
 
 	//! Do parsing.
-	void parse()
+	void parse( const QString & fileName )
 	{
+		QDomElement element = m_dom.documentElement();
+
+		if( element.isNull() && m_tag.isMandatory() )
+			throw Exception( QString( "Unexpected end of file. "
+				"Undefined mandatory tag \"%1\". "
+				"In file \"%2\" on line %3." )
+					.arg( m_tag.name() )
+					.arg( fileName )
+					.arg( element.lineNumber() ) );
+
+		if( !element.isNull() )
+		{
+			if( element.tagName() != m_tag.name() )
+				throw Exception( QString( "Unexpected tag name. "
+					"We expected \"%1\", but we've got \"%2\". "
+					"In file \"%3\" on line %4." )
+						.arg( m_tag.name() )
+						.arg( element.tagName() )
+						.arg( fileName )
+						.arg( element.lineNumber() ) );
+
+			m_stack.push( &m_tag );
+
+			m_tag.onStart( ParserInfo( fileName,
+				element.lineNumber(),
+				element.columnNumber() ) );
+		}
+
+		parseTag( element, fileName );
+
+		if( !element.isNull() )
+		{
+			m_stack.top()->onFinish( ParserInfo(
+				fileName,
+				element.lineNumber(),
+				element.columnNumber() ) );
+
+			m_stack.pop();
+		}
+
+		checkParserStateAfterParsing();
+	}
+
+private:
+	//! Parse tag.
+	void parseTag( const QDomElement & e, const QString & fileName )
+	{
+		for( QDomNode n = e.firstChild(); !n.isNull();
+			n = n.nextSibling() )
+		{
+			QDomElement child = n.toElement();
+
+			if( !child.isNull() )
+			{
+				Tag * tag = findTag( child.tagName(),
+					m_stack.top()->children() );
+
+				if( !tag )
+					throw Exception( QString( "Unexpected tag name. "
+						"We expected one child tag of tag \"%1\", "
+						"but we've got \"%2\". "
+						"In file \"%3\" on line %4." )
+							.arg( m_stack.top()->name() )
+							.arg( child.tagName() )
+							.arg( fileName )
+							.arg( child.lineNumber() ) );
+
+				m_stack.push( tag );
+
+				tag->onStart( ParserInfo( fileName,
+					child.lineNumber(),
+					child.columnNumber() ) );
+
+				parseTag( child, fileName );
+
+				tag->onFinish( ParserInfo(
+					fileName,
+					child.lineNumber(),
+					child.columnNumber() ) );
+
+				m_stack.pop();
+			}
+			else
+			{
+				QDomText text = n.toText();
+
+				if( !text.isNull() )
+				{
+					m_stack.top()->onString( ParserInfo(
+							fileName,
+							text.lineNumber(),
+							text.columnNumber() ),
+						text.data() );
+				}
+				else
+					throw Exception( QString( "Unexpected tag name. "
+						"We expected one child tag of tag \"%1\", "
+						"but we've got \"%2\". "
+						"In file \"%3\" on line %4." )
+							.arg( m_stack.top()->name() )
+							.arg( n.nodeName() )
+							.arg( fileName )
+							.arg( n.lineNumber() ) );
+			}
+		}
+	}
+
+	//! Find tag.
+	Tag * findTag( const QString & name, const Tag::ChildTagsList & list )
+	{
+		foreach( Tag * tag, list )
+		{
+			if( tag->name() == name )
+				return tag;
+		}
+
+		return 0;
 	}
 
 private:
@@ -346,9 +459,9 @@ Parser::~Parser()
 }
 
 void
-Parser::parse()
+Parser::parse( const QString & fileName )
 {
-	d->m_parser->parse();
+	d->m_parser->parse( fileName );
 }
 
 } /* namespace QtConfFile */

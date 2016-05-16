@@ -97,7 +97,7 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec,
 
 			Parser parser( tag, stream );
 
-			parser.parse();
+			parser.parse( fileName );
 		}
 			break;
 
@@ -111,7 +111,7 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec,
 
 			Parser parser( tag, doc );
 
-			parser.parse();
+			parser.parse( fileName );
 		}
 			break;
 

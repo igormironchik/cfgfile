@@ -288,7 +288,7 @@ private slots:
 		QtConfFile::Parser parser( firstTag, input );
 
 		try {
-		parser.parse();
+		parser.parse( QLatin1String( "test_configWithOneTag" ) );
 		}
 		catch( const QtConfFile::Exception & x )
 		{
@@ -331,7 +331,7 @@ private slots:
 
 		QtConfFile::Parser parser( firstTag, input );
 
-		parser.parse();
+		parser.parse( QLatin1String( "test_configWithThreeTags" ) );
 
 		firstTag.setDefined();
 
@@ -366,7 +366,7 @@ private slots:
 		QtConfFile::Parser parser( firstTag, input );
 
 		try {
-			parser.parse();
+			parser.parse( QLatin1String( "test_unexpectedStartCurlBrace" ) );
 		}
 		catch( QtConfFile::Exception & x )
 		{
@@ -396,7 +396,7 @@ private slots:
 		QtConfFile::Parser parser( firstTag, input );
 
 		try {
-			parser.parse();
+			parser.parse( QLatin1String( "test_unexpectedTagName1" ) );
 		}
 		catch( QtConfFile::Exception & x )
 		{
@@ -428,7 +428,7 @@ private slots:
 		QtConfFile::Parser parser( firstTag, input );
 
 		try {
-			parser.parse();
+			parser.parse( QLatin1String( "test_unexpectedTagName2" ) );
 		}
 		catch( QtConfFile::Exception & x )
 		{
@@ -460,7 +460,7 @@ private slots:
 		QtConfFile::Parser parser( firstTag, input );
 
 		try {
-			parser.parse();
+			parser.parse( QLatin1String( "test_unexpectedEndOfFile" ) );
 		}
 		catch( QtConfFile::Exception & x )
 		{

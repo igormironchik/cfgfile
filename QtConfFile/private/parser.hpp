@@ -58,13 +58,13 @@ public:
 
 	Parser( Tag & tag, const QDomDocument & dom );
 
-    ~Parser();
+	~Parser();
 
     /*!
         Parse input stream.
         \throw Exception on errors.
     */
-    void parse();
+	void parse( const QString & fileName );
 
 private:
     Q_DISABLE_COPY( Parser )

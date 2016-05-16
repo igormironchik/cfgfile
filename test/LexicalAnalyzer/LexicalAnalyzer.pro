@@ -2,7 +2,7 @@
 TEMPLATE = app
 DESTDIR = .
 CONFIG += console
-QT += testlib
+QT += testlib xml
 QT -= gui
 
 SOURCES += main.cpp
