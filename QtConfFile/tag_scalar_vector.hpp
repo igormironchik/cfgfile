@@ -267,6 +267,11 @@ TagScalarVector< T >::print( QDomDocument & doc, QDomElement * parent ) const
 			QString value = Format< T >::toString( v );
 			value = toQtConfFileFormat( value );
 
+			static const QChar quote = QLatin1Char( '"' );
+
+			if( value.startsWith( quote ) && value.endsWith( quote ) )
+				value = value.mid( 1, value.length() - 2 );
+
 			thisElement.setAttribute( QString( "a" ) + QString::number( i ),
 				value );
 

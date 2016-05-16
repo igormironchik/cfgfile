@@ -370,6 +370,8 @@ private:
 
 				const QDomNamedNodeMap attributes = child.attributes();
 
+				static const QChar quote = QLatin1Char( '"' );
+
 				for( int i = 1; i <= attributes.count(); ++i )
 				{
 					const QDomAttr attr = attributes.namedItem(
@@ -380,7 +382,8 @@ private:
 								fileName,
 								attr.lineNumber(),
 								attr.columnNumber() ),
-							fromQtConfFileFormat( attr.value() ) );
+							fromQtConfFileFormat( attr.value()
+								.prepend( quote ).append( quote ) ) );
 				}
 
 				parseTag( child, fileName );
