@@ -367,6 +367,21 @@ private:
 					child.lineNumber(),
 					child.columnNumber() ) );
 
+				const QDomNamedNodeMap attributes = child.attributes();
+
+				for( int i = 1; i <= attributes.count(); ++i )
+				{
+					const QDomAttr attr = attributes.namedItem(
+						QString( "a" ) + QString::number( i ) ).toAttr();
+
+					if( !attr.isNull() )
+						tag->onString( ParserInfo(
+								fileName,
+								attr.lineNumber(),
+								attr.columnNumber() ),
+							attr.value() );
+				}
+
 				parseTag( child, fileName );
 
 				tag->onFinish( ParserInfo(

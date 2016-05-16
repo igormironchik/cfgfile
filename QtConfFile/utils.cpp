@@ -105,9 +105,17 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec,
 		{
 			QDomDocument doc;
 
-			if( !doc.setContent( &file.file() ) )
+			QString error;
+			int line = 0;
+			int column = 0;
+
+			if( !doc.setContent( &file.file(), true, &error, &line, &column ) )
 				throw Exception( QString( "Unable to parse XML "
-					"from file: \"%1\"." ).arg( fileName ) );
+					"from file: \"%1\". \"%2\" On line %3, column %4." )
+						.arg( fileName )
+						.arg( error )
+						.arg( QString::number( line ) )
+						.arg( QString::number( column ) ) );
 
 			Parser parser( tag, doc );
 

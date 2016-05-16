@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 
 
 SUBDIRS = simple \
-		  generator
+		  generator \
+		  xml

@@ -1,6 +1,6 @@
 
 TEMPLATE = app
-TARGET = example.simple.app
+TARGET = example.xml.app
 DESTDIR = .
 CONFIG += console
 QT -= gui

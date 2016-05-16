@@ -40,6 +40,8 @@
 // Qt include.
 #include <QtCore/QVector>
 
+#include <QDomText>
+
 
 namespace QtConfFile {
 
@@ -258,14 +260,17 @@ TagScalarVector< T >::print( QDomDocument & doc, QDomElement * parent ) const
 		else
 			parent->appendChild( thisElement );
 
+		unsigned int i = 1;
+
 		foreach( T v, m_values )
 		{
 			QString value = Format< T >::toString( v );
 			value = toQtConfFileFormat( value );
 
-			QDomText data = doc.createTextNode( value );
+			thisElement.setAttribute( QString( "a" ) + QString::number( i ),
+				value );
 
-			thisElement.appendChild( data );
+			++i;
 		}
 
 		if( !children().isEmpty() )
