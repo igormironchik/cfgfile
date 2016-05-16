@@ -33,6 +33,7 @@
 #include <QtConfFile/private/Lex>
 #include <QtConfFile/private/InputStream>
 #include <QtConfFile/private/Tag>
+#include <QtConfFile/private/StringFormat>
 #include <QtConfFile/Exceptions>
 
 // Qt include.
@@ -379,7 +380,7 @@ private:
 								fileName,
 								attr.lineNumber(),
 								attr.columnNumber() ),
-							attr.value() );
+							fromQtConfFileFormat( attr.value() ) );
 				}
 
 				parseTag( child, fileName );
@@ -401,7 +402,7 @@ private:
 							fileName,
 							text.lineNumber(),
 							text.columnNumber() ),
-						text.data() );
+						fromQtConfFileFormat( text.data() ) );
 				}
 				else
 					throw Exception( QString( "Unexpected tag name. "

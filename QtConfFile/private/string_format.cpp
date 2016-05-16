@@ -94,4 +94,28 @@ QString toQtConfFileFormat( const QString & what )
 	}
 }
 
+
+//
+// fromQtConfFileFormat
+//
+
+//! Format string from QtConfFile format.
+QString fromQtConfFileFormat( const QString & what )
+{
+	if( what.startsWith( c_quotes ) && what.endsWith( c_quotes ) )
+	{
+		QString result = what.mid( 1, what.length() - 2 );
+
+		result.replace( QLatin1String( "\\n" ), c_carriageReturn );
+		result.replace( QLatin1String( "\\\"" ), c_quotes );
+		result.replace( QLatin1String( "\\r" ), c_lineFeed );
+		result.replace( QLatin1String( "\\t" ), c_tab );
+		result.replace( QLatin1String( "\\\\" ), c_backSlash );
+
+		return result;
+	}
+	else
+		return what;
+}
+
 } /* namespace QtConfFile */

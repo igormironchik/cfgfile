@@ -44,6 +44,14 @@ namespace QtConfFile {
 //! Format string to QtConfFile format.
 QString toQtConfFileFormat( const QString & what );
 
+
+//
+// fromQtConfFileFormat
+//
+
+//! Format string from QtConfFile format.
+QString fromQtConfFileFormat( const QString & what );
+
 } /* namespace QtConfFile */
 
 #endif // QTCONFFILE__PRIVATE__STRING_FORMAT_HPP__INCLUDED
