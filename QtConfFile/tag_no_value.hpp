@@ -54,6 +54,9 @@ public:
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
+	//! Print tag to the output.
+	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 

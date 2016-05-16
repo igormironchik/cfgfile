@@ -2,7 +2,7 @@
 TEMPLATE = app
 TARGET = qtconffile.generator
 DESTDIR = ../..
-QT += core
+QT += core xml
 CONFIG += console
 
 HEADERS += generator.hpp

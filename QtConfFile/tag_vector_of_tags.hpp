@@ -110,6 +110,9 @@ public:
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
+	//! Print tag to the output.
+	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 
@@ -218,6 +221,16 @@ TagVectorOfTags< T >::print( int indent ) const
 	}
 
 	return result;
+}
+template< class T >
+void
+TagVectorOfTags< T >::print( QDomDocument & doc, QDomElement * parent ) const
+{
+	if( isDefined() )
+	{
+		foreach( PointerToTag p, m_tags )
+			p->print( doc, parent );
+	}
 }
 
 template< class T >

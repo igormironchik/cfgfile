@@ -101,6 +101,9 @@ public:
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
+	//! Print tag to the output.
+	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 
@@ -240,6 +243,37 @@ TagScalarVector< T >::print( int indent ) const
 	}
 
 	return result;
+}
+
+template< class T >
+void
+TagScalarVector< T >::print( QDomDocument & doc, QDomElement * parent ) const
+{
+	if( isDefined() )
+	{
+		QDomElement thisElement = doc.createElement( name() );
+
+		if( !parent )
+			doc.appendChild( thisElement );
+		else
+			parent->appendChild( thisElement );
+
+		foreach( T v, m_values )
+		{
+			QString value = Format< T >::toString( v );
+			value = toQtConfFileFormat( value );
+
+			QDomText data = doc.createTextNode( value );
+
+			thisElement.appendChild( data );
+		}
+
+		if( !children().isEmpty() )
+		{
+			foreach( Tag * tag, children() )
+				tag->print( doc, &thisElement );
+		}
+	}
 }
 
 template< class T >

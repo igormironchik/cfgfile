@@ -74,6 +74,12 @@ public:
 		return QString();
 	}
 
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
+	{
+		Q_UNUSED( doc )
+		Q_UNUSED( parent )
+	}
+
 protected:
 	void onStart( const QtConfFile::ParserInfo & info )
 	{
@@ -143,6 +149,12 @@ public:
 		Q_UNUSED( indent )
 
 		return QString();
+	}
+
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
+	{
+		Q_UNUSED( doc )
+		Q_UNUSED( parent )
 	}
 
 protected:
@@ -215,6 +227,12 @@ public:
 		Q_UNUSED( indent )
 
 		return QString();
+	}
+
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
+	{
+		Q_UNUSED( doc )
+		Q_UNUSED( parent )
 	}
 
 protected:
@@ -448,8 +466,7 @@ private slots:
 		{
 			QCOMPARE( x.whatAsQString(),
 				QLatin1String( "Unexpected end of file. "
-					"Still unfinished tag \"firstTag\". "
-					"In file \"test_unexpectedEndOfFile\" on line 3." ) );
+					"Still unfinished tag \"firstTag\"." ) );
 
 			return;
 		}

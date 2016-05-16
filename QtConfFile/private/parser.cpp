@@ -37,21 +37,139 @@
 
 // Qt include.
 #include <QtCore/QStack>
+#include <QDomDocument>
 
 
 namespace QtConfFile {
 
+namespace /* anonymous */ {
+
 //
-// Parser::ParserPrivate
+// ParserBaseImpl
 //
 
-class Parser::ParserPrivate {
+//! Base implementation of parser.
+class ParserBaseImpl {
 public:
-	ParserPrivate( Tag & tag, InputStream & stream )
-        :   m_lex( stream )
-        ,   m_tag( tag )
-    {
-    }
+	explicit ParserBaseImpl( Tag & tag )
+		:	m_tag( tag )
+	{
+	}
+
+	virtual ~ParserBaseImpl()
+	{
+	}
+
+	//! Do parsing.
+	virtual void parse() = 0;
+
+protected:
+
+	void checkParserStateAfterParsing()
+	{
+		if( !m_stack.isEmpty() )
+			throw Exception( QString( "Unexpected end of file. "
+				"Still unfinished tag \"%1\"." )
+					.arg( m_stack.top()->name() ) );
+
+		checkIsChildMandatoryTagsDefined( m_tag, true );
+	}
+
+	void checkIsChildMandatoryTagsDefined( const Tag & tag, bool first = false )
+	{
+		if( first )
+		{
+			if( tag.isMandatory() && !tag.isDefined() )
+				throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
+					.arg( tag.name() ) );
+
+			foreach( Tag * t, tag.children() )
+				checkIsChildMandatoryTagsDefined( *t );
+		}
+		else if( tag.isMandatory() && !tag.isDefined() )
+		{
+			throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
+				.arg( tag.name() ) );
+		}
+
+		if( tag.isMandatory() )
+		{
+			foreach( Tag * t, tag.children() )
+				checkIsChildMandatoryTagsDefined( *t );
+		}
+	}
+
+
+protected:
+	Tag & m_tag;
+	QStack< Tag* > m_stack;
+}; // class ParserBaseImpl
+
+
+//
+// ParserQtConfImpl
+//
+
+//! Implementation of parser in QtConfFile format.
+class ParserQtConfImpl
+	:	public ParserBaseImpl
+{
+public:
+	ParserQtConfImpl( Tag & tag, InputStream & stream )
+		:	ParserBaseImpl( tag )
+		,	m_lex( stream )
+	{
+	}
+
+	~ParserQtConfImpl()
+	{
+	}
+
+	//! Do parsing.
+	void parse()
+	{
+		if( !startFirstTagParsing() )
+			return;
+
+		Lexeme lexeme = m_lex.nextLexeme();
+
+		while( !lexeme.isNull() )
+		{
+			if( !m_stack.isEmpty() )
+			{
+				if( lexeme.type() == StartTagLexeme )
+					startTagParsing( *m_stack.top(),
+						m_stack.top()->children() );
+				else if( lexeme.type() == StringLexeme )
+					m_stack.top()->onString( ParserInfo(
+						m_lex.inputStream().fileName(),
+						m_lex.lineNumber(),
+						m_lex.columnNumber() ),
+							lexeme.value() );
+				else if( lexeme.type() == FinishTagLexeme )
+				{
+					m_stack.top()->onFinish( ParserInfo(
+						m_lex.inputStream().fileName(),
+						m_lex.lineNumber(),
+						m_lex.columnNumber() ) );
+					m_stack.pop();
+				}
+			}
+			else
+				throw Exception( QString( "Unexpected content. "
+					"We've finished parsing, but we've got this: \"%1\". "
+					"In file \"%2\" on line %3." )
+						.arg( lexeme.value() )
+						.arg( m_lex.inputStream().fileName() )
+						.arg( m_lex.inputStream().lineNumber() ) );
+
+			lexeme = m_lex.nextLexeme();
+		}
+
+		checkParserStateAfterParsing();
+	}
+
+private:
 
 	bool startFirstTagParsing()
 	{
@@ -153,46 +271,59 @@ public:
 					.arg( m_lex.inputStream().lineNumber() ) );
 	}
 
-	void checkParserStateAfterParsing()
-	{
-		if( !m_stack.isEmpty() )
-			throw Exception( QString( "Unexpected end of file. "
-				"Still unfinished tag \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( m_stack.top()->name() )
-					.arg( m_lex.inputStream().fileName() )
-					.arg( m_lex.inputStream().lineNumber() ) );
+private:
+	LexicalAnalyzer m_lex;
+}; // class ParserQtConfImpl
 
-		checkIsChildMandatoryTagsDefined( m_tag, true );
+
+//
+// ParserDomImpl
+//
+
+//! Implementation of parser in XML format.
+class ParserDomImpl
+	:	public ParserBaseImpl
+{
+public:
+	ParserDomImpl( Tag & tag, const QDomDocument & dom )
+		:	ParserBaseImpl( tag )
+		,	m_dom( dom )
+	{
 	}
 
-	void checkIsChildMandatoryTagsDefined( const Tag & tag, bool first = false )
+	~ParserDomImpl()
 	{
-		if( first )
-		{
-			if( tag.isMandatory() && !tag.isDefined() )
-				throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
-					.arg( tag.name() ) );
-
-			foreach( Tag * t, tag.children() )
-				checkIsChildMandatoryTagsDefined( *t );
-		}
-		else if( tag.isMandatory() && !tag.isDefined() )
-		{
-			throw Exception( QString( "Undefined mandatory tag: \"%1\"." )
-				.arg( tag.name() ) );
-		}
-
-		if( tag.isMandatory() )
-		{
-			foreach( Tag * t, tag.children() )
-				checkIsChildMandatoryTagsDefined( *t );
-		}
 	}
 
-    LexicalAnalyzer m_lex;
-	Tag & m_tag;
-	QStack< Tag* > m_stack;
+	//! Do parsing.
+	void parse()
+	{
+	}
+
+private:
+	const QDomDocument & m_dom;
+}; // class ParserDomImpl
+
+} /* namespace anonymous */
+
+
+//
+// Parser::ParserPrivate
+//
+
+class Parser::ParserPrivate {
+public:
+	ParserPrivate( Tag & tag, InputStream & stream )
+		:   m_parser( new ParserQtConfImpl( tag, stream ) )
+    {
+    }
+
+	ParserPrivate( Tag & tag, const QDomDocument & dom )
+		:	m_parser( new ParserDomImpl( tag, dom ) )
+	{
+	}
+
+	QScopedPointer< ParserBaseImpl > m_parser;
 }; // class Parser::ParserPrivate
 
 
@@ -205,6 +336,11 @@ Parser::Parser( Tag & tag, InputStream & stream )
 {
 }
 
+Parser::Parser( Tag & tag, const QDomDocument & dom )
+	:	d( new ParserPrivate( tag, dom ) )
+{
+}
+
 Parser::~Parser()
 {
 }
@@ -212,45 +348,7 @@ Parser::~Parser()
 void
 Parser::parse()
 {
-	if( !d->startFirstTagParsing() )
-		return;
-
-	Lexeme lexeme = d->m_lex.nextLexeme();
-
-	while( !lexeme.isNull() )
-	{
-		if( !d->m_stack.isEmpty() )
-		{
-			if( lexeme.type() == StartTagLexeme )
-				d->startTagParsing( *d->m_stack.top(),
-					d->m_stack.top()->children() );
-			else if( lexeme.type() == StringLexeme )
-				d->m_stack.top()->onString( ParserInfo(
-					d->m_lex.inputStream().fileName(),
-					d->m_lex.lineNumber(),
-					d->m_lex.columnNumber() ),
-						lexeme.value() );
-			else if( lexeme.type() == FinishTagLexeme )
-			{
-				d->m_stack.top()->onFinish( ParserInfo(
-					d->m_lex.inputStream().fileName(),
-					d->m_lex.lineNumber(),
-					d->m_lex.columnNumber() ) );
-				d->m_stack.pop();
-			}
-		}
-		else
-			throw Exception( QString( "Unexpected content. "
-				"We've finished parsing, but we've got this: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( lexeme.value() )
-					.arg( d->m_lex.inputStream().fileName() )
-					.arg( d->m_lex.inputStream().lineNumber() ) );
-
-		lexeme = d->m_lex.nextLexeme();
-	}
-
-	d->checkParserStateAfterParsing();
+	d->m_parser->parse();
 }
 
 } /* namespace QtConfFile */

@@ -4,6 +4,7 @@ TARGET = example.generator
 DESTDIR = .
 CONFIG += console
 QT -= gui
+QT += xml
 
 SOURCES += main.cpp
 

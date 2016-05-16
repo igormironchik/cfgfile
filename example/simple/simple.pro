@@ -4,6 +4,7 @@ TARGET = example.simple
 DESTDIR = .
 CONFIG += console
 QT -= gui
+QT += xml
 
 HEADERS += cfg.hpp
 

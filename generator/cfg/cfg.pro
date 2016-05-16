@@ -5,6 +5,7 @@ DESTDIR = ../../lib
 INCLUDEPATH += .
 CONFIG += qt staticlib
 QT -= gui
+QT += xml
 
 HEADERS += cfg.hpp
 

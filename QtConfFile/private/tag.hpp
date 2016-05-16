@@ -36,6 +36,13 @@
 #include <QtCore/QScopedPointer>
 #include <QtCore/QString>
 
+QT_BEGIN_NAMESPACE
+
+class QDomDocument;
+class QDomElement;
+
+QT_END_NAMESPACE
+
 // QtConfFile include.
 #include <QtConfFile/private/ParserInfo>
 
@@ -94,6 +101,10 @@ public:
 
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const = 0;
+
+	//! Print tag to the output.
+	virtual void print( QDomDocument & doc,
+		QDomElement * parent = 0 ) const = 0;
 
     //! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );

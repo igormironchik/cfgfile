@@ -42,6 +42,19 @@
 namespace QtConfFile {
 
 //
+// FileFormat
+//
+
+//! Format of the conf file.
+enum FileFormat {
+	//! QtConfFile format.
+	QtConfFileFormat,
+	//! XML format.
+	XMLFormat
+}; // enum FileFormat
+
+
+//
 // readQtConfFile
 //
 
@@ -53,7 +66,9 @@ readQtConfFile(
 	//! File name.
 	const QString & fileName,
 	//! Text codec.
-	QTextCodec * codec = QTextCodec::codecForLocale() );
+	QTextCodec * codec = QTextCodec::codecForLocale(),
+	//! Format of the file.
+	FileFormat fmt = QtConfFileFormat );
 
 
 //
@@ -68,7 +83,9 @@ writeQtConfFile(
 	//! File name.
 	const QString & fileName,
 	//! Text codec.
-	QTextCodec * codec = QTextCodec::codecForLocale() );
+	QTextCodec * codec = QTextCodec::codecForLocale(),
+	//! Format of the file.
+	FileFormat fmt = QtConfFileFormat );
 
 } /* namespace QtConfFile */
 

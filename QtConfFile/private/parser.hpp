@@ -34,6 +34,12 @@
 // Qt include.
 #include <QtCore/QScopedPointer>
 
+QT_BEGIN_NAMESPACE
+
+class QDomDocument;
+
+QT_END_NAMESPACE
+
 
 namespace QtConfFile {
 
@@ -49,6 +55,9 @@ class Tag;
 class Parser {
 public:
 	Parser( Tag & tag, InputStream & stream );
+
+	Parser( Tag & tag, const QDomDocument & dom );
+
     ~Parser();
 
     /*!

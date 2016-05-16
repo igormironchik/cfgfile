@@ -32,6 +32,10 @@
 #include <QtConfFile/TagNoValue>
 #include <QtConfFile/Exceptions>
 
+// Qt include.
+#include <QDomDocument>
+#include <QDomElement>
+
 
 namespace QtConfFile {
 
@@ -82,6 +86,23 @@ TagNoValue::print( int indent ) const
 	}
 
 	return result;
+}
+
+void
+TagNoValue::print( QDomDocument & doc, QDomElement * parent ) const
+{
+	QDomElement thisElement = doc.createElement( name() );
+
+	if( !parent )
+		doc.appendChild( thisElement );
+	else
+		parent->appendChild( thisElement );
+
+	if( !children().isEmpty() )
+	{
+		foreach( Tag * tag, children() )
+			tag->print( doc, &thisElement );
+	}
 }
 
 void

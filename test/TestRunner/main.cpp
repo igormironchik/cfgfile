@@ -54,8 +54,9 @@ public:
 	{
 		QDir dir( "." );
 		init( dir );
+
         m_tests.removeOne( QDir::toNativeSeparators(
-            dir.absoluteFilePath( appName ) ) );
+			QDir::cleanPath( dir.absoluteFilePath( appName ) ) ) );
 	}
 
 	~TestRunner()

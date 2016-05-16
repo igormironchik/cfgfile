@@ -6,6 +6,7 @@ DEPENDPATH += . private
 INCLUDEPATH += . ..
 CONFIG += qt staticlib
 QT -= gui
+QT += xml
 
 HEADERS += private/constraint.hpp \
            private/format.hpp \

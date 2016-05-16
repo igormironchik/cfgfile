@@ -38,36 +38,85 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 
+#include <QDomDocument>
+#include <QDomElement>
+
 
 namespace QtConfFile {
+
+namespace /* anonymous */ {
+
+//
+// FileCloser
+//
+
+//! Automatically close file.
+class FileCloser {
+public:
+	FileCloser( const QString & fileName, QIODevice::OpenMode mode )
+		:	m_file( fileName )
+	{
+		if( !m_file.open( mode ) )
+			throw Exception( QString( "Couldn't open file: \"%1\"" )
+				.arg( fileName ) );
+	}
+
+	~FileCloser()
+	{
+		m_file.close();
+	}
+
+	//! \return File.
+	QFile & file()
+	{
+		return m_file;
+	}
+
+private:
+	QFile m_file;
+}; // class FileCloser
+
+} /* namespace anonymous */
+
 
 //
 // readQtConfFile
 //
 
 void
-readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
+readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec,
+	FileFormat fmt )
 {
-	QFile file( fileName );
+	FileCloser file( fileName, QIODevice::ReadOnly | QIODevice::Text );
 
-	if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
-		throw Exception( QString( "Couldn't open file: \"%1\"" )
-			.arg( fileName ) );
-
-	try {
-		InputStream stream( &file, codec, fileName );
-
-		Parser parser( tag, stream );
-
-		parser.parse();
-
-		file.close();
-	}
-	catch( ... )
+	switch( fmt )
 	{
-		file.close();
+		case QtConfFileFormat :
+		{
+			InputStream stream( &file.file(), codec, fileName );
 
-		throw;
+			Parser parser( tag, stream );
+
+			parser.parse();
+		}
+			break;
+
+		case XMLFormat :
+		{
+			QDomDocument doc;
+
+			if( !doc.setContent( &file.file() ) )
+				throw Exception( QString( "Unable to parse XML "
+					"from file: \"%1\"." ).arg( fileName ) );
+
+			Parser parser( tag, doc );
+
+			parser.parse();
+		}
+			break;
+
+		default :
+			break;
 	}
 }
 
@@ -77,29 +126,40 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
 //
 
 void
-writeQtConfFile( const Tag & tag, const QString & fileName, QTextCodec * codec )
+writeQtConfFile( const Tag & tag, const QString & fileName, QTextCodec * codec,
+	FileFormat fmt )
 {
-	QFile file( fileName );
+	FileCloser file( fileName,
+		QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text );
 
-	if( !file.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
-		throw Exception( QString( "Couldn't open file: \"%1\"" )
-			.arg( fileName ) );
-
-	try {
-		QString content = tag.print();
-
-		QTextStream stream( &file );
-		stream.setCodec( codec );
-
-		stream << content;
-
-		file.close();
-	}
-	catch( ... )
+	switch( fmt )
 	{
-		file.close();
+		case QtConfFileFormat :
+		{
+			QString content = tag.print();
 
-		throw;
+			QTextStream stream( &file.file() );
+			stream.setCodec( codec );
+
+			stream << content;
+		}
+			break;
+
+		case XMLFormat :
+		{
+			QDomDocument doc;
+
+			tag.print( doc );
+
+			QTextStream stream( &file.file() );
+			stream.setCodec( codec );
+
+			stream << doc.toString( 4 );
+		}
+			break;
+
+		default :
+			break;
 	}
 }
 
