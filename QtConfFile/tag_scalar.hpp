@@ -567,6 +567,9 @@ public:
 	//! Print tag to the output.
 	virtual QString print( int indent = 0 ) const;
 
+	//! Print tag to the output.
+	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+
 	//! Called when tag parsing started.
 	virtual void onStart( const ParserInfo & info );
 
@@ -706,6 +709,35 @@ TagScalar< QString >::print( int indent ) const
 	}
 
 	return result;
+}
+
+inline
+void
+TagScalar< QString >::print( QDomDocument & doc,
+	QDomElement * parent ) const
+{
+	if( isDefined() )
+	{
+		QDomElement thisElement = doc.createElement( name() );
+
+		if( !parent )
+			doc.appendChild( thisElement );
+		else
+			parent->appendChild( thisElement );
+
+		QString value = Format< QString >::toString( m_value );
+		value = toQtConfFileFormat( value );
+
+		QDomText data = doc.createTextNode( value );
+
+		thisElement.appendChild( data );
+
+		if( !children().isEmpty() )
+		{
+			foreach( Tag * tag, children() )
+				tag->print( doc, &thisElement );
+		}
+	}
 }
 
 inline
