@@ -49,8 +49,7 @@ int main( int argc, char ** argv )
 
 	try {
 		QtConfFile::readQtConfFile( readTag, QLatin1String( "example.cfg" ),
-			QTextCodec::codecForName( "UTF-8" ),
-			QtConfFile::FileFormat::XMLFormat );
+			QTextCodec::codecForName( "UTF-8" ) );
 	}
 	catch( const QtConfFile::Exception & x )
 	{

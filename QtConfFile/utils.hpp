@@ -66,9 +66,7 @@ readQtConfFile(
 	//! File name.
 	const QString & fileName,
 	//! Text codec.
-	QTextCodec * codec = QTextCodec::codecForLocale(),
-	//! Format of the file.
-	FileFormat fmt = QtConfFileFormat );
+	QTextCodec * codec = QTextCodec::codecForLocale() );
 
 
 //

@@ -41,6 +41,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include <QTextStream>
+
 
 namespace QtConfFile {
 
@@ -76,6 +78,52 @@ private:
 	QFile m_file;
 }; // class FileCloser
 
+
+//
+// DetermineFormat
+//
+
+//! Determine format of the configuration file.
+class DetermineFormat {
+public:
+	DetermineFormat( QIODevice * dev, QTextCodec * codec )
+		:	m_stream( dev )
+	{
+		m_stream.setCodec( codec );
+	}
+
+	~DetermineFormat()
+	{
+	}
+
+	//! Determine file's format.
+	FileFormat determineFormat()
+	{
+		static const QChar xml = QLatin1Char( '<' );
+
+		QChar ch = 0x00;
+
+		while( !m_stream.atEnd() )
+		{
+			m_stream >> ch;
+
+			if( ch.isSpace() )
+				continue;
+
+			if( ch == xml )
+				return XMLFormat;
+			else
+				return QtConfFileFormat;
+		}
+
+		return QtConfFileFormat;
+	}
+
+private:
+	//! Stream.
+	QTextStream m_stream;
+}; // class DetermineFormat
+
 } /* namespace anonymous */
 
 
@@ -84,10 +132,19 @@ private:
 //
 
 void
-readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec,
-	FileFormat fmt )
+readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
 {
 	FileCloser file( fileName, QIODevice::ReadOnly | QIODevice::Text );
+
+	FileFormat fmt = QtConfFileFormat;
+
+	{
+		DetermineFormat fmtDeterminator( &file.file(), codec );
+
+		fmt = fmtDeterminator.determineFormat();
+	}
+
+	file.file().seek( 0 );
 
 	switch( fmt )
 	{
