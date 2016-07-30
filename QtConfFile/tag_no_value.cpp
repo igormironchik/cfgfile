@@ -91,17 +91,20 @@ TagNoValue::print( int indent ) const
 void
 TagNoValue::print( QDomDocument & doc, QDomElement * parent ) const
 {
-	QDomElement thisElement = doc.createElement( name() );
-
-	if( !parent )
-		doc.appendChild( thisElement );
-	else
-		parent->appendChild( thisElement );
-
-	if( !children().isEmpty() )
+	if( isDefined() )
 	{
-		foreach( Tag * tag, children() )
-			tag->print( doc, &thisElement );
+		QDomElement thisElement = doc.createElement( name() );
+
+		if( !parent )
+			doc.appendChild( thisElement );
+		else
+			parent->appendChild( thisElement );
+
+		if( !children().isEmpty() )
+		{
+			foreach( Tag * tag, children() )
+				tag->print( doc, &thisElement );
+		}
 	}
 }
 
