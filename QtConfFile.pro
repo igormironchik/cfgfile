@@ -3,11 +3,11 @@ TEMPLATE = subdirs
 
 
 SUBDIRS = QtConfFile \
-          test \
+          tests \
           example \
           generator
 
-test.depends = QtConfFile
+tests.depends = QtConfFile
 example.depends = QtConfFile generator
 generator.depends = QtConfFile
 

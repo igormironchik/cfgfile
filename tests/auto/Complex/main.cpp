@@ -83,7 +83,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testAllIsOk
 
@@ -99,7 +99,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testAllIsOkWithComments
 

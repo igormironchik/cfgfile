@@ -72,7 +72,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testAllIsOkWithTrueAndFalse
 
@@ -88,7 +88,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testAllIsOkWithOnAndOff
 
@@ -104,7 +104,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testAllIsOkWith1And0
 
@@ -121,7 +121,7 @@ private slots:
 		{
 			qDebug() << x.whatAsQString();
 
-			throw;
+			QVERIFY( true == false );
 		}
 	} // testFalseInsteadOfTrue
 
