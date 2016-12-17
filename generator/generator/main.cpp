@@ -166,7 +166,7 @@ int main( int argc, char ** argv )
 	try {
 		data = parseCommandLineArguments( argc, argv );
 	}
-	catch( const QtArgHelpHasPrintedEx & x )
+	catch( const QtArgHelpHasPrintedEx & )
 	{
 		return 0;
 	}
