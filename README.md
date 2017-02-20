@@ -1,7 +1,6 @@
-
 Library for reading and writing configuration files with Qt (QtConfFile).
 
-# LICENSE
+# License
 
 Copyright (c) 2012-2016 Igor Mironchik
 
@@ -27,9 +26,9 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 
-# COMPILING
+# Compilling
 
- * Juct run qmake and then make, as usually.
+Juct run qmake and then make, as usually.
 
 # About
 
