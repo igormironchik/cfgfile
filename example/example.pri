@@ -6,7 +6,7 @@ copy_cfg_files.output = ${QMAKE_FILE_BASE}.cfg
 copy_cfg_files.CONFIG = no_link
 
 win32 {
-	copy_cfg_files.commands = copy /y ${QMAKE_FILE_IN} $${OUT_PWD}/${QMAKE_FILE_BASE}.cfg
+	copy_cfg_files.commands = copy /y ${QMAKE_FILE_IN} $$shell_path( $${OUT_PWD}/${QMAKE_FILE_BASE}.cfg )
 }
 else {
 	copy_cfg_files.commands = cp ${QMAKE_FILE_IN} $${OUT_PWD}/${QMAKE_FILE_BASE}.cfg
