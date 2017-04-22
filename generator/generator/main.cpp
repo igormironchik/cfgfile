@@ -119,18 +119,17 @@ static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
 	QtArgCmdLine cmd( argc, argv );
 
 	QtArgHelp help( &cmd );
-	help.printer()->setProgramDescription(
+	help.setProgramDescription(
 		QLatin1String( "C++ header generator for QtConfFile." ) );
-	help.printer()->setExecutableName( QLatin1String( argv[ 0 ] ) );
+	help.setExecutableName( QLatin1String( argv[ 0 ] ) );
 
-	cmd.addArg( &input );
-	cmd.addArg( &output );
-	cmd.addArg( &help );
+	cmd.addParseable( input );
+	cmd.addParseable( output );
+	cmd.addParseable( help );
 
 	cmd.parse();
 
-	ForGeneration data( input.value().toString(),
-		output.value().toString() );
+	ForGeneration data( input.value(), output.value() );
 
 	QTextStream stream( stdout );
 
