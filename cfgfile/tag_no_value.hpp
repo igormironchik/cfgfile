@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
-#define QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
+#ifndef CFGFILE__TAG_NO_VALUE_HPP__INCLUDED
+#define CFGFILE__TAG_NO_VALUE_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/private/Tag>
+// cfgfile include.
+#include <cfgfile/private/Tag>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // TagNoValue
@@ -68,6 +68,6 @@ public:
 		const QString & str );
 }; // class TagNoValue
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__TAG_NO_VALUE_HPP__INCLUDED
+#endif // CFGFILE__TAG_NO_VALUE_HPP__INCLUDED

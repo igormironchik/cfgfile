@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__EXCEPTIONS_HPP__INCLUDED
-#define QTCONFFILE__EXCEPTIONS_HPP__INCLUDED
+#ifndef CFGFILE__EXCEPTIONS_HPP__INCLUDED
+#define CFGFILE__EXCEPTIONS_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QString>
@@ -38,7 +38,7 @@
 #include <stdexcept>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // Exception
@@ -60,6 +60,6 @@ private:
 	QString m_what;
 }; // class Exception
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__EXCEPTIONS_HPP__INCLUDED
+#endif // CFGFILE__EXCEPTIONS_HPP__INCLUDED

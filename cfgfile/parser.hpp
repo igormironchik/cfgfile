@@ -1,10 +1,10 @@
 
 /*!
-    \file
+	\file
 
-    \author Igor Mironchik (igor.mironchik at gmail dot com).
+	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__PARSER_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__PARSER_HPP__INCLUDED
+#ifndef CFGFILE__PARSER_HPP__INCLUDED
+#define CFGFILE__PARSER_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QScopedPointer>
@@ -41,7 +41,7 @@ class QDomDocument;
 QT_END_NAMESPACE
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 class InputStream;
 class Tag;
@@ -73,6 +73,6 @@ private:
     QScopedPointer< ParserPrivate > d;
 }; // class Parser
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__PARSER_HPP__INCLUDED
+#endif // CFGFILE__PARSER_HPP__INCLUDED

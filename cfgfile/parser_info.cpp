@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,11 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/ParserInfo>
+// cfgfile include.
+#include <cfgfile/private/ParserInfo>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // ParserInfo
@@ -65,4 +65,4 @@ ParserInfo::columnNumber() const
 	return m_columnNumber;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

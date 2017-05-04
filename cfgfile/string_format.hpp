@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,30 +28,30 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__STRING_FORMAT_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__STRING_FORMAT_HPP__INCLUDED
+#ifndef CFGFILE__STRING_FORMAT_HPP__INCLUDED
+#define CFGFILE__STRING_FORMAT_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QString>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
-// toQtConfFileFormat
+// tocfgfileFormat
 //
 
-//! Format string to QtConfFile format.
-QString toQtConfFileFormat( const QString & what );
+//! Format string to cfgfile format.
+QString tocfgfileFormat( const QString & what );
 
 
 //
-// fromQtConfFileFormat
+// fromcfgfileFormat
 //
 
-//! Format string from QtConfFile format.
-QString fromQtConfFileFormat( const QString & what );
+//! Format string from cfgfile format.
+QString fromcfgfileFormat( const QString & what );
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__STRING_FORMAT_HPP__INCLUDED
+#endif // CFGFILE__STRING_FORMAT_HPP__INCLUDED

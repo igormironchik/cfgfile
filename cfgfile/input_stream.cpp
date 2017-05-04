@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/InputStream>
+// cfgfile include.
+#include <cfgfile/private/InputStream>
 
 // Qt include.
 #include <QtCore/QTextStream>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 static const QChar c_carriageReturn = QChar( '\n' );
 static const QChar c_lineFeed = QChar( '\r' );
@@ -175,4 +175,4 @@ InputStream::fileName() const
 	return d->m_fileName;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

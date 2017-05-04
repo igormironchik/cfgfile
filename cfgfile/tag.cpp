@@ -1,10 +1,10 @@
 
 /*!
-    \file
+	\file
 
-    \author Igor Mironchik (igor.mironchik at gmail dot com).
+	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/Tag>
+// cfgfile include.
+#include <cfgfile/private/Tag>
 
 // Qt include.
 #include <QtCore/QString>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // Tag::TagPrivate
@@ -179,4 +179,4 @@ Tag::isAnyChildDefined() const
 	return false;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

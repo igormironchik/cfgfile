@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -31,14 +31,14 @@
 // Generator cfg include.
 #include "cfg.hpp"
 
-// QtConfFile include.
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/Exceptions>
 
 // C++ include.
 #include <algorithm>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace Generator {
 
@@ -912,7 +912,7 @@ Model::checkClass( const Class & c,
 	const QString className = fullName( c );
 
 	if( prevDefinedClasses.contains( className ) )
-		throw QtConfFile::Exception( QString( "Redefinition of class \"%1\". "
+		throw cfgfile::Exception( QString( "Redefinition of class \"%1\". "
 			"Line %2, column %3." )
 				.arg( className )
 				.arg( QString::number( c.lineNumber() ) )
@@ -932,7 +932,7 @@ Model::checkClass( const Class & c,
 				case Field::ScalarVectorFieldType :
 				{
 					if( f.name().isEmpty() )
-						throw QtConfFile::Exception( QString(
+						throw cfgfile::Exception( QString(
 							"Base of class field's name is empty. "
 							"Line %1, column %2." )
 								.arg( QString::number( f.lineNumber() ) )
@@ -945,7 +945,7 @@ Model::checkClass( const Class & c,
 			}
 		}
 		else if( f.name().isEmpty() )
-			throw QtConfFile::Exception( QString(
+			throw cfgfile::Exception( QString(
 				"Field name of class \"%1\" "
 				"Line %2, column %3." )
 					.arg( className )
@@ -953,7 +953,7 @@ Model::checkClass( const Class & c,
 					.arg( QString::number( f.columnNumber() ) ) );
 
 		if( fields.contains( f.name() ) )
-			throw QtConfFile::Exception( QString( "Field \"%1\" "
+			throw cfgfile::Exception( QString( "Field \"%1\" "
 				"already defined in class \"%2\". Line %3, column %4." )
 					.arg( f.name() )
 					.arg( className )
@@ -969,7 +969,7 @@ Model::checkClass( const Class & c,
 				if( !checkIsClassDefined( fullName( c, f.valueType() ),
 					className, prevDefinedClasses ) )
 				{
-					throw QtConfFile::Exception( QString( "Value type \"%1\" of "
+					throw cfgfile::Exception( QString( "Value type \"%1\" of "
 						"member \"%2\" of class \"%3\" "
 						"wasn't defined. Line %4, column %5." )
 							.arg( f.valueType() )
@@ -1006,8 +1006,8 @@ Model::setIncludeGuard( const QString & guard )
 // TagMinMaxConstraint
 //
 
-TagMinMaxConstraint::TagMinMaxConstraint( QtConfFile::Tag & owner )
-	:	QtConfFile::TagNoValue( owner, c_minMaxConstraintTagName, false )
+TagMinMaxConstraint::TagMinMaxConstraint( cfgfile::Tag & owner )
+	:	cfgfile::TagNoValue( owner, c_minMaxConstraintTagName, false )
 	,	m_min( *this, c_minTagName, true )
 	,	m_max( *this, c_maxTagName, true )
 {
@@ -1029,8 +1029,8 @@ TagMinMaxConstraint::cfg() const
 // TagOneOfConstraint
 //
 
-TagOneOfConstraint::TagOneOfConstraint( QtConfFile::Tag & owner )
-	:	QtConfFile::TagScalarVector< QString > ( owner,
+TagOneOfConstraint::TagOneOfConstraint( cfgfile::Tag & owner )
+	:	cfgfile::TagScalarVector< QString > ( owner,
 			c_oneOfConstraintTagName, false )
 {
 }
@@ -1052,7 +1052,7 @@ TagOneOfConstraint::cfg() const
 //
 
 TagField::TagField( const QString & name, bool isMandatory )
-	:	QtConfFile::TagNoValue( name, isMandatory )
+	:	cfgfile::TagNoValue( name, isMandatory )
 	,	m_name( *this, c_fieldNameTagName, true )
 	,	m_valueType( *this, c_valueTypeTagName, false )
 	,	m_minMaxConstraint( *this )
@@ -1085,7 +1085,7 @@ static inline Field::FieldType fieldTypeFromString( const QString & type )
 static inline void throwConstraintRedefinition( const QString & className,
 	const QString & fieldName, qint64 lineNumber, qint64 columnNumber )
 {
-	throw QtConfFile::Exception( QString( "Redefinition of "
+	throw cfgfile::Exception( QString( "Redefinition of "
 		"constraint in class \"%1\", field \"%2\". "
 		"Line %3, column %4." )
 			.arg( className )
@@ -1094,8 +1094,8 @@ static inline void throwConstraintRedefinition( const QString & className,
 			.arg( QString::number( columnNumber ) ) );
 }
 
-static inline void checkConstraints( const QtConfFile::Tag & c1,
-	const QtConfFile::Tag & c2,
+static inline void checkConstraints( const cfgfile::Tag & c1,
+	const cfgfile::Tag & c2,
 	const QString & className, const QString& fieldName )
 {
 	if( c1.isDefined() && c2.isDefined() )
@@ -1165,7 +1165,7 @@ TagField::onFinish( const ParserInfo & info )
 		case Field::VectorOfTagsFieldType :
 		{
 			if( !m_valueType.isDefined() )
-				throw QtConfFile::Exception( QString( "Undefined required "
+				throw cfgfile::Exception( QString( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
 						.arg( c_valueTypeTagName )
 						.arg( name() )
@@ -1178,7 +1178,7 @@ TagField::onFinish( const ParserInfo & info )
 			break;
 	}
 
-	QtConfFile::TagNoValue::onFinish( info );
+	cfgfile::TagNoValue::onFinish( info );
 }
 
 
@@ -1186,9 +1186,9 @@ TagField::onFinish( const ParserInfo & info )
 // TagBaseClass
 //
 
-TagBaseClass::TagBaseClass( QtConfFile::Tag & owner, const QString & name,
+TagBaseClass::TagBaseClass( cfgfile::Tag & owner, const QString & name,
 	bool isMandatory )
-	:	QtConfFile::TagScalar< QString > ( owner, name, isMandatory )
+	:	cfgfile::TagScalar< QString > ( owner, name, isMandatory )
 	,	m_valueType( *this, c_valueTypeTagName, false )
 	,	m_name( *this, c_fieldNameTagName, false )
 	,	m_minMaxConstraint( *this )
@@ -1255,7 +1255,7 @@ TagBaseClass::onFinish( const ParserInfo & info )
 		case Field::VectorOfTagsFieldType :
 		{
 			if( !m_valueType.isDefined() )
-				throw QtConfFile::Exception( QString( "Undefined required "
+				throw cfgfile::Exception( QString( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
 						.arg( c_valueTypeTagName )
 						.arg( c_baseClassTagName )
@@ -1263,7 +1263,7 @@ TagBaseClass::onFinish( const ParserInfo & info )
 						.arg( QString::number( info.columnNumber() ) ) );
 
 			if( !m_name.isDefined() )
-				throw QtConfFile::Exception( QString( "Undefined required "
+				throw cfgfile::Exception( QString( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
 						.arg( c_fieldNameTagName )
 						.arg( c_baseClassTagName )
@@ -1276,7 +1276,7 @@ TagBaseClass::onFinish( const ParserInfo & info )
 			break;
 	}
 
-	QtConfFile::TagScalar< QString >::onFinish( info );
+	cfgfile::TagScalar< QString >::onFinish( info );
 }
 
 
@@ -1285,7 +1285,7 @@ TagBaseClass::onFinish( const ParserInfo & info )
 //
 
 TagClass::TagClass( const QString & name, bool isMandatory )
-	:	QtConfFile::TagScalar< QString > ( name, isMandatory )
+	:	cfgfile::TagScalar< QString > ( name, isMandatory )
 	,	m_baseClassName( *this, c_baseClassTagName, false )
 	,	m_scalarTags( *this, c_scalarTagName, false )
 	,	m_noValueTags( *this, c_noValueTagName, false )
@@ -1359,7 +1359,7 @@ TagClass::cfg() const
 //
 
 TagNamespace::TagNamespace( const QString & name, bool isMandatory )
-	:	QtConfFile::TagScalar< QString > ( name, isMandatory )
+	:	cfgfile::TagScalar< QString > ( name, isMandatory )
 	,	m_nestedNamespaces( *this, c_namespaceTagName, false )
 	,	m_classes( *this, c_classTagName, false )
 {
@@ -1398,7 +1398,7 @@ TagNamespace::cfg() const
 //
 
 TagModel::TagModel()
-	:	QtConfFile::TagScalar< QString > ( c_mainCfgTagName, true )
+	:	cfgfile::TagScalar< QString > ( c_mainCfgTagName, true )
 	,	m_rootNamespace( *this, c_namespaceTagName, false )
 	,	m_rootClasses( *this, c_classTagName, false )
 	,	m_globalIncludes( *this, c_globalIncludeTagName, false )
@@ -1447,4 +1447,4 @@ TagModel::cfg() const
 
 } /* namespace Generator */
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

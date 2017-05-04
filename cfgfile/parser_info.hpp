@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED
+#ifndef CFGFILE__PARSER_INFO_HPP__INCLUDED
+#define CFGFILE__PARSER_INFO_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QString>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // ParserInfo
@@ -65,6 +65,6 @@ private:
 	qint64 m_columnNumber;
 }; // class PraserInfo
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__PARSER_INFO_HPP__INCLUDED
+#endif // CFGFILE__PARSER_INFO_HPP__INCLUDED

@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,17 +28,17 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
-#define QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
+#ifndef CFGFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
+#define CFGFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/private/Constraint>
+// cfgfile include.
+#include <cfgfile/private/Constraint>
 
 // Qt include.
 #include <QtCore/QSet>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // ConstraintOneOf
@@ -109,6 +109,6 @@ ConstraintOneOf< T >::check( const T & value ) const
 	return ( m_list.contains( value ) );
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
+#endif // CFGFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED

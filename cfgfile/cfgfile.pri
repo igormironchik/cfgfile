@@ -15,7 +15,8 @@ HEADERS += $$PWD/constraint.hpp \
            $$PWD/tag_scalar.hpp \
            $$PWD/tag_scalar_vector.hpp \
            $$PWD/tag_vector_of_tags.hpp \
-           $$PWD/utils.hpp
+           $$PWD/utils.hpp \
+	$$PWD/types.hpp
 
 SOURCES += $$PWD/input_stream.cpp \
            $$PWD/lex.cpp \

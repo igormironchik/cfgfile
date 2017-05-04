@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__GENERATOR__GENERATOR_HPP__INCLUDED
-#define QTCONFFILE__GENERATOR__GENERATOR_HPP__INCLUDED
+#ifndef CFGFILE__GENERATOR__GENERATOR_HPP__INCLUDED
+#define CFGFILE__GENERATOR__GENERATOR_HPP__INCLUDED
 
 // Generator cfg include.
 #include "../cfg/cfg.hpp"
@@ -40,7 +40,7 @@ class QTextStream;
 QT_END_NAMESPACE
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace Generator {
 
@@ -81,6 +81,6 @@ private:
 
 } /* namespace Generator */
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__GENERATOR__GENERATOR_HPP__INCLUDED
+#endif // CFGFILE__GENERATOR__GENERATOR_HPP__INCLUDED

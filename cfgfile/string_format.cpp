@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,11 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/StringFormat>
+// cfgfile include.
+#include <cfgfile/private/StringFormat>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 static const QChar c_beginTag = QChar( '{' );
 static const QChar c_endTag = QChar( '}' );
@@ -47,10 +47,10 @@ static const QString c_startMultiLineComment = QLatin1String( "|#" );
 static const QString c_finishMultiLineComment = QLatin1String( "#|" );
 
 //
-// toQtConfFileFormat
+// tocfgfileFormat
 //
 
-QString toQtConfFileFormat( const QString & what )
+QString tocfgfileFormat( const QString & what )
 {
 	if( what.isEmpty() )
 		return QLatin1String( "\"\"" );
@@ -96,11 +96,11 @@ QString toQtConfFileFormat( const QString & what )
 
 
 //
-// fromQtConfFileFormat
+// fromcfgfileFormat
 //
 
-//! Format string from QtConfFile format.
-QString fromQtConfFileFormat( const QString & what )
+//! Format string from cfgfile format.
+QString fromcfgfileFormat( const QString & what )
 {
 	if( what.startsWith( c_quotes ) && what.endsWith( c_quotes ) )
 	{
@@ -118,4 +118,4 @@ QString fromQtConfFileFormat( const QString & what )
 		return what;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,11 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/Utils>
-#include <QtConfFile/Exceptions>
-#include <QtConfFile/private/Parser>
-#include <QtConfFile/private/InputStream>
+// cfgfile include.
+#include <cfgfile/Utils>
+#include <cfgfile/Exceptions>
+#include <cfgfile/private/Parser>
+#include <cfgfile/private/InputStream>
 
 // Qt include.
 #include <QtCore/QFile>
@@ -44,7 +44,7 @@
 #include <QTextStream>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace /* anonymous */ {
 
@@ -113,10 +113,10 @@ public:
 			if( ch == xml )
 				return XMLFormat;
 			else
-				return QtConfFileFormat;
+				return cfgfileFormat;
 		}
 
-		return QtConfFileFormat;
+		return cfgfileFormat;
 	}
 
 private:
@@ -128,15 +128,15 @@ private:
 
 
 //
-// readQtConfFile
+// readcfgfile
 //
 
 void
-readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
+readcfgfile( Tag & tag, const QString & fileName, QTextCodec * codec )
 {
 	FileCloser file( fileName, QIODevice::ReadOnly | QIODevice::Text );
 
-	FileFormat fmt = QtConfFileFormat;
+	FileFormat fmt = cfgfileFormat;
 
 	{
 		DetermineFormat fmtDeterminator( &file.file(), codec );
@@ -148,7 +148,7 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
 
 	switch( fmt )
 	{
-		case QtConfFileFormat :
+		case cfgfileFormat :
 		{
 			InputStream stream( &file.file(), codec, fileName );
 
@@ -187,11 +187,11 @@ readQtConfFile( Tag & tag, const QString & fileName, QTextCodec * codec )
 
 
 //
-// writeQtConfFile
+// writecfgfile
 //
 
 void
-writeQtConfFile( const Tag & tag, const QString & fileName, QTextCodec * codec,
+writecfgfile( const Tag & tag, const QString & fileName, QTextCodec * codec,
 	FileFormat fmt )
 {
 	FileCloser file( fileName,
@@ -199,7 +199,7 @@ writeQtConfFile( const Tag & tag, const QString & fileName, QTextCodec * codec,
 
 	switch( fmt )
 	{
-		case QtConfFileFormat :
+		case cfgfileFormat :
 		{
 			QString content = tag.print();
 
@@ -228,4 +228,4 @@ writeQtConfFile( const Tag & tag, const QString & fileName, QTextCodec * codec,
 	}
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

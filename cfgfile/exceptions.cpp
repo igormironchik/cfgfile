@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,11 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/Exceptions>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // Exception
@@ -54,5 +54,5 @@ Exception::whatAsQString() const
 	return m_what;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 

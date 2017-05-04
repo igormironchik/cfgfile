@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,19 +28,19 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED
-#define QTCONFFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED
+#ifndef CFGFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED
+#define CFGFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/private/Tag>
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/private/Tag>
+#include <cfgfile/Exceptions>
 
 // Qt include.
 #include <QtCore/QVector>
 #include <QtCore/QSharedPointer>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // TagVectorOfTags
@@ -273,6 +273,6 @@ TagVectorOfTags< T >::onString( const ParserInfo & info,
 	m_current->onString( info, str );
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED
+#endif // CFGFILE__TAG_VECTOR_OF_TAGS_HPP__INCLUDED

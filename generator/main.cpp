@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -40,8 +40,8 @@
 #include <QtArg/CmdLine>
 #include <QtArg/Exceptions>
 
-// QtConfFile include.
-#include <QtConfFile/Utils>
+// cfgfile include.
+#include <cfgfile/Utils>
 
 // Generator include.
 #include "generator.hpp"
@@ -120,7 +120,7 @@ static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
 
 	QtArgHelp help( &cmd );
 	help.setProgramDescription(
-		QLatin1String( "C++ header generator for QtConfFile." ) );
+		QLatin1String( "C++ header generator for cfgfile." ) );
 	help.setExecutableName( QLatin1String( argv[ 0 ] ) );
 
 	cmd.addParseable( input );
@@ -178,12 +178,12 @@ int main( int argc, char ** argv )
 		return 1;
 	}
 
-	QtConfFile::Generator::Cfg::Model model;
+	cfgfile::Generator::Cfg::Model model;
 
 	try {
-		QtConfFile::Generator::Cfg::TagModel tag;
+		cfgfile::Generator::Cfg::TagModel tag;
 
-		QtConfFile::readQtConfFile( tag, data.inputFile(),
+		cfgfile::readcfgfile( tag, data.inputFile(),
 			QTextCodec::codecForName( "UTF-8" ) );
 
 		model = tag.cfg();
@@ -192,7 +192,7 @@ int main( int argc, char ** argv )
 
 		model.check();
 	}
-	catch( const QtConfFile::Exception & x )
+	catch( const cfgfile::Exception & x )
 	{
 		QTextStream stream( stdout );
 
@@ -207,7 +207,7 @@ int main( int argc, char ** argv )
 	{
 		QTextStream stream( &output );
 
-		QtConfFile::Generator::CppGenerator gen( model );
+		cfgfile::Generator::CppGenerator gen( model );
 
 		gen.generate( stream );
 

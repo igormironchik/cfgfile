@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
-#define QTCONFFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
+#ifndef CFGFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
+#define CFGFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
 
-//QtConfFile include.
-#include <QtConfFile/private/Tag>
-#include <QtConfFile/private/Constraint>
-#include <QtConfFile/private/Format>
-#include <QtConfFile/private/StringFormat>
+//cfgfile include.
+#include <cfgfile/private/Tag>
+#include <cfgfile/private/Constraint>
+#include <cfgfile/private/Format>
+#include <cfgfile/private/StringFormat>
 
 // Qt include.
 #include <QtCore/QVector>
@@ -43,7 +43,7 @@
 #include <QDomText>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // TagScalarVector
@@ -225,7 +225,7 @@ TagScalarVector< T >::print( int indent ) const
 			result.append( QLatin1String( " " ) );
 
 			QString value = Format< T >::toString( v );
-			value = toQtConfFileFormat( value );
+			value = tocfgfileFormat( value );
 
 			result.append( value );
 		}
@@ -265,7 +265,7 @@ TagScalarVector< T >::print( QDomDocument & doc, QDomElement * parent ) const
 		foreach( T v, m_values )
 		{
 			QString value = Format< T >::toString( v );
-			value = toQtConfFileFormat( value );
+			value = tocfgfileFormat( value );
 
 			static const QChar quote = QLatin1Char( '"' );
 
@@ -343,6 +343,6 @@ TagScalarVector< T >::onString( const ParserInfo & info,
 	setDefined();
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
+#endif // CFGFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED

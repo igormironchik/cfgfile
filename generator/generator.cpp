@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -39,7 +39,7 @@
 #include <algorithm>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace Generator {
 
@@ -117,15 +117,15 @@ static inline void generateIncludes( QTextStream & stream,
 	const QStringList & globalIncludes,
 	const QStringList & relativeIncludes )
 {
-	stream << QLatin1String( "// QtConfFile include.\n"
-							 "#include <QtConfFile/TagNoValue>\n"
-							 "#include <QtConfFile/TagScalar>\n"
-							 "#include <QtConfFile/TagScalarVector>\n"
-							 "#include <QtConfFile/TagVectorOfTags>\n"
-							 "#include <QtConfFile/ConstraintMinMax>\n"
-							 "#include <QtConfFile/ConstraintOneOf>\n"
-							 "#include <QtConfFile/Exceptions>\n"
-							 "#include <QtConfFile/Utils>\n\n" );
+	stream << QLatin1String( "// cfgfile include.\n"
+							 "#include <cfgfile/TagNoValue>\n"
+							 "#include <cfgfile/TagScalar>\n"
+							 "#include <cfgfile/TagScalarVector>\n"
+							 "#include <cfgfile/TagVectorOfTags>\n"
+							 "#include <cfgfile/ConstraintMinMax>\n"
+							 "#include <cfgfile/ConstraintOneOf>\n"
+							 "#include <cfgfile/Exceptions>\n"
+							 "#include <cfgfile/Utils>\n\n" );
 
 	stream << QLatin1String( "// Qt include.\n" )
 		<< QLatin1String( "#include <QList>\n\n" );
@@ -184,15 +184,15 @@ static inline QString generateBaseTagClassName( const QString & base,
 	const QString & valueType )
 {
 	if( base == Cfg::c_scalarTagName )
-		return QString( "QtConfFile::TagScalar< " ) + valueType +
+		return QString( "cfgfile::TagScalar< " ) + valueType +
 			QLatin1String( " >" );
 	else if( base == Cfg::c_noValueTagName )
-		return QString( "QtConfFile::TagNoValue" );
+		return QString( "cfgfile::TagNoValue" );
 	else if( base == Cfg::c_scalarVectorTagName )
-		return QString( "QtConfFile::TagScalarVector< " ) + valueType +
+		return QString( "cfgfile::TagScalarVector< " ) + valueType +
 				QLatin1String( " >" );
 	else if( base == Cfg::c_vectorOfTagsTagName )
-		return QString( "QtConfFile::TagVectorOfTags< " ) + valueType +
+		return QString( "cfgfile::TagVectorOfTags< " ) + valueType +
 				QLatin1String( " >" );
 	else
 		return generateTagClassName( base );
@@ -667,7 +667,7 @@ static inline void generateCfgSet( QTextStream & stream,
 						<< f.valueType() << QLatin1String( " & v, cfg." )
 						<< f.name() << QLatin1String( "() )\n" )
 						<< QLatin1String( "\t\t{\n" )
-						<< QLatin1String( "\t\t\tQtConfFile::TagVectorOfTags< " )
+						<< QLatin1String( "\t\t\tcfgfile::TagVectorOfTags< " )
 						<< generateTagClassName( f.valueType() )
 						<< QLatin1String( " >::PointerToTag p(\n" )
 						<< QLatin1String( "\t\t\t\tnew " )
@@ -739,14 +739,14 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 			{
 				case Cfg::Field::NoValueFieldType :
 				{
-					stream << QLatin1String( "\tQtConfFile::TagNoValue m_" )
+					stream << QLatin1String( "\tcfgfile::TagNoValue m_" )
 						<< f.name() << QLatin1String( ";\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarFieldType :
 				{
-					stream << QLatin1String( "\tQtConfFile::TagScalar< " )
+					stream << QLatin1String( "\tcfgfile::TagScalar< " )
 						<< f.valueType() << QLatin1String( " > m_" )
 						<< f.name() << QLatin1String( ";\n" );
 				}
@@ -754,7 +754,7 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 
 				case Cfg::Field::ScalarVectorFieldType :
 				{
-					stream << QLatin1String( "\tQtConfFile::TagScalarVector< " )
+					stream << QLatin1String( "\tcfgfile::TagScalarVector< " )
 						<< f.valueType() << QLatin1String( " > m_" )
 						<< f.name() << QLatin1String( ";\n" );
 				}
@@ -762,7 +762,7 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 
 				case Cfg::Field::VectorOfTagsFieldType :
 				{
-					stream << QLatin1String( "\tQtConfFile::TagVectorOfTags< " )
+					stream << QLatin1String( "\tcfgfile::TagVectorOfTags< " )
 						<< generateTagClassName( f.valueType() )
 						<< QLatin1String( " > m_" )
 						<< f.name() << QLatin1String( ";\n" );
@@ -791,7 +791,7 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 			{
 				case Cfg::ConstraintBase::MinMaxConstraintType :
 				{
-					stream << QLatin1String( "\tQtConfFile::ConstraintMinMax< " )
+					stream << QLatin1String( "\tcfgfile::ConstraintMinMax< " )
 						<< f.valueType() << QLatin1String( " > m_" )
 						<< f.name() << QLatin1String( "Constraint;\n" );
 				}
@@ -799,7 +799,7 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 
 				case Cfg::ConstraintBase::OneOfConstraintType :
 				{
-					stream << QLatin1String( "\tQtConfFile::ConstraintOneOf< " )
+					stream << QLatin1String( "\tcfgfile::ConstraintOneOf< " )
 						<< f.valueType() << QLatin1String( " > m_" )
 						<< f.name() << QLatin1String( "Constraint;\n" );
 				}
@@ -890,7 +890,7 @@ static inline void generateTagClass( QTextStream & stream,
 
 	// 4
 	stream << QLatin1String( "\t" ) << tagClassName
-		<< QLatin1String( "( QtConfFile::Tag & owner, const QString & name, "
+		<< QLatin1String( "( cfgfile::Tag & owner, const QString & name, "
 						  "bool isMandatory )\n" )
 		<< QLatin1String( "\t\t:\t" )
 		<< baseTag << QLatin1String( "( owner, name, isMandatory )\n" );
@@ -1018,4 +1018,4 @@ CppGenerator::generate( QTextStream & stream ) const
 
 } /* namespace Generator */
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

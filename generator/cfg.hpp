@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,15 +28,15 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
-#define QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
+#ifndef CFGFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
+#define CFGFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/TagNoValue>
-#include <QtConfFile/TagScalar>
-#include <QtConfFile/TagVectorOfTags>
-#include <QtConfFile/TagScalarVector>
-#include <QtConfFile/ConstraintOneOf>
+// cfgfile include.
+#include <cfgfile/TagNoValue>
+#include <cfgfile/TagScalar>
+#include <cfgfile/TagVectorOfTags>
+#include <cfgfile/TagScalarVector>
+#include <cfgfile/ConstraintOneOf>
 
 // Qt include.
 #include <QList>
@@ -45,7 +45,7 @@
 #include <QStringList>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace Generator {
 
@@ -488,7 +488,7 @@ public:
 	//! will broke links.
 	void prepare();
 
-	//! Check model. \throw QtConfFile::Exception on error.
+	//! Check model. \throw cfgfile::Exception on error.
 	//! Model must be prepared before calling this method.
 	void check() const;
 
@@ -530,10 +530,10 @@ private:
 
 //! Tag for MinMaxConstraint.
 class TagMinMaxConstraint
-	:	public QtConfFile::TagNoValue
+	:	public cfgfile::TagNoValue
 {
 public:
-	explicit TagMinMaxConstraint( QtConfFile::Tag & owner );
+	explicit TagMinMaxConstraint( cfgfile::Tag & owner );
 	~TagMinMaxConstraint();
 
 	//! \return Constraint.
@@ -541,9 +541,9 @@ public:
 
 private:
 	//! Min value.
-	QtConfFile::TagScalar< QString > m_min;
+	cfgfile::TagScalar< QString > m_min;
 	//! Max value.
-	QtConfFile::TagScalar< QString > m_max;
+	cfgfile::TagScalar< QString > m_max;
 }; // class TagMinMaxConstraint
 
 
@@ -553,10 +553,10 @@ private:
 
 //! Tag for OneOfConstraint.
 class TagOneOfConstraint
-	:	public QtConfFile::TagScalarVector< QString >
+	:	public cfgfile::TagScalarVector< QString >
 {
 public:
-	explicit TagOneOfConstraint( QtConfFile::Tag & owner );
+	explicit TagOneOfConstraint( cfgfile::Tag & owner );
 	~TagOneOfConstraint();
 
 	//! \return Constraint.
@@ -570,7 +570,7 @@ public:
 
 //! Tag for Field.
 class TagField
-	:	public QtConfFile::TagNoValue
+	:	public cfgfile::TagNoValue
 {
 public:
 	TagField( const QString & name, bool isMandatory );
@@ -584,17 +584,17 @@ public:
 
 private:
 	//! Name.
-	QtConfFile::TagScalar< QString > m_name;
+	cfgfile::TagScalar< QString > m_name;
 	//! Value type.
-	QtConfFile::TagScalar< QString > m_valueType;
+	cfgfile::TagScalar< QString > m_valueType;
 	//! Min-max constraint.
 	TagMinMaxConstraint m_minMaxConstraint;
 	//! One of constraint.
 	TagOneOfConstraint m_oneOfConstraint;
 	//! Is required?
-	QtConfFile::TagNoValue m_isRequired;
+	cfgfile::TagNoValue m_isRequired;
 	//! Default value.
-	QtConfFile::TagScalar< QString > m_defaultValue;
+	cfgfile::TagScalar< QString > m_defaultValue;
 }; // class TagField
 
 
@@ -603,10 +603,10 @@ private:
 //
 
 class TagBaseClass
-	:	public QtConfFile::TagScalar< QString >
+	:	public cfgfile::TagScalar< QString >
 {
 public:
-	TagBaseClass( QtConfFile::Tag & owner, const QString & name,
+	TagBaseClass( cfgfile::Tag & owner, const QString & name,
 		bool isMandatory );
 	~TagBaseClass();
 
@@ -621,19 +621,19 @@ public:
 
 private:
 	//! Value type.
-	QtConfFile::TagScalar< QString > m_valueType;
+	cfgfile::TagScalar< QString > m_valueType;
 	//! Constraint.
-	QtConfFile::ConstraintOneOf< QString > m_constraint;
+	cfgfile::ConstraintOneOf< QString > m_constraint;
 	//! Name.
-	QtConfFile::TagScalar< QString > m_name;
+	cfgfile::TagScalar< QString > m_name;
 	//! Min-max constraint.
 	TagMinMaxConstraint m_minMaxConstraint;
 	//! One of constraint.
 	TagOneOfConstraint m_oneOfConstraint;
 	//! Is required?
-	QtConfFile::TagNoValue m_isRequired;
+	cfgfile::TagNoValue m_isRequired;
 	//! Default value.
-	QtConfFile::TagScalar< QString > m_defaultValue;
+	cfgfile::TagScalar< QString > m_defaultValue;
 }; // class TagBaseClass
 
 
@@ -643,7 +643,7 @@ private:
 
 //! Tag for Class.
 class TagClass
-	:	public QtConfFile::TagScalar< QString >
+	:	public cfgfile::TagScalar< QString >
 {
 public:
 	TagClass( const QString & name, bool isMandatory );
@@ -656,15 +656,15 @@ private:
 	//! Base class name.
 	TagBaseClass m_baseClassName;
 	//! Scalar tags.
-	QtConfFile::TagVectorOfTags< TagField > m_scalarTags;
+	cfgfile::TagVectorOfTags< TagField > m_scalarTags;
 	//! No-value tags.
-	QtConfFile::TagVectorOfTags< TagField > m_noValueTags;
+	cfgfile::TagVectorOfTags< TagField > m_noValueTags;
 	//! Scalar-vector tags.
-	QtConfFile::TagVectorOfTags< TagField > m_scalarVectorTags;
+	cfgfile::TagVectorOfTags< TagField > m_scalarVectorTags;
 	//! Vector-of-tags tags.
-	QtConfFile::TagVectorOfTags< TagField > m_vectorOfTagsTags;
+	cfgfile::TagVectorOfTags< TagField > m_vectorOfTagsTags;
 	//! Custom tags.
-	QtConfFile::TagVectorOfTags< TagField > m_customTags;
+	cfgfile::TagVectorOfTags< TagField > m_customTags;
 }; // class TagScalar
 
 
@@ -674,7 +674,7 @@ private:
 
 //! Tag for Namespace.
 class TagNamespace
-	:	public QtConfFile::TagScalar< QString >
+	:	public cfgfile::TagScalar< QString >
 {
 public:
 	TagNamespace( const QString & name, bool isMandatory );
@@ -685,9 +685,9 @@ public:
 
 private:
 	//! Nested namespaces.
-	QtConfFile::TagVectorOfTags< TagNamespace > m_nestedNamespaces;
+	cfgfile::TagVectorOfTags< TagNamespace > m_nestedNamespaces;
 	//! Classes.
-	QtConfFile::TagVectorOfTags< TagClass > m_classes;
+	cfgfile::TagVectorOfTags< TagClass > m_classes;
 }; // class TagNamespace
 
 
@@ -697,7 +697,7 @@ private:
 
 //! Tag for Model.
 class TagModel
-	:	public QtConfFile::TagScalar< QString >
+	:	public cfgfile::TagScalar< QString >
 {
 public:
 	TagModel();
@@ -708,14 +708,14 @@ public:
 
 private:
 	//! Root namespace.
-	QtConfFile::TagVectorOfTags< TagNamespace > m_rootNamespace;
+	cfgfile::TagVectorOfTags< TagNamespace > m_rootNamespace;
 	//! Classes in root namespace.
-	QtConfFile::TagVectorOfTags< TagClass > m_rootClasses;
+	cfgfile::TagVectorOfTags< TagClass > m_rootClasses;
 	//! Global includes.
-	QtConfFile::TagVectorOfTags< QtConfFile::TagScalar< QString > >
+	cfgfile::TagVectorOfTags< cfgfile::TagScalar< QString > >
 		m_globalIncludes;
 	//! Relative includes.
-	QtConfFile::TagVectorOfTags< QtConfFile::TagScalar< QString > >
+	cfgfile::TagVectorOfTags< cfgfile::TagScalar< QString > >
 		m_relativeIncludes;
 }; // class TagModel
 
@@ -723,6 +723,6 @@ private:
 
 } /* namespace Generator */
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
+#endif // CFGFILE__GENERATOR__CFG__CFG_HPP__INCLUDED

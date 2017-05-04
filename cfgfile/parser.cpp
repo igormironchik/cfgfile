@@ -1,10 +1,10 @@
 
 /*!
-    \file
+	\file
 
-    \author Igor Mironchik (igor.mironchik at gmail dot com).
+	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,13 +28,13 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/Parser>
-#include <QtConfFile/private/Lex>
-#include <QtConfFile/private/InputStream>
-#include <QtConfFile/private/Tag>
-#include <QtConfFile/private/StringFormat>
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/private/Parser>
+#include <cfgfile/private/Lex>
+#include <cfgfile/private/InputStream>
+#include <cfgfile/private/Tag>
+#include <cfgfile/private/StringFormat>
+#include <cfgfile/Exceptions>
 
 // Qt include.
 #include <QtCore/QStack>
@@ -42,7 +42,7 @@
 #include <QDomDocument>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 namespace /* anonymous */ {
 
@@ -112,7 +112,7 @@ protected:
 // ParserQtConfImpl
 //
 
-//! Implementation of parser in QtConfFile format.
+//! Implementation of parser in cfgfile format.
 class ParserQtConfImpl
 	:	public ParserBaseImpl
 {
@@ -382,7 +382,7 @@ private:
 								fileName,
 								attr.lineNumber(),
 								attr.columnNumber() ),
-							fromQtConfFileFormat( attr.value()
+							fromcfgfileFormat( attr.value()
 								.prepend( quote ).append( quote ) ) );
 				}
 
@@ -405,7 +405,7 @@ private:
 							fileName,
 							text.lineNumber(),
 							text.columnNumber() ),
-						fromQtConfFileFormat( text.data() ) );
+						fromcfgfileFormat( text.data() ) );
 				}
 				else
 					throw Exception( QString( "Unexpected tag name. "
@@ -483,4 +483,4 @@ Parser::parse( const QString & fileName )
 	d->m_parser->parse( fileName );
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,14 +28,14 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TAG_SCALAR_HPP__INCLUDED
-#define QTCONFFILE__TAG_SCALAR_HPP__INCLUDED
+#ifndef CFGFILE__TAG_SCALAR_HPP__INCLUDED
+#define CFGFILE__TAG_SCALAR_HPP__INCLUDED
 
-//QtConfFile include.
-#include <QtConfFile/private/Tag>
-#include <QtConfFile/private/Constraint>
-#include <QtConfFile/private/Format>
-#include <QtConfFile/private/StringFormat>
+//cfgfile include.
+#include <cfgfile/private/Tag>
+#include <cfgfile/private/Constraint>
+#include <cfgfile/private/Format>
+#include <cfgfile/private/StringFormat>
 
 // Qt include.
 #include <QDomDocument>
@@ -43,7 +43,7 @@
 #include <QDomText>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // TagScalar
@@ -181,7 +181,7 @@ TagScalar< T >::print( int indent ) const
 		result.append( QLatin1String( " " ) );
 
 		QString value = Format< T >::toString( m_value );
-		value = toQtConfFileFormat( value );
+		value = tocfgfileFormat( value );
 
 		result.append( value );
 
@@ -216,7 +216,7 @@ TagScalar< T >::print( QDomDocument & doc, QDomElement * parent ) const
 			parent->appendChild( thisElement );
 
 		QString value = Format< T >::toString( m_value );
-		value = toQtConfFileFormat( value );
+		value = tocfgfileFormat( value );
 
 		QDomText data = doc.createTextNode( value );
 
@@ -418,7 +418,7 @@ TagScalar< bool >::print( int indent ) const
 		result.append( QLatin1String( " " ) );
 
 		QString value = Format< bool >::toString( m_value );
-		value = toQtConfFileFormat( value );
+		value = tocfgfileFormat( value );
 
 		result.append( value );
 
@@ -453,7 +453,7 @@ TagScalar< bool >::print( QDomDocument & doc, QDomElement * parent ) const
 			parent->appendChild( thisElement );
 
 		QString value = Format< bool >::toString( m_value );
-		value = toQtConfFileFormat( value );
+		value = tocfgfileFormat( value );
 
 		QDomText data = doc.createTextNode( value );
 
@@ -685,7 +685,7 @@ TagScalar< QString >::print( int indent ) const
 					result.append( spaces );
 				}
 
-				const QString tmp = toQtConfFileFormat(
+				const QString tmp = tocfgfileFormat(
 					value.mid( i * c_maxStringLength, c_maxStringLength ) );
 
 				result.append( tmp );
@@ -726,7 +726,7 @@ TagScalar< QString >::print( QDomDocument & doc,
 			parent->appendChild( thisElement );
 
 		QString value = Format< QString >::toString( m_value );
-		value = toQtConfFileFormat( value );
+		value = tocfgfileFormat( value );
 
 		QDomText data = doc.createTextNode( value );
 
@@ -804,6 +804,6 @@ TagScalar< QString >::onString( const ParserInfo & info,
 	setDefined();
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__TAG_SCALAR_HPP__INCLUDED
+#endif // CFGFILE__TAG_SCALAR_HPP__INCLUDED

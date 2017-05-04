@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,18 +28,18 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__UTILS_HPP__INCLUDED
-#define QTCONFFILE__UTILS_HPP__INCLUDED
+#ifndef CFGFILE__UTILS_HPP__INCLUDED
+#define CFGFILE__UTILS_HPP__INCLUDED
 
 // QtCOnfFile include.
-#include <QtConfFile/private/Tag>
+#include <cfgfile/private/Tag>
 
 // Qt include.
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // FileFormat
@@ -47,20 +47,20 @@ namespace QtConfFile {
 
 //! Format of the conf file.
 enum FileFormat {
-	//! QtConfFile format.
-	QtConfFileFormat,
+	//! cfgfile format.
+	cfgfileFormat,
 	//! XML format.
 	XMLFormat
 }; // enum FileFormat
 
 
 //
-// readQtConfFile
+// readcfgfile
 //
 
-//! Read QtConfFile configuration file.
+//! Read cfgfile configuration file.
 void
-readQtConfFile(
+readcfgfile(
 	//! Configuration tag.
 	Tag & tag,
 	//! File name.
@@ -70,12 +70,12 @@ readQtConfFile(
 
 
 //
-// writeQtConfFile
+// writecfgfile
 //
 
-//! Write QtConfFile configuration file.
+//! Write cfgfile configuration file.
 void
-writeQtConfFile(
+writecfgfile(
 	//! Configuration tag.
 	const Tag & tag,
 	//! File name.
@@ -83,8 +83,8 @@ writeQtConfFile(
 	//! Text codec.
 	QTextCodec * codec = QTextCodec::codecForLocale(),
 	//! Format of the file.
-	FileFormat fmt = QtConfFileFormat );
+	FileFormat fmt = cfgfileFormat );
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__UTILS_HPP__INCLUDED
+#endif // CFGFILE__UTILS_HPP__INCLUDED

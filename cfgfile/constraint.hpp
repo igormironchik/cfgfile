@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,11 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__CONSTRAINT_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__CONSTRAINT_HPP__INCLUDED
+#ifndef CFGFILE__CONSTRAINT_HPP__INCLUDED
+#define CFGFILE__CONSTRAINT_HPP__INCLUDED
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // Constraint
@@ -57,6 +57,6 @@ public:
 	check( const T & value ) const = 0;
 }; // class Constraint
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__CONSTRAINT_HPP__INCLUDED
+#endif // CFGFILE__CONSTRAINT_HPP__INCLUDED

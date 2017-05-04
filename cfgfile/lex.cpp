@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,13 +28,13 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// QtConfFile include.
-#include <QtConfFile/private/Lex>
-#include <QtConfFile/private/InputStream>
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/private/Lex>
+#include <cfgfile/private/InputStream>
+#include <cfgfile/Exceptions>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 static const QChar c_beginTag = QChar( '{' );
 static const QChar c_endTag = QChar( '}' );
@@ -388,4 +388,4 @@ LexicalAnalyzer::columnNumber() const
 	return d->m_columnNumber;
 }
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */

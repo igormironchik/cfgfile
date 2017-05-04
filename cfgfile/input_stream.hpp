@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__INPUT_STREAM_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__INPUT_STREAM_HPP__INCLUDED
+#ifndef CFGFILE__INPUT_STREAM_HPP__INCLUDED
+#define CFGFILE__INPUT_STREAM_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QScopedPointer>
@@ -42,7 +42,7 @@ class QTextCodec;
 QT_END_NAMESPACE
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 //
 // InputStream
@@ -79,6 +79,6 @@ private:
 	QScopedPointer< InputStreamPrivate > d;
 }; // class InputStream
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__INPUT_STREAM_HPP__INCLUDED
+#endif // CFGFILE__INPUT_STREAM_HPP__INCLUDED

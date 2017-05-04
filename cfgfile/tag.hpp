@@ -4,7 +4,7 @@
 
 	\author Igor Mironchik (igor.mironchik at gmail dot com).
 
-	Copyright (c) 2012-2016 Igor Mironchik
+	Copyright (c) 2017 Igor Mironchik
 
 	Permission is hereby granted, free of charge, to any person
 	obtaining a copy of this software and associated documentation
@@ -28,8 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__PRIVATE__TAG_HPP__INCLUDED
-#define QTCONFFILE__PRIVATE__TAG_HPP__INCLUDED
+#ifndef CFGFILE__TAG_HPP__INCLUDED
+#define CFGFILE__TAG_HPP__INCLUDED
 
 // Qt include.
 #include <QtCore/QList>
@@ -43,11 +43,11 @@ class QDomElement;
 
 QT_END_NAMESPACE
 
-// QtConfFile include.
-#include <QtConfFile/private/ParserInfo>
+// cfgfile include.
+#include <cfgfile/private/ParserInfo>
 
 
-namespace QtConfFile {
+namespace cfgfile {
 
 class Lexeme;
 
@@ -132,6 +132,6 @@ private:
     QScopedPointer< TagPrivate > d;
 }; // class Tag
 
-} /* namespace QtConfFile */
+} /* namespace cfgfile */
 
-#endif // QTCONFFILE__PRIVATE__TAG_HPP__INCLUDED
+#endif // CFGFILE__TAG_HPP__INCLUDED
