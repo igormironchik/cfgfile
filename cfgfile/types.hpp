@@ -64,17 +64,8 @@ using String = std::wstring;
 //! Char type.
 using Char = String::value_type;
 
-//! List of strings.
-using StringList = std::list< String >;
-
 //! Out stream type.
 using OutStreamType = std::wostream;
-
-//! Output stream.
-static OutStreamType & outStream()
-{
-	return std::wcout;
-}
 
 #define SL(str) L##str
 
@@ -280,17 +271,6 @@ private:
 	QString m_str;
 }; // class String
 
-//! List of strings.
-using StringList = std::list< String >;
-
-//! Output stream.
-static OutStreamType & outStream()
-{
-	static QTextStream stream( stdout );
-
-	return stream;
-}
-
 #define SL(str) str
 
 #else
@@ -301,17 +281,8 @@ using String = std::string;
 //! Char type.
 using Char = String::value_type;
 
-//! List of strings.
-using StringList = std::list< String >;
-
 //! Out stream type.
 using OutStreamType = std::ostream;
-
-//! Output stream.
-static OutStreamType & outStream()
-{
-	return std::cout;
-}
 
 #define SL(str) str
 
