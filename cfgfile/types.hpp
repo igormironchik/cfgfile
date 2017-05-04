@@ -64,8 +64,8 @@ using String = std::wstring;
 //! Char type.
 using Char = String::value_type;
 
-//! Out stream type.
-using OutStreamType = std::wostream;
+//! Stream type.
+using StreamType = std::wostream;
 
 #define SL(str) L##str
 
@@ -74,8 +74,8 @@ using OutStreamType = std::wostream;
 //! Char type.
 using Char = QChar;
 
-//! Out stream type.
-using OutStreamType = QTextStream;
+//! Stream type.
+using StreamType = QTextStream;
 
 class String {
 public:
@@ -276,17 +276,33 @@ private:
 #else
 
 //! String type.
-using String = std::string;
+using string_t = std::string;
 
 //! Char type.
-using Char = String::value_type;
+using char_t = string_t::value_type;
 
-//! Out stream type.
-using OutStreamType = std::ostream;
+//! Input stream type.
+using istream_t = std::istream;
+
+//! Type of pos in stream.
+using pos_t = istream_t::pos_type;
+
+//! Output stream type.
+using ostream_t = std::ostream;
 
 #define SL(str) str
 
 #endif
+
+
+//
+// DISABLE_COPY
+//
+
+//! Macro for disabling copy.
+#define DISABLE_COPY( Class ) \
+	Class( const Class & ) = delete; \
+	Class & operator= ( const Class & ) = delete;
 
 } /* namespace cfgfile */
 

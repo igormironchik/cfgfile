@@ -31,34 +31,44 @@
 #ifndef CFGFILE__EXCEPTIONS_HPP__INCLUDED
 #define CFGFILE__EXCEPTIONS_HPP__INCLUDED
 
-// Qt include.
-#include <QtCore/QString>
-
 // C++ include.
 #include <stdexcept>
+
+// cfgfile include.
+#include "types.hpp"
 
 
 namespace cfgfile {
 
 //
-// Exception
+// exception_t
 //
 
 //! Exception in the library.
-class Exception
+class exception_t
 	:	public std::logic_error
 {
 public:
-	explicit Exception( const QString & what );
-	~Exception() throw();
+	explicit exception_t( string_t what )
+		:	std::logic_error( "Please use desc() method of the exception." )
+		,	m_what( std::move( what ) )
+	{
+	}
+
+	~exception_t() noexcept
+	{
+	}
 
 	//! \return Reason of the exception.
-	const QString & whatAsQString() const;
+	const string_t & desc() const noexcept
+	{
+		return m_what;
+	}
 
 private:
 	//! Reason of the exception.
-	QString m_what;
-}; // class Exception
+	string_t m_what;
+}; // class exception_t
 
 } /* namespace cfgfile */
 

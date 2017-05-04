@@ -31,13 +31,6 @@
 #ifndef CFGFILE__UTILS_HPP__INCLUDED
 #define CFGFILE__UTILS_HPP__INCLUDED
 
-// QtCOnfFile include.
-#include <cfgfile/private/Tag>
-
-// Qt include.
-#include <QtCore/QString>
-#include <QtCore/QTextCodec>
-
 
 namespace cfgfile {
 
