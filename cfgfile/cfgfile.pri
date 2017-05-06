@@ -20,8 +20,6 @@ HEADERS += $$PWD/constraint.hpp \
 	$$PWD/const.hpp
 
 SOURCES += $$PWD/parser.cpp \
-	$$PWD/parser_info.cpp \
 	$$PWD/tag.cpp \
-	$$PWD/string_format.cpp \
 	$$PWD/tag_no_value.cpp \
 	$$PWD/utils.cpp

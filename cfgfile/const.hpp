@@ -50,6 +50,9 @@ static const char_t c_carriage_return = SL( '\n' );
 static const char_t c_line_feed = SL( '\r' );
 static const char_t c_vertical_bar = SL( '|' );
 static const char_t c_sharp = SL( '#' );
+static const string_t c_one_line_comment = SL( "||" );
+static const string_t c_start_multi_line_comment = SL( "|#" );
+static const string_t c_finish_multi_line_comment = SL( "#|" );
 
 } /* namespace cfgfile */
 
