@@ -31,93 +31,376 @@
 #ifndef CFGFILE__LEX_HPP__INCLUDED
 #define CFGFILE__LEX_HPP__INCLUDED
 
-// Qt include.
-#include <QtCore/QScopedPointer>
-#include <QtCore/QString>
+// cfgfile include.
+#include "types.hpp"
+#include "input_stream.hpp"
+#include "exceptions.hpp"
 
 
 namespace cfgfile {
 
-class InputStream;
+class input_stream_t;
 
 //
-// LexemeType
+// lexeme_type_t
 //
 
 //! Type of the lexeme.
-enum LexemeType {
+enum class lexeme_type_t {
     //! Null lexeme.
-    NullLexeme,
+    null,
     //! Start tag lexeme "{".
-    StartTagLexeme,
+    start,
     //! Finish tag lexeme "}".
-    FinishTagLexeme,
+    finish,
     //! String lexeme.
-    StringLexeme
-}; // enum LexemeType
+    string
+}; // enum class lexeme_type_t
 
 
 //
-// Lexeme
+// lexeme_t
 //
 
 //! Lexeme.
-class Lexeme {
+class lexeme_t final {
 public:
-	Lexeme();
-    Lexeme( LexemeType type, const QString & value );
+	lexeme_t()
+		:	m_type( lexeme_type_t::null )
+	{
+	}
 
-	Lexeme & operator = ( const Lexeme & other );
+    lexeme_t( lexeme_type_t type, const string_t & value )
+		:	m_type( type )
+		,	m_value( value )
+	{
+	}
 
     //! \return Lexeme type.
-    LexemeType type() const;
+    lexeme_type_t type() const
+	{
+		return m_type;
+	}
 
     //! \return Lexeme value.
-    const QString & value() const;
+    const string_t & value() const
+	{
+		return m_value;
+	}
 
     //! \return Is lexeme a null lexeme.
-    bool isNull() const;
+    bool is_null() const
+	{
+		return ( m_type == lexeme_type_t::null );
+	}
 
 private:
     //! Lexeme type.
-    LexemeType m_type;
+    lexeme_type_t m_type;
     //! Lexeme value.
-    QString m_value;
-}; // struct Lexeme
+    string_t m_value;
+}; // class lexeme_t
 
 
 //
-// LexicalAnalyzer
+// lexical_analyzer_t
 //
 
-//! Lexicographical analyzer.
-class LexicalAnalyzer {
+//! Lexical analyzer.
+class lexical_analyzer_t final {
 public:
-	explicit LexicalAnalyzer( InputStream & stream );
-	~LexicalAnalyzer();
+	explicit lexical_analyzer_t( input_stream_t & stream )
+		:	m_stream( stream )
+		,	m_line_number( m_stream.line_number() )
+		,	m_column_number( m_stream.column_number() )
+	{
+	}
 
 	/*!
 		\return Next lexeme.
 
-		\throw Exception on lexicographical error.
+		\throw Exception on lexical error.
 	*/
-	Lexeme nextLexeme();
+	lexeme_t next_lexeme()
+	{
+		string_t result;
+
+		bool quoted_lexeme = false;
+		bool first_symbol = true;
+		bool skip_comment = false;
+
+		skip_spaces();
+
+		m_line_number = m_stream.line_number();
+		m_column_number = m_stream.column_number();
+
+		if( m_stream.at_end() )
+			return lexeme_t( lexeme_type_t::null, string_t() );
+
+		while( true )
+		{
+			char_t ch = m_stream.get();
+
+			if( ch == c_quotes )
+			{
+				if( quoted_lexeme )
+					break;
+				else if( first_symbol )
+					quoted_lexeme = true;
+				else
+				{
+					m_stream.put_back( ch );
+
+					break;
+				}
+			}
+			else if( ch == c_back_slash )
+			{
+				char_t new_char = 0x00;
+
+				if( !quoted_lexeme )
+					result.push_back( ch );
+				else if( processBackSlash( newChar ) )
+					result.push_back( new_char );
+				else
+					throw exception_t( string_t(
+						SL( "Unrecognized back-slash sequence: \"\\" ) ) +
+						SL( "\". In file \"" ) + m_stream.file_name() +
+						SL( "\" on line " ) + line_number() + SL( "." ) );
+			}
+			else if( ch == c_begin_tag )
+			{
+				if( result.empty() )
+					return lexeme_t( lexeme_type_t::start, ch );
+				else if( quoted_lexeme )
+					result.push_back( ch );
+				else
+				{
+					m_stream.put_back( ch );
+
+					break;
+				}
+			}
+			else if( ch == c_end_tag )
+			{
+				if( result.empty() )
+					return lexeme_t( lexeme_type_t::finish, ch );
+				else if( quoted_lexeme )
+					result.push_back( ch );
+				else
+				{
+					m_stream.put_back( ch );
+
+					break;
+				}
+			}
+			else if( ch == c_space || ch == c_tab )
+			{
+				if( quoted_lexeme )
+					result.push_back( ch );
+				else
+					break;
+			}
+			else if( ch == c_carriage_return || ch == c_line_feed )
+			{
+				if( quoted_lexeme )
+					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
+						SL( "New line detected. In file \"" ) +
+						m_stream.file_name() +
+						SL( "\" on line " ) + line_number() +
+						SL( "." ) );
+				else
+					break;
+			}
+			else if( ch == c_vertical_bar )
+			{
+				if( quoted_lexeme )
+					result.push_back( ch );
+				else
+				{
+					char_t next_char = m_stream.get();
+
+					if( next_char == c_vertical_bar )
+					{
+						skip_comment = true;
+
+						skip_one_line_comment();
+
+						if( first_symbol )
+							skip_spaces();
+						else
+							break;
+					}
+					else if( next_char == c_sharp )
+					{
+						skip_comment = true;
+
+						skip_multi_line_comment();
+
+						if( first_symbol )
+							skip_spaces();
+						else
+							break;
+					}
+					else
+					{
+						result.push_back( ch );
+
+						m_stream.put_back( next_char );
+					}
+				}
+			}
+			else
+				result.push_back( ch );
+
+			if( m_stream.at_end() )
+			{
+				if( quoted_lexeme )
+					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
+						SL( "End of file riched. In file \"" ) +
+						m_stream.file_name() +
+						SL( "\" on line " ) + line_number() +
+						SL( "." ) );
+				else if( result.empty() )
+					return lexeme_t( lexeme_type_t::null, string_t() );
+				else
+					break;
+			}
+
+			if( !skip_comment )
+				first_symbol = false;
+			else
+				skip_comment = false;
+		}
+
+		return lexeme_t( lexeme_type_t::string, result );
+	}
 
     //! \return Input stream.
-    InputStream & inputStream();
+    input_stream_t & input_stream()
+	{
+		return m_stream;
+	}
 
 	//! \return Line number.
-	qint64 lineNumber() const;
+	pos_t line_number() const
+	{
+		return m_line_number;
+	}
 
 	//! \return Column number.
-	qint64 columnNumber() const;
+	pos_t column_number() const
+	{
+		return m_column_number;
+	}
 
 private:
-	Q_DISABLE_COPY( LexicalAnalyzer )
+	//! \return Is character a space character?
+	bool is_space_char( char_t ch )
+	{
+		if( ch == c_space || ch == c_tab ||
+			ch == c_carriage_return || ch == c_line_feed )
+				return true;
+		else
+			return false;
+	}
 
-    class LexicalAnalyzerPrivate;
-	QScopedPointer< LexicalAnalyzerPrivate > d;
-}; // class LexicalAnalyzer
+	//! Skip spaces in the stream.
+	void skip_spaces()
+	{
+		if( m_stream.at_end() )
+			return;
+
+		char_t ch = m_stream.get();
+
+		while( is_space_char( ch ) )
+		{
+			if( m_stream.at_end() )
+				return;
+
+			ch = m_stream.get();
+		}
+
+		m_stream.put_back( ch );
+	}
+
+	//! Process back-slash sequence.
+	bool process_back_slash( char_t & ch )
+	{
+		if( m_stream.at_end() )
+			throw exception_t( string_t( SL( "Unexpected end of file. "
+					"Unfinished back slash sequence. In file \"" ) ) +
+				m_stream.file_name() + SL( "\" on line " ) +
+				m_stream.line_number() + SL( "." ) );
+
+		ch = m_stream.get();
+
+		if( ch == c_n )
+			ch = c_carriage_return;
+		else if( ch == c_t )
+			ch = c_tab;
+		else if( ch == c_r )
+			ch = c_lineFeed;
+		else if( ch == c_quotes )
+			ch = c_quotes;
+		else if( ch == c_back_slash )
+			ch = c_back_slash;
+		else
+			return false;
+
+		return true;
+	}
+
+	//! Skip one-line comment.
+	void skip_one_line_comment()
+	{
+		if( !m_stream.at_end() )
+		{
+			char_t ch = m_stream.get();
+
+			while( ch != c_carriage_return && ch != c_line_feed &&
+				!m_stream.at_end() )
+					ch = m_stream.get();
+		}
+	}
+
+	//! Skip multi-line comment.
+	void skip_multi_line_comment()
+	{
+		if( !m_stream.at_end() )
+		{
+			char_t ch = m_stream.get();
+
+			if( m_stream.at_end() )
+				return;
+
+			char_t next_char = m_stream.get();
+
+			if( ch == c_sharp && next_char == c_vertical_bar )
+				return;
+
+			while( !m_stream.at_end() )
+			{
+				ch = next_char;
+
+				next_char = m_stream.get();
+
+				if( ch == c_sharp && next_char == c_vertical_bar )
+					break;
+			}
+		}
+	}
+
+private:
+	DISABLE_COPY( lexical_analyzer_t )
+
+	//! Input stream.
+	input_stream_t & m_stream;
+	//! Line number.
+	pos_t m_line_number;
+	//! Column number.
+	pos_t m_column_number;
+}; // class lexical_analyzer_t
 
 } /* namespace cfgfile */
 

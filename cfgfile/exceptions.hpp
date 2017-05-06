@@ -45,7 +45,7 @@ namespace cfgfile {
 //
 
 //! Exception in the library.
-class exception_t
+class exception_t final
 	:	public std::logic_error
 {
 public:

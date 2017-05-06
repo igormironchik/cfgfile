@@ -33,13 +33,10 @@
 
 // cfgfile include.
 #include "types.hpp"
+#include "const.hpp"
 
 
 namespace cfgfile {
-
-static const char_t c_carriage_return = SL( '\n' );
-static const char_t c_line_feed = SL( '\r' );
-
 
 //
 // input_stream_t

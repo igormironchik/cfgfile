@@ -16,10 +16,10 @@ HEADERS += $$PWD/constraint.hpp \
 	$$PWD/tag_scalar_vector.hpp \
 	$$PWD/tag_vector_of_tags.hpp \
 	$$PWD/utils.hpp \
-	$$PWD/types.hpp
+	$$PWD/types.hpp \
+	$$PWD/const.hpp
 
-SOURCES += $$PWD/lex.cpp \
-	$$PWD/parser.cpp \
+SOURCES += $$PWD/parser.cpp \
 	$$PWD/parser_info.cpp \
 	$$PWD/tag.cpp \
 	$$PWD/string_format.cpp \
