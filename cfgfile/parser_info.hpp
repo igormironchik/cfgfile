@@ -31,39 +31,53 @@
 #ifndef CFGFILE__PARSER_INFO_HPP__INCLUDED
 #define CFGFILE__PARSER_INFO_HPP__INCLUDED
 
-// Qt include.
-#include <QtCore/QString>
+// cfgfile include.
+#include "types.hpp"
 
 
 namespace cfgfile {
 
 //
-// ParserInfo
+// parser_info_t
 //
 
 //! Information about parsed file and current state of parsing.
-class ParserInfo {
+class parser_info_t {
 public:
-	ParserInfo( const QString & fileName, qint64 lineNumber,
-		qint64 columnNumber );
+	parser_info_t( const string_t & file_name, pos_t line_number,
+		pos_t column_number )
+		:	m_file_name( file_name )
+		,	m_line_number( line_number )
+		,	m_column_number( column_number )
+	{
+	}
 
 	//! \return File name.
-	const QString & fileName() const;
+	const string_t & file_name() const
+	{
+		return m_file_name;
+	}
 
 	//! \return Line number.
-	qint64 lineNumber() const;
+	pos_t line_number() const
+	{
+		return m_line_number;
+	}
 
 	//! \return Column number.
-	qint64 columnNumber() const;
+	pos_t column_number() const
+	{
+		return m_column_number;
+	}
 
 private:
 	//! File name.
-	QString m_fileName;
+	string_t m_file_name;
 	//! Line number.
-	qint64 m_lineNumber;
+	pos_t m_line_number;
 	//! Column number.
-	qint64 m_columnNumber;
-}; // class PraserInfo
+	pos_t m_column_number;
+}; // class parser_info_t
 
 } /* namespace cfgfile */
 
