@@ -21,5 +21,4 @@ HEADERS += $$PWD/constraint.hpp \
 
 SOURCES += $$PWD/parser.cpp \
 	$$PWD/tag.cpp \
-	$$PWD/tag_no_value.cpp \
-	$$PWD/utils.cpp
+	$$PWD/tag_no_value.cpp
