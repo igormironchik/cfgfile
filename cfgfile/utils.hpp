@@ -239,7 +239,7 @@ write_cfgfile(
 
 			stream << doc.toString( 4 );
 #else
-			throw exception_t( SL( "XML supported only with Qt." ) );
+			static_assert( false, "XML supported only with Qt." );
 #endif
 		}
 			break;
