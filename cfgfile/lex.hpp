@@ -39,8 +39,6 @@
 
 namespace cfgfile {
 
-class input_stream_t;
-
 //
 // lexeme_type_t
 //
