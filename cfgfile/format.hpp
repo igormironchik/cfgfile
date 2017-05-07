@@ -32,281 +32,472 @@
 #define CFGFILE__FORMAT_HPP__INCLUDED
 
 // cfgfile include.
-#include <cfgfile/private/ParserInfo>
-#include <cfgfile/Exceptions>
+#include "parser_info.hpp"
+#include "exceptions.hpp"
+#include "types.hpp"
 
+#ifdef CFGFILE_QSTRING_BUILD
 // Qt include.
-#include <QtCore/QString>
+#include <QString>
+#endif
 
 
 namespace cfgfile {
 
 //
-// Format
+// format_t
 //
 
 //! Format template value to the string and back.
 template< class T >
-class Format {
+class format_t {
 public:
 	//! Format value to string.
-	static QString toString( const T & value )
+	static string_t to_string( const T & )
 	{
-		Q_UNUSED( value )
-
-		return QString();
+		return string_t();
 	}
 
 	//! Format value from string.
-	static T fromString( const ParserInfo & info, const QString & value )
+	static T from_string( const parser_info_t &, const string_t & )
 	{
-		Q_UNUSED( info )
-		Q_UNUSED( value )
-
 		return T();
 	}
-}; // class Format
+}; // class format_t
 
 
 template<>
-class Format< int > {
+class format_t< int > {
 public:
 	//! Format value to string.
-	static QString toString( const int & value )
+	static string_t to_string( const int & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static int fromString( const ParserInfo & info, const QString & value )
+	static int from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		int result = value.toInt( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			int result = std::stoi( value, &pos );
+
+			if( pos != value.length() )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< int >
+}; // class format_t< int >
 
 
 template<>
-class Format< uint > {
+class format_t< unsigned int > {
 public:
 	//! Format value to string.
-	static QString toString( const uint & value )
+	static string_t to_string( const unsigned int & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static uint fromString( const ParserInfo & info, const QString & value )
+	static unsigned int from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		uint result = value.toUInt( &ok );
+		unsigned int result = value.toUInt( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			int result = std::stoi( value, &pos );
+
+			if( pos != value.length() || result < 0 )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (unsigned int) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< uint >
+}; // class format_t< unsigned int >
 
 
 template<>
-class Format< long > {
+class format_t< long > {
 public:
 	//! Format value to string.
-	static QString toString( const long & value )
+	static string_t to_string( const long & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static long fromString( const ParserInfo & info, const QString & value )
+	static long from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		long result = value.toLong( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			long result = std::stol( value, &pos );
+
+			if( pos != value.length() )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (unsigned int) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< long >
+}; // class format_t< long >
 
 
 template<>
-class Format< ulong > {
+class format_t< unsigned long > {
 public:
 	//! Format value to string.
-	static QString toString( const ulong & value )
+	static string_t to_string( const unsigned long & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static ulong fromString( const ParserInfo & info, const QString & value )
+	static unsigned long from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		ulong result = value.toULong( &ok );
+		unsigned long result = value.toULong( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			long result = std::stol( value, &pos );
+
+			if( pos != value.length() || result < 0 )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (unsigned long) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< ulong >
+}; // class format_t< unsigned long >
 
 
 template<>
-class Format< qlonglong > {
+class format_t< long long > {
 public:
 	//! Format value to string.
-	static QString toString( const qlonglong & value )
+	static string_t to_string( const long long & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static qlonglong fromString( const ParserInfo & info, const QString & value )
+	static long long from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		qlonglong result = value.toLongLong( &ok );
+		long long result = value.toLongLong( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			long long result = std::stoll( value, &pos );
+
+			if( pos != value.length() )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (long long) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< qlonglong >
+}; // class format_t< qlonglong >
 
 
 template<>
-class Format< qulonglong > {
+class format_t< unsigned long long > {
 public:
 	//! Format value to string.
-	static QString toString( const qulonglong & value )
+	static string_t to_string( const unsigned long long & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static qulonglong fromString( const ParserInfo & info, const QString & value )
+	static unsigned long long from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		qulonglong result = value.toULongLong( &ok );
+		unsigned long long result = value.toULongLong( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			long long result = std::stoll( value, &pos );
+
+			if( pos != value.length() || pos < 0 )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (unsigned long long) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< qulonglong >
+}; // class format_t< unsigned long long >
 
 
 template<>
-class Format< double > {
+class format_t< double > {
 public:
 	//! Format value to string.
-	static QString toString( const double & value )
+	static string_t to_string( const double & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		return QString::number( value );
+#elif defined( CFGFILE_WSTRING_BUILD )
+		return std::to_wstring( value );
+#else
+		return std::to_string( value );
+#endif
 	}
 
 	//! Format value from string.
-	static double fromString( const ParserInfo & info, const QString & value )
+	static double from_string( const parser_info_t & info, const string_t & value )
 	{
+#ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		double result = value.toDouble( &ok );
 
 		if( !ok )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 		else
 			return result;
+#else
+		try {
+			std::size_t pos = 0;
+
+			double result = std::stod( value, &pos );
+
+			if( pos != value.length() )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					value + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+
+			return (unsigned int) result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+		}
+#endif
 	}
-}; // class Format< double >
+}; // class format_t< double >
 
 
 template<>
-class Format< QString > {
+class format_t< string_t > {
 public:
 	//! Format value to string.
-	static QString toString( const QString & value )
+	static string_t to_string( const string_t & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static QString fromString( const ParserInfo & info, const QString & value )
+	static string_t from_string( const parser_info_t &, const string_t & value )
 	{
-		Q_UNUSED( info )
-
 		return value;
 	}
-}; // class Format< double >
+}; // class format_t< string_t >
 
 
-static const QString c_on = QLatin1String( "on" );
-static const QString c_off = QLatin1String( "off" );
-static const QString c_true = QLatin1String( "true" );
-static const QString c_false = QLatin1String( "false" );
-static const QString c_1 = QLatin1String( "1" );
-static const QString c_0 = QLatin1String( "0" );
+static const string_t c_on = SL( "on" );
+static const string_t c_off = SL( "off" );
+static const string_t c_true = SL( "true" );
+static const string_t c_false = SL( "false" );
+static const string_t c_1 = SL( "1" );
+static const string_t c_0 = SL( "0" );
 
 template<>
-class Format< bool > {
+class format_t< bool > {
 public:
 	//! Format value to string.
-	static QString toString( const bool & value )
+	static string_t to_string( const bool & value )
 	{
-		return ( value ? QLatin1String( "true" ) : QLatin1String( "false" ) );
+		return ( value ? SL( "true" ) : SL( "false" ) );
 	}
 
 	//! Format value from string.
-	static bool fromString( const ParserInfo & info, const QString & value )
+	static bool from_string( const parser_info_t & info, const string_t & value )
 	{
 		if( value == c_on || value == c_true || value == c_1 )
 			return true;
 		else if( value == c_off || value == c_false || value == c_0 )
 			return false;
 		else
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"In file \"%2\" on line %3." )
-					.arg( value )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
+			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				value + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
 	}
-}; // class Format< double >
+}; // class format_t< bool >
 
 } /* namespace cfgfile */
 
