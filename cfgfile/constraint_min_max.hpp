@@ -46,7 +46,7 @@ namespace cfgfile {
 	min <= value <= max.
 */
 template< class T >
-class constraint_min_max_t
+class constraint_min_max_t final
 	:	public constraint_t< T >
 {
 public:
