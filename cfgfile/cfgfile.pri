@@ -1,5 +1,4 @@
 
-
 HEADERS += $$PWD/constraint.hpp \
 	$$PWD/format.hpp \
 	$$PWD/input_stream.hpp \
@@ -18,5 +17,3 @@ HEADERS += $$PWD/constraint.hpp \
 	$$PWD/utils.hpp \
 	$$PWD/types.hpp \
 	$$PWD/const.hpp
-
-SOURCES += $$PWD/tag_no_value.cpp

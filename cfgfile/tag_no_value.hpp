@@ -32,41 +32,125 @@
 #define CFGFILE__TAG_NO_VALUE_HPP__INCLUDED
 
 // cfgfile include.
-#include <cfgfile/private/Tag>
+#include "tag.hpp"
+#include "parser_info.hpp"
+#include "const.hpp"
+#include "exceptions.hpp"
+
+#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+// Qt include.
+#include <QDomDocument>
+#include <QDomElement>
+#endif
 
 
 namespace cfgfile {
 
 //
-// TagNoValue
+// tag_no_value_t
 //
 
 //! Tag without a value.
-class TagNoValue
-	:	public Tag
+class tag_no_value_t final
+	:	public tag_t
 {
 public:
-	explicit TagNoValue( const QString & name, bool isMandatory = false );
-	TagNoValue( Tag & owner, const QString & name, bool isMandatory = false );
+	explicit tag_no_value_t( const string_t & name,
+		bool is_mandatory = false )
+		:	tag_t( name, is_mandatory )
+	{
+	}
 
-	virtual ~TagNoValue();
+	tag_no_value_t( tag_t & owner, const string_t & name,
+		bool is_mandatory = false )
+		:	tag_t( owner, name, is_mandatory )
+	{
+	}
+
+	~tag_no_value_t()
+	{
+	}
 
 	//! Print tag to the output.
-	virtual QString print( int indent = 0 ) const;
+	string_t print( int indent = 0 ) const override
+	{
+		string_t result;
 
+		if( is_defined() )
+		{
+			result.push_back( string_t( indent, c_tab ) );
+
+			result.push_back( c_begin_tag );
+			result.push_back( name() );
+
+			if( !children().empty() )
+			{
+				result.push_back( c_carriage_return );
+
+				for( const tag_t * tag : children() )
+					result.push_back( tag->print( indent + 1 ) );
+
+				result.push_back( string_t( indent, c_tab ) );
+			}
+
+			result.push_back( c_end_tag );
+			result.push_back( c_carriage_return );
+		}
+
+		return result;
+	}
+
+#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
 	//! Print tag to the output.
-	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
+	{
+		if( is_defined() )
+		{
+			QDomElement this_element = doc.createElement( name() );
 
-	//! Called when tag parsing started.
-	virtual void onStart( const ParserInfo & info );
+			if( !parent )
+				doc.appendChild( this_element );
+			else
+				parent->appendChild( this_element );
+
+			if( !children().empty() )
+			{
+				for( const tag_t * tag : children() )
+					tag->print( doc, &this_element );
+			}
+		}
+	}
+#endif
 
 	//! Called when tag parsing finished.
-	virtual void onFinish( const ParserInfo & info );
+	void on_finish( const parser_info_t & info ) override
+	{
+		for( const tag_t * tag : children() )
+		{
+			if( tag->is_mandatory() && !tag->is_defined() )
+				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() +
+					SL( "\". Where parent is: \"" ) + name() +
+					SL( "\". In file \"" ) + info.file_name() +
+					SL( "\" on line " ) + info.line_number() +
+					SL( "." ) );
+		}
+
+		set_defined();
+	}
 
 	//! Called when string found.
-	virtual void onString( const ParserInfo & info,
-		const QString & str );
-}; // class TagNoValue
+	void on_string( const parser_info_t & info,
+		const string_t & str ) override
+	{
+		throw exception_t( string_t( SL( "Tag \"" ) ) +
+			name() + SL( "\" doesn't allow any values. "
+				"But we've got this: \"" ) +
+			str + SL( "\". In file \"" ) + info.file_name() +
+			SL( "\" on line " ) + info.line_number() +
+			SL( "." ) );
+	}
+}; // class tag_no_value_t
 
 } /* namespace cfgfile */
 
