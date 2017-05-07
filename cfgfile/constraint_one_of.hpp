@@ -32,35 +32,45 @@
 #define CFGFILE__CONSTRAINT_ONE_OF_HPP__INCLUDED
 
 // cfgfile include.
-#include <cfgfile/private/Constraint>
+#include "constraint.hpp"
 
-// Qt include.
-#include <QtCore/QSet>
+// C++ include.
+#include <set>
 
 
 namespace cfgfile {
 
 //
-// ConstraintOneOf
+// constraint_one_of_t
 //
 
 //! Constraint that allowed values to be in the given list of values.
 template< class T >
-class ConstraintOneOf
-	:	public Constraint< T >
+class constraint_one_of_t final
+	:	public constraint_t< T >
 {
 public:
-	ConstraintOneOf();
+	constraint_one_of_t()
+	{
+	}
 
-	virtual ~ConstraintOneOf();
+	~constraint_one_of_t()
+	{
+	}
 
 	//! Add value to the list of values of the constraint.
 	void
-	addValue( const T & value );
+	add_value( const T & value )
+	{
+		m_list.insert( value );
+	}
 
 	//! Add value to the list of values of the constraint.
 	void
-	removeValue( const T & value );
+	remove_value( const T & value )
+	{
+		m_list.erase( value );
+	}
 
 	/*!
 		Check value for correctness.
@@ -69,45 +79,15 @@ public:
 		\retval true If all is OK.
 		\retval false If value doen't correspond to the constraint.
 	*/
-	virtual bool
-	check( const T & value ) const;
+	bool check( const T & value ) const override
+	{
+		return ( m_list.find( value ) != m_list.cend() );
+	}
 
 private:
 	//! List of allowed values.
-	QSet< T > m_list;
-}; // class ConstraintOneOf
-
-
-template< class T >
-ConstraintOneOf< T >::ConstraintOneOf()
-{
-}
-
-template< class T >
-ConstraintOneOf< T >::~ConstraintOneOf()
-{
-}
-
-template< class T >
-void
-ConstraintOneOf< T >::addValue( const T & value )
-{
-	m_list.insert( value );
-}
-
-template< class T >
-void
-ConstraintOneOf< T >::removeValue( const T & value )
-{
-	m_list.remove( value );
-}
-
-template< class T >
-bool
-ConstraintOneOf< T >::check( const T & value ) const
-{
-	return ( m_list.contains( value ) );
-}
+	std::set< T > m_list;
+}; // class constraint_one_of_t
 
 } /* namespace cfgfile */
 
