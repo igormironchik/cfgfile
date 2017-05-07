@@ -31,17 +31,13 @@
 // generator_t include.
 #include "generator.hpp"
 
-// Qt include.
-#include <QTextStream>
-#include <QStack>
-
 // C++ include.
 #include <algorithm>
 
 
 namespace cfgfile {
 
-namespace generator_t {
+namespace generator {
 
 //
 // generator_t
@@ -56,14 +52,14 @@ generator_t::~generator_t()
 }
 
 
-typedef const Cfg::Namespace * ConstNamespacePointer;
+typedef const cfg::namespace_t* const_namespace_ptr_t;
 
 
 //
 // cpp_generator_t
 //
 
-cpp_generator_t::cpp_generator_t( const Cfg::Model & model )
+cpp_generator_t::cpp_generator_t( const cfg::model_t & model )
 	:	m_model( model )
 {
 }
@@ -74,171 +70,160 @@ cpp_generator_t::~cpp_generator_t()
 
 
 //
-// NamespaceStack
+// namespace_stack_t
 //
 
-typedef QStack< ConstNamespacePointer > NamespaceStack;
+typedef std::list< const_namespace_ptr_t > namespace_stack_t;
 
 
 //
 // startNamespaces
 //
 
-static inline void startNamespaces( QTextStream & stream,
-	NamespaceStack & stack )
+static inline void start_namespaces( std::ostream & stream,
+	namespace_stack_t & stack )
 {
-	foreach( const ConstNamespacePointer & n, stack )
-		stream << QLatin1String( "namespace " )
+	for( const const_namespace_ptr_t & n : stack )
+		stream << "namespace "
 			<< n->name()
-			<< QLatin1String( " {\n\n" );
+			<< " {\n\n";
 } // closeNamespaces
 
 
 //
-// closeNamespace
+// close_namespace
 //
 
-static inline void closeNamespace( QTextStream & stream,
-	NamespaceStack & stack )
+static inline void close_namespace( std::ostream & stream,
+	namespace_stack_t & stack )
 {
-	stream << QLatin1String( "} /* namespace " )
-		<< stack.top()->name()
-		<< QLatin1String( " */\n\n" );
+	stream << "} /* namespace "
+		<< stack.back()->name()
+		<< " */\n\n";
 
-	stack.pop();
+	stack.pop_back();
 } // closeNamespace
 
 
 //
-// generateIncludes
+// generate_includes
 //
 
-static inline void generateIncludes( QTextStream & stream,
-	const QStringList & globalIncludes,
-	const QStringList & relativeIncludes )
+static inline void generate_includes( std::ostream & stream,
+	const std::list< std::string > & global_includes,
+	const std::list< std::string > & relative_includes )
 {
-	stream << QLatin1String( "// cfgfile include.\n"
-							 "#include <cfgfile/tag_no_value_t>\n"
-							 "#include <cfgfile/tag_scalar_t>\n"
-							 "#include <cfgfile/tag_scalar_tVector>\n"
-							 "#include <cfgfile/tag_vector_of_tags_t>\n"
-							 "#include <cfgfile/ConstraintMinMax>\n"
-							 "#include <cfgfile/constraint_one_of_t>\n"
-							 "#include <cfgfile/Exceptions>\n"
-							 "#include <cfgfile/Utils>\n\n" );
+	stream << "// cfgfile include.\n"
+		"#include <cfgfile/all.hpp";
 
-	stream << QLatin1String( "// Qt include.\n" )
-		<< QLatin1String( "#include <std::list>\n\n" );
+	stream << "// C++ include.\n"
+		<< "#include <list>\n\n";
 
-	foreach( const QString & incl, globalIncludes )
-		stream << QLatin1String( "#include <" )
-			<< incl << QLatin1String( ">\n" );
+	for( const std::string & incl : global_includes )
+		stream << "#include <" << incl << ">\n";
 
-	if( !globalIncludes.isEmpty() )
-		stream << QLatin1String( "\n" );
+	if( !global_includes.empty() )
+		stream << "\n";
 
-	foreach( const QString & incl, relativeIncludes )
-		stream << QLatin1String( "#include \"" )
-			<< incl << QLatin1String( "\"\n" );
+	for( const std::string & incl : relative_includes )
+		stream << "#include \"" << incl << "\"\n";
 
-	if( !relativeIncludes.isEmpty() )
-		stream << QLatin1String( "\n" );
-} // generateIncludes
+	if( !relative_includes.empty() )
+		stream << "\n";
+} // generate_includes
 
 
 //
-// generateSetterMethodName
+// generate_setter_method_name
 //
 
-static inline QString generateSetterMethodName( const QString & name )
+static inline std::string generate_setter_method_name( const std::string & name )
 {
-	return ( QString( "set" ) + name.at( 0 ).toUpper() +
-		name.right( name.length() - 1 ) );
-} // generateSetterMethodName
+	return ( std::string( "set_" ) + name );
+} // generate_setter_method_name
 
 
 //
-// generatetag_class_tName
+// generate_class_name
 //
 
-static inline QString generatetag_class_tName( const QString & name )
+static inline std::string generate_class_name( const std::string & name )
 {
-	const int pos = name.lastIndexOf( Cfg::c_namespace_separator );
+	const auto pos = name.rfind( cfg::c_namespace_separator );
 
-	QString res = ( pos == -1 ? QString() :
-		name.left( pos + Cfg::c_namespace_separator.length() ) );
-	res.append( QLatin1String( "Tag" ) );
-	res.append( ( pos == -1 ? name :
-		name.right( name.length() - pos -
-			Cfg::c_namespace_separator.length() ) ) );
+	std::string res = ( pos == std::string::npos ? std::string() :
+		name.substr( 0, pos + cfg::c_namespace_separator.length() ) );
+	res.append( "tag_" );
+	res.append( ( pos == std::string::npos ? name :
+		name.substr( pos + cfg::c_namespace_separator.length() ) ) );
+	res.append( "_t" );
 
 	return res;
 }
 
 
 //
-// generateBasetag_class_tName
+// generate_base_class_name
 //
 
-static inline QString generateBasetag_class_tName( const QString & base,
-	const QString & value_type )
+static inline std::string generate_base_class_name( const std::string & base,
+	const std::string & value_type )
 {
-	if( base == Cfg::c_scalar_tag_name )
-		return QString( "cfgfile::tag_scalar_t< " ) + value_type +
-			QLatin1String( " >" );
-	else if( base == Cfg::c_no_value_tag_name )
-		return QString( "cfgfile::tag_no_value_t" );
-	else if( base == Cfg::c_scalar_vector_tag_name )
-		return QString( "cfgfile::tag_scalar_tVector< " ) + value_type +
-				QLatin1String( " >" );
-	else if( base == Cfg::c_vector_of_tags_tag_name )
-		return QString( "cfgfile::tag_vector_of_tags_t< " ) + value_type +
-				QLatin1String( " >" );
+	if( base == cfg::c_scalar_tag_name )
+		return std::string( "cfgfile::tag_scalar_t< " ) + value_type +
+			std::string( " >" );
+	else if( base == cfg::c_no_value_tag_name )
+		return std::string( "cfgfile::tag_no_value_t" );
+	else if( base == cfg::c_scalar_vector_tag_name )
+		return std::string( "cfgfile::tag_scalar_vector_t< " ) + value_type +
+				std::string( " >" );
+	else if( base == cfg::c_vector_of_tags_tag_name )
+		return std::string( "cfgfile::tag_vector_of_tags_t< " ) + value_type +
+				std::string( " >" );
 	else
-		return generatetag_class_tName( base );
-} // generateBasetag_class_tName
+		return generate_class_name( base );
+} // generate_base_class_name
 
 
 //
-// generateTagNameFromClassName
+// generate_tag_name_from_class_name
 //
 
-static inline QString generateTagNameFromClassName( const QString & name )
+static inline std::string generate_tag_name_from_class_name( const std::string & name )
 {
-	return ( name.at( 0 ).toLower() +
-		name.right( name.length() - 1 ) );
-} // generateTagNameFromClassName
+	return name;
+} // generate_tag_name_from_class_name
 
 
 //
-// boolToString
+// bool_to_string
 //
 
-static inline QString boolToString( bool value )
+static inline std::string bool_to_string( bool value )
 {
 	if( value )
-		return QLatin1String( "true" );
+		return std::string( "true" );
 	else
-		return QLatin1String( "false" );
-} // boolToString
+		return std::string( "false" );
+} // bool_to_string
 
 
 //
-// generatetag_field_tsInCtor
+// generate_fields_in_ctor
 //
 
-static inline void generatetag_field_tsInCtor( QTextStream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_fields_in_ctor( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
 	foreach( const Cfg::Field & f, c->fields() )
 	{
 		if( !f.isBase() )
 		{
-			stream << QLatin1String( "\t\t,\tm_" )
-				<< f.name() << QLatin1String( "( *this, QLatin1String( \"" )
-				<< f.name() << QLatin1String( "\" ), " )
-				<< boolToString( f.isRequired() )
-				<< QLatin1String( " )\n" );
+			stream << std::string( "\t\t,\tm_" )
+				<< f.name() << std::string( "( *this, std::string( \"" )
+				<< f.name() << std::string( "\" ), " )
+				<< bool_to_string( f.isRequired() )
+				<< std::string( " )\n" );
 
 			if( !f.isConstraintNull() )
 			{
@@ -251,17 +236,17 @@ static inline void generatetag_field_tsInCtor( QTextStream & stream,
 						Cfg::min_max_constraint_t * minMax =
 							static_cast< Cfg::min_max_constraint_t* > ( constr );
 
-						stream << QLatin1String( "\t\t,\tm_" )
-							<< f.name() << QLatin1String( "Constraint( " )
-							<< minMax->min() << QLatin1String( ", " )
-							<< minMax->max() << QLatin1String( " )\n" );
+						stream << std::string( "\t\t,\tm_" )
+							<< f.name() << std::string( "Constraint( " )
+							<< minMax->min() << std::string( ", " )
+							<< minMax->max() << std::string( " )\n" );
 					}
 						break;
 
 					case Cfg::constraint_base_t::one_of_constraint_type :
 					{
-						stream << QLatin1String( "\t\t,\tm_" )
-							<< f.name() << QLatin1String( "Constraint()\n" );
+						stream << std::string( "\t\t,\tm_" )
+							<< f.name() << std::string( "Constraint()\n" );
 					}
 						break;
 
@@ -271,14 +256,14 @@ static inline void generatetag_field_tsInCtor( QTextStream & stream,
 			}
 		}
 	}
-} // generatetag_field_tsInCtor
+} // generate_fields_in_ctor
 
 
 //
 // generateConstraintsInCtor
 //
 
-static inline void generateConstraintsInCtor( QTextStream & stream,
+static inline void generateConstraintsInCtor( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
 	foreach( const Cfg::Field & f, c->fields() )
@@ -292,12 +277,12 @@ static inline void generateConstraintsInCtor( QTextStream & stream,
 				case Cfg::constraint_base_t::min_max_constraint_type :
 				{
 					if( !f.isBase() )
-						stream << QLatin1String( "\t\tm_" )
-							<< f.name() << QLatin1String( ".setConstraint( &m_" )
-							<< f.name() << QLatin1String( "Constraint );\n\n" );
+						stream << std::string( "\t\tm_" )
+							<< f.name() << std::string( ".setConstraint( &m_" )
+							<< f.name() << std::string( "Constraint );\n\n" );
 					else
-						stream << QLatin1String( "\t\tsetConstraint( &m_" )
-							<< f.name() << QLatin1String( "Constraint );\n\n" );
+						stream << std::string( "\t\tsetConstraint( &m_" )
+							<< f.name() << std::string( "Constraint );\n\n" );
 				}
 					break;
 
@@ -306,21 +291,21 @@ static inline void generateConstraintsInCtor( QTextStream & stream,
 					Cfg::one_of_constraint_t * oneOf =
 						static_cast< Cfg::one_of_constraint_t* > ( constr );
 
-					foreach( const QString & s, oneOf->values() )
+					foreach( const std::string & s, oneOf->values() )
 					{
-						stream << QLatin1String( "\t\tm_" )
+						stream << std::string( "\t\tm_" )
 							<< f.name()
-							<< QLatin1String( "Constraint.addValue( " )
-							<< s << QLatin1String( " );\n" );
+							<< std::string( "Constraint.addValue( " )
+							<< s << std::string( " );\n" );
 					}
 
 					if( !f.isBase() )
-						stream << QLatin1String( "\t\tm_" )
-							<< f.name() << QLatin1String( ".setConstraint( &m_" )
-							<< f.name() << QLatin1String( "Constraint );\n\n" );
+						stream << std::string( "\t\tm_" )
+							<< f.name() << std::string( ".setConstraint( &m_" )
+							<< f.name() << std::string( "Constraint );\n\n" );
 					else
-						stream << QLatin1String( "\t\tsetConstraint( &m_" )
-							<< f.name() << QLatin1String( "Constraint );\n\n" );
+						stream << std::string( "\t\tsetConstraint( &m_" )
+							<< f.name() << std::string( "Constraint );\n\n" );
 				}
 					break;
 
@@ -336,12 +321,12 @@ static inline void generateConstraintsInCtor( QTextStream & stream,
 // generateTypeOfData
 //
 
-static inline QString generateTypeOfData( const Cfg::Field & f )
+static inline std::string generateTypeOfData( const Cfg::Field & f )
 {
 	switch( f.type() )
 	{
 		case Cfg::Field::NoValuefield_type_t :
-			return QLatin1String( "bool" );
+			return std::string( "bool" );
 
 		case Cfg::Field::CustomTagfield_type_t :
 		case Cfg::Field::Scalarfield_type_t :
@@ -349,10 +334,10 @@ static inline QString generateTypeOfData( const Cfg::Field & f )
 
 		case Cfg::Field::VectorOfTagsfield_type_t :
 		case Cfg::Field::ScalarVectorfield_type_t :
-			return QString( "std::list< " ) + f.value_type() + QLatin1String( " >" );
+			return std::string( "std::list< " ) + f.value_type() + std::string( " >" );
 
 		default :
-			return QLatin1String( "void" );
+			return std::string( "void" );
 	}
 } // generateTypeOfData
 
@@ -361,18 +346,18 @@ static inline QString generateTypeOfData( const Cfg::Field & f )
 // generateDataClass
 //
 
-static inline void generateDataClass( QTextStream & stream,
+static inline void generateDataClass( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
-	stream << QLatin1String( "//\n// " )
-		<< c->name() << QLatin1String( "\n//\n\n" );
+	stream << std::string( "//\n// " )
+		<< c->name() << std::string( "\n//\n\n" );
 
-	stream << QLatin1String( "class " ) << c->name() << QLatin1String( " {\n" );
-	stream << QLatin1String( "public:\n" );
+	stream << std::string( "class " ) << c->name() << std::string( " {\n" );
+	stream << std::string( "public:\n" );
 
 	// c_tor and d_tor.
-	stream << QLatin1String( "\t" ) << c->name()
-		<< QLatin1String( "()\n" );
+	stream << std::string( "\t" ) << c->name()
+		<< std::string( "()\n" );
 
 	int i = 0;
 
@@ -381,65 +366,65 @@ static inline void generateDataClass( QTextStream & stream,
 		if( !f.defaultValue().isEmpty() )
 		{
 			if( i == 0 )
-				stream << QLatin1String( "\t\t:" );
+				stream << std::string( "\t\t:" );
 			else
-				stream << QLatin1String( "\t\t," );
+				stream << std::string( "\t\t," );
 
-			stream << QLatin1String( "\tm_" )
-				<< f.name() << QLatin1String( "( " )
-				<< f.defaultValue() << QLatin1String( " )\n" );
+			stream << std::string( "\tm_" )
+				<< f.name() << std::string( "( " )
+				<< f.defaultValue() << std::string( " )\n" );
 
 			++i;
 		}
 	}
 
-	stream << QLatin1String( "\t{\n"
+	stream << std::string( "\t{\n"
 							 "\t}\n"
 							 "\t~" )
-		<< c->name() << QLatin1String( "()\n"
+		<< c->name() << std::string( "()\n"
 									   "\t{\n"
 									   "\t}\n\n" );
 
 	// Copy c_tor.
-	stream << QLatin1String( "\t" ) << c->name()
-		<< QLatin1String( "( const " ) << c->name()
-		<< QLatin1String( " & other )\n" );
+	stream << std::string( "\t" ) << c->name()
+		<< std::string( "( const " ) << c->name()
+		<< std::string( " & other )\n" );
 
 	i = 0;
 
 	foreach( const Cfg::Field & f, c->fields() )
 	{
 		if( i == 0 )
-			stream << QLatin1String( "\t\t:" );
+			stream << std::string( "\t\t:" );
 		else
-			stream << QLatin1String( "\t\t," );
+			stream << std::string( "\t\t," );
 
-		stream << QLatin1String( "\tm_" )
-			<< f.name() << QLatin1String( "( other." )
-			<< f.name() << QLatin1String( "() )\n" );
+		stream << std::string( "\tm_" )
+			<< f.name() << std::string( "( other." )
+			<< f.name() << std::string( "() )\n" );
 
 		++i;
 	}
 
-	stream << QLatin1String( "\t{\n"
+	stream << std::string( "\t{\n"
 							 "\t}\n" );
 
 	// operator =.
-	stream << QLatin1String( "\t" ) << c->name()
-		<< QLatin1String( " & operator = ( const " ) << c->name()
-		<< QLatin1String( " & other )\n"
+	stream << std::string( "\t" ) << c->name()
+		<< std::string( " & operator = ( const " ) << c->name()
+		<< std::string( " & other )\n"
 						  "\t{\n"
 						  "\t\tif( this != &other )\n"
 						  "\t\t{\n" );
 
 	foreach( const Cfg::Field & f, c->fields() )
 	{
-		stream << QLatin1String( "\t\t\tm_" )
-			<< f.name() << QLatin1String( " = other." )
-			<< f.name() << QLatin1String( "();\n" );
+		stream << std::string( "\t\t\tm_" )
+			<< f.name() << std::string( " = other." )
+			<< f.name() << std::string( "();\n" );
 	}
 
-	stream << QLatin1String( "\t\t}\n\n"
+	stream << std::string( "\t\t}\n\n"
 							 "\t\treturn *this;\n"
 							 "\t}\n\n" );
 
@@ -448,62 +433,62 @@ static inline void generateDataClass( QTextStream & stream,
 	{
 		if( f.type() != Cfg::Field::NoValuefield_type_t )
 		{
-			stream << QLatin1String( "\tconst " )
-				<< generateTypeOfData( f ) << QLatin1String( " & " )
-				<< f.name() << QLatin1String( "() const\n"
+			stream << std::string( "\tconst " )
+				<< generateTypeOfData( f ) << std::string( " & " )
+				<< f.name() << std::string( "() const\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
-				<< f.name() << QLatin1String( ";\n"
+				<< f.name() << std::string( ";\n"
 											  "\t}\n" );
 
-			stream << QLatin1String( "\t" )
-				<< generateTypeOfData( f ) << QLatin1String( " & " )
-				<< f.name() << QLatin1String( "()\n"
+			stream << std::string( "\t" )
+				<< generateTypeOfData( f ) << std::string( " & " )
+				<< f.name() << std::string( "()\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
-				<< f.name() << QLatin1String( ";\n"
+				<< f.name() << std::string( ";\n"
 											  "\t}\n" );
 
-			stream << QLatin1String( "\tvoid " )
-				<< generateSetterMethodName( f.name() )
-				<< QLatin1String( "( const " ) << generateTypeOfData( f )
-				<< QLatin1String( " & v )\n"
+			stream << std::string( "\tvoid " )
+				<< generate_setter_method_name( f.name() )
+				<< std::string( "( const " ) << generateTypeOfData( f )
+				<< std::string( " & v )\n"
 								  "\t{\n"
 								  "\t\tm_" ) << f.name()
-				<< QLatin1String( " = v;\n"
+				<< std::string( " = v;\n"
 								  "\t}\n\n" );
 		}
 		else
 		{
-			stream << QLatin1String( "\tbool " )
-				<< f.name() << QLatin1String( "() const\n"
+			stream << std::string( "\tbool " )
+				<< f.name() << std::string( "() const\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
-				<< f.name() << QLatin1String( ";\n"
+				<< f.name() << std::string( ";\n"
 											  "\t}\n" );
 
-			stream << QLatin1String( "\tvoid " )
-				<< generateSetterMethodName( f.name() )
-				<< QLatin1String( "( bool v = true )\n"
+			stream << std::string( "\tvoid " )
+				<< generate_setter_method_name( f.name() )
+				<< std::string( "( bool v = true )\n"
 								  "\t{\n"
 								  "\t\tm_" ) << f.name()
-				<< QLatin1String( " = v;\n"
+				<< std::string( " = v;\n"
 								  "\t}\n\n" );
 		}
 	}
 
 	// Private members.
-	stream << QLatin1String( "private:\n" );
+	stream << std::string( "private:\n" );
 
 	foreach( const Cfg::Field & f, c->fields() )
 	{
-		stream << QLatin1String( "\t" ) << generateTypeOfData( f )
-			<< QLatin1String( " m_" ) << f.name()
-			<< QLatin1String( ";\n" );
+		stream << std::string( "\t" ) << generateTypeOfData( f )
+			<< std::string( " m_" ) << f.name()
+			<< std::string( ";\n" );
 	}
 
-	stream << QLatin1String( "}; // class " ) << c->name()
-		<< QLatin1String( "\n\n\n" );
+	stream << std::string( "}; // class " ) << c->name()
+		<< std::string( "\n\n\n" );
 } // generateDataClass
 
 
@@ -511,7 +496,7 @@ static inline void generateDataClass( QTextStream & stream,
 // generateCfgInit
 //
 
-static inline void generateCfgInit( QTextStream & stream,
+static inline void generateCfgInit( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
 	foreach( const Cfg::Field & f, c->fields() )
@@ -522,71 +507,71 @@ static inline void generateCfgInit( QTextStream & stream,
 			{
 				case Cfg::Field::NoValuefield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( m_" )
-						<< f.name() << QLatin1String( ".isDefined() )\n"
+					stream << std::string( "\n\t\tif( m_" )
+						<< f.name() << std::string( ".isDefined() )\n"
 													  "\t\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( true );\n\n" );
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( true );\n\n" );
 				}
 					break;
 
 				case Cfg::Field::Scalarfield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( m_" )
-						<< f.name() << QLatin1String( ".isDefined() )\n"
+					stream << std::string( "\n\t\tif( m_" )
+						<< f.name() << std::string( ".isDefined() )\n"
 								"\t\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( m_" )
-						<< f.name() << QLatin1String( ".value() );\n" );
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( m_" )
+						<< f.name() << std::string( ".value() );\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarVectorfield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( m_" )
-						<< f.name() << QLatin1String( ".isDefined() )\n"
+					stream << std::string( "\n\t\tif( m_" )
+						<< f.name() << std::string( ".isDefined() )\n"
 								"\t\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( m_" )
-						<< f.name() << QLatin1String( ".values().toList() );\n" );
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( m_" )
+						<< f.name() << std::string( ".values().toList() );\n" );
 				}
 					break;
 
 				case Cfg::Field::VectorOfTagsfield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( m_" )
-						   << f.name() << QLatin1String( ".isDefined() )\n"
+					stream << std::string( "\n\t\tif( m_" )
+						   << f.name() << std::string( ".isDefined() )\n"
 								   "\t\t{\n" )
-						<< QLatin1String( "\t\t\tstd::list< " )
-						<< f.value_type() << QLatin1String( " > " )
-						<< f.name() << QLatin1String( "_" )
-						<< generateTagNameFromClassName( f.value_type() )
-						<< QLatin1String( "List;\n\n" )
-						<< QLatin1String( "\t\t\tfor( int i = 0; i < m_" )
-						<< f.name() << QLatin1String( ".size(); ++i )\n" )
-						<< QLatin1String( "\t\t\t\t" )
-						<< f.name() << QLatin1String( "_" )
-						<< generateTagNameFromClassName( f.value_type() )
-						<< QLatin1String( "List.append( m_" ) << f.name()
-						<< QLatin1String( ".at( i ).getCfg() );\n\n" )
-						<< QLatin1String( "\t\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( " )
-						<< f.name() << QLatin1String( "_" )
-						<< generateTagNameFromClassName( f.value_type() )
-						<< QLatin1String( "List );\n" )
-						<< QLatin1String( "\t\t}\n" );
+						<< std::string( "\t\t\tstd::list< " )
+						<< f.value_type() << std::string( " > " )
+						<< f.name() << std::string( "_" )
+						<< generate_tag_name_from_class_name( f.value_type() )
+						<< std::string( "List;\n\n" )
+						<< std::string( "\t\t\tfor( int i = 0; i < m_" )
+						<< f.name() << std::string( ".size(); ++i )\n" )
+						<< std::string( "\t\t\t\t" )
+						<< f.name() << std::string( "_" )
+						<< generate_tag_name_from_class_name( f.value_type() )
+						<< std::string( "List.append( m_" ) << f.name()
+						<< std::string( ".at( i ).getCfg() );\n\n" )
+						<< std::string( "\t\t\tc." )
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( " )
+						<< f.name() << std::string( "_" )
+						<< generate_tag_name_from_class_name( f.value_type() )
+						<< std::string( "List );\n" )
+						<< std::string( "\t\t}\n" );
 				}
 					break;
 
 				case Cfg::Field::CustomTagfield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( m_" )
-						<< f.name() << QLatin1String( ".isDefined() )\n"
+					stream << std::string( "\n\t\tif( m_" )
+						<< f.name() << std::string( ".isDefined() )\n"
 								"\t\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( m_" )
-						<< f.name() << QLatin1String( ".getCfg() );\n" );
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( m_" )
+						<< f.name() << std::string( ".getCfg() );\n" );
 				}
 					break;
 
@@ -600,17 +585,17 @@ static inline void generateCfgInit( QTextStream & stream,
 			{
 				case Cfg::Field::Scalarfield_type_t :
 				{
-					stream << QLatin1String( "\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( value() );\n" );
+					stream << std::string( "\t\tc." )
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( value() );\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarVectorfield_type_t :
 				{
-					stream << QLatin1String( "\t\tc." )
-						<< generateSetterMethodName( f.name() )
-						<< QLatin1String( "( values().toList() );\n" );
+					stream << std::string( "\t\tc." )
+						<< generate_setter_method_name( f.name() )
+						<< std::string( "( values().toList() );\n" );
 				}
 					break;
 
@@ -626,7 +611,7 @@ static inline void generateCfgInit( QTextStream & stream,
 // generateCfgSet
 //
 
-static inline void generateCfgSet( QTextStream & stream,
+static inline void generateCfgSet( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
 	foreach( const Cfg::Field & f, c->fields() )
@@ -637,58 +622,58 @@ static inline void generateCfgSet( QTextStream & stream,
 			{
 				case Cfg::Field::NoValuefield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tif( cfg." )
-						<< f.name() << QLatin1String( "() )\n"
+					stream << std::string( "\n\t\tif( cfg." )
+						<< f.name() << std::string( "() )\n"
 													  "\t\t\tm_" )
-						<< f.name() << QLatin1String( ".setDefined();\n\n" );
+						<< f.name() << std::string( ".setDefined();\n\n" );
 				}
 					break;
 
 				case Cfg::Field::Scalarfield_type_t :
 				{
-					stream << QLatin1String( "\t\tm_" )
+					stream << std::string( "\t\tm_" )
 						<< f.name()
-						<< QLatin1String( ".setValue( cfg." )
-						<< f.name() << QLatin1String( "() );\n" );
+						<< std::string( ".setValue( cfg." )
+						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarVectorfield_type_t :
 				{
-					stream << QLatin1String( "\t\tm_" )
-						<< f.name() << QLatin1String( ".setValues( cfg." )
-						<< f.name() << QLatin1String( "().toVector() );\n" );
+					stream << std::string( "\t\tm_" )
+						<< f.name() << std::string( ".setValues( cfg." )
+						<< f.name() << std::string( "().toVector() );\n" );
 				}
 					break;
 
 				case Cfg::Field::VectorOfTagsfield_type_t :
 				{
-					stream << QLatin1String( "\n\t\tforeach( const " )
-						<< f.value_type() << QLatin1String( " & v, cfg." )
-						<< f.name() << QLatin1String( "() )\n" )
-						<< QLatin1String( "\t\t{\n" )
-						<< QLatin1String( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
-						<< generatetag_class_tName( f.value_type() )
-						<< QLatin1String( " >::PointerToTag p(\n" )
-						<< QLatin1String( "\t\t\t\tnew " )
-						<< generatetag_class_tName( f.value_type() )
-						<< QLatin1String( "( \"" )
-						<< f.name() << QLatin1String( "\", " )
-						<< boolToString( f.isRequired() )
-						<< QLatin1String( " ) );\n\n" )
-						<< QLatin1String( "\t\t\tp->setCfg( v );\n\n" )
-						<< QLatin1String( "\t\t\tm_" ) << f.name()
-						<< QLatin1String( ".setValue( p );\n" )
-						<< QLatin1String( "\t\t}\n" );
+					stream << std::string( "\n\t\tforeach( const " )
+						<< f.value_type() << std::string( " & v, cfg." )
+						<< f.name() << std::string( "() )\n" )
+						<< std::string( "\t\t{\n" )
+						<< std::string( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
+						<< generate_class_name( f.value_type() )
+						<< std::string( " >::PointerToTag p(\n" )
+						<< std::string( "\t\t\t\tnew " )
+						<< generate_class_name( f.value_type() )
+						<< std::string( "( \"" )
+						<< f.name() << std::string( "\", " )
+						<< bool_to_string( f.isRequired() )
+						<< std::string( " ) );\n\n" )
+						<< std::string( "\t\t\tp->setCfg( v );\n\n" )
+						<< std::string( "\t\t\tm_" ) << f.name()
+						<< std::string( ".setValue( p );\n" )
+						<< std::string( "\t\t}\n" );
 				}
 					break;
 
 				case Cfg::Field::CustomTagfield_type_t :
 				{
-					stream << QLatin1String( "\t\tm_" )
+					stream << std::string( "\t\tm_" )
 						<< f.name()
-						<< QLatin1String( ".setCfg( cfg." )
-						<< f.name() << QLatin1String( "() );\n" );
+						<< std::string( ".setCfg( cfg." )
+						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
@@ -702,15 +687,15 @@ static inline void generateCfgSet( QTextStream & stream,
 			{
 				case Cfg::Field::Scalarfield_type_t :
 				{
-					stream << QLatin1String( "\t\tsetValue( cfg." )
-						<< f.name() << QLatin1String( "() );\n" );
+					stream << std::string( "\t\tsetValue( cfg." )
+						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarVectorfield_type_t :
 				{
-					stream << QLatin1String( "\t\tsetValues( cfg." )
-						<< f.name() << QLatin1String( "().toVector() );\n" );
+					stream << std::string( "\t\tsetValues( cfg." )
+						<< f.name() << std::string( "().toVector() );\n" );
 				}
 					break;
 
@@ -720,7 +705,7 @@ static inline void generateCfgSet( QTextStream & stream,
 		}
 	}
 
-	stream << QLatin1String( "\n\t\tsetDefined();\n" );
+	stream << std::string( "\n\t\tsetDefined();\n" );
 } // generateCfgSet
 
 
@@ -728,7 +713,7 @@ static inline void generateCfgSet( QTextStream & stream,
 // generatePrivateTagMembers
 //
 
-static inline void generatePrivateTagMembers( QTextStream & stream,
+static inline void generatePrivateTagMembers( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
 	foreach( const Cfg::Field & f, c->fields() )
@@ -739,42 +724,42 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 			{
 				case Cfg::Field::NoValuefield_type_t :
 				{
-					stream << QLatin1String( "\tcfgfile::tag_no_value_t m_" )
-						<< f.name() << QLatin1String( ";\n" );
+					stream << std::string( "\tcfgfile::tag_no_value_t m_" )
+						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
 				case Cfg::Field::Scalarfield_type_t :
 				{
-					stream << QLatin1String( "\tcfgfile::tag_scalar_t< " )
-						<< f.value_type() << QLatin1String( " > m_" )
-						<< f.name() << QLatin1String( ";\n" );
+					stream << std::string( "\tcfgfile::tag_scalar_t< " )
+						<< f.value_type() << std::string( " > m_" )
+						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
 				case Cfg::Field::ScalarVectorfield_type_t :
 				{
-					stream << QLatin1String( "\tcfgfile::tag_scalar_tVector< " )
-						<< f.value_type() << QLatin1String( " > m_" )
-						<< f.name() << QLatin1String( ";\n" );
+					stream << std::string( "\tcfgfile::tag_scalar_tVector< " )
+						<< f.value_type() << std::string( " > m_" )
+						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
 				case Cfg::Field::VectorOfTagsfield_type_t :
 				{
-					stream << QLatin1String( "\tcfgfile::tag_vector_of_tags_t< " )
-						<< generatetag_class_tName( f.value_type() )
-						<< QLatin1String( " > m_" )
-						<< f.name() << QLatin1String( ";\n" );
+					stream << std::string( "\tcfgfile::tag_vector_of_tags_t< " )
+						<< generate_class_name( f.value_type() )
+						<< std::string( " > m_" )
+						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
 				case Cfg::Field::CustomTagfield_type_t :
 				{
-					stream << QLatin1String( "\t" )
-						<< generatetag_class_tName( f.value_type() )
-						<< QLatin1String( " m_" )
-						<< f.name() << QLatin1String( ";\n" );
+					stream << std::string( "\t" )
+						<< generate_class_name( f.value_type() )
+						<< std::string( " m_" )
+						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
@@ -791,17 +776,17 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 			{
 				case Cfg::constraint_base_t::min_max_constraint_type :
 				{
-					stream << QLatin1String( "\tcfgfile::ConstraintMinMax< " )
-						<< f.value_type() << QLatin1String( " > m_" )
-						<< f.name() << QLatin1String( "Constraint;\n" );
+					stream << std::string( "\tcfgfile::ConstraintMinMax< " )
+						<< f.value_type() << std::string( " > m_" )
+						<< f.name() << std::string( "Constraint;\n" );
 				}
 					break;
 
 				case Cfg::constraint_base_t::one_of_constraint_type :
 				{
-					stream << QLatin1String( "\tcfgfile::constraint_one_of_t< " )
-						<< f.value_type() << QLatin1String( " > m_" )
-						<< f.name() << QLatin1String( "Constraint;\n" );
+					stream << std::string( "\tcfgfile::constraint_one_of_t< " )
+						<< f.value_type() << std::string( " > m_" )
+						<< f.name() << std::string( "Constraint;\n" );
 				}
 					break;
 
@@ -817,126 +802,126 @@ static inline void generatePrivateTagMembers( QTextStream & stream,
 // generatetag_class_t
 //
 
-static inline void generatetag_class_t( QTextStream & stream,
+static inline void generatetag_class_t( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {
-	const QString tagClassName = QString( "Tag" ) + c->name();
+	const std::string tagClassName = std::string( "Tag" ) + c->name();
 
-	stream << QLatin1String( "//\n"
+	stream << std::string( "//\n"
 							 "// " )
-		<< tagClassName << QLatin1String( "\n"
+		<< tagClassName << std::string( "\n"
 									   "//\n\n" );
 
-	stream << QLatin1String( "class " ) << tagClassName
-		<< QLatin1String( "\n"
+	stream << std::string( "class " ) << tagClassName
+		<< std::string( "\n"
 						  "\t:\tpublic " );
 
-	const QString baseTag = generateBasetag_class_tName( c->baseName(),
+	const std::string baseTag = generate_base_class_name( c->baseName(),
 		c->baseValueType() );
 
-	stream << baseTag << QLatin1String( "\n" );
-	stream << QLatin1String( "{\n" );
-	stream << QLatin1String( "public:\n" );
+	stream << baseTag << std::string( "\n" );
+	stream << std::string( "{\n" );
+	stream << std::string( "public:\n" );
 
 	// c_tors.
 	// 1
-	const QString tagName = generateTagNameFromClassName( c->name() );
+	const std::string tagName = generate_tag_name_from_class_name( c->name() );
 
-	stream << QLatin1String( "\t" ) << tagClassName
-		<< QLatin1String( "()\n"
+	stream << std::string( "\t" ) << tagClassName
+		<< std::string( "()\n"
 						  "\t\t:\t" )
-		<< baseTag << QLatin1String( "( QLatin1String( \"" )
-		<< tagName << QLatin1String( "\" ), true )\n" );
+		<< baseTag << std::string( "( std::string( \"" )
+		<< tagName << std::string( "\" ), true )\n" );
 
-	generatetag_field_tsInCtor( stream, c );
+	generate_fields_in_ctor( stream, c );
 
-	stream << QLatin1String( "\t{\n" );
+	stream << std::string( "\t{\n" );
 
 	generateConstraintsInCtor( stream, c );
 
-	stream << QLatin1String( "\t}\n\n" );
+	stream << std::string( "\t}\n\n" );
 
 	// 2
-	stream << QLatin1String( "\texplicit " ) << tagClassName
-		<< QLatin1String( "( const " ) << c->name()
-		<< QLatin1String( " & cfg )\n"
+	stream << std::string( "\texplicit " ) << tagClassName
+		<< std::string( "( const " ) << c->name()
+		<< std::string( " & cfg )\n"
 						  "\t\t:\t" )
-		<< baseTag << QLatin1String( "( QLatin1String( \"" )
-		<< tagName << QLatin1String( "\" ), true )\n" );
+		<< baseTag << std::string( "( std::string( \"" )
+		<< tagName << std::string( "\" ), true )\n" );
 
-	generatetag_field_tsInCtor( stream, c );
+	generate_fields_in_ctor( stream, c );
 
-	stream << QLatin1String( "\t{\n" );
+	stream << std::string( "\t{\n" );
 
 	generateConstraintsInCtor( stream, c );
 
-	stream << QLatin1String( "\t\tsetCfg( cfg );\n" );
+	stream << std::string( "\t\tsetCfg( cfg );\n" );
 
-	stream << QLatin1String( "\t}\n\n" );
+	stream << std::string( "\t}\n\n" );
 
 	// 3
-	stream << QLatin1String( "\t" ) << tagClassName
-		<< QLatin1String( "( const QString & name, bool is_mandatory )\n" )
-		<< QLatin1String( "\t\t:\t" )
-		<< baseTag << QLatin1String( "( name, is_mandatory )\n" );
+	stream << std::string( "\t" ) << tagClassName
+		<< std::string( "( const std::string & name, bool is_mandatory )\n" )
+		<< std::string( "\t\t:\t" )
+		<< baseTag << std::string( "( name, is_mandatory )\n" );
 
-	generatetag_field_tsInCtor( stream, c );
+	generate_fields_in_ctor( stream, c );
 
-	stream << QLatin1String( "\t{\n" );
+	stream << std::string( "\t{\n" );
 
 	generateConstraintsInCtor( stream, c );
 
-	stream << QLatin1String( "\t}\n\n" );
+	stream << std::string( "\t}\n\n" );
 
 	// 4
-	stream << QLatin1String( "\t" ) << tagClassName
-		<< QLatin1String( "( cfgfile::Tag & owner, const QString & name, "
+	stream << std::string( "\t" ) << tagClassName
+		<< std::string( "( cfgfile::Tag & owner, const std::string & name, "
 						  "bool is_mandatory )\n" )
-		<< QLatin1String( "\t\t:\t" )
-		<< baseTag << QLatin1String( "( owner, name, is_mandatory )\n" );
+		<< std::string( "\t\t:\t" )
+		<< baseTag << std::string( "( owner, name, is_mandatory )\n" );
 
-	generatetag_field_tsInCtor( stream, c );
+	generate_fields_in_ctor( stream, c );
 
-	stream << QLatin1String( "\t{\n" );
+	stream << std::string( "\t{\n" );
 
 	generateConstraintsInCtor( stream, c );
 
-	stream << QLatin1String( "\t}\n\n" );
+	stream << std::string( "\t}\n\n" );
 
 	// d_tor.
-	stream << QLatin1String( "\t~" ) << tagClassName
-		<< QLatin1String( "()\n" )
-		<< QLatin1String( "\t{\n"
+	stream << std::string( "\t~" ) << tagClassName
+		<< std::string( "()\n" )
+		<< std::string( "\t{\n"
 						  "\t}\n\n" );
 
 	// getter.
-	stream << QLatin1String( "\t" ) << c->name()
-		<< QLatin1String( " getCfg() const\n"
+	stream << std::string( "\t" ) << c->name()
+		<< std::string( " getCfg() const\n"
 						  "\t{\n"
 						  "\t\t" ) << c->name()
-		<< QLatin1String( " c;\n" );
+		<< std::string( " c;\n" );
 
 	generateCfgInit( stream, c );
 
-	stream << QLatin1String( "\n\t\treturn c;\n"
+	stream << std::string( "\n\t\treturn c;\n"
 							 "\t}\n\n" );
 
 	// setter.
-	stream << QLatin1String( "\tvoid setCfg( const " )
-		<< c->name() << QLatin1String( " & cfg )\n"
+	stream << std::string( "\tvoid setCfg( const " )
+		<< c->name() << std::string( " & cfg )\n"
 									   "\t{\n" );
 
 	generateCfgSet( stream, c );
 
-	stream << QLatin1String( "\t}\n\n" );
+	stream << std::string( "\t}\n\n" );
 
 	// private members.
-	stream << QLatin1String( "private:\n" );
+	stream << std::string( "private:\n" );
 
 	generatePrivateTagMembers( stream, c );
 
-	stream << QLatin1String( "}; // class " )
-		<< tagClassName << QLatin1String( "\n\n" );
+	stream << std::string( "}; // class " )
+		<< tagClassName << std::string( "\n\n" );
 } // generatetag_class_t
 
 
@@ -944,7 +929,7 @@ static inline void generatetag_class_t( QTextStream & stream,
 // generateCppClasses
 //
 
-static inline void generateCppClasses( QTextStream & stream,
+static inline void generateCppClasses( std::ostream & stream,
 	Cfg::ConstClassPointer c )
 {	
 	generateDataClass( stream, c );
@@ -953,30 +938,30 @@ static inline void generateCppClasses( QTextStream & stream,
 } // generateCppClasses
 
 void
-cpp_generator_t::generate( QTextStream & stream ) const
+cpp_generator_t::generate( std::ostream & stream ) const
 {
 	unsigned long long index = 0;
 
-	NamespaceStack nms;
+	namespace_stack_t nms;
 
 	Cfg::ConstClassPointer c = 0;
 
-	const QString guard = m_model.includeGuard() + QLatin1String( "__INCLUDED" );
+	const std::string guard = m_model.includeGuard() + std::string( "__INCLUDED" );
 
-	stream << QLatin1String( "\n#ifndef " ) << guard
-		<< QLatin1String( "\n#define " ) << guard
-		<< QLatin1String( "\n\n" );
+	stream << std::string( "\n#ifndef " ) << guard
+		<< std::string( "\n#define " ) << guard
+		<< std::string( "\n\n" );
 
-	generateIncludes( stream, m_model.globalIncludes(),
-		m_model.relativeIncludes() );
+	generate_includes( stream, m_model.global_includes(),
+		m_model.relative_includes() );
 
 	while( ( c = m_model.nextClass( index ) ) )
 	{
 		++index;
 
-		NamespaceStack tmp;
+		namespace_stack_t tmp;
 
-		ConstNamespacePointer n = c->parentNamespace();
+		const_namespace_ptr_t n = c->parentNamespace();
 
 		while( n )
 		{
@@ -991,31 +976,31 @@ cpp_generator_t::generate( QTextStream & stream ) const
 			std::reverse( tmp.begin(), tmp.end() );
 
 			while( !nms.isEmpty() && nms.top() != tmp.top() )
-				closeNamespace( stream, nms );
+				close_namespace( stream, nms );
 
 			if( nms.isEmpty() )
 			{
 				nms.swap( tmp );
 
-				startNamespaces( stream, nms );
+				start_namespaces( stream, nms );
 			}
 		}
 		else
 		{
 			while( !nms.isEmpty() )
-				closeNamespace( stream, nms );
+				close_namespace( stream, nms );
 		}
 
 		generateCppClasses( stream, c );
 	}
 
 	while( !nms.isEmpty() )
-		closeNamespace( stream, nms );
+		close_namespace( stream, nms );
 
-	stream << QLatin1String( "#endif // " ) << guard
-		<< QLatin1String( "\n" );
+	stream << std::string( "#endif // " ) << guard
+		<< std::string( "\n" );
 }
 
-} /* namespace generator_t */
+} /* namespace generator */
 
 } /* namespace cfgfile */

@@ -57,7 +57,7 @@ namespace cfgfile {
 	\endcode
 */
 template< class T >
-class tag_vector_of_tags_t final
+class tag_vector_of_tags_t
 	:	public tag_t
 {
 public:
@@ -83,7 +83,7 @@ public:
 	}
 
 	//! \return Amount of the subordinate tags.
-	vector_of_tags_t::size_type
+	typename vector_of_tags_t::size_type
 	size() const
 	{
 		return m_tags.size();
@@ -91,7 +91,7 @@ public:
 
 	//! \return Subordinate tag at the given position.
 	const T &
-	at( vector_of_tags_t::size_type index ) const
+	at( typename vector_of_tags_t::size_type index ) const
 	{
 		return *m_tags.at( index );
 	}

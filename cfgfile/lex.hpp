@@ -158,18 +158,19 @@ public:
 
 				if( !quoted_lexeme )
 					result.push_back( ch );
-				else if( processBackSlash( newChar ) )
+				else if( process_back_slash( new_char ) )
 					result.push_back( new_char );
 				else
 					throw exception_t( string_t(
 						SL( "Unrecognized back-slash sequence: \"\\" ) ) +
 						SL( "\". In file \"" ) + m_stream.file_name() +
-						SL( "\" on line " ) + line_number() + SL( "." ) );
+						SL( "\" on line " ) + std::to_string( line_number() ) +
+						SL( "." ) );
 			}
 			else if( ch == c_begin_tag )
 			{
 				if( result.empty() )
-					return lexeme_t( lexeme_type_t::start, ch );
+					return lexeme_t( lexeme_type_t::start, string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -182,7 +183,7 @@ public:
 			else if( ch == c_end_tag )
 			{
 				if( result.empty() )
-					return lexeme_t( lexeme_type_t::finish, ch );
+					return lexeme_t( lexeme_type_t::finish, string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -205,7 +206,7 @@ public:
 					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
 						SL( "New line detected. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + line_number() +
+						SL( "\" on line " ) + std::to_string( line_number() ) +
 						SL( "." ) );
 				else
 					break;
@@ -257,7 +258,7 @@ public:
 					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
 						SL( "End of file riched. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + line_number() +
+						SL( "\" on line " ) + std::to_string( line_number() ) +
 						SL( "." ) );
 				else if( result.empty() )
 					return lexeme_t( lexeme_type_t::null, string_t() );
@@ -329,7 +330,7 @@ private:
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"Unfinished back slash sequence. In file \"" ) ) +
 				m_stream.file_name() + SL( "\" on line " ) +
-				m_stream.line_number() + SL( "." ) );
+				std::to_string( m_stream.line_number() ) + SL( "." ) );
 
 		ch = m_stream.get();
 
@@ -338,7 +339,7 @@ private:
 		else if( ch == c_t )
 			ch = c_tab;
 		else if( ch == c_r )
-			ch = c_lineFeed;
+			ch = c_line_feed;
 		else if( ch == c_quotes )
 			ch = c_quotes;
 		else if( ch == c_back_slash )

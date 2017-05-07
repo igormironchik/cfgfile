@@ -36,6 +36,7 @@
 
 // C++ include.
 #include <string>
+#include <map>
 
 
 namespace cfgfile {
@@ -543,10 +544,10 @@ private:
 
 //! Tag for one_of_constraint_t.
 class tag_one_of_constraint_t
-	:	public cfgfile::tag_scalar_tVector< std::string >
+	:	public cfgfile::tag_scalar_vector_t< std::string >
 {
 public:
-	explicit tag_one_of_constraint_t( cfgfile::Tag & owner );
+	explicit tag_one_of_constraint_t( cfgfile::tag_t & owner );
 	~tag_one_of_constraint_t();
 
 	//! \return Constraint.

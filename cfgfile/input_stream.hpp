@@ -59,7 +59,7 @@ public:
 	//! Get a symbol from the stream.
 	char_t get()
 	{
-		++m_column_number;
+		m_column_number += 1;
 
 		char_t ch = 0x00;
 
@@ -71,7 +71,7 @@ public:
 
 			if( is_new_line( ch ) )
 			{
-				++m_line_number;
+				m_line_number += 1;
 				m_column_number = 1;
 			}
 
@@ -82,7 +82,7 @@ public:
 
 		if( is_new_line( ch ) )
 		{
-			++m_line_number;
+			m_line_number += 1;
 			m_column_number = 1;
 		}
 
@@ -92,10 +92,10 @@ public:
 	//! Put symbol back in the stream.
 	void put_back( char_t ch )
 	{
-		--m_column_number;
+		m_column_number -= 1;
 
 		if( ch == c_carriage_return || ch == c_line_feed )
-			--m_line_number;
+			m_line_number -= 1;
 
 		m_returned_char = ch;
 	}
@@ -144,7 +144,7 @@ private:
 
 			if( next_char == c_carriage_return )
 			{
-				ch == next_char;
+				ch = next_char;
 
 				return true;
 			}

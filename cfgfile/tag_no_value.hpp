@@ -51,7 +51,7 @@ namespace cfgfile {
 //
 
 //! Tag without a value.
-class tag_no_value_t final
+class tag_no_value_t
 	:	public tag_t
 {
 public:
@@ -78,19 +78,19 @@ public:
 
 		if( is_defined() )
 		{
-			result.push_back( string_t( indent, c_tab ) );
+			result.append( string_t( indent, c_tab ) );
 
 			result.push_back( c_begin_tag );
-			result.push_back( name() );
+			result.append( name() );
 
 			if( !children().empty() )
 			{
 				result.push_back( c_carriage_return );
 
 				for( const tag_t * tag : children() )
-					result.push_back( tag->print( indent + 1 ) );
+					result.append( tag->print( indent + 1 ) );
 
-				result.push_back( string_t( indent, c_tab ) );
+				result.append( string_t( indent, c_tab ) );
 			}
 
 			result.push_back( c_end_tag );
@@ -132,7 +132,8 @@ public:
 					tag->name() +
 					SL( "\". Where parent is: \"" ) + name() +
 					SL( "\". In file \"" ) + info.file_name() +
-					SL( "\" on line " ) + info.line_number() +
+					SL( "\" on line " ) +
+					std::to_string( info.line_number() ) +
 					SL( "." ) );
 		}
 
@@ -147,7 +148,8 @@ public:
 			name() + SL( "\" doesn't allow any values. "
 				"But we've got this: \"" ) +
 			str + SL( "\". In file \"" ) + info.file_name() +
-			SL( "\" on line " ) + info.line_number() +
+			SL( "\" on line " ) +
+			std::to_string( info.line_number() ) +
 			SL( "." ) );
 	}
 }; // class tag_no_value_t

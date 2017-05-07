@@ -79,7 +79,7 @@ protected:
 	void check_parser_state_after_parsing()
 	{
 		if( !m_stack.empty() )
-			throw exception_t_t( string_t( SL( "Unexpected end of file. "
+			throw exception_t( string_t( SL( "Unexpected end of file. "
 				"Still unfinished tag \"" ) ) + m_stack.top()->name() +
 				SL( "\"." ) );
 
@@ -92,7 +92,7 @@ protected:
 		if( first )
 		{
 			if( tag.is_mandatory() && !tag.is_defined() )
-				throw exception_t_t( string_t( SL( "Undefined mandatory tag: \"" ) ) +
+				throw exception_t( string_t( SL( "Undefined mandatory tag: \"" ) ) +
 					tag.name() + SL( "\"." ) );
 
 			for( tag_t * t : tag.children() )
@@ -100,7 +100,7 @@ protected:
 		}
 		else if( tag.is_mandatory() && !tag.is_defined() )
 		{
-			throw exception_t_t( string_t( SL( "Undefined mandatory tag: \"" ) ) +
+			throw exception_t( string_t( SL( "Undefined mandatory tag: \"" ) ) +
 				tag.name() + SL( "\"." ) );
 		}
 
@@ -174,7 +174,8 @@ public:
 						"We've finished parsing, but we've got this: \"" ) ) +
 					lexeme.value() + SL( "\". " ) +
 					SL( "In file \"" ) + file_name +
-					SL( "\" on line " ) + m_lex.input_stream().line_number() +
+					SL( "\" on line " ) +
+					std::to_string( m_lex.input_stream().line_number() ) +
 					SL( "." ) );
 
 
@@ -194,7 +195,8 @@ private:
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"Undefined mandatory tag \"" ) ) + m_tag.name() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( !m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
 			return false;
@@ -202,7 +204,8 @@ private:
 			throw exception_t( string_t( SL( "Expected start curl brace, "
 					"but we've got \"" ) ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 
 		lexeme = m_lex.next_lexeme();
@@ -212,7 +215,8 @@ private:
 					"We expected \"" ) ) + m_tag.name() +
 				SL( "\", but we've got \"" ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 
 		return true;
@@ -224,25 +228,28 @@ private:
 			throw exception_t( string_t( SL( "Unexpected start curl brace. "
 					"We expected tag name, but we've got start curl brace. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( lexeme.type() == lexeme_type_t::finish )
 			throw exception_t( string_t( SL( "Unexpected finish curl brace. "
 					"We expected tag name, but we've got finish curl brace. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( lexeme.type() == lexeme_type_t::null )
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( tag.name() == lexeme.value() )
 		{
 			m_stack.push( &tag );
 
 			tag.on_start( parser_info_t(
-				m_lex.inputStream().file_name(),
+				m_lex.input_stream().file_name(),
 				m_lex.line_number(),
 				m_lex.column_number() ) );
 
@@ -275,7 +282,8 @@ private:
 				parent.name() +
 				SL( "\", but we've got \"" ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
-				SL( "\" on line " ) + m_lex.input_stream().line_number() +
+				SL( "\" on line " ) +
+				std::to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 	}
 
@@ -454,16 +462,17 @@ private:
 //
 
 //! Parser of the configuration file.
-class Parser final {
+class parser_t final {
 public:
 	parser_t( tag_t & tag, input_stream_t & stream )
-		:	m_d( std::make_unique< parser_conffile_impl_t > ( tag, stream ) )
+		:	m_d( std::make_unique< details::parser_conffile_impl_t >
+				( tag, stream ) )
 	{
 	}
 
 #if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
 	parser_t( tag_t & tag, const QDomDocument & dom );
-		:	m_d( std::make_unique< parser_dom_impl_t > ( tag, dom ) )
+		:	m_d( std::make_unique< details::parser_dom_impl_t > ( tag, dom ) )
 	{
 	}
 #endif

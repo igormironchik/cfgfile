@@ -38,6 +38,9 @@
 // C++ include.
 #include <fstream>
 
+// Args include.
+#include <Args/all.hpp>
+
 
 //
 // for_generation_t
@@ -103,17 +106,16 @@ private:
 
 static inline for_generation_t parse_cli( int argc, char ** argv )
 {
-	Args::Arg input( 'i', "input",
-		"Input file name", true, true );
-	Args::Arg output( 'o', "output",
-		"Output file name", true, true );
+	Args::Arg input( 'i', "input", true, true );
+	input.setDescription( "Input file name" );
+	Args::Arg output( 'o', "output", true, true );
+	output.setDescription( "Output file name" );
 
 	Args::CmdLine cmd( argc, argv );
 
 	Args::Help help;
-	help.setProgramDescription(
-		QLatin1String( "C++ header generator for cfgfile." ) );
-	help.setExecutableName( QLatin1String( argv[ 0 ] ) );
+	help.setAppDescription( "C++ header generator for cfgfile." );
+	help.setExecutable( argv[ 0 ] );
 
 	cmd.addArg( input );
 	cmd.addArg( output );
@@ -126,13 +128,6 @@ static inline for_generation_t parse_cli( int argc, char ** argv )
 	if( data.input_file().isEmpty() )
 	{
 		std::cout << "Please specify input file." << endl;
-
-		exit( 1 );
-	}
-
-	if( !QFileInfo( data.input_file() ).exists() )
-	{
-		std::cout << "Specified input file doesn't exist." << endl;
 
 		exit( 1 );
 	}
@@ -155,15 +150,24 @@ int main( int argc, char ** argv )
 	try {
 		data = parse_cli( argc, argv );
 	}
-	catch( const Args::ArgHelpHasPrintedEx & )
+	catch( const Args::HelpHasBeenPrintedException & )
 	{
 		return 0;
 	}
-	catch( const Args::ArgBaseException & x )
+	catch( const Args::BaseException & x )
 	{
 		std::cout << x.desc() << endl;
 
 		return 1;
+	}
+
+	std::ifstream in( data.input_file() );
+
+	if( !in.good() )
+	{
+		std::cout << "Specified input file doesn't exist." << endl;
+
+		exit( 1 );
 	}
 
 	cfgfile::generator::cfg::model_t model;
@@ -171,7 +175,9 @@ int main( int argc, char ** argv )
 	try {
 		cfgfile::generator::cfg::tag_model_t tag;
 
-		cfgfile::read_cfgfile( tag, data.input_file() );
+		cfgfile::read_cfgfile( tag, in, data.input_file() );
+
+		in.close();
 
 		model = tag.cfg();
 
@@ -181,22 +187,22 @@ int main( int argc, char ** argv )
 	}
 	catch( const cfgfile::exception_t & x )
 	{
+		in.close();
+
 		std::cout << x.desc() << endl;
 
 		return 1;
 	}
 
-	QFile output( data.output_file() );
+	std::ofstream out( data.output_file() );
 
-	if( output.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
+	if( out.good() )
 	{
-		QTextStream stream( &output );
-
-		cfgfile::generator_t::cpp_generator_t gen( model );
+		cfgfile::generator::cpp_generator_t gen( model );
 
 		gen.generate( stream );
 
-		output.close();
+		out.close();
 
 		return 0;
 	}

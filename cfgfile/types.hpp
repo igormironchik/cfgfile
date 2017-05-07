@@ -285,7 +285,7 @@ using char_t = string_t::value_type;
 using istream_t = std::istream;
 
 //! Type of pos in stream.
-using pos_t = istream_t::pos_type;
+using pos_t = std::streamoff;
 
 //! Output stream type.
 using ostream_t = std::ostream;

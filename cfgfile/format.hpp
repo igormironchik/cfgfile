@@ -105,7 +105,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return result;
 		}
@@ -114,7 +114,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -160,7 +160,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -169,7 +169,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -215,7 +215,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -224,7 +224,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -270,7 +270,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned long) result;
 		}
@@ -279,7 +279,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -325,7 +325,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (long long) result;
 		}
@@ -334,7 +334,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -380,7 +380,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned long long) result;
 		}
@@ -389,7 +389,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -435,7 +435,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -444,7 +444,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -495,7 +495,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 	}
 }; // class format_t< bool >
 

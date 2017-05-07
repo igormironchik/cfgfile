@@ -55,7 +55,7 @@ namespace cfgfile {
 
 //! Tag with scalar value.
 template< class T >
-class tag_scalar_t final
+class tag_scalar_t
 	:	public tag_t
 {
 public:
@@ -311,25 +311,25 @@ public:
 
 		if( is_defined() )
 		{
-			result.push_back( string_t( indent, c_tab ) );
+			result.append( string_t( indent, c_tab ) );
 
 			result.push_back( c_begin_tag );
-			result.push_back( name() );
+			result.append( name() );
 			result.push_back( c_space );
 
 			string_t value = format_t< bool >::to_string( m_value );
-			value = toc_fgfile_format( value );
+			value = to_cfgfile_format( value );
 
-			result.push_back( value );
+			result.append( value );
 
 			if( !children().empty() )
 			{
 				result.push_back( c_carriage_return );
 
 				for( const tag_t * tag : children() )
-					result.push_back( tag->print( indent + 1 ) );
+					result.append( tag->print( indent + 1 ) );
 
-				result.push_back( string_t( indent, c_tab ) );
+				result.append( string_t( indent, c_tab ) );
 			}
 
 			result.push_back( c_end_tag );
@@ -374,7 +374,8 @@ public:
 		if( !is_defined() )
 			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
 				name() + SL( "\". In file \"" ) + info.file_name() +
-				SL( "\" on line " ) + info.line_number() + SL( "." ) );
+				SL( "\" on line " ) +
+				std::to_string( info.line_number() ) + SL( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
@@ -382,7 +383,8 @@ public:
 				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
 					tag->name() + SL( "\". Where parent is: \"" ) +
 					name() + SL( "\". In file \"" ) + info.file_name() +
-					SL( "\" on line " ) + info.line_number() + SL( "." ) );
+					SL( "\" on line " ) +
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 	}
 
@@ -397,7 +399,7 @@ public:
 					SL( "\" for tag \"" ) + name() +
 					SL( "\" must be defined before any child tag. In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 
 			m_value = format_t< bool >::from_string( info, str );
 
@@ -407,7 +409,7 @@ public:
 			throw exception_t( string_t( SL( "Value for the tag \"" ) ) +
 				name() + SL( "\" already defined. In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 	}
 
 private:
@@ -425,7 +427,7 @@ static const pos_t c_max_string_length = 80;
 //! Tag with bool value.
 template<>
 class tag_scalar_t< string_t >
-	:	public Tag
+	:	public tag_t
 {
 public:
 	explicit tag_scalar_t( const string_t & name, bool is_mandatory = false )
@@ -498,10 +500,10 @@ public:
 
 		if( is_defined() )
 		{
-			result.push_back( string_t( indent, c_tab ) );
+			result.append( string_t( indent, c_tab ) );
 
 			result.push_back( c_begin_tag );
-			result.push_back( name() );
+			result.append( name() );
 			result.push_back( c_space );
 
 			string_t value = format_t< string_t >::to_string( m_value );
@@ -520,15 +522,15 @@ public:
 					{
 						result.push_back( c_carriage_return );
 
-						result.push_back( string_t( indent, c_tab ) );
+						result.append( string_t( indent, c_tab ) );
 
-						result.push_back( spaces );
+						result.append( spaces );
 					}
 
 					const string_t tmp = to_cfgfile_format(
 						value.substr( i * c_max_string_length, c_max_string_length ) );
 
-					result.push_back( tmp );
+					result.append( tmp );
 				}
 			}
 			else
@@ -542,9 +544,9 @@ public:
 				result.push_back( c_carriage_return );
 
 				for( const tag_t * tag : children() )
-					result.push_back( tag->print( indent + 1 ) );
+					result.append( tag->print( indent + 1 ) );
 
-				result.push_back( string_t( indent, c_tab ) );
+				result.append( string_t( indent, c_tab ) );
 			}
 
 			result.push_back( c_end_tag );
@@ -593,14 +595,14 @@ public:
 					m_value + SL( "\". Value must match to the constraint in tag \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 
 		if( !is_defined() )
 			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
 				name() + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
@@ -609,7 +611,7 @@ public:
 					tag->name() + SL( "\". Where parent is: \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 	}
 
@@ -622,11 +624,11 @@ public:
 				SL( "\" for tag \"" ) + name() +
 				SL( "\" must be defined before any child tag. In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 
 		const string_t value = format_t< string_t >::from_string( info, str );
 
-		m_value.push_back( value );
+		m_value.append( value );
 
 		set_defined();
 	}

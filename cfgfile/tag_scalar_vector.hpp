@@ -59,7 +59,7 @@ namespace cfgfile {
 
 //! Tag with multiple scalar values.
 template< class T >
-class tag_scalar_vector_t final
+class tag_scalar_vector_t
 	:	public tag_t
 {
 public:
@@ -84,7 +84,7 @@ public:
 	}
 
 	//! \return Amount of the values.
-	values_vector_t::size_type
+	typename values_vector_t::size_type
 	size() const
 	{
 		return m_values.size();
@@ -92,7 +92,7 @@ public:
 
 	//! \return Value with the given index.
 	const T &
-	at( values_vector_t::size_type index ) const
+	at( typename values_vector_t::size_type index ) const
 	{
 		return m_values.at( index );
 	}

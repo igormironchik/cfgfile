@@ -69,15 +69,15 @@ string_t to_cfgfile_format( const string_t & what )
 		for( const char_t & ch : what )
 		{
 			if( ch == c_quotes )
-				result.push_back( SL( "\\\"" ) );
+				result.append( SL( "\\\"" ) );
 			else if( ch == c_carriage_return )
-				result.push_back( SL( "\\n" ) );
+				result.append( SL( "\\n" ) );
 			else if( ch == c_line_feed )
-				result.push_back( SL( "\\r" ) );
+				result.append( SL( "\\r" ) );
 			else if( ch == c_tab )
-				result.push_back( SL( "\\t" ) );
+				result.append( SL( "\\t" ) );
 			else if( ch == c_back_slash )
-				result.push_back( SL( "\\\\" ) );
+				result.append( SL( "\\\\" ) );
 			else
 				result.push_back( ch );
 		}
@@ -110,11 +110,11 @@ string_t from_cfgfile_format( const string_t & what )
 				str.replace( where, old_value.length(), new_value );
 		};
 
-		replace( result, c_carriage_return, SL( "\\n" ) );
-		replace( result, c_quotes, SL( "\\\"" ) );
-		replace( result, c_line_feed, SL( "\\r" ) );
-		replace( result, c_tab, SL( "\\t" ) );
-		replace( result, c_back_slash, SL( "\\\\" ) );
+		replace( result, string_t( 1, c_carriage_return ), SL( "\\n" ) );
+		replace( result, string_t( 1, c_quotes ), SL( "\\\"" ) );
+		replace( result, string_t( 1, c_line_feed ), SL( "\\r" ) );
+		replace( result, string_t( 1, c_tab ), SL( "\\t" ) );
+		replace( result, string_t( 1, c_back_slash ), SL( "\\\\" ) );
 
 		return result;
 	}
