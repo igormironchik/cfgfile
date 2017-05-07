@@ -44,6 +44,12 @@
 #include <memory>
 #include <stack>
 
+#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+// Qt include.
+#include <QDomDocument>
+#include <QDomElement>
+#endif
+
 
 namespace cfgfile {
 

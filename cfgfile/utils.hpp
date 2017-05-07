@@ -38,7 +38,7 @@
 #include "parser.hpp"
 #include "exceptions.hpp"
 
-#ifdef CFGFILE_QSTRING_BUILD
+#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>

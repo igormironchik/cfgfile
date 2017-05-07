@@ -19,5 +19,4 @@ HEADERS += $$PWD/constraint.hpp \
 	$$PWD/types.hpp \
 	$$PWD/const.hpp
 
-SOURCES += $$PWD/tag.cpp \
-	$$PWD/tag_no_value.cpp
+SOURCES += $$PWD/tag_no_value.cpp
