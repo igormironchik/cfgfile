@@ -32,47 +32,77 @@
 #define CFGFILE__TAG_SCALAR_VECTOR_HPP__INCLUDED
 
 //cfgfile include.
-#include <cfgfile/private/Tag>
-#include <cfgfile/private/Constraint>
-#include <cfgfile/private/Format>
-#include <cfgfile/private/StringFormat>
+#include "tag.hpp"
+#include "constraint.hpp"
+#include "format.hpp"
+#include "string_format.hpp"
+#include "types.hpp"
+#include "exceptions.hpp"
+#include "parser_info.hpp"
 
+#if defined( CFGFILE_string_t_BUILD ) && defined( CFGFILE_XML_BUILD )
 // Qt include.
-#include <QtCore/QVector>
-
+#include <QDomDocument>
+#include <QDomElement>
 #include <QDomText>
+#endif
+
+// C++ include.
+#include <vector>
 
 
 namespace cfgfile {
 
 //
-// TagScalarVector
+// tag_scalar_vector_t
 //
 
 //! Tag with multiple scalar values.
 template< class T >
-class TagScalarVector
-	:	public Tag
+class tag_scalar_vector_t final
+	:	public tag_t
 {
 public:
-	typedef QVector< T > ValuesVector;
+	typedef std::vector< T > values_vector_t;
 
-	explicit TagScalarVector( const QString & name, bool isMandatory = false );
-	TagScalarVector( Tag & owner, const QString & name, bool isMandatory = false );
+	explicit tag_scalar_vector_t( const string_t & name,
+		bool is_mandatory = false )
+		:	tag_t( name, is_mandatory )
+		,	m_constraint( nullptr )
+	{
+	}
 
-	virtual ~TagScalarVector();
+	tag_scalar_vector_t( tag_t & owner, const string_t & name,
+		bool is_mandatory = false )
+		:	tag_t( owner, name, is_mandatory )
+		,	m_constraint( nullptr )
+	{
+	}
+
+	~tag_scalar_vector_t()
+	{
+	}
 
 	//! \return Amount of the values.
-	int
-	size() const;
+	values_vector_t::size_type
+	size() const
+	{
+		return m_values.size();
+	}
 
 	//! \return Value with the given index.
 	const T &
-	at( int index ) const;
+	at( values_vector_t::size_type index ) const
+	{
+		return m_values.at( index );
+	}
 
 	//! \return All values.
-	const ValuesVector &
-	values() const;
+	const values_vector_t &
+	values() const
+	{
+		return m_values;
+	}
 
 	/*!
 		Set value.
@@ -80,11 +110,30 @@ public:
 		Repeatly adds value to the end of vector.
 	*/
 	void
-	setValue( const T & v );
+	set_value( const T & v )
+	{
+		if( m_constraint )
+		{
+			if( !m_constraint->check( v ) )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					format_t< T >::to_string( v ) +
+					SL( "\". Value must match to the constraint in tag \"" ) +
+					name() + SL( "\"." ) );
+		}
+
+		m_values.push_back( v );
+
+		set_defined();
+	}
 
 	//! Set values.
 	void
-	setValues( const ValuesVector & v );
+	set_values( const values_vector_t & v )
+	{
+		m_values = v;
+
+		set_defined();
+	}
 
 	/*!
 		Query optional values.
@@ -94,254 +143,147 @@ public:
 		otherwise nothing with \a receiver will happen.
 	*/
 	void
-	queryOptValues( ValuesVector & receiver );
+	query_opt_values( values_vector_t & receiver )
+	{
+		if( is_defined() )
+			receiver = m_values;
+	}
 
 	//! Set constraint for the tag's value.
 	void
-	setConstraint( Constraint< T > * c );
+	set_constraint( constraint_t< T > * c )
+	{
+		m_constraint = c;
+	}
 
 	//! Print tag to the output.
-	virtual QString print( int indent = 0 ) const;
+	string_t print( int indent = 0 ) const override
+	{
+		string_t result;
 
+		if( is_defined() )
+		{
+			result.push_back( string_t( indent, c_tab ) );
+			result.append( c_begin_tag );
+			result.append( name() );
+
+			for( const T & v : m_values )
+			{
+				result.push_back( c_space );
+
+				string_t value = format_t< T >::to_string( v );
+
+				value = to_cfgfile_format( value );
+
+				result.push_back( value );
+			}
+
+			if( !children().empty() )
+			{
+				result.push_back( c_carriage_return );
+
+				for( const tag_t * tag : children() )
+					result.push_back( tag->print( indent + 1 ) );
+
+				result.push_back( string_t( indent, c_tab ) );
+			}
+
+			result.push_back( c_end_tag );
+			result.push_back( c_carriage_return );
+		}
+
+		return result;
+	}
+
+#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
 	//! Print tag to the output.
-	virtual void print( QDomDocument & doc, QDomElement * parent = 0 ) const;
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
+	{
+		if( is_defined() )
+		{
+			QDomElement this_element = doc.createElement( name() );
 
-	//! Called when tag parsing started.
-	virtual void onStart( const ParserInfo & info );
+			if( !parent )
+				doc.appendChild( this_element );
+			else
+				parent->appendChild( this_element );
+
+			values_vector_t::size_type i = 1;
+
+			for( const T & v : m_values )
+			{
+				string_t value = format_t< T >::to_string( v );
+
+				value = to_cfgfile_format( value );
+
+				QString tmp = value;
+
+				if( tmp.startsWith( quote ) && tmp.endsWith( quote ) )
+					tmp = tmp.mid( 1, tmp.length() - 2 );
+
+				this_element.setAttribute( QString( "a" ) + QString::number( i ),
+					tmp );
+
+				++i;
+			}
+
+			if( !children().empty() )
+			{
+				for( const tag_t * tag : children() )
+					tag->print( doc, &this_element );
+			}
+		}
+	}
+#endif
 
 	//! Called when tag parsing finished.
-	virtual void onFinish( const ParserInfo & info );
+	void on_finish( const parser_info_t & info ) override
+	{
+		for( const tag_t * tag : children() )
+		{
+			if( tag->is_mandatory() && !tag->is_defined() )
+				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + SL( "\". Where parent is: \"" ) +
+					name + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+		}
+	}
 
 	//! Called when string found.
-	virtual void onString( const ParserInfo & info,
-		const QString & str );
+	void on_string( const parser_info_t & info,
+		const string_t & str ) override
+	{
+		if( is_any_child_defined() )
+			throw exception_t( string_t( SL( "Value \"" ) ) + str +
+				SL( "\" for tag \"" ) + name() +
+				SL( "\" must be defined before any child tag. In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				info.line_number() + SL( "." ) );
+
+		const T value = format_t< T >::from_string( info, str );
+
+		if( m_constraint )
+		{
+			if( !m_constraint->check( value ) )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					str + SL( "\". Value must match to the constraint in tag \"" ) +
+					name() + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					info.line_number() + SL( "." ) );
+		}
+
+		m_values.push_back( value );
+
+		set_defined();
+	}
 
 private:
 	//! Value of the tag.
-	ValuesVector m_values;
+	values_vector_t m_values;
 	//! Constraint.
-	Constraint< T > * m_constraint;
-}; // class TagScalarVector
-
-
-template< class T >
-TagScalarVector< T >::TagScalarVector( const QString & name, bool isMandatory )
-	:	Tag( name, isMandatory )
-	,	m_constraint( 0 )
-{
-}
-
-template< class T >
-TagScalarVector< T >::TagScalarVector( Tag & owner, const QString & name, bool isMandatory )
-	:	Tag( owner, name, isMandatory )
-	,	m_constraint( 0 )
-{
-}
-
-template< class T >
-TagScalarVector< T >::~TagScalarVector()
-{
-}
-
-template< class T >
-int
-TagScalarVector< T >::size() const
-{
-	return m_values.size();
-}
-
-template< class T >
-const T &
-TagScalarVector< T >::at( int index ) const
-{
-	return m_values.at( index );
-}
-
-template< class T >
-const typename TagScalarVector< T >::ValuesVector &
-TagScalarVector< T >::values() const
-{
-	return m_values;
-}
-
-template< class T >
-void
-TagScalarVector< T >::setValue( const T & v )
-{
-	if( m_constraint )
-	{
-		if( !m_constraint->check( v ) )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"Value must match to the constraint in tag \"%2\"." )
-					.arg( Format< T >::toString( v ) )
-					.arg( name() ) );
-	}
-
-	m_values.push_back( v );
-
-	setDefined();
-}
-
-template< class T >
-void
-TagScalarVector< T >::setValues( const ValuesVector & v )
-{
-	m_values = v;
-
-	setDefined();
-}
-
-template< class T >
-void
-TagScalarVector< T >::queryOptValues( ValuesVector & receiver )
-{
-	if( isDefined() )
-		receiver = m_values;
-}
-
-template< class T >
-void
-TagScalarVector< T >::setConstraint( Constraint< T > * c )
-{
-	m_constraint = c;
-}
-
-template< class T >
-QString
-TagScalarVector< T >::print( int indent ) const
-{
-	QString result;
-
-	if( isDefined() )
-	{
-		for( int i = 0; i < indent; ++i )
-			result.append( QLatin1String( "\t" ) );
-
-		result.append( QLatin1String( "{" ) );
-		result.append( name() );
-
-		foreach( T v, m_values )
-		{
-			result.append( QLatin1String( " " ) );
-
-			QString value = Format< T >::toString( v );
-			value = tocfgfileFormat( value );
-
-			result.append( value );
-		}
-
-		if( !children().isEmpty() )
-		{
-			result.append( QLatin1String( "\n" ) );
-
-			foreach( Tag * tag, children() )
-				result.append( tag->print( indent + 1 ) );
-
-			for( int i = 0; i < indent; ++i )
-				result.append( QLatin1String( "\t" ) );
-		}
-
-		result.append( QLatin1String( "}\n" ) );
-	}
-
-	return result;
-}
-
-template< class T >
-void
-TagScalarVector< T >::print( QDomDocument & doc, QDomElement * parent ) const
-{
-	if( isDefined() )
-	{
-		QDomElement thisElement = doc.createElement( name() );
-
-		if( !parent )
-			doc.appendChild( thisElement );
-		else
-			parent->appendChild( thisElement );
-
-		unsigned int i = 1;
-
-		foreach( T v, m_values )
-		{
-			QString value = Format< T >::toString( v );
-			value = tocfgfileFormat( value );
-
-			static const QChar quote = QLatin1Char( '"' );
-
-			if( value.startsWith( quote ) && value.endsWith( quote ) )
-				value = value.mid( 1, value.length() - 2 );
-
-			thisElement.setAttribute( QString( "a" ) + QString::number( i ),
-				value );
-
-			++i;
-		}
-
-		if( !children().isEmpty() )
-		{
-			foreach( Tag * tag, children() )
-				tag->print( doc, &thisElement );
-		}
-	}
-}
-
-template< class T >
-void
-TagScalarVector< T >::onStart( const ParserInfo & info )
-{
-	Tag::onStart( info );
-}
-
-template< class T >
-void
-TagScalarVector< T >::onFinish( const ParserInfo & info )
-{
-	foreach( Tag * tag, children() )
-	{
-		if( tag->isMandatory() && !tag->isDefined() )
-			throw Exception( QString( "Undefined child mandatory tag: \"%1\". "
-				"Where parent is: \"%2\". "
-				"In file \"%3\" on line %4." )
-					.arg( tag->name() )
-					.arg( name() )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
-	}
-}
-
-template< class T >
-void
-TagScalarVector< T >::onString( const ParserInfo & info,
-	const QString & str )
-{
-	if( isAnyChildDefined() )
-		throw Exception( QString( "Value \"%1\" for tag \"%2\" "
-			"must be defined before any child tag."
-			"In file \"%3\" on line %4." )
-				.arg( str )
-				.arg( name() )
-				.arg( info.fileName() )
-				.arg( info.lineNumber() ) );
-
-	T value = Format< T >::fromString( info, str );
-
-	if( m_constraint )
-	{
-		if( !m_constraint->check( value ) )
-			throw Exception( QString( "Invalid value: \"%1\". "
-				"Value must match to the constraint in tag \"%2\". "
-				"In file \"%3\" on line %4." )
-					.arg( str )
-					.arg( name() )
-					.arg( info.fileName() )
-					.arg( info.lineNumber() ) );
-	}
-
-	m_values.push_back( value );
-
-	setDefined();
-}
+	constraint_t< T > * m_constraint;
+}; // class tag_scalar_vector_t
 
 } /* namespace cfgfile */
 
