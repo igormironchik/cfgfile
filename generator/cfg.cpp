@@ -208,7 +208,7 @@ field_t::set_name( const std::string & n )
 bool
 field_t::is_constraint_null() const
 {
-	return m_constraint.is_null();
+	return ( m_constraint.get() == nullptr );
 }
 
 const std::shared_ptr< constraint_base_t > &
@@ -416,7 +416,7 @@ class_t::field_by_name( const std::string & n )
 void
 class_t::add_field( const field_t & f )
 {
-	m_fields.append( f );
+	m_fields.push_back( f );
 }
 
 long long
@@ -539,7 +539,7 @@ namespace_t::nested( const std::string & n ) const
 	for( ; it != last; ++it )
 	{
 		if( it->name() == n )
-			res.append( &(*it) );
+			res.push_back( &(*it) );
 	}
 
 	return res;
@@ -559,7 +559,7 @@ namespace_t::nested( const std::string & n )
 	for( ; it != last; ++it )
 	{
 		if( it->name() == n )
-			res.append( &(*it) );
+			res.push_back( &(*it) );
 	}
 
 	return res;
@@ -568,7 +568,7 @@ namespace_t::nested( const std::string & n )
 void
 namespace_t::add_namespace( const namespace_t & n )
 {
-	m_nested_namespaces.append( n );
+	m_nested_namespaces.push_back( n );
 }
 
 const std::list< class_t > &
@@ -616,7 +616,7 @@ namespace_t::class_by_name( const std::string & n )
 void
 namespace_t::add_class( const class_t & c )
 {
-	m_classes.append( c );
+	m_classes.push_back( c );
 }
 
 long long
@@ -723,7 +723,7 @@ model_t::set_global_includes( const std::list< std::string > & inc )
 void
 model_t::add_global_include( const std::string & inc )
 {
-	m_global_includes.append( inc );
+	m_global_includes.push_back( inc );
 }
 
 const std::list< std::string > &
@@ -741,7 +741,7 @@ model_t::set_relative_includes( const std::list< std::string > & inc )
 void
 model_t::add_relative_include( const std::string & inc )
 {
-	m_relative_includes.append( inc );
+	m_relative_includes.push_back( inc );
 }
 
 void extract_and_bind_all_classes( const namespace_t & root,
@@ -753,7 +753,7 @@ void extract_and_bind_all_classes( const namespace_t & root,
 
 		for( ; it != last; ++it )
 		{
-			data.append( &(*it) );
+			data.push_back( &(*it) );
 			it->set_parent_namespace( &root );
 		}
 	}
@@ -793,15 +793,15 @@ model_t::prepare()
 
 	extract_and_bind_all_classes( m_root, sorted );
 
-	std::sort( sorted.begin(), sorted.end(), const_class_ptr_tLess() );
+	std::sort( sorted.begin(), sorted.end(), const_class_ptr_less() );
 
 	unsigned long long index = 1;
 
-	foreach( const const_class_ptr_t & c, sorted )
+	for( const const_class_ptr_t & c : sorted )
 	{
 		c->set_index( index );
 
-		m_indexes.insert( index, c );
+		m_indexes.insert( std::make_pair( index, c ) );
 
 		++index;
 	}
@@ -830,8 +830,8 @@ model_t::next_class( unsigned long long index ) const
 {
 	index += 1;
 
-	if( m_indexes.contains( index ) )
-		return m_indexes[ index ];
+	if( m_indexes.find( index ) != m_indexes.cend() )
+		return m_indexes.at( index );
 	else
 		return 0;
 }
@@ -847,8 +847,8 @@ static inline std::string full_name( const class_t & c,
 	{
 		if( !nm->name().empty() )
 		{
-			name.prepend( c_namespace_separator );
-			name.prepend( nm->name() );
+			name.insert( 0, c_namespace_separator );
+			name.insert( 0, nm->name() );
 		}
 
 		nm = nm->parent_namespace();
@@ -862,33 +862,56 @@ check_is_class_defined( const std::string & class_to_check,
 	const std::string & this_class_name,
 	const std::list< std::string > & prev_defined_classes )
 {
-	const std::list< std::string > to_check = class_to_check.split( c_namespace_separator,
-		std::string::skip_empty_parts );
+	auto split = [] ( const std::string & what, const std::string & with )
+		-> std::list< std::string >
+	{
+		std::list< std::string > res;
 
-	const std::list< std::string > this_class = this_class_name.split( c_namespace_separator,
-		std::string::skip_empty_parts );
+		std::string::size_type pos = 0;
+		std::string::size_type prev = 0;
 
-	const int min = std::min( to_check.size(), this_class.size() );
+		while( ( pos = what.find( with, pos ) ) != std::string::npos )
+		{
+			const std::string value = what.substr( prev, pos - prev );
 
-	foreach( const std::string & c, prev_defined_classes )
+			if( !value.empty() )
+				res.push_back( value );
+
+			pos += with.length();
+
+			prev = pos;
+		}
+
+		return res;
+	};
+
+	const std::list< std::string > to_check =
+		split( class_to_check, c_namespace_separator );
+
+	const std::list< std::string > this_class =
+		split( this_class_name, c_namespace_separator );
+
+	const std::size_t min = std::min( to_check.size(), this_class.size() );
+
+	for( const std::string & c : prev_defined_classes )
 	{
 		std::list< std::string > to_check_tmp = to_check;
 		std::list< std::string > this_class_tmp = this_class;
-		std::list< std::string > class_tmp = c.split( c_namespace_separator,
-			std::string::skip_empty_parts );
+		std::list< std::string > class_tmp =
+			split( c, c_namespace_separator );
 
 		if( to_check_tmp == class_tmp )
 		{
-			const int min_length = std::min( min, class_tmp.size() );
+			const std::size_t min_length = std::min( min, class_tmp.size() );
 
-			for( int i = 1; i < min_length; ++i )
+			for( std::size_t i = 1; i < min_length; ++i )
 			{
-				if( to_check_tmp.first() == this_class_tmp.first() &&
-					to_check_tmp.first() == class_tmp.first() )
+				if( to_check_tmp.front() == this_class_tmp.front() &&
+					to_check_tmp.front() == class_tmp.front() )
 				{
-					to_check_tmp.removeFirst();
-					this_class_tmp.removeFirst();
-					class_tmp.removeFirst();
+					to_check_tmp.erase( to_check_tmp.begin() );
+					this_class_tmp.erase( this_class_tmp.begin() );
+					class_tmp.erase( class_tmp.begin() );
 				}
 				else
 					break;

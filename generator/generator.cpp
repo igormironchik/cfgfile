@@ -117,7 +117,7 @@ static inline void generate_includes( std::ostream & stream,
 		"#include <cfgfile/all.hpp";
 
 	stream << "// C++ include.\n"
-		<< "#include <list>\n\n";
+		<< "#include <vector>\n\n";
 
 	for( const std::string & incl : global_includes )
 		stream << "#include <" << incl << ">\n";
@@ -215,38 +215,38 @@ static inline std::string bool_to_string( bool value )
 static inline void generate_fields_in_ctor( std::ostream & stream,
 	cfg::const_class_ptr_t c )
 {
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.isBase() )
+		if( !f.is_base() )
 		{
 			stream << std::string( "\t\t,\tm_" )
-				<< f.name() << std::string( "( *this, std::string( \"" )
-				<< f.name() << std::string( "\" ), " )
-				<< bool_to_string( f.isRequired() )
+				<< f.name() << std::string( "( *this, cfgfile::string_t( SL( \"" )
+				<< f.name() << std::string( "\" ) ), " )
+				<< bool_to_string( f.is_required() )
 				<< std::string( " )\n" );
 
-			if( !f.isConstraintNull() )
+			if( !f.is_constraint_null() )
 			{
-				Cfg::constraint_base_t * constr = f.constraint().data();
+				cfg::constraint_base_t * constr = f.constraint().get();
 
 				switch( constr->type() )
 				{
-					case Cfg::constraint_base_t::min_max_constraint_type :
+					case cfg::constraint_base_t::min_max_constraint_type :
 					{
-						Cfg::min_max_constraint_t * minMax =
-							static_cast< Cfg::min_max_constraint_t* > ( constr );
+						cfg::min_max_constraint_t * min_max =
+							static_cast< cfg::min_max_constraint_t* > ( constr );
 
 						stream << std::string( "\t\t,\tm_" )
-							<< f.name() << std::string( "Constraint( " )
-							<< minMax->min() << std::string( ", " )
-							<< minMax->max() << std::string( " )\n" );
+							<< f.name() << std::string( "_constraint( " )
+							<< min_max->min() << std::string( ", " )
+							<< min_max->max() << std::string( " )\n" );
 					}
 						break;
 
-					case Cfg::constraint_base_t::one_of_constraint_type :
+					case cfg::constraint_base_t::one_of_constraint_type :
 					{
 						stream << std::string( "\t\t,\tm_" )
-							<< f.name() << std::string( "Constraint()\n" );
+							<< f.name() << std::string( "_constraint()\n" );
 					}
 						break;
 
@@ -260,52 +260,52 @@ static inline void generate_fields_in_ctor( std::ostream & stream,
 
 
 //
-// generateConstraintsInCtor
+// generate_constraints_in_ctor
 //
 
-static inline void generateConstraintsInCtor( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_constraints_in_ctor( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.isConstraintNull() )
+		if( !f.is_constraint_null() )
 		{
-			Cfg::constraint_base_t * constr = f.constraint().data();
+			cfg::constraint_base_t * constr = f.constraint().get();
 
 			switch( constr->type() )
 			{
-				case Cfg::constraint_base_t::min_max_constraint_type :
+				case cfg::constraint_base_t::min_max_constraint_type :
 				{
-					if( !f.isBase() )
+					if( !f.is_base() )
 						stream << std::string( "\t\tm_" )
-							<< f.name() << std::string( ".setConstraint( &m_" )
-							<< f.name() << std::string( "Constraint );\n\n" );
+							<< f.name() << std::string( ".set_constraint( &m_" )
+							<< f.name() << std::string( "_constraint );\n\n" );
 					else
-						stream << std::string( "\t\tsetConstraint( &m_" )
-							<< f.name() << std::string( "Constraint );\n\n" );
+						stream << std::string( "\t\tset_constraint( &m_" )
+							<< f.name() << std::string( "_constraint );\n\n" );
 				}
 					break;
 
-				case Cfg::constraint_base_t::one_of_constraint_type :
+				case cfg::constraint_base_t::one_of_constraint_type :
 				{
-					Cfg::one_of_constraint_t * oneOf =
-						static_cast< Cfg::one_of_constraint_t* > ( constr );
+					cfg::one_of_constraint_t * one_of =
+						static_cast< cfg::one_of_constraint_t* > ( constr );
 
-					foreach( const std::string & s, oneOf->values() )
+					for( const std::string & s : one_of->values() )
 					{
 						stream << std::string( "\t\tm_" )
 							<< f.name()
-							<< std::string( "Constraint.addValue( " )
+							<< std::string( "_constraint.add_value( " )
 							<< s << std::string( " );\n" );
 					}
 
-					if( !f.isBase() )
+					if( !f.is_base() )
 						stream << std::string( "\t\tm_" )
-							<< f.name() << std::string( ".setConstraint( &m_" )
-							<< f.name() << std::string( "Constraint );\n\n" );
+							<< f.name() << std::string( ".set_constraint( &m_" )
+							<< f.name() << std::string( "_constraint );\n\n" );
 					else
-						stream << std::string( "\t\tsetConstraint( &m_" )
-							<< f.name() << std::string( "Constraint );\n\n" );
+						stream << std::string( "\t\tset_constraint( &m_" )
+							<< f.name() << std::string( "_constraint );\n\n" );
 				}
 					break;
 
@@ -314,40 +314,40 @@ static inline void generateConstraintsInCtor( std::ostream & stream,
 			}
 		}
 	}
-} // generateConstraintsInCtor
+} // generate_constraints_in_ctor
 
 
 //
-// generateTypeOfData
+// generate_type_of_data
 //
 
-static inline std::string generateTypeOfData( const Cfg::Field & f )
+static inline std::string generate_type_of_data( const cfg::field_t & f )
 {
 	switch( f.type() )
 	{
-		case Cfg::Field::NoValuefield_type_t :
+		case cfg::field_t::no_value_field_type :
 			return std::string( "bool" );
 
-		case Cfg::Field::CustomTagfield_type_t :
-		case Cfg::Field::Scalarfield_type_t :
+		case cfg::field_t::custom_tag_field_type :
+		case cfg::field_t::scalar_field_type :
 			return f.value_type();
 
-		case Cfg::Field::VectorOfTagsfield_type_t :
-		case Cfg::Field::ScalarVectorfield_type_t :
-			return std::string( "std::list< " ) + f.value_type() + std::string( " >" );
+		case cfg::field_t::vector_of_tags_field_type :
+		case cfg::field_t::scalar_vector_field_type :
+			return std::string( "std::vector< " ) + f.value_type() + std::string( " >" );
 
 		default :
 			return std::string( "void" );
 	}
-} // generateTypeOfData
+} // generate_type_of_data
 
 
 //
-// generateDataClass
+// generate_data_class
 //
 
-static inline void generateDataClass( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_data_class( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
 	stream << std::string( "//\n// " )
 		<< c->name() << std::string( "\n//\n\n" );
@@ -361,9 +361,9 @@ static inline void generateDataClass( std::ostream & stream,
 
 	int i = 0;
 
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.defaultValue().isEmpty() )
+		if( !f.default_value().empty() )
 		{
 			if( i == 0 )
 				stream << std::string( "\t\t:" );
@@ -372,7 +372,7 @@ static inline void generateDataClass( std::ostream & stream,
 
 			stream << std::string( "\tm_" )
 				<< f.name() << std::string( "( " )
-				<< f.defaultValue() << std::string( " )\n" );
+				<< f.default_value() << std::string( " )\n" );
 
 			++i;
 		}
@@ -392,7 +392,7 @@ static inline void generateDataClass( std::ostream & stream,
 
 	i = 0;
 
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
 		if( i == 0 )
 			stream << std::string( "\t\t:" );
@@ -417,7 +417,7 @@ static inline void generateDataClass( std::ostream & stream,
 						  "\t\tif( this != &other )\n"
 						  "\t\t{\n" );
 
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
 		stream << std::string( "\t\t\tm_" )
 			<< f.name() << std::string( " = other." )
@@ -429,12 +429,12 @@ static inline void generateDataClass( std::ostream & stream,
 							 "\t}\n\n" );
 
 	// Getters and setters.
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( f.type() != Cfg::Field::NoValuefield_type_t )
+		if( f.type() != cfg::field_t::no_value_field_type )
 		{
 			stream << std::string( "\tconst " )
-				<< generateTypeOfData( f ) << std::string( " & " )
+				<< generate_type_of_data( f ) << std::string( " & " )
 				<< f.name() << std::string( "() const\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
@@ -442,7 +442,7 @@ static inline void generateDataClass( std::ostream & stream,
 											  "\t}\n" );
 
 			stream << std::string( "\t" )
-				<< generateTypeOfData( f ) << std::string( " & " )
+				<< generate_type_of_data( f ) << std::string( " & " )
 				<< f.name() << std::string( "()\n"
 											  "\t{\n"
 											  "\t\treturn m_" )
@@ -451,7 +451,7 @@ static inline void generateDataClass( std::ostream & stream,
 
 			stream << std::string( "\tvoid " )
 				<< generate_setter_method_name( f.name() )
-				<< std::string( "( const " ) << generateTypeOfData( f )
+				<< std::string( "( const " ) << generate_type_of_data( f )
 				<< std::string( " & v )\n"
 								  "\t{\n"
 								  "\t\tm_" ) << f.name()
@@ -480,45 +480,45 @@ static inline void generateDataClass( std::ostream & stream,
 	// Private members.
 	stream << std::string( "private:\n" );
 
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		stream << std::string( "\t" ) << generateTypeOfData( f )
+		stream << std::string( "\t" ) << generate_type_of_data( f )
 			<< std::string( " m_" ) << f.name()
 			<< std::string( ";\n" );
 	}
 
 	stream << std::string( "}; // class " ) << c->name()
 		<< std::string( "\n\n\n" );
-} // generateDataClass
+} // generate_data_class
 
 
 //
-// generateCfgInit
+// generate_cfg_init
 //
 
-static inline void generateCfgInit( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_cfg_init( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.isBase() )
+		if( !f.is_base() )
 		{
 			switch( f.type() )
 			{
-				case Cfg::Field::NoValuefield_type_t :
+				case cfg::field_t::no_value_field_type :
 				{
 					stream << std::string( "\n\t\tif( m_" )
-						<< f.name() << std::string( ".isDefined() )\n"
+						<< f.name() << std::string( ".is_defined() )\n"
 													  "\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( true );\n\n" );
 				}
 					break;
 
-				case Cfg::Field::Scalarfield_type_t :
+				case cfg::field_t::scalar_field_type :
 				{
 					stream << std::string( "\n\t\tif( m_" )
-						<< f.name() << std::string( ".isDefined() )\n"
+						<< f.name() << std::string( ".is_defined() )\n"
 								"\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( m_" )
@@ -526,52 +526,52 @@ static inline void generateCfgInit( std::ostream & stream,
 				}
 					break;
 
-				case Cfg::Field::ScalarVectorfield_type_t :
+				case cfg::field_t::scalar_vector_field_type :
 				{
 					stream << std::string( "\n\t\tif( m_" )
-						<< f.name() << std::string( ".isDefined() )\n"
+						<< f.name() << std::string( ".is_defined() )\n"
 								"\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( m_" )
-						<< f.name() << std::string( ".values().toList() );\n" );
+						<< f.name() << std::string( ".values() );\n" );
 				}
 					break;
 
-				case Cfg::Field::VectorOfTagsfield_type_t :
+				case cfg::field_t::vector_of_tags_field_type :
 				{
 					stream << std::string( "\n\t\tif( m_" )
-						   << f.name() << std::string( ".isDefined() )\n"
+						   << f.name() << std::string( ".is_defined() )\n"
 								   "\t\t{\n" )
-						<< std::string( "\t\t\tstd::list< " )
+						<< std::string( "\t\t\tstd::vector< " )
 						<< f.value_type() << std::string( " > " )
 						<< f.name() << std::string( "_" )
 						<< generate_tag_name_from_class_name( f.value_type() )
-						<< std::string( "List;\n\n" )
+						<< std::string( "_;\n\n" )
 						<< std::string( "\t\t\tfor( int i = 0; i < m_" )
 						<< f.name() << std::string( ".size(); ++i )\n" )
 						<< std::string( "\t\t\t\t" )
 						<< f.name() << std::string( "_" )
 						<< generate_tag_name_from_class_name( f.value_type() )
-						<< std::string( "List.append( m_" ) << f.name()
-						<< std::string( ".at( i ).getCfg() );\n\n" )
+						<< std::string( "_.push_back( m_" ) << f.name()
+						<< std::string( ".at( i ).get_cfg() );\n\n" )
 						<< std::string( "\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( " )
 						<< f.name() << std::string( "_" )
 						<< generate_tag_name_from_class_name( f.value_type() )
-						<< std::string( "List );\n" )
+						<< std::string( "_ );\n" )
 						<< std::string( "\t\t}\n" );
 				}
 					break;
 
-				case Cfg::Field::CustomTagfield_type_t :
+				case cfg::field_t::custom_tag_field_type :
 				{
 					stream << std::string( "\n\t\tif( m_" )
-						<< f.name() << std::string( ".isDefined() )\n"
+						<< f.name() << std::string( ".is_defined() )\n"
 								"\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( m_" )
-						<< f.name() << std::string( ".getCfg() );\n" );
+						<< f.name() << std::string( ".get_cfg() );\n" );
 				}
 					break;
 
@@ -583,7 +583,7 @@ static inline void generateCfgInit( std::ostream & stream,
 		{
 			switch( f.type() )
 			{
-				case Cfg::Field::Scalarfield_type_t :
+				case cfg::field_t::scalar_field_type :
 				{
 					stream << std::string( "\t\tc." )
 						<< generate_setter_method_name( f.name() )
@@ -591,11 +591,11 @@ static inline void generateCfgInit( std::ostream & stream,
 				}
 					break;
 
-				case Cfg::Field::ScalarVectorfield_type_t :
+				case cfg::field_t::scalar_vector_field_type :
 				{
 					stream << std::string( "\t\tc." )
 						<< generate_setter_method_name( f.name() )
-						<< std::string( "( values().toList() );\n" );
+						<< std::string( "( values() );\n" );
 				}
 					break;
 
@@ -604,75 +604,75 @@ static inline void generateCfgInit( std::ostream & stream,
 			}
 		}
 	}
-} // generateCfgInit
+} // generate_cfg_init
 
 
 //
-// generateCfgSet
+// generate_cfg_set
 //
 
-static inline void generateCfgSet( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_cfg_set( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.isBase() )
+		if( !f.is_base() )
 		{
 			switch( f.type() )
 			{
-				case Cfg::Field::NoValuefield_type_t :
+				case cfg::field_t::no_value_field_type :
 				{
 					stream << std::string( "\n\t\tif( cfg." )
 						<< f.name() << std::string( "() )\n"
 													  "\t\t\tm_" )
-						<< f.name() << std::string( ".setDefined();\n\n" );
+						<< f.name() << std::string( ".set_defined();\n\n" );
 				}
 					break;
 
-				case Cfg::Field::Scalarfield_type_t :
+				case cfg::field_t::scalar_field_type :
 				{
 					stream << std::string( "\t\tm_" )
 						<< f.name()
-						<< std::string( ".setValue( cfg." )
+						<< std::string( ".set_value( cfg." )
 						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
-				case Cfg::Field::ScalarVectorfield_type_t :
+				case cfg::field_t::scalar_vector_field_type :
 				{
 					stream << std::string( "\t\tm_" )
-						<< f.name() << std::string( ".setValues( cfg." )
-						<< f.name() << std::string( "().toVector() );\n" );
+						<< f.name() << std::string( ".set_values( cfg." )
+						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
-				case Cfg::Field::VectorOfTagsfield_type_t :
+				case cfg::field_t::vector_of_tags_field_type :
 				{
-					stream << std::string( "\n\t\tforeach( const " )
-						<< f.value_type() << std::string( " & v, cfg." )
+					stream << std::string( "\n\t\tfor( const " )
+						<< f.value_type() << std::string( " & v : cfg." )
 						<< f.name() << std::string( "() )\n" )
 						<< std::string( "\t\t{\n" )
 						<< std::string( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
-						<< std::string( " >::PointerToTag p(\n" )
+						<< std::string( " >::ptr_to_tag_t p(\n" )
 						<< std::string( "\t\t\t\tnew " )
 						<< generate_class_name( f.value_type() )
 						<< std::string( "( \"" )
 						<< f.name() << std::string( "\", " )
-						<< bool_to_string( f.isRequired() )
+						<< bool_to_string( f.is_required() )
 						<< std::string( " ) );\n\n" )
-						<< std::string( "\t\t\tp->setCfg( v );\n\n" )
+						<< std::string( "\t\t\tp->set_cfg( v );\n\n" )
 						<< std::string( "\t\t\tm_" ) << f.name()
-						<< std::string( ".setValue( p );\n" )
+						<< std::string( ".set_value( p );\n" )
 						<< std::string( "\t\t}\n" );
 				}
 					break;
 
-				case Cfg::Field::CustomTagfield_type_t :
+				case cfg::field_t::custom_tag_field_type :
 				{
 					stream << std::string( "\t\tm_" )
 						<< f.name()
-						<< std::string( ".setCfg( cfg." )
+						<< std::string( ".set_cfg( cfg." )
 						<< f.name() << std::string( "() );\n" );
 				}
 					break;
@@ -685,17 +685,17 @@ static inline void generateCfgSet( std::ostream & stream,
 		{
 			switch( f.type() )
 			{
-				case Cfg::Field::Scalarfield_type_t :
+				case cfg::field_t::scalar_field_type :
 				{
-					stream << std::string( "\t\tsetValue( cfg." )
+					stream << std::string( "\t\tset_value( cfg." )
 						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
-				case Cfg::Field::ScalarVectorfield_type_t :
+				case cfg::field_t::scalar_vector_field_type :
 				{
-					stream << std::string( "\t\tsetValues( cfg." )
-						<< f.name() << std::string( "().toVector() );\n" );
+					stream << std::string( "\t\tset_values( cfg." )
+						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
@@ -705,31 +705,31 @@ static inline void generateCfgSet( std::ostream & stream,
 		}
 	}
 
-	stream << std::string( "\n\t\tsetDefined();\n" );
-} // generateCfgSet
+	stream << std::string( "\n\t\tset_defined();\n" );
+} // generate_cfg_set
 
 
 //
-// generatePrivateTagMembers
+// generate_private_tag_members
 //
 
-static inline void generatePrivateTagMembers( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_private_tag_members( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {
-	foreach( const Cfg::Field & f, c->fields() )
+	for( const cfg::field_t & f : c->fields() )
 	{
-		if( !f.isBase() )
+		if( !f.is_base() )
 		{
 			switch( f.type() )
 			{
-				case Cfg::Field::NoValuefield_type_t :
+				case cfg::field_t::no_value_field_type :
 				{
 					stream << std::string( "\tcfgfile::tag_no_value_t m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
-				case Cfg::Field::Scalarfield_type_t :
+				case cfg::field_t::scalar_field_type :
 				{
 					stream << std::string( "\tcfgfile::tag_scalar_t< " )
 						<< f.value_type() << std::string( " > m_" )
@@ -737,15 +737,15 @@ static inline void generatePrivateTagMembers( std::ostream & stream,
 				}
 					break;
 
-				case Cfg::Field::ScalarVectorfield_type_t :
+				case cfg::field_t::scalar_vector_field_type :
 				{
-					stream << std::string( "\tcfgfile::tag_scalar_tVector< " )
+					stream << std::string( "\tcfgfile::tag_scalar_vector_t< " )
 						<< f.value_type() << std::string( " > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
 
-				case Cfg::Field::VectorOfTagsfield_type_t :
+				case cfg::field_t::vector_of_tags_field_type :
 				{
 					stream << std::string( "\tcfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
@@ -754,7 +754,7 @@ static inline void generatePrivateTagMembers( std::ostream & stream,
 				}
 					break;
 
-				case Cfg::Field::CustomTagfield_type_t :
+				case cfg::field_t::custom_tag_field_type :
 				{
 					stream << std::string( "\t" )
 						<< generate_class_name( f.value_type() )
@@ -768,25 +768,25 @@ static inline void generatePrivateTagMembers( std::ostream & stream,
 			}
 		}
 
-		if( !f.isConstraintNull() )
+		if( !f.is_constraint_null() )
 		{
-			Cfg::constraint_base_t * constr = f.constraint().data();
+			cfg::constraint_base_t * constr = f.constraint().get();
 
 			switch( constr->type() )
 			{
-				case Cfg::constraint_base_t::min_max_constraint_type :
+				case cfg::constraint_base_t::min_max_constraint_type :
 				{
-					stream << std::string( "\tcfgfile::ConstraintMinMax< " )
+					stream << std::string( "\tcfgfile::constraint_min_max_t< " )
 						<< f.value_type() << std::string( " > m_" )
-						<< f.name() << std::string( "Constraint;\n" );
+						<< f.name() << std::string( "_constraint;\n" );
 				}
 					break;
 
-				case Cfg::constraint_base_t::one_of_constraint_type :
+				case cfg::constraint_base_t::one_of_constraint_type :
 				{
 					stream << std::string( "\tcfgfile::constraint_one_of_t< " )
 						<< f.value_type() << std::string( " > m_" )
-						<< f.name() << std::string( "Constraint;\n" );
+						<< f.name() << std::string( "_constraint;\n" );
 				}
 					break;
 
@@ -795,7 +795,7 @@ static inline void generatePrivateTagMembers( std::ostream & stream,
 			}
 		}
 	}
-} // generatePrivateTagMembers
+} // generate_private_tag_members
 
 
 //
@@ -803,139 +803,139 @@ static inline void generatePrivateTagMembers( std::ostream & stream,
 //
 
 static inline void generatetag_class_t( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+	cfg::const_class_ptr_t c )
 {
-	const std::string tagClassName = std::string( "Tag" ) + c->name();
+	const std::string tag_class_name = std::string( "tag_" ) + c->name() + "_t";
 
 	stream << std::string( "//\n"
 							 "// " )
-		<< tagClassName << std::string( "\n"
+		<< tag_class_name << std::string( "\n"
 									   "//\n\n" );
 
-	stream << std::string( "class " ) << tagClassName
+	stream << std::string( "class " ) << tag_class_name
 		<< std::string( "\n"
 						  "\t:\tpublic " );
 
-	const std::string baseTag = generate_base_class_name( c->baseName(),
-		c->baseValueType() );
+	const std::string base_tag = generate_base_class_name( c->base_name(),
+		c->base_value_type() );
 
-	stream << baseTag << std::string( "\n" );
+	stream << base_tag << std::string( "\n" );
 	stream << std::string( "{\n" );
 	stream << std::string( "public:\n" );
 
 	// c_tors.
 	// 1
-	const std::string tagName = generate_tag_name_from_class_name( c->name() );
+	const std::string tag_name = generate_tag_name_from_class_name( c->name() );
 
-	stream << std::string( "\t" ) << tagClassName
+	stream << std::string( "\t" ) << tag_class_name
 		<< std::string( "()\n"
 						  "\t\t:\t" )
-		<< baseTag << std::string( "( std::string( \"" )
-		<< tagName << std::string( "\" ), true )\n" );
+		<< base_tag << std::string( "( cfgfile::string_t( SL( \"" )
+		<< tag_name << std::string( "\" ) ), true )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
 	stream << std::string( "\t{\n" );
 
-	generateConstraintsInCtor( stream, c );
+	generate_constraints_in_ctor( stream, c );
 
 	stream << std::string( "\t}\n\n" );
 
 	// 2
-	stream << std::string( "\texplicit " ) << tagClassName
+	stream << std::string( "\texplicit " ) << tag_class_name
 		<< std::string( "( const " ) << c->name()
 		<< std::string( " & cfg )\n"
 						  "\t\t:\t" )
-		<< baseTag << std::string( "( std::string( \"" )
-		<< tagName << std::string( "\" ), true )\n" );
+		<< base_tag << std::string( "( cfgfile::string_t( SL( \"" )
+		<< tag_name << std::string( "\" ) ), true )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
 	stream << std::string( "\t{\n" );
 
-	generateConstraintsInCtor( stream, c );
+	generate_constraints_in_ctor( stream, c );
 
-	stream << std::string( "\t\tsetCfg( cfg );\n" );
+	stream << std::string( "\t\tset_cfg( cfg );\n" );
 
 	stream << std::string( "\t}\n\n" );
 
 	// 3
-	stream << std::string( "\t" ) << tagClassName
-		<< std::string( "( const std::string & name, bool is_mandatory )\n" )
+	stream << std::string( "\t" ) << tag_class_name
+		<< std::string( "( const cfgfile::string_t & name, bool is_mandatory )\n" )
 		<< std::string( "\t\t:\t" )
-		<< baseTag << std::string( "( name, is_mandatory )\n" );
+		<< base_tag << std::string( "( name, is_mandatory )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
 	stream << std::string( "\t{\n" );
 
-	generateConstraintsInCtor( stream, c );
+	generate_constraints_in_ctor( stream, c );
 
 	stream << std::string( "\t}\n\n" );
 
 	// 4
-	stream << std::string( "\t" ) << tagClassName
-		<< std::string( "( cfgfile::Tag & owner, const std::string & name, "
+	stream << std::string( "\t" ) << tag_class_name
+		<< std::string( "( cfgfile::tag_t & owner, const cfgfile::string_t & name, "
 						  "bool is_mandatory )\n" )
 		<< std::string( "\t\t:\t" )
-		<< baseTag << std::string( "( owner, name, is_mandatory )\n" );
+		<< base_tag << std::string( "( owner, name, is_mandatory )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
 	stream << std::string( "\t{\n" );
 
-	generateConstraintsInCtor( stream, c );
+	generate_constraints_in_ctor( stream, c );
 
 	stream << std::string( "\t}\n\n" );
 
 	// d_tor.
-	stream << std::string( "\t~" ) << tagClassName
+	stream << std::string( "\t~" ) << tag_class_name
 		<< std::string( "()\n" )
 		<< std::string( "\t{\n"
 						  "\t}\n\n" );
 
 	// getter.
 	stream << std::string( "\t" ) << c->name()
-		<< std::string( " getCfg() const\n"
+		<< std::string( " get_cfg() const\n"
 						  "\t{\n"
 						  "\t\t" ) << c->name()
 		<< std::string( " c;\n" );
 
-	generateCfgInit( stream, c );
+	generate_cfg_init( stream, c );
 
 	stream << std::string( "\n\t\treturn c;\n"
 							 "\t}\n\n" );
 
 	// setter.
-	stream << std::string( "\tvoid setCfg( const " )
+	stream << std::string( "\tvoid set_cfg( const " )
 		<< c->name() << std::string( " & cfg )\n"
 									   "\t{\n" );
 
-	generateCfgSet( stream, c );
+	generate_cfg_set( stream, c );
 
 	stream << std::string( "\t}\n\n" );
 
 	// private members.
 	stream << std::string( "private:\n" );
 
-	generatePrivateTagMembers( stream, c );
+	generate_private_tag_members( stream, c );
 
 	stream << std::string( "}; // class " )
-		<< tagClassName << std::string( "\n\n" );
+		<< tag_class_name << std::string( "\n\n" );
 } // generatetag_class_t
 
 
 //
-// generateCppClasses
+// generate_cpp_classes
 //
 
-static inline void generateCppClasses( std::ostream & stream,
-	Cfg::ConstClassPointer c )
+static inline void generate_cpp_classes( std::ostream & stream,
+	cfg::const_class_ptr_t c )
 {	
-	generateDataClass( stream, c );
+	generate_data_class( stream, c );
 
 	generatetag_class_t( stream, c );
-} // generateCppClasses
+} // generate_cpp_classes
 
 void
 cpp_generator_t::generate( std::ostream & stream ) const
@@ -944,9 +944,10 @@ cpp_generator_t::generate( std::ostream & stream ) const
 
 	namespace_stack_t nms;
 
-	Cfg::ConstClassPointer c = 0;
+	cfg::const_class_ptr_t c = 0;
 
-	const std::string guard = m_model.includeGuard() + std::string( "__INCLUDED" );
+	const std::string guard = m_model.include_guard() +
+		std::string( "__INCLUDED" );
 
 	stream << std::string( "\n#ifndef " ) << guard
 		<< std::string( "\n#define " ) << guard
@@ -955,30 +956,30 @@ cpp_generator_t::generate( std::ostream & stream ) const
 	generate_includes( stream, m_model.global_includes(),
 		m_model.relative_includes() );
 
-	while( ( c = m_model.nextClass( index ) ) )
+	while( ( c = m_model.next_class( index ) ) )
 	{
 		++index;
 
 		namespace_stack_t tmp;
 
-		const_namespace_ptr_t n = c->parentNamespace();
+		const_namespace_ptr_t n = c->parent_namespace();
 
 		while( n )
 		{
-			if( !n->name().isEmpty() )
-				tmp.push( n );
+			if( !n->name().empty() )
+				tmp.push_back( n );
 
-			n = n->parentNamespace();
+			n = n->parent_namespace();
 		}
 
-		if( !tmp.isEmpty() )
+		if( !tmp.empty() )
 		{
 			std::reverse( tmp.begin(), tmp.end() );
 
-			while( !nms.isEmpty() && nms.top() != tmp.top() )
+			while( !nms.empty() && nms.back() != tmp.back() )
 				close_namespace( stream, nms );
 
-			if( nms.isEmpty() )
+			if( nms.empty() )
 			{
 				nms.swap( tmp );
 
@@ -987,14 +988,14 @@ cpp_generator_t::generate( std::ostream & stream ) const
 		}
 		else
 		{
-			while( !nms.isEmpty() )
+			while( !nms.empty() )
 				close_namespace( stream, nms );
 		}
 
-		generateCppClasses( stream, c );
+		generate_cpp_classes( stream, c );
 	}
 
-	while( !nms.isEmpty() )
+	while( !nms.empty() )
 		close_namespace( stream, nms );
 
 	stream << std::string( "#endif // " ) << guard

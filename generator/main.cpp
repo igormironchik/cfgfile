@@ -125,16 +125,16 @@ static inline for_generation_t parse_cli( int argc, char ** argv )
 
 	for_generation_t data( input.value(), output.value() );
 
-	if( data.input_file().isEmpty() )
+	if( data.input_file().empty() )
 	{
-		std::cout << "Please specify input file." << endl;
+		std::cout << "Please specify input file." << std::endl;
 
 		exit( 1 );
 	}
 
-	if( data.output_file().isEmpty() )
+	if( data.output_file().empty() )
 	{
-		std::cout << "Please specify output file." << endl;
+		std::cout << "Please specify output file." << std::endl;
 
 		exit( 1 );
 	}
@@ -156,7 +156,7 @@ int main( int argc, char ** argv )
 	}
 	catch( const Args::BaseException & x )
 	{
-		std::cout << x.desc() << endl;
+		std::cout << x.desc() << std::endl;
 
 		return 1;
 	}
@@ -165,7 +165,7 @@ int main( int argc, char ** argv )
 
 	if( !in.good() )
 	{
-		std::cout << "Specified input file doesn't exist." << endl;
+		std::cout << "Specified input file doesn't exist." << std::endl;
 
 		exit( 1 );
 	}
@@ -189,7 +189,7 @@ int main( int argc, char ** argv )
 	{
 		in.close();
 
-		std::cout << x.desc() << endl;
+		std::cout << x.desc() << std::endl;
 
 		return 1;
 	}
@@ -200,7 +200,7 @@ int main( int argc, char ** argv )
 	{
 		cfgfile::generator::cpp_generator_t gen( model );
 
-		gen.generate( stream );
+		gen.generate( out );
 
 		out.close();
 
@@ -209,7 +209,7 @@ int main( int argc, char ** argv )
 	else
 	{
 		std::cout << "Couldn't open output file for writting."
-			<< endl;
+			<< std::endl;
 
 		return 1;
 	}

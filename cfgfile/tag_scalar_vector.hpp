@@ -163,8 +163,8 @@ public:
 
 		if( is_defined() )
 		{
-			result.push_back( string_t( indent, c_tab ) );
-			result.append( c_begin_tag );
+			result.append( string_t( indent, c_tab ) );
+			result.push_back( c_begin_tag );
 			result.append( name() );
 
 			for( const T & v : m_values )
@@ -175,7 +175,7 @@ public:
 
 				value = to_cfgfile_format( value );
 
-				result.push_back( value );
+				result.append( value );
 			}
 
 			if( !children().empty() )
@@ -183,9 +183,9 @@ public:
 				result.push_back( c_carriage_return );
 
 				for( const tag_t * tag : children() )
-					result.push_back( tag->print( indent + 1 ) );
+					result.append( tag->print( indent + 1 ) );
 
-				result.push_back( string_t( indent, c_tab ) );
+				result.append( string_t( indent, c_tab ) );
 			}
 
 			result.push_back( c_end_tag );
@@ -244,9 +244,9 @@ public:
 			if( tag->is_mandatory() && !tag->is_defined() )
 				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
 					tag->name() + SL( "\". Where parent is: \"" ) +
-					name + SL( "\". In file \"" ) +
+					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 	}
 
@@ -259,7 +259,7 @@ public:
 				SL( "\" for tag \"" ) + name() +
 				SL( "\" must be defined before any child tag. In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				info.line_number() + SL( "." ) );
+				std::to_string( info.line_number() ) + SL( "." ) );
 
 		const T value = format_t< T >::from_string( info, str );
 
@@ -270,7 +270,7 @@ public:
 					str + SL( "\". Value must match to the constraint in tag \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 
 		m_values.push_back( value );

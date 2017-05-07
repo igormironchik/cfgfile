@@ -484,7 +484,7 @@ public:
 	void check() const;
 
 	//! Find next class.
-	const_class_ptr_t nextClass( unsigned long long index ) const;
+	const_class_ptr_t next_class( unsigned long long index ) const;
 
 	//! \return Is included something?
 	bool is_included() const;

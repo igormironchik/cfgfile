@@ -158,7 +158,7 @@ public:
 		if( is_defined() )
 		{
 			for( const ptr_to_tag_t & p : m_tags )
-				result.push_back( p->print( indent ) );
+				result.append( p->print( indent ) );
 		}
 
 		return result;
@@ -198,7 +198,7 @@ public:
 					tag->name() + SL( "\". Where parent is: \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					info.line_number() + SL( "." ) );
+					std::to_string( info.line_number() ) + SL( "." ) );
 		}
 
 		set_defined();
