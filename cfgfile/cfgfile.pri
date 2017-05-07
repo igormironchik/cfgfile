@@ -16,4 +16,5 @@ HEADERS += $$PWD/constraint.hpp \
 	$$PWD/tag_vector_of_tags.hpp \
 	$$PWD/utils.hpp \
 	$$PWD/types.hpp \
-	$$PWD/const.hpp
+	$$PWD/const.hpp \
+	$$PWD/all.hpp

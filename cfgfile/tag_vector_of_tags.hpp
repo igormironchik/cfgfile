@@ -57,7 +57,7 @@ namespace cfgfile {
 	\endcode
 */
 template< class T >
-class tag_vector_of_tags_t
+class tag_vector_of_tags_t final
 	:	public tag_t
 {
 public:
