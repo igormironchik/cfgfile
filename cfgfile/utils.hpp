@@ -173,6 +173,7 @@ read_cfgfile(
 		case file_format_t::xml_format :
 		{
 #ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_XML_BUILD
 			QDomDocument doc;
 
 			QString error;
@@ -193,10 +194,14 @@ read_cfgfile(
 
 			parser.parse( file_name );
 #else
+			throw exception_t( string_t( SL( "To use XML format build cfgfile "
+				"with CFGFILE_XML_BUILD" ) ) );
+#endif // CFGFILE_XML_BUILD
+#else
 			throw exception_t( string_t(
 					SL( "XML supported only with Qt. Parsing of file \"" ) ) +
 				file_name + SL( "\" failed." ) );
-#endif
+#endif // CFGFILE_QSTRING_BUILD
 		}
 			break;
 
@@ -233,14 +238,19 @@ write_cfgfile(
 		case file_format_t::xml_format :
 		{
 #ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_XML_BUILD
 			QDomDocument doc;
 
 			tag.print( doc );
 
 			stream << doc.toString( 4 );
 #else
-			static_assert( false, "XML supported only with Qt." );
-#endif
+			throw exception_t( string_t( SL( "To use XML format build cfgfile "
+				"with CFGFILE_XML_BUILD" ) ) );
+#endif // CFGFILE_XML_BUILD
+#else
+			throw exception_t( string_t( SL( "XML supported only with Qt." ) ) );
+#endif // CFGFILE_QSTRING_BUILD
 		}
 			break;
 
