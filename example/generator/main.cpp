@@ -28,41 +28,56 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Qt include.
-#include <QTextStream>
-
 // generator include.
 #include "example.hpp"
+
+// C++ include.
+#include <fstream>
+#include <iostream>
+#include <vector>
 
 
 int main()
 {
-	QTextStream out( stdout );
-
 	generator::B b;
-	b.setIntegerField( 100 );
+	b.set_integerField( 100 );
 
-	QList< generator::A > list;
+	std::vector< generator::A > list;
 	generator::A a;
-	a.setStringField( QLatin1String( "string" ) );
-	list.append( a );
+	a.set_stringField( "string" );
+	list.push_back( a );
 
-	b.setAVector( list );
+	b.set_aVector( list );
+
+	std::ofstream out( "generator.cfg" );
 
 	try {
-		generator::TagB tag( b );
+		generator::tag_B_t tag( b );
 
-		QtConfFile::writeQtConfFile( tag, QLatin1String( "generator.cfg" ),
-			QTextCodec::codecForName( "UTF-8" ) );
+		if( out.good() )
+		{
+			cfgfile::write_cfgfile( tag, out );
+
+			out.close();
+		}
+		else
+		{
+			std::cout << "Fialed to save configuration. Can't open file to write."
+				<< std::endl;
+
+			return 1;
+		}
 	}
-	catch( const QtConfFile::Exception & x )
+	catch( const cfgfile::exception_t & x )
 	{
-		out << x.whatAsQString() << endl;
+		out.close();
+
+		std::cout << x.desc() << std::endl;
 
 		return 1;
 	}
 
-	out << QLatin1String( "Configuration saved to \"generator.cfg\".\n" );
+	std::cout << "Configuration saved to \"generator.cfg\".\n";
 
 	return 0;
 }

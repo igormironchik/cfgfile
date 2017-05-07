@@ -94,14 +94,14 @@ Configuration::operator = ( const Configuration & other )
 
 
 TagVecOfTags::TagVecOfTags( const QString & name, bool isMandatory )
-	:	QtConfFile::TagNoValue( name, isMandatory )
+	:	cfgfile::tag_no_value_t( name, isMandatory )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 {
 }
 
 TagVecOfTags::TagVecOfTags( const Configuration::Pair & pair )
-	:	QtConfFile::TagNoValue( QLatin1String( "vecOfTags" ), true )
+	:	cfgfile::tag_no_value_t( QLatin1String( "vecOfTags" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 {
@@ -129,50 +129,50 @@ TagVecOfTags::pair() const
 //
 
 TagConfiguration::TagConfiguration()
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
+	:	cfgfile::tag_no_value_t( QLatin1String( "cfg" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
 	,	m_constriantForIntValue( 0, 100 )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 	,	m_vecOfTags( *this, QLatin1String( "vecOfTags" ), true )
 {
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str1" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str2" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str3" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str1" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str2" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str3" ) );
 
-	m_listOfStringValues.setConstraint( &m_constraintForListOfStringValues );
-	m_intValue.setConstraint( &m_constriantForIntValue );
+	m_listOfStringValues.set_constraint( &m_constraintForListOfStringValues );
+	m_intValue.set_constraint( &m_constriantForIntValue );
 }
 
 TagConfiguration::TagConfiguration( const Configuration & cfg )
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
+	:	cfgfile::tag_no_value_t( QLatin1String( "cfg" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
 	,	m_constriantForIntValue( 0, 100 )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 	,	m_vecOfTags( *this, QLatin1String( "vecOfTags" ), true )
 {
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str1" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str2" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str3" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str1" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str2" ) );
+	m_constraintForListOfStringValues.add_value( QLatin1String( "str3" ) );
 
-	m_listOfStringValues.setConstraint( &m_constraintForListOfStringValues );
-	m_intValue.setConstraint( &m_constriantForIntValue );
+	m_listOfStringValues.set_constraint( &m_constraintForListOfStringValues );
+	m_intValue.set_constraint( &m_constriantForIntValue );
 
-	m_stringValue.setValue( cfg.m_stringValue );
+	m_stringValue.set_value( cfg.m_stringValue );
 
 	foreach( QString str, cfg.m_listOfStringValues )
-		m_listOfStringValues.setValue( str );
+		m_listOfStringValues.set_value( str );
 
-	m_intValue.setValue( cfg.m_intValue );
+	m_intValue.set_value( cfg.m_intValue );
 
 	foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
 	{
-		QSharedPointer< TagVecOfTags > p( new TagVecOfTags( pair ) );
-		m_vecOfTags.setValue( p );
+		std::shared_ptr< TagVecOfTags > p( new TagVecOfTags( pair ) );
+		m_vecOfTags.set_value( p );
 	}
 
-	setDefined();
+	set_defined();
 }
 
 Configuration
@@ -184,9 +184,8 @@ TagConfiguration::configuration() const
 	cfg.m_listOfStringValues = m_listOfStringValues.values();
 	cfg.m_intValue = m_intValue.value();
 
-	foreach( QtConfFile::TagVectorOfTags< TagVecOfTags >::PointerToTag p,
-		m_vecOfTags.values() )
-			cfg.m_vectorOfTags.push_back( p->pair() );
+	foreach( auto p, m_vecOfTags.values() )
+		cfg.m_vectorOfTags.push_back( p->pair() );
 
 	return cfg;
 }

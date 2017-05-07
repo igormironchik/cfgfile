@@ -246,7 +246,7 @@ public:
 					tag->name() + SL( "\". Where parent is: \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 	}
 
@@ -259,7 +259,7 @@ public:
 				SL( "\" for tag \"" ) + name() +
 				SL( "\" must be defined before any child tag. In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 
 		const T value = format_t< T >::from_string( info, str );
 
@@ -270,7 +270,7 @@ public:
 					str + SL( "\". Value must match to the constraint in tag \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 
 		m_values.push_back( value );

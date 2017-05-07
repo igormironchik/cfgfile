@@ -1,4 +1,7 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = generator
+SUBDIRS = generator \
+	example
+
+example.depends = generator

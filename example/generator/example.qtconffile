@@ -3,7 +3,7 @@
 	{namespace generator
 		{class A
 			{tagScalar
-				{valueType QString}
+				{valueType std::string}
 				{name stringField}
 			}
 		}

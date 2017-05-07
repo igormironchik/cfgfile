@@ -86,7 +86,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		int result = value.toInt( &ok );
+		int result = ((QString)value).toInt( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -105,7 +105,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return result;
 		}
@@ -114,7 +114,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -141,7 +141,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		unsigned int result = value.toUInt( &ok );
+		unsigned int result = ((QString)value).toUInt( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -160,7 +160,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -169,7 +169,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -196,7 +196,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		long result = value.toLong( &ok );
+		long result = ((QString)value).toLong( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -215,7 +215,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -224,7 +224,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -251,7 +251,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		unsigned long result = value.toULong( &ok );
+		unsigned long result = ((QString)value).toULong( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -270,7 +270,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned long) result;
 		}
@@ -279,7 +279,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -306,7 +306,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		long long result = value.toLongLong( &ok );
+		long long result = ((QString)value).toLongLong( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -325,7 +325,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return (long long) result;
 		}
@@ -334,7 +334,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -361,7 +361,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		unsigned long long result = value.toULongLong( &ok );
+		unsigned long long result = ((QString)value).toULongLong( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -380,7 +380,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned long long) result;
 		}
@@ -389,7 +389,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -416,7 +416,7 @@ public:
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
-		double result = value.toDouble( &ok );
+		double result = ((QString)value).toDouble( &ok );
 
 		if( !ok )
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
@@ -435,7 +435,7 @@ public:
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -444,7 +444,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 #endif
 	}
@@ -495,7 +495,7 @@ public:
 			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 				value + SL( "\". In file \"" ) +
 				info.file_name() + SL( "\" on line " ) +
-				std::to_string( info.line_number() ) + SL( "." ) );
+				to_string( info.line_number() ) + SL( "." ) );
 	}
 }; // class format_t< bool >
 

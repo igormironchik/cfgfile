@@ -133,7 +133,7 @@ public:
 					SL( "\". Where parent is: \"" ) + name() +
 					SL( "\". In file \"" ) + info.file_name() +
 					SL( "\" on line " ) +
-					std::to_string( info.line_number() ) +
+					pos_to_string( info.line_number() ) +
 					SL( "." ) );
 		}
 
@@ -149,7 +149,7 @@ public:
 				"But we've got this: \"" ) +
 			str + SL( "\". In file \"" ) + info.file_name() +
 			SL( "\" on line " ) +
-			std::to_string( info.line_number() ) +
+			pos_to_string( info.line_number() ) +
 			SL( "." ) );
 	}
 }; // class tag_no_value_t

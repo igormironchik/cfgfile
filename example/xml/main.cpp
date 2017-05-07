@@ -31,13 +31,10 @@
 // Example include.
 #include "cfg.hpp"
 
-// QtConfFile include.
-#include <QtConfFile/Utils>
-#include <QtConfFile/Exceptions>
-
 // Qt include.
-#include <QtCore/QDebug>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QTextStream>
+#include <QFile>
 
 
 int main( int argc, char ** argv )
@@ -47,13 +44,27 @@ int main( int argc, char ** argv )
 
 	TagConfiguration readTag;
 
+	QFile inFile( "example.cfg" );
+
+	if( !inFile.open( QIODevice::ReadOnly | QIODevice::Text ) )
+	{
+		qDebug() << "Can't read file";
+
+		return 1;
+	}
+
 	try {
-		QtConfFile::readQtConfFile( readTag, QLatin1String( "example.cfg" ),
-			QTextCodec::codecForName( "UTF-8" ) );
+		QTextStream stream( &file );
+
+		cfgfile::read_cfgfile( readTag, stream, "example.cfg" );
+
+		inFile.close();
 	}
 	catch( const QtConfFile::Exception & x )
 	{
-		qDebug() << x.whatAsQString();
+		inFile.close();
+
+		qDebug() << x.desc();
 
 		return 1;
 	}
@@ -96,14 +107,28 @@ int main( int argc, char ** argv )
 
 	TagConfiguration writeTag( cfg );
 
-	try {
-		QtConfFile::writeQtConfFile( writeTag, QLatin1String( "new.cfg" ),
-			QTextCodec::codecForName( "UTF-8" ),
-			QtConfFile::FileFormat::XMLFormat );
-	}
-	catch( const QtConfFile::Exception & x )
+	QFile outFile( "new.cfg" );
+
+	if( !outFile.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
 	{
-		qDebug() << x.whatAsQString();
+		qDebug() << "Can't write file";
+
+		return 1;
+	}
+
+	try {
+		QTextStream stream( &outFile );
+
+		cfgfile::write_cfgfile( writeTag, stream,
+			cfgfile::file_format_t::xml_format );
+
+		outFile.close();
+	}
+	catch( const cfgfile::exception_t & x )
+	{
+		outFile.close();
+
+		qDebug() << x.desc();
 
 		return 1;
 	}

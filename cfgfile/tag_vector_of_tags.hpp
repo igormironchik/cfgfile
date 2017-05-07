@@ -198,7 +198,7 @@ public:
 					tag->name() + SL( "\". Where parent is: \"" ) +
 					name() + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +
-					std::to_string( info.line_number() ) + SL( "." ) );
+					pos_to_string( info.line_number() ) + SL( "." ) );
 		}
 
 		set_defined();

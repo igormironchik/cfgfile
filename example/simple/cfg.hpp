@@ -28,24 +28,18 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
-#define QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
+#ifndef cfgfile__EXAMPLE__CFG_HPP__INCLUDED
+#define cfgfile__EXAMPLE__CFG_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/TagNoValue>
-#include <QtConfFile/TagScalar>
-#include <QtConfFile/TagScalarVector>
-#include <QtConfFile/TagVectorOfTags>
-#include <QtConfFile/ConstraintMinMax>
-#include <QtConfFile/ConstraintOneOf>
+// cfgfile include.
+#include <cfgfile/all.hpp>
 
-// Qt include.
-#include <QtCore/QVector>
-#include <QtCore/QString>
+// C++ include.
+#include <vector>
 
 
 //
-// Configuration
+// configuration_t
 //
 
 /*!
@@ -68,36 +62,36 @@
 	}
 	\endverbatim
 */
-struct Configuration {
-	struct Pair {
-		Pair();
-		Pair( const QString & stringValue, int intValue );
+struct configuration_t {
+	struct pair_t {
+		pair_t();
+		pair_t( const std::string & stringValue, int intValue );
 
-		Pair & operator = ( const Pair & other );
+		pair_t & operator = ( const pair_t & other );
 
-		QString m_stringValue;
+		std::string m_stringValue;
 		int m_intValue;
 	}; // struct Pair
 
-	Configuration();
+	configuration_t();
 
-	Configuration & operator = ( const Configuration & other );
+	configuration_t & operator = ( const configuration_t & other );
 
-	QString m_stringValue;
-	QVector< QString > m_listOfStringValues;
+	std::string m_stringValue;
+	std::vector< std::string > m_listOfStringValues;
 	int m_intValue;
-	QVector< Pair > m_vectorOfTags;
-}; // class Configuration
+	std::vector< pair_t > m_vectorOfTags;
+}; // class configuration_t
 
 
 //
-// TagVecOfTags
+// tag_vec_of_tags_t
 //
 
 /*!
 	Tag "vecOfTags" with Configuration::Pair as value.
 
-	This class will be used as template type of QtCOnfFile::TagVectorOfTags:
+	This class will be used as template type of cfgfile::TagVectorOfTags:
 
 	\verbatim
 	{vecOfTags
@@ -106,27 +100,27 @@ struct Configuration {
 	}
 	\endverbatim
 */
-class TagVecOfTags
-	:	public QtConfFile::TagNoValue
+class tag_vec_of_tags_t
+	:	public cfgfile::tag_no_value_t
 {
 public:
 	//! For reading.
-	TagVecOfTags( const QString & name, bool isMandatory );
+	tag_vec_of_tags_t( const std::string & name, bool isMandatory );
 	//! For writing.
-	explicit TagVecOfTags( const Configuration::Pair & pair );
+	explicit tag_vec_of_tags_t( const configuration_t::pair_t & pair );
 
 	//! \return Pair of values.
-	Configuration::Pair
+	configuration_t::pair_t
 	pair() const;
 
 private:
-	QtConfFile::TagScalar< QString > m_stringValue;
-	QtConfFile::TagScalar< int > m_intValue;
-}; // class TagVecOfTags
+	cfgfile::tag_scalar_t< std::string > m_stringValue;
+	cfgfile::tag_scalar_t< int > m_intValue;
+}; // class tag_vec_of_tags_t
 
 
 //
-// TagConfiguration
+// tag_configuration_t
 //
 
 /*!
@@ -149,26 +143,26 @@ private:
 	}
 	\endverbatim
 */
-class TagConfiguration
-	:	public QtConfFile::TagNoValue
+class tag_configuration_t
+	:	public cfgfile::tag_no_value_t
 {
 public:
 	//! For reading.
-	TagConfiguration();
+	tag_configuration_t();
 	//! For writing.
-	explicit TagConfiguration( const Configuration & cfg );
+	explicit tag_configuration_t( const configuration_t & cfg );
 
 	//! \return Configuration.
-	Configuration
+	configuration_t
 	configuration() const;
 
 private:
-	QtConfFile::TagScalar< QString > m_stringValue;
-	QtConfFile::ConstraintOneOf< QString > m_constraintForListOfStringValues;
-	QtConfFile::TagScalarVector< QString > m_listOfStringValues;
-	QtConfFile::ConstraintMinMax< int > m_constriantForIntValue;
-	QtConfFile::TagScalar< int > m_intValue;
-	QtConfFile::TagVectorOfTags< TagVecOfTags > m_vecOfTags;
+	cfgfile::tag_scalar_t< std::string > m_stringValue;
+	cfgfile::constraint_one_of_t< std::string > m_constraintForListOfStringValues;
+	cfgfile::tag_scalar_vector_t< std::string > m_listOfStringValues;
+	cfgfile::constraint_min_max_t< int > m_constriantForIntValue;
+	cfgfile::tag_scalar_t< int > m_intValue;
+	cfgfile::tag_vector_of_tags_t< tag_vec_of_tags_t > m_vecOfTags;
 }; // class TagConfiguration
 
-#endif // QTCONFFILE__EXAMPLE__CFG_HPP__INCLUDED
+#endif // cfgfile__EXAMPLE__CFG_HPP__INCLUDED

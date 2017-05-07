@@ -164,7 +164,7 @@ public:
 					throw exception_t( string_t(
 						SL( "Unrecognized back-slash sequence: \"\\" ) ) +
 						SL( "\". In file \"" ) + m_stream.file_name() +
-						SL( "\" on line " ) + std::to_string( line_number() ) +
+						SL( "\" on line " ) + pos_to_string( line_number() ) +
 						SL( "." ) );
 			}
 			else if( ch == c_begin_tag )
@@ -206,7 +206,7 @@ public:
 					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
 						SL( "New line detected. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + std::to_string( line_number() ) +
+						SL( "\" on line " ) + pos_to_string( line_number() ) +
 						SL( "." ) );
 				else
 					break;
@@ -258,7 +258,7 @@ public:
 					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
 						SL( "End of file riched. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + std::to_string( line_number() ) +
+						SL( "\" on line " ) + pos_to_string( line_number() ) +
 						SL( "." ) );
 				else if( result.empty() )
 					return lexeme_t( lexeme_type_t::null, string_t() );
@@ -330,7 +330,7 @@ private:
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"Unfinished back slash sequence. In file \"" ) ) +
 				m_stream.file_name() + SL( "\" on line " ) +
-				std::to_string( m_stream.line_number() ) + SL( "." ) );
+				pos_to_string( m_stream.line_number() ) + SL( "." ) );
 
 		ch = m_stream.get();
 

@@ -39,6 +39,7 @@
 #include "lex.hpp"
 #include "parser_info.hpp"
 #include "const.hpp"
+#include "string_format.hpp"
 
 // C++ include.
 #include <memory>
@@ -175,7 +176,7 @@ public:
 					lexeme.value() + SL( "\". " ) +
 					SL( "In file \"" ) + file_name +
 					SL( "\" on line " ) +
-					std::to_string( m_lex.input_stream().line_number() ) +
+					pos_to_string( m_lex.input_stream().line_number() ) +
 					SL( "." ) );
 
 
@@ -196,7 +197,7 @@ private:
 					"Undefined mandatory tag \"" ) ) + m_tag.name() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( !m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
 			return false;
@@ -205,7 +206,7 @@ private:
 					"but we've got \"" ) ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 
 		lexeme = m_lex.next_lexeme();
@@ -216,7 +217,7 @@ private:
 				SL( "\", but we've got \"" ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 
 		return true;
@@ -229,20 +230,20 @@ private:
 					"We expected tag name, but we've got start curl brace. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( lexeme.type() == lexeme_type_t::finish )
 			throw exception_t( string_t( SL( "Unexpected finish curl brace. "
 					"We expected tag name, but we've got finish curl brace. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( lexeme.type() == lexeme_type_t::null )
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"In file \"" ) ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 		else if( tag.name() == lexeme.value() )
 		{
@@ -283,7 +284,7 @@ private:
 				SL( "\", but we've got \"" ) + lexeme.value() +
 				SL( "\". In file \"" ) + m_lex.input_stream().file_name() +
 				SL( "\" on line " ) +
-				std::to_string( m_lex.input_stream().line_number() ) +
+				pos_to_string( m_lex.input_stream().line_number() ) +
 				SL( "." ) );
 	}
 
@@ -321,8 +322,8 @@ public:
 		if( element.isNull() && m_tag.is_mandatory() )
 			throw exception_t( string_t( SL( "Unexpected end of file. "
 					"Undefined mandatory tag \"" ) ) + m_tag.name() +
-				SL( "\". In file \"" ) + file_name
-				SL( "\" on line " ) + element.lineNumber() +
+				SL( "\". In file \"" ) + file_name +
+				SL( "\" on line " ) + pos_to_string( element.lineNumber() ) +
 				SL( "." ) );
 
 		if( !element.isNull() )
@@ -330,9 +331,9 @@ public:
 			if( element.tagName() != m_tag.name() )
 				throw exception_t( string_t( SL( "Unexpected tag name. "
 						"We expected \"" ) ) + m_tag.name() +
-					SL( "\", but we've got \"" ) + element.tagName() +
+					SL( "\", but we've got \"" ) + string_t( element.tagName() ) +
 					SL( "\". In file \"" ) + file_name +
-					SL( "\" on line " ) + element.lineNumber() +
+					SL( "\" on line " ) + pos_to_string( element.lineNumber() ) +
 					SL( "." ) );
 
 			m_stack.push( &m_tag );
@@ -375,9 +376,9 @@ private:
 					throw exception_t( string_t( SL( "Unexpected tag name. "
 							"We expected one child tag of tag \"" ) ) +
 						m_stack.top()->name() +
-						SL( "\", but we've got \"" ) + child.tagName() +
+						SL( "\", but we've got \"" ) + string_t( child.tagName() ) +
 						SL( "\". In file \"" ) + file_name +
-						SL( "\" on line " ) + child.lineNumber() +
+						SL( "\" on line " ) + pos_to_string( child.lineNumber() ) +
 						SL( "." ) );
 
 				m_stack.push( tag );
@@ -399,7 +400,7 @@ private:
 								attr.lineNumber(),
 								attr.columnNumber() ),
 							from_cfgfile_format( attr.value()
-								.prepend( c_quote ).append( c_quote ) ) );
+								.prepend( c_quotes ).append( c_quotes ) ) );
 				}
 
 				parse_tag( child, file_name );
@@ -427,9 +428,9 @@ private:
 					throw exception_t( string_t( SL( "Unexpected tag name. "
 							"We expected one child tag of tag \"" ) ) +
 						m_stack.top()->name() +
-						SL( "\", but we've got \"" ) + n.nodeName() +
+						SL( "\", but we've got \"" ) + string_t( n.nodeName() ) +
 						SL( "\". In file \"" ) + file_name +
-						SL( "\" on line " ) + n.lineNumber() +
+						SL( "\" on line " ) + pos_to_string( n.lineNumber() ) +
 						SL( "." ) );
 			}
 		}
