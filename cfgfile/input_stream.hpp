@@ -48,8 +48,14 @@ public:
 	input_stream_t( const string_t & file_name,
 		istream_t & input )
 		:	m_stream( input )
+		,	m_line_number( 0 )
+		,	m_column_number( 0 )
 		,	m_file_name( file_name )
+		,	m_returned_char( 0 )
 	{
+#ifndef CFGFILE_QSTRING_BUILD
+		m_stream >> std::noskipws;
+#endif
 	}
 
 	~input_stream_t()

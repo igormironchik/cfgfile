@@ -84,7 +84,7 @@ static const std::string c_required_tag_name( "required" );
 //! Default value tag name.
 static const std::string c_default_value_tag_name( "defaultValue" );
 //! Value type tag name.
-static const std::string c_value_type_tag_name( "value_type" );
+static const std::string c_value_type_tag_name( "valueType" );
 
 
 //
