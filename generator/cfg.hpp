@@ -32,455 +32,445 @@
 #define CFGFILE__GENERATOR__CFG__CFG_HPP__INCLUDED
 
 // cfgfile include.
-#include <cfgfile/TagNoValue>
-#include <cfgfile/TagScalar>
-#include <cfgfile/TagVectorOfTags>
-#include <cfgfile/TagScalarVector>
-#include <cfgfile/ConstraintOneOf>
+#include <cfgfile/all.hpp>
 
-// Qt include.
-#include <QList>
-#include <QSharedPointer>
-#include <QMap>
-#include <QStringList>
+// C++ include.
+#include <string>
 
 
 namespace cfgfile {
 
-namespace Generator {
+namespace generator {
 
-namespace Cfg {
+namespace cfg {
 
 //! Main cfg tag's name.
-static const QString c_mainCfgTagName = QLatin1String( "forGeneration" );
+static const std::string c_main_cfg_tag_name( "forGeneration" );
 //! Namespace tag's name.
-static const QString c_namespaceTagName = QLatin1String( "namespace" );
+static const std::string c_namespace_tag_name( "namespace" );
 //! Class tag's name.
-static const QString c_classTagName = QLatin1String( "class" );
+static const std::string c_class_tag_name( "class" );
 //! Base class tag's name.
-static const QString c_baseClassTagName = QLatin1String( "base" );
+static const std::string c_base_class_tag_name( "base" );
 //! Name of field tag's name.
-static const QString c_fieldNameTagName = QLatin1String( "name" );
+static const std::string c_field_name_tag_name( "name" );
 //! Min-max constraint tag's name.
-static const QString c_minMaxConstraintTagName =
-	QLatin1String( "minMaxConstraint" );
+static const std::string c_min_max_constraint_tag_name( "minMaxConstraint" );
 //! One-of constraint tag's name.
-static const QString c_oneOfConstraintTagName =
-	QLatin1String( "oneOfConstraint" );
+static const std::string c_one_of_constraint_tag_name( "oneOfConstraint" );
 //! Min tag's name.
-static const QString c_minTagName = QLatin1String( "min" );
+static const std::string c_min_tag_name( "min" );
 //! Max tag's name.
-static const QString c_maxTagName = QLatin1String( "max" );
+static const std::string c_max_tag_name( "max" );
 //! Scalar field tag's name.
-static const QString c_scalarTagName = QLatin1String( "tagScalar" );
+static const std::string c_scalar_tag_name( "tagScalar" );
 //! No-value field tag's name.
-static const QString c_noValueTagName = QLatin1String( "tagNoValue" );
+static const std::string c_no_value_tag_name( "tagNoValue" );
 //! Scalar vector field tag's name.
-static const QString c_scalarVectorTagName = QLatin1String( "tagScalarVector" );
+static const std::string c_scalar_vector_tag_name( "tagScalarVector" );
 //! Vector of tags field tag's name.
-static const QString c_vectorOfTagsTagName = QLatin1String( "tagVectorOfTags" );
+static const std::string c_vector_of_tags_tag_name( "tagVectorOfTags" );
 //! Custom tag field tag's name.
-static const QString c_customTagName = QLatin1String( "tag" );
+static const std::string c_custom_tag_name( "tag" );
 //! Namespace separator.
-static const QString c_namespaceSeparator = QLatin1String( "::" );
+static const std::string c_namespace_separator( "::" );
 //! Global include tag's name.
-static const QString c_globalIncludeTagName = QLatin1String( "globalInclude" );
+static const std::string c_global_include_tag_name( "globalInclude" );
 //! Relative include tag's name.
-static const QString c_relativeIncludeTagName =
-	QLatin1String( "relativeInclude" );
+static const std::string c_relative_include_tag_name( "relativeInclude" );
 //! Required tag name.
-static const QString c_requiredTagName = QLatin1String( "required" );
+static const std::string c_required_tag_name( "required" );
 //! Default value tag name.
-static const QString c_defaultValueTagName = QLatin1String( "defaultValue" );
+static const std::string c_default_value_tag_name( "defaultValue" );
 //! Value type tag name.
-static const QString c_valueTypeTagName = QLatin1String( "valueType" );
+static const std::string c_value_type_tag_name( "value_type" );
 
 
 //
-// ConstraintBase
+// constraint_base_t
 //
 
 //! Base class for constraints.
-class ConstraintBase {
+class constraint_base_t {
 public:
-	ConstraintBase();
-	virtual ~ConstraintBase();
+	constraint_base_t();
+	virtual ~constraint_base_t();
 
 	//! Type of the constraint.
-	enum ConstraintType {
+	enum constraint_type_t {
 		//! Undefined.
-		UndefinedConstraintType = 0,
+		undefined_constraint_type = 0,
 		//! Min-max.
-		MinMaxConstraintType = 1,
+		min_max_constraint_type = 1,
 		//! One of.
-		OneOfConstraintType = 2
-	}; // enum ConstraintType
+		one_of_constraint_type = 2
+	}; // enum constraint_type_t
 
 	//! \return Constraint type.
-	virtual ConstraintType type() const = 0;
-}; // class ConstraintBase
+	virtual constraint_type_t type() const = 0;
+}; // class constraint_base_t
 
 
 //
-// MinMaxConstraint
+// min_max_constraint_t
 //
 
 //! Min-max constraint.
-class MinMaxConstraint
-	:	public ConstraintBase
+class min_max_constraint_t
+	:	public constraint_base_t
 {
 public:
-	MinMaxConstraint( const QString & minValue,
-		const QString & maxValue );
-	virtual ~MinMaxConstraint();
+	min_max_constraint_t( const std::string & minValue,
+		const std::string & maxValue );
+	virtual ~min_max_constraint_t();
 
 	//! \return Constraint type.
-	virtual ConstraintType type() const;
+	virtual constraint_type_t type() const;
 
 	//! \return Min value.
-	const QString & min() const;
+	const std::string & min() const;
 	//! \return Max value.
-	const QString & max() const;
+	const std::string & max() const;
 
 private:
 	//! Min value.
-	QString m_min;
+	std::string m_min;
 	//! Max value.
-	QString m_max;
-}; // class MinMaxConstraint
+	std::string m_max;
+}; // class min_max_constraint_t
 
 
 //
-// OneOfConstraint
+// one_of_constraint_t
 //
 
 //! One of constraint.
-class OneOfConstraint
-	:	public ConstraintBase
+class one_of_constraint_t
+	:	public constraint_base_t
 {
 public:
-	explicit OneOfConstraint( const QStringList & valuesList );
-	virtual ~OneOfConstraint();
+	explicit one_of_constraint_t( const std::list< std::string > & valuesList );
+	virtual ~one_of_constraint_t();
 
 	//! \return Constraint type.
-	virtual ConstraintType type() const;
+	virtual constraint_type_t type() const;
 
 	//! \return List of values.
-	const QStringList & values() const;
+	const std::list< std::string > & values() const;
 
 private:
 	//! List of values.
-	QStringList m_values;
-}; // class OneOfConstraint
+	std::list< std::string > m_values;
+}; // class one_of_constraint_t
 
 
 //
-// Field
+// field_t
 //
 
 //! This is data field in class.
-class Field {
+class field_t {
 public:
 	//! Type of the field.
-	enum FieldType {
+	enum field_type_t {
 		//! Unknown.
-		UnknownFieldType = 0,
+		unknown_field_type = 0,
 		//! Scalar.
-		ScalarFieldType  = 1,
+		scalar_field_type  = 1,
 		//! No value.
-		NoValueFieldType = 2,
+		no_value_field_type = 2,
 		//! Scalar vector.
-		ScalarVectorFieldType = 3,
+		scalar_vector_field_type = 3,
 		//! Vector of tags.
-		VectorOfTagsFieldType = 4,
+		vector_of_tags_field_type = 4,
 		//! Custome tag.
-		CustomTagFieldType = 5
-	}; // enum FieldType
+		custom_tag_field_type = 5
+	}; // enum field_type_t
 
-	Field();
-	~Field();
+	field_t();
+	~field_t();
 
-	Field( const Field & other );
-	Field & operator = ( const Field & other );
+	field_t( const field_t & other );
+	field_t & operator = ( const field_t & other );
 
-	bool operator == ( const QString & n ) const;
+	bool operator == ( const std::string & n ) const;
 
 	//! \return Type of the field.
-	FieldType type() const;
+	field_type_t type() const;
 	//! Set type of the field.
-	void setType( FieldType t );
+	void set_type( field_type_t t );
 
 	//! \return Type of the field's value.
-	const QString & valueType() const;
+	const std::string & value_type() const;
 	//! Set type of the field's value.
-	void setValueType( const QString & t );
+	void set_value_type( const std::string & t );
 
 	//! \return Name of the field.
-	const QString & name() const;
+	const std::string & name() const;
 	//! Set name of the field.
-	void setName( const QString & n );
+	void set_name( const std::string & n );
 
 	//! \return Is constraint null.
-	bool isConstraintNull() const;
+	bool is_constraint_null() const;
 
 	//! \return Constraint.
-	const QSharedPointer< ConstraintBase > & constraint() const;
+	const std::shared_ptr< constraint_base_t > & constraint() const;
 	//! Set constraint.
-	void setConstraint( const QSharedPointer< ConstraintBase > & c );
+	void set_constraint( const std::shared_ptr< constraint_base_t > & c );
 
 	//! \return Line number.
-	qint64 lineNumber() const;
+	long long line_number() const;
 	//! Set line number.
-	void setLineNumber( qint64 num );
+	void set_line_number( long long num );
 
 	//! \return Column number.
-	qint64 columnNumber() const;
+	long long column_number() const;
 	//! Set column number.
-	void setColumnNumber( qint64 num );
+	void set_column_number( long long num );
 
 	//! \return Is field required?
-	bool isRequired() const;
+	bool is_required() const;
 	//! Set requreid.
-	void setRequired( bool on = true );
+	void set_required( bool on = true );
 
 	//! \return Default value for the field.
-	const QString & defaultValue() const;
+	const std::string & default_value() const;
 	//! Set default value.
-	void setDefaultValue( const QString & value );
+	void set_default_value( const std::string & value );
 
 	//! \return Is this field the base of class?
-	bool isBase() const;
+	bool is_base() const;
 	//! Set that this field is the base of class.
-	void setBase( bool on = true );
+	void set_base( bool on = true );
 
 private:
 	//! Type
-	FieldType m_type;
+	field_type_t m_type;
 	//! Value's type.
-	QString m_valueType;
+	std::string m_value_type;
 	//! Name.
-	QString m_name;
+	std::string m_name;
 	//! Constraint.
-	QSharedPointer< ConstraintBase > m_constraint;
+	std::shared_ptr< constraint_base_t > m_constraint;
 	//! Line number.
-	qint64 m_lineNumber;
+	long long m_line_number;
 	//! Column number.
-	qint64 m_columnNumber;
+	long long m_column_number;
 	//! Is required?
-	bool m_isRequired;
+	bool m_is_required;
 	//! Default value.
-	QString m_defaultValue;
+	std::string m_default_value;
 	//! Is base of class?
-	bool m_isBase;
-}; // class Field
+	bool m_is_base;
+}; // class field_t
 
 
-class Namespace;
+class namespace_t;
 
 
 //
-// Class
+// class_t
 //
 
 //! This is data structure uses to store class.
-class Class {
+class class_t {
 public:
-	Class();
-	~Class();
+	class_t();
+	~class_t();
 
-	Class( const Class & other );
-	Class & operator = ( const Class & other );
+	class_t( const class_t & other );
+	class_t & operator = ( const class_t & other );
 
-	bool operator == ( const QString & n ) const;
+	bool operator == ( const std::string & n ) const;
 
 	//! \return Name of the class.
-	const QString & name() const;
+	const std::string & name() const;
 	//! Set name of the class.
-	void setName( const QString & n );
+	void set_name( const std::string & n );
 
 	//! \return Base class name.
-	const QString & baseName() const;
+	const std::string & base_name() const;
 	//! Set base class name.
-	void setBaseName( const QString & n );
+	void set_base_name( const std::string & n );
 
 	//! \return Base value type.
-	const QString & baseValueType() const;
+	const std::string & base_value_type() const;
 	//! Set base value type.
-	void setBaseValueType( const QString & t );
+	void set_base_value_type( const std::string & t );
 
 	//! \return all fields.
-	const QList< Field > & fields() const;
+	const std::list< field_t > & fields() const;
 
 	//! \return Field with the given name.
-	const Field * fieldByName( const QString & n ) const;
+	const field_t * field_by_name( const std::string & n ) const;
 	//! \return Field with the given name.
-	Field * fieldByName( const QString & n );
+	field_t * field_by_name( const std::string & n );
 
 	//! Add field.
-	void addField( const Field & f );
+	void add_field( const field_t & f );
 
 	//! \return Line number.
-	qint64 lineNumber() const;
+	long long line_number() const;
 	//! Set line number.
-	void setLineNumber( qint64 num );
+	void set_line_number( long long num );
 
 	//! \return Column number.
-	qint64 columnNumber() const;
+	long long column_number() const;
 	//! Set column number.
-	void setColumnNumber( qint64 num );
+	void set_column_number( long long num );
 
 	//! \return Index.
-	quint64 index() const;
+	unsigned long long index() const;
 
 	//! \return Parent namespace.
-	const Namespace * parentNamespace() const;
+	const namespace_t * parent_namespace() const;
 
 protected:
-	friend class Model;
+	friend class model_t;
 
-	friend void extractAndBindAllClasses( const Namespace & root,
-		QList< const Class* > & data );
+	friend void extract_and_bind_all_classes( const namespace_t & root,
+		std::list< const class_t* > & data );
 
 	//! Set parent namespace.
-	void setParentNamespace( const Namespace * p ) const;
+	void set_parent_namespace( const namespace_t * p ) const;
 
 	//! Set index.
-	void setIndex( quint64 i ) const;
+	void set_index( unsigned long long i ) const;
 
 private:
 	//! Name of the class.
-	QString m_name;
+	std::string m_name;
 	//! Base class name.
-	QString m_baseName;
+	std::string m_base_name;
 	//! Base value type.
-	QString m_baseValueType;
+	std::string m_base_value_type;
 	//! Fields.
-	QList< Field > m_fields;
+	std::list< field_t > m_fields;
 	//! Line number.
-	qint64 m_lineNumber;
+	long long m_line_number;
 	//! Column number.
-	qint64 m_columnNumber;
+	long long m_column_number;
 
 	//! Index.
-	mutable quint64 m_index;
+	mutable unsigned long long m_index;
 	//! Parent namespace.
-	mutable const Namespace * m_parent;
-}; // class Class
+	mutable const namespace_t * m_parent;
+}; // class class_t
 
 
 //
-// Namespace
+// namespace_t
 //
 
 //! This data structure uses to store namespaces.
-class Namespace {
+class namespace_t {
 public:
-	Namespace();
-	~Namespace();
+	namespace_t();
+	~namespace_t();
 
-	Namespace( const Namespace & other );
-	Namespace & operator = ( const Namespace & other );
+	namespace_t( const namespace_t & other );
+	namespace_t & operator = ( const namespace_t & other );
 
 	//! \return Name.
-	const QString & name() const;
+	const std::string & name() const;
 	//! Set name.
-	void setName( const QString & n );
+	void set_name( const std::string & n );
 
 	//! \return All nested namespaces.
-	const QList< Namespace > & allNested() const;
+	const std::list< namespace_t > & all_nested() const;
 
 	//! \return Nested namespace with the given name.
-	QList< const Namespace* > nested( const QString & n ) const;
+	std::list< const namespace_t* > nested( const std::string & n ) const;
 	//! \return Nested namespace with the given name.
-	QList< Namespace* > nested( const QString & n );
+	std::list< namespace_t* > nested( const std::string & n );
 
 	//! Add namespace.
-	void addNamespace( const Namespace & n );
+	void add_namespace( const namespace_t & n );
 
 	//! \return all classes.
-	const QList< Class > & classes() const;
+	const std::list< class_t > & classes() const;
 
 	//! \return Class with the given name.
-	const Class * classByName( const QString & n ) const;
+	const class_t * class_by_name( const std::string & n ) const;
 	//! \return Class with the given name.
-	Class * classByName( const QString & n );
+	class_t * class_by_name( const std::string & n );
 
 	//! Add class.
-	void addClass( const Class & c );
+	void add_class( const class_t & c );
 
 	//! \return Line number.
-	qint64 lineNumber() const;
+	long long line_number() const;
 	//! Set line number.
-	void setLineNumber( qint64 num );
+	void set_line_number( long long num );
 
 	//! \return Column number.
-	qint64 columnNumber() const;
+	long long column_number() const;
 	//! Set column number.
-	void setColumnNumber( qint64 num );
+	void set_column_number( long long num );
 
 	//! \return Parent namespace.
-	const Namespace * parentNamespace() const;
+	const namespace_t * parent_namespace() const;
 
 protected:
-	friend void extractAndBindAllClasses( const Namespace & root,
-		QList< const Class* > & data );
+	friend void extract_and_bind_all_classes( const namespace_t & root,
+		std::list< const class_t* > & data );
 
 	//! Set parent namespace.
-	void setParentNamespace( const Namespace * p ) const;
+	void set_parent_namespace( const namespace_t * p ) const;
 
 private:
 	//! Namespace name.
-	QString m_name;
+	std::string m_name;
 	//! Nested namespaces.
-	QList< Namespace > m_nestedNamespaces;
+	std::list< namespace_t > m_nested_namespaces;
 	//! Classes in this namespace.
-	QList< Class > m_classes;
+	std::list< class_t > m_classes;
 	//! Line number.
-	qint64 m_lineNumber;
+	long long m_line_number;
 	//! Column number.
-	qint64 m_columnNumber;
+	long long m_column_number;
 
 	//! Parent namespace.
-	mutable const Namespace * m_parent;
-}; // class Namespace
+	mutable const namespace_t * m_parent;
+}; // class namespace_t
 
 
-typedef const Class* ConstClassPointer;
+typedef const class_t* const_class_ptr_t;
 
 
 //
-// Model
+// model_t
 //
 
 //! This is model of the configuration uses to generate C++ code.
-class Model {
+class model_t {
 public:
-	Model();
-	~Model();
+	model_t();
+	~model_t();
 
-	Model( const Model & other );
-	Model & operator = ( const Model & other );
+	model_t( const model_t & other );
+	model_t & operator = ( const model_t & other );
 
 	//! \return Root namespace.
-	const Namespace & rootNamespace() const;
+	const namespace_t & root_namespace() const;
 	//! \return Root namespace.
-	Namespace & rootNamespace();
+	namespace_t & root_namespace();
 	//! Set root namespace.
-	void setRootNamespace( const Namespace & n );
+	void set_root_namespace( const namespace_t & n );
 
 	//! \return List of global includes.
-	const QStringList & globalIncludes() const;
+	const std::list< std::string > & global_includes() const;
 	//! Set list of global includes.
-	void setGlobalIncludes( const QStringList & inc );
+	void set_global_includes( const std::list< std::string > & inc );
 	//! Add global include.
-	void addGlobalInclude( const QString & inc );
+	void add_global_include( const std::string & inc );
 
 	//! \return List of relative includes.
-	const QStringList & relativeIncludes() const;
+	const std::list< std::string > & relative_includes() const;
 	//! Set list of relative includes.
-	void setRelativeIncludes( const QStringList & inc );
+	void set_relative_includes( const std::list< std::string > & inc );
 	//! Add relative include.
-	void addRelativeInclude( const QString & inc );
+	void add_relative_include( const std::string & inc );
 
 	//! Prepare model. After call of this method modifications not
 	//! allowed. If you modified something you have to re-call
@@ -493,235 +483,235 @@ public:
 	void check() const;
 
 	//! Find next class.
-	ConstClassPointer nextClass( quint64 index ) const;
+	const_class_ptr_t nextClass( unsigned long long index ) const;
 
 	//! \return Is included something?
-	bool isIncluded() const;
+	bool is_included() const;
 
 	//! \return Macro for include guard.
-	const QString & includeGuard() const;
+	const std::string & include_guard() const;
 	//! Set include guard.
-	void setIncludeGuard( const QString & guard );
+	void set_include_guard( const std::string & guard );
 
 private:
 	//! Check class.
-	void checkClass( const Class & c,
-		QStringList & prevDefinedClasses,
+	void check_class( const class_t & c,
+		std::list< std::string > & prev_defined_classes,
 		bool included ) const;
 
 private:
 	//! Root namespace, i.e. ::
-	Namespace m_root;
+	namespace_t m_root;
 	//! List of global includes.
-	QStringList m_globalIncludes;
+	std::list< std::string > m_global_includes;
 	//! List of relative includes.
-	QStringList m_relativeIncludes;
+	std::list< std::string > m_relative_includes;
 	//! Include guard.
-	QString m_includeGuard;
+	std::string m_include_guard;
 
 	//! Prepared data.
-	QMap< quint64, ConstClassPointer > m_indexes;
+	std::map< unsigned long long, const_class_ptr_t > m_indexes;
 }; // class Model
 
 
 //
-// TagMinMaxConstraint
+// tag_min_max_constraint_t
 //
 
-//! Tag for MinMaxConstraint.
-class TagMinMaxConstraint
-	:	public cfgfile::TagNoValue
+//! Tag for min_max_constraint_t.
+class tag_min_max_constraint_t
+	:	public cfgfile::tag_no_value_t
 {
 public:
-	explicit TagMinMaxConstraint( cfgfile::Tag & owner );
-	~TagMinMaxConstraint();
+	explicit tag_min_max_constraint_t( cfgfile::tag_t & owner );
+	~tag_min_max_constraint_t();
 
 	//! \return Constraint.
-	QSharedPointer< MinMaxConstraint > cfg() const;
+	std::shared_ptr< min_max_constraint_t > cfg() const;
 
 private:
 	//! Min value.
-	cfgfile::TagScalar< QString > m_min;
+	cfgfile::tag_scalar_t< std::string > m_min;
 	//! Max value.
-	cfgfile::TagScalar< QString > m_max;
-}; // class TagMinMaxConstraint
+	cfgfile::tag_scalar_t< std::string > m_max;
+}; // class tag_min_max_constraint_t
 
 
 //
-// TagOneOfConstraint
+// tag_one_of_constraint_t
 //
 
-//! Tag for OneOfConstraint.
-class TagOneOfConstraint
-	:	public cfgfile::TagScalarVector< QString >
+//! Tag for one_of_constraint_t.
+class tag_one_of_constraint_t
+	:	public cfgfile::tag_scalar_tVector< std::string >
 {
 public:
-	explicit TagOneOfConstraint( cfgfile::Tag & owner );
-	~TagOneOfConstraint();
+	explicit tag_one_of_constraint_t( cfgfile::Tag & owner );
+	~tag_one_of_constraint_t();
 
 	//! \return Constraint.
-	QSharedPointer< OneOfConstraint > cfg() const;
-}; // class TagOneOfConstraint
+	std::shared_ptr< one_of_constraint_t > cfg() const;
+}; // class tag_one_of_constraint_t
 
 
 //
-// TagField
+// tag_field_t
 //
 
 //! Tag for Field.
-class TagField
-	:	public cfgfile::TagNoValue
+class tag_field_t
+	:	public cfgfile::tag_no_value_t
 {
 public:
-	TagField( const QString & name, bool isMandatory );
-	~TagField();
+	tag_field_t( const std::string & name, bool is_mandatory );
+	~tag_field_t();
 
 	//! \return Field.
-	Field cfg() const;
+	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void onFinish( const ParserInfo & info );
+	void on_finish( const parser_info_t & info );
 
 private:
 	//! Name.
-	cfgfile::TagScalar< QString > m_name;
+	cfgfile::tag_scalar_t< std::string > m_name;
 	//! Value type.
-	cfgfile::TagScalar< QString > m_valueType;
+	cfgfile::tag_scalar_t< std::string > m_value_type;
 	//! Min-max constraint.
-	TagMinMaxConstraint m_minMaxConstraint;
+	tag_min_max_constraint_t m_min_max_constraint;
 	//! One of constraint.
-	TagOneOfConstraint m_oneOfConstraint;
+	tag_one_of_constraint_t m_one_of_constraint;
 	//! Is required?
-	cfgfile::TagNoValue m_isRequired;
+	cfgfile::tag_no_value_t m_is_required;
 	//! Default value.
-	cfgfile::TagScalar< QString > m_defaultValue;
-}; // class TagField
+	cfgfile::tag_scalar_t< std::string > m_default_value;
+}; // class tag_field_t
 
 
 //
-// TagBaseClass
+// tag_base_class_t
 //
 
-class TagBaseClass
-	:	public cfgfile::TagScalar< QString >
+class tag_base_class_t
+	:	public cfgfile::tag_scalar_t< std::string >
 {
 public:
-	TagBaseClass( cfgfile::Tag & owner, const QString & name,
-		bool isMandatory );
-	~TagBaseClass();
+	tag_base_class_t( cfgfile::tag_t & owner, const std::string & name,
+		bool is_mandatory );
+	~tag_base_class_t();
 
 	//! \return Value type.
-	QString valueType() const;
+	std::string value_type() const;
 
 	//! \return Field.
-	Field cfg() const;
+	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void onFinish( const ParserInfo & info );
+	void on_finish( const parser_info_t & info );
 
 private:
 	//! Value type.
-	cfgfile::TagScalar< QString > m_valueType;
+	cfgfile::tag_scalar_t< std::string > m_value_type;
 	//! Constraint.
-	cfgfile::ConstraintOneOf< QString > m_constraint;
+	cfgfile::constraint_one_of_t< std::string > m_constraint;
 	//! Name.
-	cfgfile::TagScalar< QString > m_name;
+	cfgfile::tag_scalar_t< std::string > m_name;
 	//! Min-max constraint.
-	TagMinMaxConstraint m_minMaxConstraint;
+	tag_min_max_constraint_t m_min_max_constraint;
 	//! One of constraint.
-	TagOneOfConstraint m_oneOfConstraint;
+	tag_one_of_constraint_t m_one_of_constraint;
 	//! Is required?
-	cfgfile::TagNoValue m_isRequired;
+	cfgfile::tag_no_value_t m_is_required;
 	//! Default value.
-	cfgfile::TagScalar< QString > m_defaultValue;
-}; // class TagBaseClass
+	cfgfile::tag_scalar_t< std::string > m_default_value;
+}; // class tag_base_class_t
 
 
 //
-// TagClass
+// tag_class_t
 //
 
 //! Tag for Class.
-class TagClass
-	:	public cfgfile::TagScalar< QString >
+class tag_class_t
+	:	public cfgfile::tag_scalar_t< std::string >
 {
 public:
-	TagClass( const QString & name, bool isMandatory );
-	~TagClass();
+	tag_class_t( const std::string & name, bool is_mandatory );
+	~tag_class_t();
 
 	//! \return Class.
-	Class cfg() const;
+	class_t cfg() const;
 
 private:
 	//! Base class name.
-	TagBaseClass m_baseClassName;
+	tag_base_class_t m_base_class_name;
 	//! Scalar tags.
-	cfgfile::TagVectorOfTags< TagField > m_scalarTags;
+	cfgfile::tag_vector_of_tags_t< tag_field_t > m_scalar_tags;
 	//! No-value tags.
-	cfgfile::TagVectorOfTags< TagField > m_noValueTags;
+	cfgfile::tag_vector_of_tags_t< tag_field_t > m_no_value_tags;
 	//! Scalar-vector tags.
-	cfgfile::TagVectorOfTags< TagField > m_scalarVectorTags;
+	cfgfile::tag_vector_of_tags_t< tag_field_t > m_scalar_vector_tags;
 	//! Vector-of-tags tags.
-	cfgfile::TagVectorOfTags< TagField > m_vectorOfTagsTags;
+	cfgfile::tag_vector_of_tags_t< tag_field_t > m_vector_of_tags_tags;
 	//! Custom tags.
-	cfgfile::TagVectorOfTags< TagField > m_customTags;
-}; // class TagScalar
+	cfgfile::tag_vector_of_tags_t< tag_field_t > m_custom_tags;
+}; // class tag_scalar_t
 
 
 //
-// TagNamespace
+// tag_namespace_t
 //
 
 //! Tag for Namespace.
-class TagNamespace
-	:	public cfgfile::TagScalar< QString >
+class tag_namespace_t
+	:	public cfgfile::tag_scalar_t< std::string >
 {
 public:
-	TagNamespace( const QString & name, bool isMandatory );
-	~TagNamespace();
+	tag_namespace_t( const std::string & name, bool is_mandatory );
+	~tag_namespace_t();
 
 	//! \return Namespace.
-	Namespace cfg() const;
+	namespace_t cfg() const;
 
 private:
 	//! Nested namespaces.
-	cfgfile::TagVectorOfTags< TagNamespace > m_nestedNamespaces;
+	cfgfile::tag_vector_of_tags_t< tag_namespace_t > m_nested_namespaces;
 	//! Classes.
-	cfgfile::TagVectorOfTags< TagClass > m_classes;
-}; // class TagNamespace
+	cfgfile::tag_vector_of_tags_t< tag_class_t > m_classes;
+}; // class tag_namespace_t
 
 
 //
-// TagModel
+// tag_model_t
 //
 
 //! Tag for Model.
-class TagModel
-	:	public cfgfile::TagScalar< QString >
+class tag_model_t
+	:	public cfgfile::tag_scalar_t< std::string >
 {
 public:
-	TagModel();
-	~TagModel();
+	tag_model_t();
+	~tag_model_t();
 
 	//! \return Model.
-	Model cfg() const;
+	model_t cfg() const;
 
 private:
 	//! Root namespace.
-	cfgfile::TagVectorOfTags< TagNamespace > m_rootNamespace;
+	cfgfile::tag_vector_of_tags_t< tag_namespace_t > m_root_namespace;
 	//! Classes in root namespace.
-	cfgfile::TagVectorOfTags< TagClass > m_rootClasses;
+	cfgfile::tag_vector_of_tags_t< tag_class_t > m_root_classes;
 	//! Global includes.
-	cfgfile::TagVectorOfTags< cfgfile::TagScalar< QString > >
-		m_globalIncludes;
+	cfgfile::tag_vector_of_tags_t< cfgfile::tag_scalar_t< std::string > >
+		m_global_includes;
 	//! Relative includes.
-	cfgfile::TagVectorOfTags< cfgfile::TagScalar< QString > >
-		m_relativeIncludes;
-}; // class TagModel
+	cfgfile::tag_vector_of_tags_t< cfgfile::tag_scalar_t< std::string > >
+		m_relative_includes;
+}; // class tag_model_t
 
-} /* namespace Cfg */
+} /* namespace cfg */
 
-} /* namespace Generator */
+} /* namespace generator */
 
 } /* namespace cfgfile */
 

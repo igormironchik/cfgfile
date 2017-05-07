@@ -28,11 +28,8 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Generator cfg include.
+// generator_t cfg include.
 #include "cfg.hpp"
-
-// cfgfile include.
-#include <cfgfile/Exceptions>
 
 // C++ include.
 #include <algorithm>
@@ -40,292 +37,292 @@
 
 namespace cfgfile {
 
-namespace Generator {
+namespace generator {
 
-namespace Cfg {
-
-//
-// ConstraintBase
-//
-
-ConstraintBase::ConstraintBase()
-{
-}
-
-ConstraintBase::~ConstraintBase()
-{
-}
-
+namespace cfg {
 
 //
-// MinMaxConstraint
+// constraint_base_t
 //
 
-MinMaxConstraint::MinMaxConstraint( const QString & minValue,
-	const QString & maxValue )
-	:	m_min( minValue )
-	,	m_max( maxValue )
+constraint_base_t::constraint_base_t()
 {
 }
 
-MinMaxConstraint::~MinMaxConstraint()
+constraint_base_t::~constraint_base_t()
 {
 }
 
-ConstraintBase::ConstraintType
-MinMaxConstraint::type() const
+
+//
+// min_max_constraint_t
+//
+
+min_max_constraint_t::min_max_constraint_t( const std::string & min_value,
+	const std::string & max_value )
+	:	m_min( min_value )
+	,	m_max( max_value )
 {
-	return MinMaxConstraintType;
 }
 
-const QString &
-MinMaxConstraint::min() const
+min_max_constraint_t::~min_max_constraint_t()
+{
+}
+
+constraint_base_t::constraint_type_t
+min_max_constraint_t::type() const
+{
+	return min_max_constraint_type;
+}
+
+const std::string &
+min_max_constraint_t::min() const
 {
 	return m_min;
 }
 
-const QString &
-MinMaxConstraint::max() const
+const std::string &
+min_max_constraint_t::max() const
 {
 	return m_max;
 }
 
 
 //
-// OneOfConstraint
+// one_of_constraint_t
 //
 
-OneOfConstraint::OneOfConstraint( const QStringList & valuesList )
-	:	m_values( valuesList )
+one_of_constraint_t::one_of_constraint_t( const std::list< std::string > & values )
+	:	m_values( values )
 {
 }
 
-OneOfConstraint::~OneOfConstraint()
+one_of_constraint_t::~one_of_constraint_t()
 {
 
 }
 
-ConstraintBase::ConstraintType
-OneOfConstraint::type() const
+constraint_base_t::constraint_type_t
+one_of_constraint_t::type() const
 {
-	return OneOfConstraintType;
+	return one_of_constraint_type;
 }
 
-const QStringList &
-OneOfConstraint::values() const
+const std::list< std::string > &
+one_of_constraint_t::values() const
 {
 	return m_values;
 }
 
 
 //
-// Field
+// field_t
 //
 
-Field::Field()
-	:	m_lineNumber( -1 )
-	,	m_columnNumber( -1 )
-	,	m_isRequired( false )
-	,	m_isBase( false )
+field_t::field_t()
+	:	m_line_number( -1 )
+	,	m_column_number( -1 )
+	,	m_is_required( false )
+	,	m_is_base( false )
 {
 }
 
-Field::~Field()
+field_t::~field_t()
 {
 }
 
-Field::Field( const Field & other )
+field_t::field_t( const field_t & other )
 	:	m_type( other.type() )
-	,	m_valueType( other.valueType() )
+	,	m_value_type( other.value_type() )
 	,	m_name( other.name() )
 	,	m_constraint( other.constraint() )
-	,	m_lineNumber( other.lineNumber() )
-	,	m_columnNumber( other.columnNumber() )
-	,	m_isRequired( other.isRequired() )
-	,	m_defaultValue( other.defaultValue() )
-	,	m_isBase( other.isBase() )
+	,	m_line_number( other.line_number() )
+	,	m_column_number( other.column_number() )
+	,	m_is_required( other.is_required() )
+	,	m_default_value( other.default_value() )
+	,	m_is_base( other.is_base() )
 {
 }
 
-Field &
-Field::operator = ( const Field & other )
+field_t &
+field_t::operator = ( const field_t & other )
 {
 	if( this != & other )
 	{
 		m_type = other.type();
-		m_valueType = other.valueType();
+		m_value_type = other.value_type();
 		m_name = other.name();
 		m_constraint = other.constraint();
-		m_lineNumber = other.lineNumber();
-		m_columnNumber = other.columnNumber();
-		m_isRequired = other.isRequired();
-		m_defaultValue = other.defaultValue();
-		m_isBase = other.isBase();
+		m_line_number = other.line_number();
+		m_column_number = other.column_number();
+		m_is_required = other.is_required();
+		m_default_value = other.default_value();
+		m_is_base = other.is_base();
 	}
 
 	return *this;
 }
 
 bool
-Field::operator == ( const QString & n ) const
+field_t::operator == ( const std::string & n ) const
 {
 	return ( name() == n );
 }
 
-Field::FieldType
-Field::type() const
+field_t::field_type_t
+field_t::type() const
 {
 	return m_type;
 }
 
 void
-Field::setType( FieldType t )
+field_t::set_type( field_type_t t )
 {
 	m_type = t;
 }
 
-const QString &
-Field::valueType() const
+const std::string &
+field_t::value_type() const
 {
-	return m_valueType;
+	return m_value_type;
 }
 
 void
-Field::setValueType( const QString & t )
+field_t::set_value_type( const std::string & t )
 {
-	m_valueType = t;
+	m_value_type = t;
 }
 
-const QString &
-Field::name() const
+const std::string &
+field_t::name() const
 {
 	return m_name;
 }
 
 void
-Field::setName( const QString & n )
+field_t::set_name( const std::string & n )
 {
 	m_name = n;
 }
 
 bool
-Field::isConstraintNull() const
+field_t::is_constraint_null() const
 {
-	return m_constraint.isNull();
+	return m_constraint.is_null();
 }
 
-const QSharedPointer< ConstraintBase > &
-Field::constraint() const
+const std::shared_ptr< constraint_base_t > &
+field_t::constraint() const
 {
 	return m_constraint;
 }
 
 void
-Field::setConstraint( const QSharedPointer< ConstraintBase > & c )
+field_t::set_constraint( const std::shared_ptr< constraint_base_t > & c )
 {
 	m_constraint = c;
 }
 
-qint64
-Field::lineNumber() const
+long long
+field_t::line_number() const
 {
-	return m_lineNumber;
+	return m_line_number;
 }
 
 void
-Field::setLineNumber( qint64 num )
+field_t::set_line_number( long long num )
 {
-	m_lineNumber = num;
+	m_line_number = num;
 }
 
-qint64
-Field::columnNumber() const
+long long
+field_t::column_number() const
 {
-	return m_columnNumber;
+	return m_column_number;
 }
 
 void
-Field::setColumnNumber( qint64 num )
+field_t::set_column_number( long long num )
 {
-	m_columnNumber = num;
+	m_column_number = num;
 }
 
 bool
-Field::isRequired() const
+field_t::is_required() const
 {
-	return m_isRequired;
+	return m_is_required;
 }
 
 void
-Field::setRequired( bool on )
+field_t::set_required( bool on )
 {
-	m_isRequired = on;
+	m_is_required = on;
 }
 
-const QString &
-Field::defaultValue() const
+const std::string &
+field_t::default_value() const
 {
-	return m_defaultValue;
+	return m_default_value;
 }
 
 void
-Field::setDefaultValue( const QString & value )
+field_t::set_default_value( const std::string & value )
 {
-	m_defaultValue = value;
+	m_default_value = value;
 }
 
 bool
-Field::isBase() const
+field_t::is_base() const
 {
-	return m_isBase;
+	return m_is_base;
 }
 
 void
-Field::setBase( bool on )
+field_t::set_base( bool on )
 {
-	m_isBase = on;
+	m_is_base = on;
 }
 
 
 //
-// Class
+// class_t
 //
 
-Class::Class()
-	:	m_baseName( c_noValueTagName )
-	,	m_lineNumber( -1 )
-	,	m_columnNumber( -1 )
+class_t::class_t()
+	:	m_base_name( c_no_value_tag_name )
+	,	m_line_number( -1 )
+	,	m_column_number( -1 )
 	,	m_index( 0 )
 	,	m_parent( 0 )
 {
 }
 
-Class::~Class()
+class_t::~class_t()
 {
 }
 
-Class::Class( const Class & other )
+class_t::class_t( const class_t & other )
 	:	m_name( other.name() )
-	,	m_baseName( other.baseName() )
-	,	m_baseValueType( other.baseValueType() )
+	,	m_base_name( other.base_name() )
+	,	m_base_value_type( other.base_value_type() )
 	,	m_fields( other.fields() )
-	,	m_lineNumber( other.lineNumber() )
-	,	m_columnNumber( other.columnNumber() )
+	,	m_line_number( other.line_number() )
+	,	m_column_number( other.column_number() )
 	,	m_index( other.index() )
 {
 }
 
-Class &
-Class::operator = ( const Class & other )
+class_t &
+class_t::operator = ( const class_t & other )
 {
 	if( this != &other )
 	{
 		m_name = other.name();
-		m_baseName = other.baseName();
-		m_baseValueType = other.baseValueType();
+		m_base_name = other.base_name();
+		m_base_value_type = other.base_value_type();
 		m_fields = other.fields();
-		m_lineNumber = other.lineNumber();
-		m_columnNumber = other.columnNumber();
+		m_line_number = other.line_number();
+		m_column_number = other.column_number();
 		m_index = other.index();
 	}
 
@@ -333,61 +330,61 @@ Class::operator = ( const Class & other )
 }
 
 bool
-Class::operator == ( const QString & n ) const
+class_t::operator == ( const std::string & n ) const
 {
 	return ( name() == n );
 }
 
-const QString &
-Class::name() const
+const std::string &
+class_t::name() const
 {
 	return m_name;
 }
 
 void
-Class::setName( const QString & n )
+class_t::set_name( const std::string & n )
 {
 	m_name = n;
 }
 
-const QString &
-Class::baseName() const
+const std::string &
+class_t::base_name() const
 {
-	return m_baseName;
+	return m_base_name;
 }
 
 void
-Class::setBaseName( const QString & n )
+class_t::set_base_name( const std::string & n )
 {
-	m_baseName = n;
+	m_base_name = n;
 }
 
-const QString &
-Class::baseValueType() const
+const std::string &
+class_t::base_value_type() const
 {
-	return m_baseValueType;
+	return m_base_value_type;
 }
 
 void
-Class::setBaseValueType( const QString & t )
+class_t::set_base_value_type( const std::string & t )
 {
-	m_baseValueType = t;
+	m_base_value_type = t;
 }
 
-const QList< Field > &
-Class::fields() const
+const std::list< field_t > &
+class_t::fields() const
 {
 	return m_fields;
 }
 
-const Field *
-Class::fieldByName( const QString & n ) const
+const field_t *
+class_t::field_by_name( const std::string & n ) const
 {
-	if( n.isEmpty() )
+	if( n.empty() )
 		return 0;
 
-	QList< Field >::ConstIterator it = m_fields.constBegin();
-	QList< Field >::ConstIterator last = m_fields.constEnd();
+	std::list< field_t >::const_iterator it = m_fields.cbegin();
+	std::list< field_t >::const_iterator last = m_fields.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -398,14 +395,14 @@ Class::fieldByName( const QString & n ) const
 	return 0;
 }
 
-Field *
-Class::fieldByName( const QString & n )
+field_t *
+class_t::field_by_name( const std::string & n )
 {
-	if( n.isEmpty() )
+	if( n.empty() )
 		return 0;
 
-	QList< Field >::Iterator it = m_fields.begin();
-	QList< Field >::Iterator last = m_fields.end();
+	std::list< field_t >::iterator it = m_fields.begin();
+	std::list< field_t >::iterator last = m_fields.end();
 
 	for( ; it != last; ++it )
 	{
@@ -417,127 +414,127 @@ Class::fieldByName( const QString & n )
 }
 
 void
-Class::addField( const Field & f )
+class_t::add_field( const field_t & f )
 {
 	m_fields.append( f );
 }
 
-qint64
-Class::lineNumber() const
+long long
+class_t::line_number() const
 {
-	return m_lineNumber;
+	return m_line_number;
 }
 
 void
-Class::setLineNumber( qint64 num )
+class_t::set_line_number( long long num )
 {
-	m_lineNumber = num;
+	m_line_number = num;
 }
 
-qint64
-Class::columnNumber() const
+long long
+class_t::column_number() const
 {
-	return m_columnNumber;
+	return m_column_number;
 }
 
 void
-Class::setColumnNumber( qint64 num )
+class_t::set_column_number( long long num )
 {
-	m_columnNumber = num;
+	m_column_number = num;
 }
 
-quint64
-Class::index() const
+unsigned long long
+class_t::index() const
 {
 	return m_index;
 }
 
 void
-Class::setIndex( quint64 i ) const
+class_t::set_index( unsigned long long i ) const
 {
 	m_index=  i;
 }
 
-const Namespace *
-Class::parentNamespace() const
+const namespace_t *
+class_t::parent_namespace() const
 {
 	return m_parent;
 }
 
 void
-Class::setParentNamespace( const Namespace * p ) const
+class_t::set_parent_namespace( const namespace_t * p ) const
 {
 	m_parent = p;
 }
 
 
 //
-// Namespace
+// namespace_t
 //
 
-Namespace::Namespace()
-	:	m_lineNumber( -1 )
-	,	m_columnNumber( -1 )
+namespace_t::namespace_t()
+	:	m_line_number( -1 )
+	,	m_column_number( -1 )
 	,	m_parent( 0 )
 {
 }
 
-Namespace::~Namespace()
+namespace_t::~namespace_t()
 {
 }
 
-Namespace::Namespace( const Namespace & other )
+namespace_t::namespace_t( const namespace_t & other )
 	:	m_name( other.name() )
-	,	m_nestedNamespaces( other.allNested() )
+	,	m_nested_namespaces( other.all_nested() )
 	,	m_classes( other.classes() )
-	,	m_lineNumber( other.lineNumber() )
-	,	m_columnNumber( other.columnNumber() )
+	,	m_line_number( other.line_number() )
+	,	m_column_number( other.column_number() )
 {
 }
 
-Namespace &
-Namespace::operator = ( const Namespace & other )
+namespace_t &
+namespace_t::operator = ( const namespace_t & other )
 {
 	if( this != &other )
 	{
 		m_name = other.name();
-		m_nestedNamespaces = other.allNested();
+		m_nested_namespaces = other.all_nested();
 		m_classes = other.classes();
-		m_lineNumber = other.lineNumber();
-		m_columnNumber = other.columnNumber();
+		m_line_number = other.line_number();
+		m_column_number = other.column_number();
 	}
 
 	return *this;
 }
 
-const QString &
-Namespace::name() const
+const std::string &
+namespace_t::name() const
 {
 	return m_name;
 }
 
 void
-Namespace::setName( const QString & n )
+namespace_t::set_name( const std::string & n )
 {
 	m_name = n;
 }
 
-const QList< Namespace > &
-Namespace::allNested() const
+const std::list< namespace_t > &
+namespace_t::all_nested() const
 {
-	return m_nestedNamespaces;
+	return m_nested_namespaces;
 }
 
-QList< const Namespace* >
-Namespace::nested( const QString & n ) const
+std::list< const namespace_t* >
+namespace_t::nested( const std::string & n ) const
 {
-	QList< const Namespace* > res;
+	std::list< const namespace_t* > res;
 
-	if( n.isEmpty() )
+	if( n.empty() )
 		return res;
 
-	QList< Namespace >::ConstIterator it = m_nestedNamespaces.constBegin();
-	QList< Namespace >::ConstIterator last = m_nestedNamespaces.constEnd();
+	std::list< namespace_t >::const_iterator it = m_nested_namespaces.cbegin();
+	std::list< namespace_t >::const_iterator last = m_nested_namespaces.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -548,16 +545,16 @@ Namespace::nested( const QString & n ) const
 	return res;
 }
 
-QList< Namespace* >
-Namespace::nested( const QString & n )
+std::list< namespace_t* >
+namespace_t::nested( const std::string & n )
 {
-	QList< Namespace* > res;
+	std::list< namespace_t* > res;
 
-	if( n.isEmpty() )
+	if( n.empty() )
 		return res;
 
-	QList< Namespace >::Iterator it = m_nestedNamespaces.begin();
-	QList< Namespace >::Iterator last = m_nestedNamespaces.end();
+	std::list< namespace_t >::iterator it = m_nested_namespaces.begin();
+	std::list< namespace_t >::iterator last = m_nested_namespaces.end();
 
 	for( ; it != last; ++it )
 	{
@@ -569,25 +566,25 @@ Namespace::nested( const QString & n )
 }
 
 void
-Namespace::addNamespace( const Namespace & n )
+namespace_t::add_namespace( const namespace_t & n )
 {
-	m_nestedNamespaces.append( n );
+	m_nested_namespaces.append( n );
 }
 
-const QList< Class > &
-Namespace::classes() const
+const std::list< class_t > &
+namespace_t::classes() const
 {
 	return m_classes;
 }
 
-const Class *
-Namespace::classByName( const QString & n ) const
+const class_t *
+namespace_t::class_by_name( const std::string & n ) const
 {
-	if( n.isEmpty() )
+	if( n.empty() )
 		return 0;
 
-	QList< Class >::ConstIterator it = m_classes.constBegin();
-	QList< Class >::ConstIterator last = m_classes.constEnd();
+	std::list< class_t >::const_iterator it = m_classes.cbegin();
+	std::list< class_t >::const_iterator last = m_classes.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -598,14 +595,14 @@ Namespace::classByName( const QString & n ) const
 	return 0;
 }
 
-Class *
-Namespace::classByName( const QString & n )
+class_t *
+namespace_t::class_by_name( const std::string & n )
 {
-	if( n.isEmpty() )
+	if( n.empty() )
 		return 0;
 
-	QList< Class >::Iterator it = m_classes.begin();
-	QList< Class >::Iterator last = m_classes.end();
+	std::list< class_t >::iterator it = m_classes.begin();
+	std::list< class_t >::iterator last = m_classes.end();
 
 	for( ; it != last; ++it )
 	{
@@ -617,192 +614,192 @@ Namespace::classByName( const QString & n )
 }
 
 void
-Namespace::addClass( const Class & c )
+namespace_t::add_class( const class_t & c )
 {
 	m_classes.append( c );
 }
 
-qint64
-Namespace::lineNumber() const
+long long
+namespace_t::line_number() const
 {
-	return m_lineNumber;
+	return m_line_number;
 }
 
 void
-Namespace::setLineNumber( qint64 num )
+namespace_t::set_line_number( long long num )
 {
-	m_lineNumber = num;
+	m_line_number = num;
 }
 
-qint64
-Namespace::columnNumber() const
+long long
+namespace_t::column_number() const
 {
-	return m_columnNumber;
+	return m_column_number;
 }
 
 void
-Namespace::setColumnNumber( qint64 num )
+namespace_t::set_column_number( long long num )
 {
-	m_columnNumber = num;
+	m_column_number = num;
 }
 
-const Namespace *
-Namespace::parentNamespace() const
+const namespace_t *
+namespace_t::parent_namespace() const
 {
 	return m_parent;
 }
 
 void
-Namespace::setParentNamespace( const Namespace * p ) const
+namespace_t::set_parent_namespace( const namespace_t * p ) const
 {
 	m_parent = p;
 }
 
 
 //
-// Model
+// model_t
 //
 
-Model::Model()
+model_t::model_t()
 {
 }
 
-Model::~Model()
+model_t::~model_t()
 {
 }
 
-Model::Model( const Model & other )
-	:	m_root( other.rootNamespace() )
-	,	m_globalIncludes( other.globalIncludes() )
-	,	m_relativeIncludes( other.relativeIncludes() )
-	,	m_includeGuard( other.includeGuard() )
+model_t::model_t( const model_t & other )
+	:	m_root( other.root_namespace() )
+	,	m_global_includes( other.global_includes() )
+	,	m_relative_includes( other.relative_includes() )
+	,	m_include_guard( other.include_guard() )
 {
 }
 
-Model &
-Model::operator = ( const Model & other )
+model_t &
+model_t::operator = ( const model_t & other )
 {
 	if( this != &other )
 	{
-		m_root = other.rootNamespace();
-		m_globalIncludes = other.globalIncludes();
-		m_relativeIncludes = other.relativeIncludes();
-		m_includeGuard = other.includeGuard();
+		m_root = other.root_namespace();
+		m_global_includes = other.global_includes();
+		m_relative_includes = other.relative_includes();
+		m_include_guard = other.include_guard();
 	}
 
 	return *this;
 }
 
-const Namespace &
-Model::rootNamespace() const
+const namespace_t &
+model_t::root_namespace() const
 {
 	return m_root;
 }
 
-Namespace &
-Model::rootNamespace()
+namespace_t &
+model_t::root_namespace()
 {
 	return m_root;
 }
 
 void
-Model::setRootNamespace( const Namespace & n )
+model_t::set_root_namespace( const namespace_t & n )
 {
 	m_root = n;
 }
 
-const QStringList &
-Model::globalIncludes() const
+const std::list< std::string > &
+model_t::global_includes() const
 {
-	return m_globalIncludes;
+	return m_global_includes;
 }
 
 void
-Model::setGlobalIncludes( const QStringList & inc )
+model_t::set_global_includes( const std::list< std::string > & inc )
 {
-	m_globalIncludes = inc;
+	m_global_includes = inc;
 }
 
 void
-Model::addGlobalInclude( const QString & inc )
+model_t::add_global_include( const std::string & inc )
 {
-	m_globalIncludes.append( inc );
+	m_global_includes.append( inc );
 }
 
-const QStringList &
-Model::relativeIncludes() const
+const std::list< std::string > &
+model_t::relative_includes() const
 {
-	return m_relativeIncludes;
-}
-
-void
-Model::setRelativeIncludes( const QStringList & inc )
-{
-	m_relativeIncludes = inc;
+	return m_relative_includes;
 }
 
 void
-Model::addRelativeInclude( const QString & inc )
+model_t::set_relative_includes( const std::list< std::string > & inc )
 {
-	m_relativeIncludes.append( inc );
+	m_relative_includes = inc;
 }
 
-void extractAndBindAllClasses( const Namespace & root,
-	QList< ConstClassPointer > & data )
+void
+model_t::add_relative_include( const std::string & inc )
+{
+	m_relative_includes.append( inc );
+}
+
+void extract_and_bind_all_classes( const namespace_t & root,
+	std::list< const_class_ptr_t > & data )
 {
 	{
-		QList< Class >::ConstIterator it = root.classes().constBegin();
-		QList< Class >::ConstIterator last = root.classes().constEnd();
+		std::list< class_t >::const_iterator it = root.classes().cbegin();
+		std::list< class_t >::const_iterator last = root.classes().cend();
 
 		for( ; it != last; ++it )
 		{
 			data.append( &(*it) );
-			it->setParentNamespace( &root );
+			it->set_parent_namespace( &root );
 		}
 	}
 
 	{
-		QList< Namespace >::ConstIterator it = root.allNested().constBegin();
-		QList< Namespace >::ConstIterator last = root.allNested().constEnd();
+		std::list< namespace_t >::const_iterator it = root.all_nested().cbegin();
+		std::list< namespace_t >::const_iterator last = root.all_nested().cend();
 
 		for( ; it != last; ++it )
 		{
-			it->setParentNamespace( &root );
-			extractAndBindAllClasses( *it, data );
+			it->set_parent_namespace( &root );
+			extract_and_bind_all_classes( *it, data );
 		}
 
 	}
 }
 
-struct ConstClassPointerLess {
-	bool operator () ( const ConstClassPointer & c1,
-		const ConstClassPointer & c2 )
+struct const_class_ptr_less {
+	bool operator () ( const const_class_ptr_t & c1,
+		const const_class_ptr_t & c2 )
 	{
-		if( c1->lineNumber() < c2->lineNumber() )
+		if( c1->line_number() < c2->line_number() )
 			return true;
-		else if( c1->lineNumber() == c2->lineNumber() )
-			return ( c1->columnNumber() < c2->columnNumber() );
+		else if( c1->line_number() == c2->line_number() )
+			return ( c1->column_number() < c2->column_number() );
 		else
 			return false;
 	}
 };
 
 void
-Model::prepare()
+model_t::prepare()
 {
 	m_indexes.clear();
 
-	QList< ConstClassPointer > sorted;
+	std::list< const_class_ptr_t > sorted;
 
-	extractAndBindAllClasses( m_root, sorted );
+	extract_and_bind_all_classes( m_root, sorted );
 
-	std::sort( sorted.begin(), sorted.end(), ConstClassPointerLess() );
+	std::sort( sorted.begin(), sorted.end(), const_class_ptr_tLess() );
 
-	quint64 index = 1;
+	unsigned long long index = 1;
 
-	foreach( const ConstClassPointer & c, sorted )
+	foreach( const const_class_ptr_t & c, sorted )
 	{
-		c->setIndex( index );
+		c->set_index( index );
 
 		m_indexes.insert( index, c );
 
@@ -811,25 +808,25 @@ Model::prepare()
 }
 
 void
-Model::check() const
+model_t::check() const
 {
-	QStringList classes;
+	std::list< std::string > classes;
 
-	ConstClassPointer c = 0;
+	const_class_ptr_t c = 0;
 
-	quint64 index = 0;
+	unsigned long long index = 0;
 
-	const bool included = isIncluded();
+	const bool included = is_included();
 
-	while( ( c = nextClass( index ) ) )
+	while( ( c = next_class( index ) ) )
 	{
-		checkClass( *c, classes, included );
+		check_class( *c, classes, included );
 		++index;
 	}
 }
 
-ConstClassPointer
-Model::nextClass( quint64 index ) const
+const_class_ptr_t
+model_t::next_class( unsigned long long index ) const
 {
 	index += 1;
 
@@ -839,65 +836,65 @@ Model::nextClass( quint64 index ) const
 		return 0;
 }
 
-static inline QString fullName( const Class & c,
-	const QString & startName = QString() )
+static inline std::string full_name( const class_t & c,
+	const std::string & start_name = std::string() )
 {
-	QString name = ( startName.isEmpty() ? c.name() : startName );
+	std::string name = ( start_name.empty() ? c.name() : start_name );
 
-	const Namespace * nm = c.parentNamespace();
+	const namespace_t * nm = c.parent_namespace();
 
 	while( nm )
 	{
-		if( !nm->name().isEmpty() )
+		if( !nm->name().empty() )
 		{
-			name.prepend( c_namespaceSeparator );
+			name.prepend( c_namespace_separator );
 			name.prepend( nm->name() );
 		}
 
-		nm = nm->parentNamespace();
+		nm = nm->parent_namespace();
 	}
 
 	return name;
 }
 
 static inline bool
-checkIsClassDefined( const QString & classToCheck,
-	const QString & thisClassName,
-	const QStringList & prevDefinedClasses )
+check_is_class_defined( const std::string & class_to_check,
+	const std::string & this_class_name,
+	const std::list< std::string > & prev_defined_classes )
 {
-	const QStringList toCheck = classToCheck.split( c_namespaceSeparator,
-		QString::SkipEmptyParts );
+	const std::list< std::string > to_check = class_to_check.split( c_namespace_separator,
+		std::string::skip_empty_parts );
 
-	const QStringList thisClass = thisClassName.split( c_namespaceSeparator,
-		QString::SkipEmptyParts );
+	const std::list< std::string > this_class = this_class_name.split( c_namespace_separator,
+		std::string::skip_empty_parts );
 
-	const int min = qMin( toCheck.size(), thisClass.size() );
+	const int min = std::min( to_check.size(), this_class.size() );
 
-	foreach( const QString & c, prevDefinedClasses )
+	foreach( const std::string & c, prev_defined_classes )
 	{
-		QStringList toCheckTmp = toCheck;
-		QStringList thisClassTmp = thisClass;
-		QStringList classTmp = c.split( c_namespaceSeparator,
-			QString::SkipEmptyParts );
+		std::list< std::string > to_check_tmp = to_check;
+		std::list< std::string > this_class_tmp = this_class;
+		std::list< std::string > class_tmp = c.split( c_namespace_separator,
+			std::string::skip_empty_parts );
 
-		if( toCheckTmp == classTmp )
+		if( to_check_tmp == class_tmp )
 		{
-			const int minLength = qMin( min, classTmp.size() );
+			const int min_length = std::min( min, class_tmp.size() );
 
-			for( int i = 1; i < minLength; ++i )
+			for( int i = 1; i < min_length; ++i )
 			{
-				if( toCheckTmp.first() == thisClassTmp.first() &&
-					toCheckTmp.first() == classTmp.first() )
+				if( to_check_tmp.first() == this_class_tmp.first() &&
+					to_check_tmp.first() == class_tmp.first() )
 				{
-					toCheckTmp.removeFirst();
-					thisClassTmp.removeFirst();
-					classTmp.removeFirst();
+					to_check_tmp.removeFirst();
+					this_class_tmp.removeFirst();
+					class_tmp.removeFirst();
 				}
 				else
 					break;
 			}
 
-			if( toCheckTmp.size() == 1 || thisClassTmp.size() == 1 )
+			if( to_check_tmp.size() == 1 || this_class_tmp.size() == 1 )
 				return true;
 		}
 	}
@@ -906,37 +903,37 @@ checkIsClassDefined( const QString & classToCheck,
 }
 
 void
-Model::checkClass( const Class & c,
-	QStringList & prevDefinedClasses, bool included ) const
+model_t::check_class( const class_t & c,
+	std::list< std::string > & prev_defined_classes, bool included ) const
 {
-	const QString className = fullName( c );
+	const std::string class_name = full_name( c );
 
-	if( prevDefinedClasses.contains( className ) )
-		throw cfgfile::Exception( QString( "Redefinition of class \"%1\". "
+	if( prev_defined_classes.contains( class_name ) )
+		throw cfgfile::exception_t( std::string( "Redefinition of class_t \"%1\". "
 			"Line %2, column %3." )
-				.arg( className )
-				.arg( QString::number( c.lineNumber() ) )
-				.arg( QString::number( c.columnNumber() ) ) );
+				.arg( class_name )
+				.arg( std::string::number( c.line_number() ) )
+				.arg( std::string::number( c.column_number() ) ) );
 
-	prevDefinedClasses.append( className );
+	prev_defined_classes.append( class_name );
 
-	QStringList fields;
+	std::list< std::string > fields;
 
-	foreach( const Field & f, c.fields() )
+	foreach( const field_t & f, c.fields() )
 	{
-		if( f.isBase() )
+		if( f.is_base() )
 		{
 			switch( f.type() )
 			{
-				case Field::ScalarFieldType :
-				case Field::ScalarVectorFieldType :
+				case field_t::scalar_field_type :
+				case field_t::scalar_vector_field_type :
 				{
-					if( f.name().isEmpty() )
-						throw cfgfile::Exception( QString(
-							"Base of class field's name is empty. "
+					if( f.name().empty() )
+						throw cfgfile::exception_t( std::string(
+							"Base of class_t field_t's name is empty. "
 							"Line %1, column %2." )
-								.arg( QString::number( f.lineNumber() ) )
-								.arg( QString::number( f.columnNumber() ) ) );
+								.arg( std::string::number( f.line_number() ) )
+								.arg( std::string::number( f.column_number() ) ) );
 				}
 					break;
 
@@ -944,39 +941,39 @@ Model::checkClass( const Class & c,
 					break;
 			}
 		}
-		else if( f.name().isEmpty() )
-			throw cfgfile::Exception( QString(
-				"Field name of class \"%1\" "
+		else if( f.name().empty() )
+			throw cfgfile::exception_t( std::string(
+				"field_t name of class_t \"%1\" "
 				"Line %2, column %3." )
-					.arg( className )
-					.arg( QString::number( f.lineNumber() ) )
-					.arg( QString::number( f.columnNumber() ) ) );
+					.arg( class_name )
+					.arg( std::string::number( f.line_number() ) )
+					.arg( std::string::number( f.column_number() ) ) );
 
 		if( fields.contains( f.name() ) )
-			throw cfgfile::Exception( QString( "Field \"%1\" "
-				"already defined in class \"%2\". Line %3, column %4." )
+			throw cfgfile::exception_t( std::string( "field_t \"%1\" "
+				"already defined in class_t \"%2\". Line %3, column %4." )
 					.arg( f.name() )
-					.arg( className )
-					.arg( QString::number( f.lineNumber() ) )
-					.arg( QString::number( f.columnNumber() ) ) );
+					.arg( class_name )
+					.arg( std::string::number( f.line_number() ) )
+					.arg( std::string::number( f.column_number() ) ) );
 		else
 			fields.append( f.name() );
 
 		if( !included )
 		{
-			if( f.type() == Field::CustomTagFieldType )
+			if( f.type() == field_t::custom_tag_field_type )
 			{
-				if( !checkIsClassDefined( fullName( c, f.valueType() ),
-					className, prevDefinedClasses ) )
+				if( !check_is_class_defined( full_name( c, f.value_type() ),
+					class_name, prev_defined_classes ) )
 				{
-					throw cfgfile::Exception( QString( "Value type \"%1\" of "
-						"member \"%2\" of class \"%3\" "
+					throw cfgfile::exception_t( std::string( "Value type \"%1\" of "
+						"member \"%2\" of class_t \"%3\" "
 						"wasn't defined. Line %4, column %5." )
-							.arg( f.valueType() )
+							.arg( f.value_type() )
 							.arg( f.name() )
-							.arg( className )
-							.arg( QString::number( c.lineNumber() ) )
-							.arg( QString::number( c.columnNumber() ) ) );
+							.arg( class_name )
+							.arg( std::string::number( c.line_number() ) )
+							.arg( std::string::number( c.column_number() ) ) );
 				}
 			}
 		}
@@ -984,193 +981,193 @@ Model::checkClass( const Class & c,
 }
 
 bool
-Model::isIncluded() const
+model_t::is_included() const
 {
-	return ( !m_globalIncludes.isEmpty() || !m_relativeIncludes.isEmpty() );
+	return ( !m_global_includes.empty() || !m_relative_includes.empty() );
 }
 
-const QString &
-Model::includeGuard() const
+const std::string &
+model_t::include_guard() const
 {
-	return m_includeGuard;
+	return m_include_guard;
 }
 
 void
-Model::setIncludeGuard( const QString & guard )
+model_t::set_include_quard( const std::string & guard )
 {
-	m_includeGuard = guard;
+	m_include_guard = guard;
 }
 
 
 //
-// TagMinMaxConstraint
+// tag_min_max_constraint_t
 //
 
-TagMinMaxConstraint::TagMinMaxConstraint( cfgfile::Tag & owner )
-	:	cfgfile::TagNoValue( owner, c_minMaxConstraintTagName, false )
-	,	m_min( *this, c_minTagName, true )
-	,	m_max( *this, c_maxTagName, true )
+tag_min_max_constraint_t::tag_min_max_constraint_t( cfgfile::Tag & owner )
+	:	cfgfile::tag_no_value_t( owner, c_min_max_constraint_tag_name, false )
+	,	m_min( *this, c_min_tag_name, true )
+	,	m_max( *this, c_max_tag_name, true )
 {
 }
 
-TagMinMaxConstraint::~TagMinMaxConstraint()
+tag_min_max_constraint_t::~tag_min_max_constraint_t()
 {
 }
 
-QSharedPointer< MinMaxConstraint >
-TagMinMaxConstraint::cfg() const
+std::shared_ptr< min_max_constraint_t >
+tag_min_max_constraint_t::cfg() const
 {
-	return QSharedPointer< MinMaxConstraint > ( new MinMaxConstraint(
+	return std::shared_ptr< min_max_constraint_t > ( new min_max_constraint_t(
 		m_min.value(), m_max.value() ) );
 }
 
 
 //
-// TagOneOfConstraint
+// tag_one_of_constraint_t
 //
 
-TagOneOfConstraint::TagOneOfConstraint( cfgfile::Tag & owner )
-	:	cfgfile::TagScalarVector< QString > ( owner,
-			c_oneOfConstraintTagName, false )
+tag_one_of_constraint_t::tag_one_of_constraint_t( cfgfile::Tag & owner )
+	:	cfgfile::tag_scalar_tVector< std::string > ( owner,
+			c_one_of_constraint_tag_name, false )
 {
 }
 
-TagOneOfConstraint::~TagOneOfConstraint()
+tag_one_of_constraint_t::~tag_one_of_constraint_t()
 {
 }
 
-QSharedPointer< OneOfConstraint >
-TagOneOfConstraint::cfg() const
+std::shared_ptr< one_of_constraint_t >
+tag_one_of_constraint_t::cfg() const
 {
-	return QSharedPointer< OneOfConstraint > ( new OneOfConstraint(
+	return std::shared_ptr< one_of_constraint_t > ( new one_of_constraint_t(
 		values().toList() ) );
 }
 
 
 //
-// TagField
+// tag_field_t
 //
 
-TagField::TagField( const QString & name, bool isMandatory )
-	:	cfgfile::TagNoValue( name, isMandatory )
-	,	m_name( *this, c_fieldNameTagName, true )
-	,	m_valueType( *this, c_valueTypeTagName, false )
-	,	m_minMaxConstraint( *this )
-	,	m_oneOfConstraint( *this )
-	,	m_isRequired( *this, c_requiredTagName, false )
-	,	m_defaultValue( *this, c_defaultValueTagName, false )
+tag_field_t::tag_field_t( const std::string & name, bool is_mandatory )
+	:	cfgfile::tag_no_value_t( name, is_mandatory )
+	,	m_name( *this, c_field_t_name_tag_name, true )
+	,	m_value_type( *this, c_value_type_tag_name, false )
+	,	m_min_max_constraint( *this )
+	,	m_one_of_constraint( *this )
+	,	m_is_required( *this, c_required_tag_name, false )
+	,	m_default_value( *this, c_default_value_tag_name, false )
 {
 }
 
-TagField::~TagField()
+tag_field_t::~tag_field_t()
 {
 }
 
-static inline Field::FieldType fieldTypeFromString( const QString & type )
+static inline field_t::field_type_t field_type_from_string( const std::string & type )
 {
-	if( type == c_scalarTagName )
-		return Field::ScalarFieldType;
-	else if( type == c_noValueTagName )
-		return Field::NoValueFieldType;
-	else if( type == c_scalarVectorTagName )
-		return Field::ScalarVectorFieldType;
-	else if( type == c_vectorOfTagsTagName )
-		return Field::VectorOfTagsFieldType;
-	else if( type == c_customTagName )
-		return Field::CustomTagFieldType;
+	if( type == c_scalar_tag_name )
+		return field_t::scalar_field_type;
+	else if( type == c_no_value_tag_name )
+		return field_t::no_value_field_type;
+	else if( type == c_scalar_vector_tag_name )
+		return field_t::scalar_vector_field_type;
+	else if( type == c_vector_of_tags_tag_name )
+		return field_t::vector_of_tags_field_type;
+	else if( type == c_custom_tag_name )
+		return field_t::custom_tag_field_type;
 	else
-		return Field::UnknownFieldType;
+		return field_t::unknown_field_type;
 }
 
-static inline void throwConstraintRedefinition( const QString & className,
-	const QString & fieldName, qint64 lineNumber, qint64 columnNumber )
+static inline void throw_constraint_redefinition( const std::string & class_name,
+	const std::string & field_tName, long long line_number, long long column_number )
 {
-	throw cfgfile::Exception( QString( "Redefinition of "
-		"constraint in class \"%1\", field \"%2\". "
+	throw cfgfile::exception_t( std::string( "Redefinition of "
+		"constraint in class_t \"%1\", field_t \"%2\". "
 		"Line %3, column %4." )
-			.arg( className )
-			.arg( fieldName )
-			.arg( QString::number( lineNumber ) )
-			.arg( QString::number( columnNumber ) ) );
+			.arg( class_name )
+			.arg( field_tName )
+			.arg( std::string::number( line_number ) )
+			.arg( std::string::number( column_number ) ) );
 }
 
-static inline void checkConstraints( const cfgfile::Tag & c1,
+static inline void check_constraints( const cfgfile::Tag & c1,
 	const cfgfile::Tag & c2,
-	const QString & className, const QString& fieldName )
+	const std::string & class_name, const std::string& field_tName )
 {
-	if( c1.isDefined() && c2.isDefined() )
+	if( c1.is_defined() && c2.is_defined() )
 	{
-		if( c1.lineNumber() == c2.lineNumber() )
+		if( c1.line_number() == c2.line_number() )
 		{
-			if( c1.columnNumber() > c2.columnNumber() )
-				throwConstraintRedefinition( className, fieldName,
-					c1.lineNumber(),
-					c1.columnNumber() );
+			if( c1.column_number() > c2.column_number() )
+				throw_constraint_redefinition( class_name, field_tName,
+					c1.line_number(),
+					c1.column_number() );
 			else
-				throwConstraintRedefinition( className, fieldName,
-					c2.lineNumber(),
-					c2.columnNumber() );
+				throw_constraint_redefinition( class_name, field_tName,
+					c2.line_number(),
+					c2.column_number() );
 		}
-		else if( c1.lineNumber() > c2.lineNumber() )
-			throwConstraintRedefinition( className, fieldName,
-				c1.lineNumber(),
-				c1.columnNumber() );
+		else if( c1.line_number() > c2.line_number() )
+			throw_constraint_redefinition( class_name, field_tName,
+				c1.line_number(),
+				c1.column_number() );
 		else
-			throwConstraintRedefinition( className, fieldName,
-				c2.lineNumber(),
-				c2.columnNumber() );
+			throw_constraint_redefinition( class_name, field_tName,
+				c2.line_number(),
+				c2.column_number() );
 	}
 }
 
-Field
-TagField::cfg() const
+field_t
+tag_field_t::cfg() const
 {
-	Field f;
-	f.setType( fieldTypeFromString( name() ) );
-	f.setName( m_name.value() );
-	f.setLineNumber( lineNumber() );
-	f.setColumnNumber( columnNumber() );
+	field_t f;
+	f.set_type( field_type_from_string( name() ) );
+	f.set_name( m_name.value() );
+	f.set_line_number( line_number() );
+	f.set_column_number( column_number() );
 
-	if( m_valueType.isDefined() )
-		f.setValueType( m_valueType.value() );
+	if( m_value_type.is_defined() )
+		f.set_value_type( m_value_type.value() );
 
-	if( m_isRequired.isDefined() )
-		f.setRequired();
+	if( m_is_required.is_defined() )
+		f.set_required();
 
-	if( m_defaultValue.isDefined() )
-		f.setDefaultValue( m_defaultValue.value() );
-	else if( f.type() == Field::NoValueFieldType )
-		f.setDefaultValue( QLatin1String( "false" ) );
+	if( m_default_value.is_defined() )
+		f.set_default_value( m_default_value.value() );
+	else if( f.type() == field_t::no_value_field_type )
+		f.set_default_value( QLatin1String( "false" ) );
 
-	const TagClass * c = static_cast< const TagClass* > ( parent() );
+	const tag_class_t * c = static_cast< const tag_class_t* > ( parent() );
 
-	checkConstraints( m_minMaxConstraint, m_oneOfConstraint,
+	check_constraints( m_min_max_constraint, m_one_of_constraint,
 		c->name(), m_name.value() );
 
-	if( m_minMaxConstraint.isDefined() )
-		f.setConstraint( m_minMaxConstraint.cfg() );
-	else if( m_oneOfConstraint.isDefined() )
-		f.setConstraint( m_oneOfConstraint.cfg() );
+	if( m_min_max_constraint.is_defined() )
+		f.set_constraint( m_min_max_constraint.cfg() );
+	else if( m_one_of_constraint.is_defined() )
+		f.set_constraint( m_one_of_constraint.cfg() );
 
 	return f;
 }
 
 void
-TagField::onFinish( const ParserInfo & info )
+tag_field_t::on_finish( const parser_info_t & info )
 {
-	switch( fieldTypeFromString( name() ) )
+	switch( field_type_from_string( name() ) )
 	{
-		case Field::ScalarFieldType :
-		case Field::ScalarVectorFieldType :
-		case Field::VectorOfTagsFieldType :
+		case field_t::scalar_field_type :
+		case field_t::scalar_vector_field_type :
+		case field_t::vector_of_tags_field_type :
 		{
-			if( !m_valueType.isDefined() )
-				throw cfgfile::Exception( QString( "Undefined required "
+			if( !m_value_type.is_defined() )
+				throw cfgfile::exception_t( std::string( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
-						.arg( c_valueTypeTagName )
+						.arg( c_value_type_tag_name )
 						.arg( name() )
-						.arg( QString::number( info.lineNumber() ) )
-						.arg( QString::number( info.columnNumber() ) ) );
+						.arg( std::string::number( info.line_number() ) )
+						.arg( std::string::number( info.column_number() ) ) );
 		}
 			break;
 
@@ -1178,97 +1175,97 @@ TagField::onFinish( const ParserInfo & info )
 			break;
 	}
 
-	cfgfile::TagNoValue::onFinish( info );
+	cfgfile::tag_no_value_t::on_finish( info );
 }
 
 
 //
-// TagBaseClass
+// tag_base_class_t
 //
 
-TagBaseClass::TagBaseClass( cfgfile::Tag & owner, const QString & name,
-	bool isMandatory )
-	:	cfgfile::TagScalar< QString > ( owner, name, isMandatory )
-	,	m_valueType( *this, c_valueTypeTagName, false )
-	,	m_name( *this, c_fieldNameTagName, false )
-	,	m_minMaxConstraint( *this )
-	,	m_oneOfConstraint( *this )
-	,	m_isRequired( *this, c_requiredTagName, false )
-	,	m_defaultValue( *this, c_defaultValueTagName, false )
+tag_base_class_t::tag_base_class_t( cfgfile::Tag & owner, const std::string & name,
+	bool is_mandatory )
+	:	cfgfile::tag_scalar_t< std::string > ( owner, name, is_mandatory )
+	,	m_value_type( *this, c_value_type_tag_name, false )
+	,	m_name( *this, c_field_t_name_tag_name, false )
+	,	m_min_max_constraint( *this )
+	,	m_one_of_constraint( *this )
+	,	m_is_required( *this, c_required_tag_name, false )
+	,	m_default_value( *this, c_default_value_tag_name, false )
 {
-	m_constraint.addValue( c_scalarTagName );
-	m_constraint.addValue( c_noValueTagName );
-	m_constraint.addValue( c_scalarVectorTagName );
+	m_constraint.addValue( c_scalar_tag_name );
+	m_constraint.addValue( c_no_value_tag_name );
+	m_constraint.addValue( c_scalar_vector_tag_name );
 
-	setConstraint( &m_constraint );
+	set_constraint( &m_constraint );
 }
 
-TagBaseClass::~TagBaseClass()
+tag_base_class_t::~tag_base_class_t()
 {
 }
 
-QString
-TagBaseClass::valueType() const
+std::string
+tag_base_class_t::value_type() const
 {
-	return m_valueType.value();
+	return m_value_type.value();
 }
 
-Field
-TagBaseClass::cfg() const
+field_t
+tag_base_class_t::cfg() const
 {
-	Field f;
-	f.setBase( true );
-	f.setType( fieldTypeFromString( value() ) );
-	f.setName( m_name.value() );
-	f.setLineNumber( lineNumber() );
-	f.setColumnNumber( columnNumber() );
+	field_t f;
+	f.set_base( true );
+	f.set_type( field_type_from_string( value() ) );
+	f.set_name( m_name.value() );
+	f.set_line_number( line_number() );
+	f.set_column_number( column_number() );
 
-	if( m_valueType.isDefined() )
-		f.setValueType( m_valueType.value() );
+	if( m_value_type.is_defined() )
+		f.set_value_type( m_value_type.value() );
 
-	if( m_isRequired.isDefined() )
-		f.setRequired();
+	if( m_is_required.is_defined() )
+		f.set_required();
 
-	if( m_defaultValue.isDefined() )
-		f.setDefaultValue( m_defaultValue.value() );
+	if( m_default_value.is_defined() )
+		f.set_default_value( m_default_value.value() );
 
-	const TagClass * c = static_cast< const TagClass* > ( parent() );
+	const tag_class_t * c = static_cast< const tag_class_t* > ( parent() );
 
-	checkConstraints( m_minMaxConstraint, m_oneOfConstraint,
+	check_constraints( m_min_max_constraint, m_one_of_constraint,
 		c->name(), m_name.value() );
 
-	if( m_minMaxConstraint.isDefined() )
-		f.setConstraint( m_minMaxConstraint.cfg() );
-	else if( m_oneOfConstraint.isDefined() )
-		f.setConstraint( m_oneOfConstraint.cfg() );
+	if( m_min_max_constraint.is_defined() )
+		f.set_constraint( m_min_max_constraint.cfg() );
+	else if( m_one_of_constraint.is_defined() )
+		f.set_constraint( m_one_of_constraint.cfg() );
 
 	return f;
 }
 
 void
-TagBaseClass::onFinish( const ParserInfo & info )
+tag_base_class_t::on_finish( const parser_info_t & info )
 {
-	switch( fieldTypeFromString( value() ) )
+	switch( field_type_from_string( value() ) )
 	{
-		case Field::ScalarFieldType :
-		case Field::ScalarVectorFieldType :
-		case Field::VectorOfTagsFieldType :
+		case field_t::scalar_field_type :
+		case field_t::scalar_vector_field_type :
+		case field_t::vector_of_tags_field_type :
 		{
-			if( !m_valueType.isDefined() )
-				throw cfgfile::Exception( QString( "Undefined required "
+			if( !m_value_type.is_defined() )
+				throw cfgfile::exception_t( std::string( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
-						.arg( c_valueTypeTagName )
-						.arg( c_baseClassTagName )
-						.arg( QString::number( info.lineNumber() ) )
-						.arg( QString::number( info.columnNumber() ) ) );
+						.arg( c_value_type_tag_name )
+						.arg( c_base_class_t_tag_name )
+						.arg( std::string::number( info.line_number() ) )
+						.arg( std::string::number( info.column_number() ) ) );
 
-			if( !m_name.isDefined() )
-				throw cfgfile::Exception( QString( "Undefined required "
+			if( !m_name.is_defined() )
+				throw cfgfile::exception_t( std::string( "Undefined required "
 					"tag \"%1\" in tag \"%2\". Line %3, column %4." )
-						.arg( c_fieldNameTagName )
-						.arg( c_baseClassTagName )
-						.arg( QString::number( info.lineNumber() ) )
-						.arg( QString::number( info.columnNumber() ) ) );
+						.arg( c_field_t_name_tag_name )
+						.arg( c_base_class_t_tag_name )
+						.arg( std::string::number( info.line_number() ) )
+						.arg( std::string::number( info.column_number() ) ) );
 		}
 			break;
 
@@ -1276,78 +1273,78 @@ TagBaseClass::onFinish( const ParserInfo & info )
 			break;
 	}
 
-	cfgfile::TagScalar< QString >::onFinish( info );
+	cfgfile::tag_scalar_t< std::string >::on_finish( info );
 }
 
 
 //
-// TagClass
+// tag_class_t
 //
 
-TagClass::TagClass( const QString & name, bool isMandatory )
-	:	cfgfile::TagScalar< QString > ( name, isMandatory )
-	,	m_baseClassName( *this, c_baseClassTagName, false )
-	,	m_scalarTags( *this, c_scalarTagName, false )
-	,	m_noValueTags( *this, c_noValueTagName, false )
-	,	m_scalarVectorTags( *this, c_scalarVectorTagName, false )
-	,	m_vectorOfTagsTags( *this, c_vectorOfTagsTagName, false )
-	,	m_customTags( *this, c_customTagName, false )
+tag_class_t::tag_class_t( const std::string & name, bool is_mandatory )
+	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
+	,	m_base_class_name( *this, c_base_class_t_tag_name, false )
+	,	m_scalar_tags( *this, c_scalar_tag_name, false )
+	,	m_no_value_tags( *this, c_no_value_tag_name, false )
+	,	m_scalar_vector_tags( *this, c_scalar_vector_tag_name, false )
+	,	m_vector_of_tags_tags( *this, c_vector_of_tags_tag_name, false )
+	,	m_custom_tags( *this, c_custom_tag_name, false )
 {
 }
 
-TagClass::~TagClass()
+tag_class_t::~tag_class_t()
 {
 }
 
-Class
-TagClass::cfg() const
+class_t
+tag_class_t::cfg() const
 {
-	Class c;
-	c.setName( value() );
+	class_t c;
+	c.set_name( value() );
 
-	if( m_baseClassName.isDefined() )
+	if( m_base_class_name.is_defined() )
 	{
-		c.setBaseName( m_baseClassName.value() );
+		c.set_base_name( m_base_class_name.value() );
 
-		if( c.baseName() != c_noValueTagName )
+		if( c.base_name() != c_no_value_tag_name )
 		{
-			c.setBaseValueType( m_baseClassName.valueType() );
+			c.set_base_value_type( m_base_class_name.value_type() );
 
-			c.addField( m_baseClassName.cfg() );
+			c.add_field( m_base_class_name.cfg() );
 		}
 	}
 
-	c.setLineNumber( lineNumber() );
-	c.setColumnNumber( columnNumber() );
+	c.set_line_number( line_number() );
+	c.set_column_number( column_number() );
 
-	if( m_scalarTags.isDefined() )
+	if( m_scalar_tags.is_defined() )
 	{
-		for( int i = 0; i < m_scalarTags.size(); ++i )
-			c.addField( m_scalarTags.at( i ).cfg() );
+		for( int i = 0; i < m_scalar_tags.size(); ++i )
+			c.add_field( m_scalar_tags.at( i ).cfg() );
 	}
 
-	if( m_noValueTags.isDefined() )
+	if( m_no_value_tags.is_defined() )
 	{
-		for( int i = 0; i < m_noValueTags.size(); ++i )
-			c.addField( m_noValueTags.at( i ).cfg() );
+		for( int i = 0; i < m_no_value_tags.size(); ++i )
+			c.add_field( m_no_value_tags.at( i ).cfg() );
 	}
 
-	if( m_scalarVectorTags.isDefined() )
+	if( m_scalar_vector_tags.is_defined() )
 	{
-		for( int i = 0; i < m_scalarVectorTags.size(); ++i )
-			c.addField( m_scalarVectorTags.at( i ).cfg() );
+		for( int i = 0; i < m_scalar_vector_tags.size(); ++i )
+			c.add_field( m_scalar_vector_tags.at( i ).cfg() );
 	}
 
-	if( m_vectorOfTagsTags.isDefined() )
+	if( m_vector_of_tags_tags.is_defined() )
 	{
-		for( int i = 0; i < m_vectorOfTagsTags.size(); ++i )
-			c.addField( m_vectorOfTagsTags.at( i ).cfg() );
+		for( int i = 0; i < m_vector_of_tags_tags.size(); ++i )
+			c.add_field( m_vector_of_tags_tags.at( i ).cfg() );
 	}
 
-	if( m_customTags.isDefined() )
+	if( m_custom_tags.is_defined() )
 	{
-		for( int i = 0; i < m_customTags.size(); ++i )
-			c.addField( m_customTags.at( i ).cfg() );
+		for( int i = 0; i < m_custom_tags.size(); ++i )
+			c.add_field( m_custom_tags.at( i ).cfg() );
 	}
 
 	return c;
@@ -1355,38 +1352,38 @@ TagClass::cfg() const
 
 
 //
-// TagNamespace
+// tag_namespace_t
 //
 
-TagNamespace::TagNamespace( const QString & name, bool isMandatory )
-	:	cfgfile::TagScalar< QString > ( name, isMandatory )
-	,	m_nestedNamespaces( *this, c_namespaceTagName, false )
-	,	m_classes( *this, c_classTagName, false )
+tag_namespace_t::tag_namespace_t( const std::string & name, bool is_mandatory )
+	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
+	,	m_nested_namespaces( *this, c_namespace_tag_name, false )
+	,	m_classes( *this, c_class_t_tag_name, false )
 {
 }
 
-TagNamespace::~TagNamespace()
+tag_namespace_t::~tag_namespace_t()
 {
 }
 
-Namespace
-TagNamespace::cfg() const
+namespace_t
+tag_namespace_t::cfg() const
 {
-	Namespace n;
-	n.setName( value() );
-	n.setLineNumber( lineNumber() );
-	n.setColumnNumber( columnNumber() );
+	namespace_t n;
+	n.set_name( value() );
+	n.set_line_number( line_number() );
+	n.set_column_number( column_number() );
 
-	if( m_nestedNamespaces.isDefined() )
+	if( m_nested_namespaces.is_defined() )
 	{
-		for( int i = 0; i < m_nestedNamespaces.size(); ++i )
-			n.addNamespace( m_nestedNamespaces.at( i ).cfg() );
+		for( int i = 0; i < m_nested_namespaces.size(); ++i )
+			n.add_namespace( m_nested_namespaces.at( i ).cfg() );
 	}
 
-	if( m_classes.isDefined() )
+	if( m_classes.is_defined() )
 	{
 		for( int i = 0; i < m_classes.size(); ++i )
-			n.addClass( m_classes.at( i ).cfg() );
+			n.add_class( m_classes.at( i ).cfg() );
 	}
 
 	return n;
@@ -1394,57 +1391,57 @@ TagNamespace::cfg() const
 
 
 //
-// TagModel
+// tag_model_t
 //
 
-TagModel::TagModel()
-	:	cfgfile::TagScalar< QString > ( c_mainCfgTagName, true )
-	,	m_rootNamespace( *this, c_namespaceTagName, false )
-	,	m_rootClasses( *this, c_classTagName, false )
-	,	m_globalIncludes( *this, c_globalIncludeTagName, false )
-	,	m_relativeIncludes( *this, c_relativeIncludeTagName, false )
+tag_model_t::tag_model_t()
+	:	cfgfile::tag_scalar_t< std::string > ( c_main_cfg_tag_name, true )
+	,	m_root_namespace( *this, c_namespace_tag_name, false )
+	,	m_root_classes( *this, c_class_t_tag_name, false )
+	,	m_global_includes( *this, c_global_include_tag_name, false )
+	,	m_relative_includes( *this, c_relative_include_tag_name, false )
 {
 }
 
-TagModel::~TagModel()
+tag_model_t::~tag_model_t()
 {
 }
 
-Model
-TagModel::cfg() const
+model_t
+tag_model_t::cfg() const
 {
-	Model m;
-	m.setIncludeGuard( value() );
+	model_t m;
+	m.set_include_quard( value() );
 
-	if( m_rootNamespace.isDefined() )
+	if( m_root_namespace.is_defined() )
 	{
-		for( int i = 0; i < m_rootNamespace.size(); ++i )
-			m.rootNamespace().addNamespace( m_rootNamespace.at( i ).cfg() );
+		for( int i = 0; i < m_root_namespace.size(); ++i )
+			m.root_namespace().add_namespace( m_root_namespace.at( i ).cfg() );
 	}
 
-	if( m_rootClasses.isDefined() )
+	if( m_root_classes.is_defined() )
 	{
-		for( int i = 0; i < m_rootClasses.size(); ++i )
-			m.rootNamespace().addClass( m_rootClasses.at( i ).cfg() );
+		for( int i = 0; i < m_root_classes.size(); ++i )
+			m.root_namespace().add_class( m_root_classes.at( i ).cfg() );
 	}
 
-	if( m_globalIncludes.isDefined() )
+	if( m_global_includes.is_defined() )
 	{
-		for( int i = 0; i < m_globalIncludes.size(); ++i )
-			m.addGlobalInclude( m_globalIncludes.at( i ).value() );
+		for( int i = 0; i < m_global_includes.size(); ++i )
+			m.add_global_include( m_global_includes.at( i ).value() );
 	}
 
-	if( m_relativeIncludes.isDefined() )
+	if( m_relative_includes.is_defined() )
 	{
-		for( int i = 0; i < m_relativeIncludes.size(); ++i )
-			m.addRelativeInclude( m_relativeIncludes.at( i ).value() );
+		for( int i = 0; i < m_relative_includes.size(); ++i )
+			m.add_relative_include( m_relative_includes.at( i ).value() );
 	}
 
 	return m;
 }
 
-} /* namespace Cfg */
+} /* namespace cfg */
 
-} /* namespace Generator */
+} /* namespace generator */
 
 } /* namespace cfgfile */

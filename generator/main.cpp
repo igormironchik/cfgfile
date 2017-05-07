@@ -28,128 +28,118 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Qt include.
-#include <QCoreApplication>
-#include <QFileInfo>
-#include <QFile>
-#include <QTextStream>
-
-// QtArg include.
-#include <QtArg/Arg>
-#include <QtArg/Help>
-#include <QtArg/CmdLine>
-#include <QtArg/Exceptions>
 
 // cfgfile include.
-#include <cfgfile/Utils>
+#include <cfgfile/utils.hpp>
 
-// Generator include.
+// generator_t include.
 #include "generator.hpp"
+
+// C++ include.
+#include <fstream>
 
 
 //
-// ForGeneration
+// for_generation_t
 //
 
 //! Data uses to generate.
-class ForGeneration {
+class for_generation_t {
 public:
-	ForGeneration()
+	for_generation_t()
 	{
 	}
 
-	ForGeneration( const QString & inputFile, const QString & outputFile )
-		:	m_inputFileName( inputFile )
-		,	m_outputFileName( outputFile )
+	for_generation_t( const std::string & input_file, const std::string & output_file )
+		:	m_input_file_name( input_file )
+		,	m_output_file_name( output_file )
 	{
 	}
 
-	~ForGeneration()
+	~for_generation_t()
 	{
 	}
 
-	ForGeneration( const ForGeneration & other )
-		:	m_inputFileName( other.inputFile() )
-		,	m_outputFileName( other.outputFile() )
+	for_generation_t( const for_generation_t & other )
+		:	m_input_file_name( other.input_file() )
+		,	m_output_file_name( other.output_file() )
 	{
 	}
 
-	ForGeneration & operator = ( const ForGeneration & other )
+	for_generation_t & operator = ( const for_generation_t & other )
 	{
 		if( this != &other )
 		{
-			m_inputFileName = other.inputFile();
-			m_outputFileName = other.outputFile();
+			m_input_file_name = other.input_file();
+			m_output_file_name = other.output_file();
 		}
 
 		return *this;
 	}
 
 	//! \return Input file name.
-	const QString & inputFile() const
+	const std::string & input_file() const
 	{
-		return m_inputFileName;
+		return m_input_file_name;
 	}
 
 	//! \return Output file name.
-	const QString & outputFile() const
+	const std::string & output_file() const
 	{
-		return m_outputFileName;
+		return m_output_file_name;
 	}
 
 private:
 	//! Input file name.
-	QString m_inputFileName;
+	std::string m_input_file_name;
 	//! Output file name.
-	QString m_outputFileName;
-}; // class ForGeneration
+	std::string m_output_file_name;
+}; // class for_generation_t
 
 
 //
-// parseCommandLineArguments
+// parse_cli
 //
 
-static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
+static inline for_generation_t parse_cli( int argc, char ** argv )
 {
-	QtArg input( QLatin1Char( 'i' ), QLatin1String( "input" ),
-		QLatin1String( "Input file name" ), true, true );
-	QtArg output( QLatin1Char( 'o' ), QLatin1String( "output" ),
-		QLatin1String( "Output file name" ), true, true );
+	Args::Arg input( 'i', "input",
+		"Input file name", true, true );
+	Args::Arg output( 'o', "output",
+		"Output file name", true, true );
 
-	QtArgCmdLine cmd( argc, argv );
+	Args::CmdLine cmd( argc, argv );
 
-	QtArgHelp help( &cmd );
+	Args::Help help;
 	help.setProgramDescription(
 		QLatin1String( "C++ header generator for cfgfile." ) );
 	help.setExecutableName( QLatin1String( argv[ 0 ] ) );
 
-	cmd.addParseable( input );
-	cmd.addParseable( output );
-	cmd.addParseable( help );
+	cmd.addArg( input );
+	cmd.addArg( output );
+	cmd.addArg( help );
 
 	cmd.parse();
 
-	ForGeneration data( input.value(), output.value() );
+	for_generation_t data( input.value(), output.value() );
 
-	QTextStream stream( stdout );
-
-	if( data.inputFile().isEmpty() )
+	if( data.input_file().isEmpty() )
 	{
-		stream << QLatin1String( "Please specify input file." ) << endl;
+		std::cout << "Please specify input file." << endl;
 
 		exit( 1 );
 	}
 
-	if( !QFileInfo( data.inputFile() ).exists() )
+	if( !QFileInfo( data.input_file() ).exists() )
 	{
-		stream << QLatin1String( "Specified input file doesn't exist." ) << endl;
+		std::cout << "Specified input file doesn't exist." << endl;
 
 		exit( 1 );
 	}
 
-	if( data.outputFile().isEmpty() )
+	if( data.output_file().isEmpty() )
 	{
-		stream << QLatin1String( "Please specify output file." ) << endl;
+		std::cout << "Please specify output file." << endl;
 
 		exit( 1 );
 	}
@@ -160,31 +150,28 @@ static inline ForGeneration parseCommandLineArguments( int argc, char ** argv )
 
 int main( int argc, char ** argv )
 {	
-	ForGeneration data;
+	for_generation_t data;
 
 	try {
-		data = parseCommandLineArguments( argc, argv );
+		data = parse_cli( argc, argv );
 	}
-	catch( const QtArgHelpHasPrintedEx & )
+	catch( const Args::ArgHelpHasPrintedEx & )
 	{
 		return 0;
 	}
-	catch( const QtArgBaseException & x )
+	catch( const Args::ArgBaseException & x )
 	{
-		QTextStream stream( stdout );
-
-		stream << x.whatAsQString() << endl;
+		std::cout << x.desc() << endl;
 
 		return 1;
 	}
 
-	cfgfile::Generator::Cfg::Model model;
+	cfgfile::generator::cfg::model_t model;
 
 	try {
-		cfgfile::Generator::Cfg::TagModel tag;
+		cfgfile::generator::cfg::tag_model_t tag;
 
-		cfgfile::readcfgfile( tag, data.inputFile(),
-			QTextCodec::codecForName( "UTF-8" ) );
+		cfgfile::read_cfgfile( tag, data.input_file() );
 
 		model = tag.cfg();
 
@@ -192,22 +179,20 @@ int main( int argc, char ** argv )
 
 		model.check();
 	}
-	catch( const cfgfile::Exception & x )
+	catch( const cfgfile::exception_t & x )
 	{
-		QTextStream stream( stdout );
-
-		stream << x.whatAsQString() << endl;
+		std::cout << x.desc() << endl;
 
 		return 1;
 	}
 
-	QFile output( data.outputFile() );
+	QFile output( data.output_file() );
 
 	if( output.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
 	{
 		QTextStream stream( &output );
 
-		cfgfile::Generator::CppGenerator gen( model );
+		cfgfile::generator_t::cpp_generator_t gen( model );
 
 		gen.generate( stream );
 
@@ -217,9 +202,7 @@ int main( int argc, char ** argv )
 	}
 	else
 	{
-		QTextStream stream( stdout );
-
-		stream << QLatin1String( "Couldn't open output file for writting." )
+		std::cout << "Couldn't open output file for writting."
 			<< endl;
 
 		return 1;

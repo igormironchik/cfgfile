@@ -31,55 +31,53 @@
 #ifndef CFGFILE__GENERATOR__GENERATOR_HPP__INCLUDED
 #define CFGFILE__GENERATOR__GENERATOR_HPP__INCLUDED
 
-// Generator cfg include.
-#include "../cfg/cfg.hpp"
+// generator_t cfg include.
+#include "cfg.hpp"
 
-
-QT_BEGIN_NAMESPACE
-class QTextStream;
-QT_END_NAMESPACE
+// C++ include.
+#include <ostream>
 
 
 namespace cfgfile {
 
-namespace Generator {
+namespace generator {
 
 //
-// Generator
+// generator_t
 //
 
 //! Base generator.
-class Generator {
+class generator_t {
 public:
-	Generator();
-	virtual ~Generator();
+	generator_t();
+	virtual ~generator_t();
 
 	//! Generate.
-	virtual void generate( QTextStream & stream ) const = 0;
-}; // class Generator
+	virtual void generate( std::ostream & stream ) const = 0;
+}; // class generator_t
 
 
 //
-// CppGenerator
+// cpp_generator_t
 //
 
 //! C++ generator.
-class CppGenerator
-	:	public Generator
+class cpp_generator_t
+	:	public generator_t
 {
 public:
-	explicit CppGenerator( const Cfg::Model & model );
-	~CppGenerator();
+	explicit cpp_generator_t( const cfg::model_t & model );
+	~cpp_generator_t();
 
 	//! Generate.
-	virtual void generate( QTextStream & stream ) const;
+	void generate( std::ostream & stream ) const override;
 
 private:
 	//! Model.
-	const Cfg::Model & m_model;
-}; // class CppGenerator
+	const cfg::model_t & m_model;
+}; // class cpp_generator_t
 
-} /* namespace Generator */
+} /* namespace generator */
 
 } /* namespace cfgfile */
 
