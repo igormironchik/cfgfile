@@ -39,11 +39,11 @@
 namespace cfgfile {
 
 //
-// tocfgfileFormat
+// to_cfgfile_format
 //
 
 //! Format string to cfgfile format.
-string_t to_cfgfile_format( const string_t & what )
+static string_t to_cfgfile_format( const string_t & what )
 {
 	if( what.empty() )
 		return SL( "\"\"" );
@@ -86,15 +86,15 @@ string_t to_cfgfile_format( const string_t & what )
 
 		return result;
 	}
-}
+} // to_cfgfile_format
 
 
 //
-// fromcfgfileFormat
+// from_cfgfile_format
 //
 
 //! Format string from cfgfile format.
-string_t from_cfgfile_format( const string_t & what )
+static string_t from_cfgfile_format( const string_t & what )
 {
 	if( what.find( c_quotes ) == 0 &&
 		what.rfind( c_quotes ) == what.length() - 1 )
@@ -120,7 +120,7 @@ string_t from_cfgfile_format( const string_t & what )
 	}
 	else
 		return what;
-}
+} // from_cfgfile_format
 
 } /* namespace cfgfile */
 

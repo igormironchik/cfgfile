@@ -135,8 +135,7 @@ private:
 //
 
 //! Read cfgfile configuration file.
-void
-read_cfgfile(
+static void read_cfgfile(
 	//! Configuration tag.
 	tag_t & tag,
 	//! Stream.
@@ -216,8 +215,7 @@ read_cfgfile(
 //
 
 //! Write cfgfile configuration file.
-void
-write_cfgfile(
+static void write_cfgfile(
 	//! Configuration tag.
 	const tag_t & tag,
 	//! Stream.

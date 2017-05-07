@@ -150,18 +150,18 @@ class one_of_constraint_t
 	:	public constraint_base_t
 {
 public:
-	explicit one_of_constraint_t( const std::list< std::string > & valuesList );
+	explicit one_of_constraint_t( const std::vector< std::string > & values );
 	virtual ~one_of_constraint_t();
 
 	//! \return Constraint type.
 	virtual constraint_type_t type() const;
 
 	//! \return List of values.
-	const std::list< std::string > & values() const;
+	const std::vector< std::string > & values() const;
 
 private:
 	//! List of values.
-	std::list< std::string > m_values;
+	std::vector< std::string > m_values;
 }; // class one_of_constraint_t
 
 
@@ -512,7 +512,7 @@ private:
 
 	//! Prepared data.
 	std::map< unsigned long long, const_class_ptr_t > m_indexes;
-}; // class Model
+}; // class model_t
 
 
 //
