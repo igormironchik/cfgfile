@@ -35,16 +35,16 @@
 namespace cfgfile {
 
 //
-// Constraint
+// constraint_t
 //
 
 //! Base class for constraints.
 template< class T >
-class Constraint {
+class constraint_t {
 public:
-	Constraint() {}
+	constraint_t() {}
 
-	virtual ~Constraint() {}
+	virtual ~constraint_t() {}
 
 	/*!
 		Check value for correctness.
@@ -55,7 +55,7 @@ public:
 	*/
 	virtual bool
 	check( const T & value ) const = 0;
-}; // class Constraint
+}; // class constraint_t
 
 } /* namespace cfgfile */
 
