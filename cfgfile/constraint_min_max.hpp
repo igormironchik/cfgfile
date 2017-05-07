@@ -32,13 +32,13 @@
 #define CFGFILE__CONSTRAINT_MIN_MAX_HPP__INCLUDED
 
 // cfgfile include.
-#include <cfgfile/private/Constraint>
+#include "constraint.hpp"
 
 
 namespace cfgfile {
 
 //
-// ConstraintMinMax
+// constraint_min_max_t
 //
 
 /*!
@@ -46,13 +46,19 @@ namespace cfgfile {
 	min <= value <= max.
 */
 template< class T >
-class ConstraintMinMax
-	:	public Constraint< T >
+class constraint_min_max_t
+	:	public constraint_t< T >
 {
 public:
-	ConstraintMinMax( const T & min, const T & max );
+	constraint_min_max_t( const T & min, const T & max )
+		:	m_min( min )
+		,	m_max( max )
+	{
+	}
 
-	virtual ~ConstraintMinMax();
+	~constraint_min_max_t()
+	{
+	}
 
 	/*!
 		Check value for correctness.
@@ -61,35 +67,17 @@ public:
 		\retval true If all is OK.
 		\retval false If value doen't correspond to the constraint.
 	*/
-	virtual bool
-	check( const T & value ) const;
+	bool check( const T & value ) const override
+	{
+		return ( m_min <= value && value <= m_max );
+	}
 
 private:
 	//! Minimum value.
 	T m_min;
 	//! MAximum value.
 	T m_max;
-}; // class ConstraintMinMax
-
-
-template< class T >
-ConstraintMinMax< T >::ConstraintMinMax( const T & min, const T & max )
-	:	m_min( min )
-	,	m_max( max )
-{
-}
-
-template< class T >
-ConstraintMinMax< T >::~ConstraintMinMax()
-{
-}
-
-template< class T >
-bool
-ConstraintMinMax< T >::check( const T & value ) const
-{
-	return ( m_min <= value && value <= m_max );
-}
+}; // class constraint_min_max_t
 
 } /* namespace cfgfile */
 
