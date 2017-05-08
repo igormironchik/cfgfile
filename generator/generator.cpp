@@ -189,7 +189,8 @@ static inline std::string generate_base_class_name( const std::string & base,
 // generate_tag_name_from_class_name
 //
 
-static inline std::string generate_tag_name_from_class_name( const std::string & name )
+static inline std::string generate_tag_name_from_class_name(
+	const std::string & name )
 {
 	return name;
 } // generate_tag_name_from_class_name
@@ -333,6 +334,8 @@ static inline std::string generate_type_of_data( const cfg::field_t & f )
 			return f.value_type();
 
 		case cfg::field_t::vector_of_tags_field_type :
+			return std::string( "std::vector< " ) + f.value_type() + std::string( "_t >" );
+
 		case cfg::field_t::scalar_vector_field_type :
 			return std::string( "std::vector< " ) + f.value_type() + std::string( " >" );
 
@@ -352,12 +355,12 @@ static inline void generate_data_class( std::ostream & stream,
 	stream << std::string( "//\n// " )
 		<< c->name() << std::string( "\n//\n\n" );
 
-	stream << std::string( "class " ) << c->name() << std::string( " {\n" );
+	stream << std::string( "class " ) << c->name() << std::string( "_t {\n" );
 	stream << std::string( "public:\n" );
 
 	// c_tor and d_tor.
 	stream << std::string( "\t" ) << c->name()
-		<< std::string( "()\n" );
+		<< std::string( "_t()\n" );
 
 	int i = 0;
 
@@ -381,52 +384,9 @@ static inline void generate_data_class( std::ostream & stream,
 	stream << std::string( "\t{\n"
 							 "\t}\n"
 							 "\t~" )
-		<< c->name() << std::string( "()\n"
+		<< c->name() << std::string( "_t()\n"
 									   "\t{\n"
 									   "\t}\n\n" );
-
-	// Copy c_tor.
-	stream << std::string( "\t" ) << c->name()
-		<< std::string( "( const " ) << c->name()
-		<< std::string( " & other )\n" );
-
-	i = 0;
-
-	for( const cfg::field_t & f : c->fields() )
-	{
-		if( i == 0 )
-			stream << std::string( "\t\t:" );
-		else
-			stream << std::string( "\t\t," );
-
-		stream << std::string( "\tm_" )
-			<< f.name() << std::string( "( other." )
-			<< f.name() << std::string( "() )\n" );
-
-		++i;
-	}
-
-	stream << std::string( "\t{\n"
-							 "\t}\n" );
-
-	// operator =.
-	stream << std::string( "\t" ) << c->name()
-		<< std::string( " & operator = ( const " ) << c->name()
-		<< std::string( " & other )\n"
-						  "\t{\n"
-						  "\t\tif( this != &other )\n"
-						  "\t\t{\n" );
-
-	for( const cfg::field_t & f : c->fields() )
-	{
-		stream << std::string( "\t\t\tm_" )
-			<< f.name() << std::string( " = other." )
-			<< f.name() << std::string( "();\n" );
-	}
-
-	stream << std::string( "\t\t}\n\n"
-							 "\t\treturn *this;\n"
-							 "\t}\n\n" );
 
 	// Getters and setters.
 	for( const cfg::field_t & f : c->fields() )
@@ -543,7 +503,7 @@ static inline void generate_cfg_init( std::ostream & stream,
 						   << f.name() << std::string( ".is_defined() )\n"
 								   "\t\t{\n" )
 						<< std::string( "\t\t\tstd::vector< " )
-						<< f.value_type() << std::string( " > " )
+						<< f.value_type() << std::string( "_t > " )
 						<< f.name() << std::string( "_" )
 						<< generate_tag_name_from_class_name( f.value_type() )
 						<< std::string( "_;\n\n" )
@@ -649,7 +609,7 @@ static inline void generate_cfg_set( std::ostream & stream,
 				case cfg::field_t::vector_of_tags_field_type :
 				{
 					stream << std::string( "\n\t\tfor( const " )
-						<< f.value_type() << std::string( " & v : cfg." )
+						<< f.value_type() << std::string( "_t & v : cfg." )
 						<< f.name() << std::string( "() )\n" )
 						<< std::string( "\t\t{\n" )
 						<< std::string( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
@@ -802,7 +762,7 @@ static inline void generate_private_tag_members( std::ostream & stream,
 // generatetag_class_t
 //
 
-static inline void generatetag_class_t( std::ostream & stream,
+static inline void generate_tag_class( std::ostream & stream,
 	cfg::const_class_ptr_t c )
 {
 	const std::string tag_class_name = std::string( "tag_" ) + c->name() + "_t";
@@ -844,7 +804,7 @@ static inline void generatetag_class_t( std::ostream & stream,
 	// 2
 	stream << std::string( "\texplicit " ) << tag_class_name
 		<< std::string( "( const " ) << c->name()
-		<< std::string( " & cfg )\n"
+		<< std::string( "_t & cfg )\n"
 						  "\t\t:\t" )
 		<< base_tag << std::string( "( cfgfile::string_t( SL( \"" )
 		<< tag_name << std::string( "\" ) ), true )\n" );
@@ -896,10 +856,10 @@ static inline void generatetag_class_t( std::ostream & stream,
 
 	// getter.
 	stream << std::string( "\t" ) << c->name()
-		<< std::string( " get_cfg() const\n"
+		<< std::string( "_t get_cfg() const\n"
 						  "\t{\n"
 						  "\t\t" ) << c->name()
-		<< std::string( " c;\n" );
+		<< std::string( "_t c;\n" );
 
 	generate_cfg_init( stream, c );
 
@@ -908,7 +868,7 @@ static inline void generatetag_class_t( std::ostream & stream,
 
 	// setter.
 	stream << std::string( "\tvoid set_cfg( const " )
-		<< c->name() << std::string( " & cfg )\n"
+		<< c->name() << std::string( "_t & cfg )\n"
 									   "\t{\n" );
 
 	generate_cfg_set( stream, c );
@@ -934,7 +894,7 @@ static inline void generate_cpp_classes( std::ostream & stream,
 {	
 	generate_data_class( stream, c );
 
-	generatetag_class_t( stream, c );
+	generate_tag_class( stream, c );
 } // generate_cpp_classes
 
 void

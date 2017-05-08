@@ -39,11 +39,11 @@
 
 int main()
 {
-	generator::B b;
+	generator::B_t b;
 	b.set_integerField( 100 );
 
-	std::vector< generator::A > list;
-	generator::A a;
+	std::vector< generator::A_t > list;
+	generator::A_t a;
 	a.set_stringField( "string" );
 	list.push_back( a );
 
