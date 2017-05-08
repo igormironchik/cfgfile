@@ -472,7 +472,7 @@ public:
 	}
 
 #if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
-	parser_t( tag_t & tag, const QDomDocument & dom );
+	parser_t( tag_t & tag, const QDomDocument & dom )
 		:	m_d( std::make_unique< details::parser_dom_impl_t > ( tag, dom ) )
 	{
 	}

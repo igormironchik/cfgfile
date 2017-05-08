@@ -105,10 +105,10 @@ TagVecOfTags::TagVecOfTags( const Configuration::Pair & pair )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 {
-	m_stringValue.setValue( pair.m_stringValue );
-	m_intValue.setValue( pair.m_intValue );
+	m_stringValue.set_value( pair.m_stringValue );
+	m_intValue.set_value( pair.m_intValue );
 
-	setDefined();
+	set_defined();
 }
 
 

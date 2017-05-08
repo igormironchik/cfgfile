@@ -184,7 +184,7 @@ static void read_cfgfile(
 			if( !doc.setContent( data, true, &error, &line, &column ) )
 				throw exception_t( QString( "Unable to parse XML "
 					"from file: \"%1\". \"%2\" On line %3, column %4." )
-						.arg( fileName )
+						.arg( file_name )
 						.arg( error )
 						.arg( QString::number( line ) )
 						.arg( QString::number( column ) ) );

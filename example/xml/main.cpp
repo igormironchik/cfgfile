@@ -54,13 +54,13 @@ int main( int argc, char ** argv )
 	}
 
 	try {
-		QTextStream stream( &file );
+		QTextStream stream( &inFile );
 
 		cfgfile::read_cfgfile( readTag, stream, "example.cfg" );
 
 		inFile.close();
 	}
-	catch( const QtConfFile::Exception & x )
+	catch( const cfgfile::exception_t & x )
 	{
 		inFile.close();
 
@@ -75,7 +75,7 @@ int main( int argc, char ** argv )
 	out << "We've loaded the configuration from file:" << endl;
 	out << "stringValue: " << cfg.m_stringValue << endl;
 
-	if( !cfg.m_listOfStringValues.isEmpty() )
+	if( !cfg.m_listOfStringValues.empty() )
 	{
 		out << "listOfStringValues: ";
 
@@ -87,7 +87,7 @@ int main( int argc, char ** argv )
 
 	out << "intValue: " << cfg.m_intValue << endl;
 
-	if( !cfg.m_vectorOfTags.isEmpty() )
+	if( !cfg.m_vectorOfTags.empty() )
 	{
 		int i = 1;
 

@@ -218,7 +218,7 @@ public:
 
 				QString tmp = value;
 
-				if( tmp.startsWith( quote ) && tmp.endsWith( quote ) )
+				if( tmp.startsWith( c_quotes ) && tmp.endsWith( c_quotes ) )
 					tmp = tmp.mid( 1, tmp.length() - 2 );
 
 				this_element.setAttribute( QString( "a" ) + QString::number( i ),

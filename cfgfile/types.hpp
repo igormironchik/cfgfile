@@ -123,10 +123,10 @@ public:
 	{
 	}
 
-	string_t( char_t ch )
-		:	m_str( ch )
-	{
-	}
+//	string_t( char_t ch )
+//		:	m_str( ch )
+//	{
+//	}
 
 	string_t( QLatin1String str )
 		:	m_str( str )
@@ -165,42 +165,59 @@ public:
 		return m_str.indexOf( str.m_str );
 	}
 
-	QString::iterator begin()
+	inline int rfind( const string_t & str ) const
+	{
+		return m_str.lastIndexOf( str.m_str );
+	}
+
+	inline int rfind( char_t ch ) const
+	{
+		return m_str.lastIndexOf( ch );
+	}
+
+	string_t & replace( size_type pos, size_type count, const string_t & v )
+	{
+		m_str.replace( pos, count, v.m_str );
+
+		return *this;
+	}
+
+	inline QString::iterator begin()
 	{
 		return m_str.begin();
 	}
 
-	QString::iterator end()
+	inline QString::iterator end()
 	{
 		return m_str.end();
 	}
 
-	QString::const_iterator begin() const
+	inline QString::const_iterator begin() const
 	{
 		return m_str.begin();
 	}
 
-	QString::const_iterator end() const
+	inline QString::const_iterator end() const
 	{
 		return m_str.end();
 	}
 
-	QString::const_iterator cbegin() const
+	inline QString::const_iterator cbegin() const
 	{
 		return m_str.begin();
 	}
 
-	QString::const_iterator cend() const
+	inline QString::const_iterator cend() const
 	{
 		return m_str.end();
 	}
 
-	size_type length() const
+	inline size_type length() const
 	{
 		return m_str.length();
 	}
 
-	string_t substr( size_type pos, size_type count = npos ) const
+	inline string_t substr( size_type pos, size_type count = npos ) const
 	{
 		return m_str.mid( pos, count );
 	}
@@ -243,31 +260,31 @@ public:
 		return to;
 	}
 
-	const char_t operator [] ( size_type pos ) const
+	inline const char_t operator [] ( size_type pos ) const
 	{
 		return m_str[ pos ];
 	}
 
-	string_t & append( const string_t & other )
+	inline string_t & append( const string_t & other )
 	{
 		m_str.append( other.m_str );
 
 		return *this;
 	}
 
-	string_t & append( size_type count, char_t ch )
+	inline string_t & append( size_type count, char_t ch )
 	{
 		m_str.append( QString( count, ch ) );
 
 		return *this;
 	}
 
-	void clear()
+	inline void clear()
 	{
 		m_str.clear();
 	}
 
-	void push_back( char_t ch )
+	inline void push_back( char_t ch )
 	{
 		m_str.append( ch );
 	}
