@@ -467,6 +467,24 @@ public:
 	}
 }; // class format_t< string_t >
 
+#ifdef CFGFILE_QSTRING_BUILD
+template<>
+class format_t< QString > {
+public:
+	//! Format value to string.
+	static QString to_string( const QString & value )
+	{
+		return value;
+	}
+
+	//! Format value from string.
+	static QString from_string( const parser_info_t &, const QString & value )
+	{
+		return value;
+	}
+}; // class format_t< QString >
+#endif
+
 
 static const string_t c_on = SL( "on" );
 static const string_t c_off = SL( "off" );

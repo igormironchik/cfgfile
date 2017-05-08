@@ -70,14 +70,14 @@ namespace details {
 //
 
 //! Checks if character is whitespace character.
-static inline bool is_space( const char_t & ch )
+static inline bool is_space( char_t ch )
 {
 #ifdef CFGFILE_QSTRING_BUILD
 	return ch.isSpace();
 #elif defined( CFGFILE_WSTRING_BUILD )
 	return std::iswspace( ch );
 #else
-	return std::isspace( ch );
+	return std::isspace( (unsigned char) ch );
 #endif
 }
 

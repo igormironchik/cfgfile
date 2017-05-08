@@ -91,7 +91,7 @@ public:
 		{
 			if( !m_constraint->check( v ) )
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					format_t< T >::to_string( v ) +
+					string_t( format_t< T >::to_string( v ) ) +
 					SL( "\". Value must match to the constraint in tag \"" ) +
 					name() + SL( "\"." ) );
 		}

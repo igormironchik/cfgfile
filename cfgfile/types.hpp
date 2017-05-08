@@ -123,10 +123,10 @@ public:
 	{
 	}
 
-//	string_t( char_t ch )
-//		:	m_str( ch )
-//	{
-//	}
+	string_t( char_t ch )
+		:	m_str( ch )
+	{
+	}
 
 	string_t( QLatin1String str )
 		:	m_str( str )
