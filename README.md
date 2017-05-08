@@ -289,10 +289,10 @@ In the above example will be generated similar to the following header file.
 namespace NamespaceName {
 
 //
-// NameOfTheClass_t
+// NameOfTheClass
 //
   
-class NameOfTheClass_t {
+class NameOfTheClass {
 public:
   c_tors();
   ~d_tor();
@@ -301,14 +301,14 @@ public:
   const std::string & fieldWithString() const;
   //! Set fieldWithString value.
   void set_fieldWithString( const std::string & value );
-}; // class NameOfTheClass_t
+}; // class NameOfTheClass
   
   
 //
-// tag_NameOfTheClass_t
+// tag_NameOfTheClass
 //
   
-class tag_NameOfTheClass_t
+class tag_NameOfTheClass
   :  public cfgfile::tag_no_value_t
 {
 public:
@@ -316,8 +316,8 @@ public:
   ~d_tor();
     
   //! \return Configuration.
-  NameOfTheClass_t get_cfg() const;
-}; // class tag_NameOfTheClass_t
+  NameOfTheClass get_cfg() const;
+}; // class tag_NameOfTheClass
   
 } // namespace NamespaceName
 ```
@@ -327,8 +327,8 @@ For this you can use {globalInclude <string>} and {relativeInclude <string>}
 tags. When using such includes in C++ code will be added corresponding
 include directives. And checking of classes' and namespaces' names will be
 turned off. And one more restriction is that that class's name for tag
-must be equal to tag_ + Name + _t, i.e. if data structure names Data then class for
-tag must be named tag_Data_t and be placed in the same namespace as Data class/
+must be equal to tag_ + Name, i.e. if data structure names Data then class for
+tag must be named tag_Data and be placed in the same namespace as Data class/
 structure.
             
 # Integration of Generator with QMake
