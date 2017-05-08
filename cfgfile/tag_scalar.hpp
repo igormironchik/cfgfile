@@ -643,6 +643,232 @@ private:
 	constraint_t< string_t > * m_constraint;
 }; // class tag_scalar_t
 
+
+#ifdef CFGFILE_QSTRING_BUILD
+
+//
+// tag_scalar_t< QString >
+//
+
+//! Tag with bool value.
+template<>
+class tag_scalar_t< QString >
+	:	public tag_t
+{
+public:
+	explicit tag_scalar_t( const string_t & name, bool is_mandatory = false )
+		:	tag_t( name, is_mandatory )
+		,	m_constraint( nullptr )
+	{
+	}
+
+	tag_scalar_t( tag_t & owner, const string_t & name,
+		bool is_mandatory = false )
+		:	tag_t( owner, name, is_mandatory )
+		,	m_constraint( nullptr )
+	{
+	}
+
+	~tag_scalar_t()
+	{
+	}
+
+	//! \return Value of the tag.
+	const QString &
+	value() const
+	{
+		return m_value;
+	}
+
+	//! Set value.
+	void
+	set_value( const QString & v )
+	{
+		if( m_constraint )
+		{
+			if( !m_constraint->check( v ) )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					string_t( format_t< QString >::to_string( v ) ) +
+					SL( "\". Value must match to the constraint in tag \"" ) +
+					name() + SL( "\"." ) );
+		}
+
+		m_value = v;
+
+		set_defined();
+	}
+
+	/*!
+		Query optional value.
+
+		If isDefined() is true then \a receiver
+		will be initialized with value of the tag,
+		otherwise nothing with \a receiver will happen.
+	*/
+	void
+	query_opt_value( QString & receiver )
+	{
+		if( is_defined() )
+			receiver = m_value;
+	}
+
+	//! Set constraint for the tag's value.
+	void
+	set_constraint( constraint_t< QString > * c )
+	{
+		m_constraint = c;
+	}
+
+	//! Print tag to the output.
+	string_t print( int indent = 0 ) const override
+	{
+		string_t result;
+
+		if( is_defined() )
+		{
+			result.append( string_t( indent, c_tab ) );
+
+			result.push_back( c_begin_tag );
+			result.append( name() );
+			result.push_back( c_space );
+
+			QString value = format_t< QString >::to_string( m_value );
+
+			const pos_t sections = ( value.length() / c_max_string_length +
+				( value.length() % c_max_string_length > 0 ? 1 : 0 ) );
+
+			if( sections )
+			{
+				const string_t spaces = string_t( name().length() + 2,
+					c_space );
+
+				for( pos_t i = 0; i < sections; ++i )
+				{
+					if( i > 0 )
+					{
+						result.push_back( c_carriage_return );
+
+						result.append( string_t( indent, c_tab ) );
+
+						result.append( spaces );
+					}
+
+					const string_t tmp = to_cfgfile_format(
+						value.mid( i * c_max_string_length, c_max_string_length ) );
+
+					result.append( tmp );
+				}
+			}
+			else
+			{
+				result.push_back( c_quotes );
+				result.push_back( c_quotes );
+			}
+
+			if( !children().empty() )
+			{
+				result.push_back( c_carriage_return );
+
+				for( const tag_t * tag : children() )
+					result.append( tag->print( indent + 1 ) );
+
+				result.append( string_t( indent, c_tab ) );
+			}
+
+			result.push_back( c_end_tag );
+			result.push_back( c_carriage_return );
+		}
+
+		return result;
+	}
+
+#ifdef CFGFILE_XML_BUILD
+	//! Print tag to the output.
+	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
+	{
+		if( is_defined() )
+		{
+			QDomElement this_element = doc.createElement( name() );
+
+			if( !parent )
+				doc.appendChild( this_element );
+			else
+				parent->appendChild( this_element );
+
+			string_t value = format_t< string_t >::to_string( m_value );
+			value = to_cfgfile_format( value );
+
+			QDomText data = doc.createTextNode( value );
+
+			this_element.appendChild( data );
+
+			if( !children().empty() )
+			{
+				for( const tag_t * tag : children() )
+					tag->print( doc, &this_element );
+			}
+		}
+	}
+#endif // CFGFILE_XML_BUILD
+
+	//! Called when tag parsing finished.
+	void on_finish( const parser_info_t & info ) override
+	{
+		if( m_constraint )
+		{
+			if( !m_constraint->check( m_value ) )
+				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+					string_t( m_value ) +
+					SL( "\". Value must match to the constraint in tag \"" ) +
+					name() + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					pos_to_string( info.line_number() ) + SL( "." ) );
+		}
+
+		if( !is_defined() )
+			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
+				name() + SL( "\". In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				pos_to_string( info.line_number() ) + SL( "." ) );
+
+		for( const tag_t * tag : children() )
+		{
+			if( tag->is_mandatory() && !tag->is_defined() )
+				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + SL( "\". Where parent is: \"" ) +
+					name() + SL( "\". In file \"" ) +
+					info.file_name() + SL( "\" on line " ) +
+					pos_to_string( info.line_number() ) + SL( "." ) );
+		}
+	}
+
+	//! Called when string found.
+	void on_string( const parser_info_t & info,
+		const string_t & str ) override
+	{
+		if( is_any_child_defined() )
+			throw exception_t( string_t( SL( "Value \"" ) ) + str +
+				SL( "\" for tag \"" ) + name() +
+				SL( "\" must be defined before any child tag. In file \"" ) +
+				info.file_name() + SL( "\" on line " ) +
+				pos_to_string( info.line_number() ) + SL( "." ) );
+
+		const QString value = format_t< QString >::from_string( info, str );
+
+		m_value.append( value );
+
+		set_defined();
+	}
+
+private:
+	//! Value of the tag.
+	QString m_value;
+	//! Constraint.
+	constraint_t< QString > * m_constraint;
+}; // class tag_scalar_t< QString >
+
+#endif // CFGFILE_QSTRING_BUILD
+
 } /* namespace cfgfile */
 
 #endif // CFGFILE__TAG_SCALAR_HPP__INCLUDED
