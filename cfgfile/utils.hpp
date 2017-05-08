@@ -42,6 +42,9 @@
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
+#elif defined( CFGFILE_WSTRING_BUILD )
+// C++ include.
+#include <cwctype>
 #else
 // C++ include.
 #include <cctype>
