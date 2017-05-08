@@ -112,7 +112,7 @@ public:
   }
   
   //! \return Our cool value.
-  const std::string &amp; ourCoolValue() const
+  const std::string & ourCoolValue() const
   {
     return m_ourCoolValue;
   }
@@ -138,7 +138,7 @@ public:
   {
   }
   
-  explicit TagConfiguration( const Configuration &amp; cfg )
+  explicit TagConfiguration( const Configuration & cfg )
     :  cfgfile::tag_no_value_t( "configuration", true )
     ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
@@ -196,7 +196,7 @@ try {
   
   cfg = readTag.cfg();
 }
-catch( const cfgfile::exception_t &amp; x )
+catch( const cfgfile::exception_t & x )
 {
   std::cout << x.desc() << std::endl;
 }
@@ -214,7 +214,7 @@ try {
   
   cfgfile::write_cfgfile( writeTag, stream );
 }
-catch( const cfgfile::exception_t &amp; x )
+catch( const cfgfile::exception_t & x )
 {
   std::cout << x.desc(); << std::endl
 }
@@ -298,9 +298,9 @@ public:
   ~d_tor();
     
   //! \return fieldWithQString value.
-  const std::string &amp; fieldWithString() const;
+  const std::string & fieldWithString() const;
   //! Set fieldWithString value.
-  void set_fieldWithString( const std::string &amp; value );
+  void set_fieldWithString( const std::string & value );
 }; // class NameOfTheClass_t
   
   
