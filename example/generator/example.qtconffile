@@ -1,22 +1,22 @@
 
 {forGeneration GENERATED
 	{namespace generator
-		{class A
+		{class a_t
 			{tagScalar
 				{valueType std::string}
-				{name stringField}
+				{name string_field}
 			}
 		}
 
-		{class B
+		{class b_t
 			{base tagScalar
 				{valueType int}
-				{name integerField}
+				{name integer_field}
 			}
 
 			{tagVectorOfTags
-				{valueType A}
-				{name aVector}
+				{valueType a_t}
+				{name a_vector}
 			}
 		}
 	}

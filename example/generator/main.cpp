@@ -39,20 +39,20 @@
 
 int main()
 {
-	generator::B_t b;
-	b.set_integerField( 100 );
+	generator::b_t b;
+	b.set_integer_field( 100 );
 
-	std::vector< generator::A_t > list;
-	generator::A_t a;
-	a.set_stringField( "string" );
+	std::vector< generator::a_t > list;
+	generator::a_t a;
+	a.set_string_field( "string" );
 	list.push_back( a );
 
-	b.set_aVector( list );
+	b.set_a_vector( list );
 
 	std::ofstream out( "generator.cfg" );
 
 	try {
-		generator::tag_B_t tag( b );
+		generator::tag_b_t tag( b );
 
 		if( out.good() )
 		{
