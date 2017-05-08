@@ -3,7 +3,7 @@ TEMPLATE = app
 TARGET = cfgfile.generator
 DESTDIR = ..
 QT -= core gui
-CONFIG += console
+CONFIG += console c++14
 
 HEADERS += generator.hpp \
 	cfg.hpp

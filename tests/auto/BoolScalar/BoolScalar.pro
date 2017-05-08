@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 DESTDIR = .
-CONFIG += console
+CONFIG += console c++14
 QT -= gui core
 
 HEADERS += cfg.hpp

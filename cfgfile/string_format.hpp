@@ -43,7 +43,7 @@ namespace cfgfile {
 //
 
 //! Format string to cfgfile format.
-static string_t to_cfgfile_format( const string_t & what )
+static inline string_t to_cfgfile_format( const string_t & what )
 {
 	if( what.empty() )
 		return SL( "\"\"" );
@@ -94,7 +94,7 @@ static string_t to_cfgfile_format( const string_t & what )
 //
 
 //! Format string from cfgfile format.
-static string_t from_cfgfile_format( const string_t & what )
+static inline string_t from_cfgfile_format( const string_t & what )
 {
 	if( what.find( c_quotes ) == 0 &&
 		what.rfind( c_quotes ) == what.length() - 1 )
@@ -104,7 +104,7 @@ static string_t from_cfgfile_format( const string_t & what )
 		auto replace = [] ( string_t & str, const string_t & old_value,
 			const string_t & new_value )
 		{
-			pos_t where = string_t::npos;
+			string_t::size_type where = string_t::npos;
 
 			while( ( where = str.find( old_value ) ) != string_t::npos )
 				str.replace( where, old_value.length(), new_value );

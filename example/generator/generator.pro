@@ -2,7 +2,7 @@
 TEMPLATE = app
 TARGET = example.generator
 DESTDIR = .
-CONFIG += console
+CONFIG += console c++14
 QT -= gui core
 
 SOURCES += main.cpp

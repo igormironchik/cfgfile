@@ -376,7 +376,7 @@ public:
 
 			long long result = std::stoll( value, &pos );
 
-			if( pos != value.length() || pos < 0 )
+			if( pos != value.length() )
 				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
 					value + SL( "\". In file \"" ) +
 					info.file_name() + SL( "\" on line " ) +

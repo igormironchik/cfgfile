@@ -208,7 +208,7 @@ public:
 			else
 				parent->appendChild( this_element );
 
-			values_vector_t::size_type i = 1;
+			typename values_vector_t::size_type i = 1;
 
 			for( const T & v : m_values )
 			{

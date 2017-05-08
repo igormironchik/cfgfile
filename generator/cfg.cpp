@@ -1333,31 +1333,31 @@ tag_class_t::cfg() const
 
 	if( m_scalar_tags.is_defined() )
 	{
-		for( int i = 0; i < m_scalar_tags.size(); ++i )
+		for( std::size_t i = 0; i < m_scalar_tags.size(); ++i )
 			c.add_field( m_scalar_tags.at( i ).cfg() );
 	}
 
 	if( m_no_value_tags.is_defined() )
 	{
-		for( int i = 0; i < m_no_value_tags.size(); ++i )
+		for( std::size_t i = 0; i < m_no_value_tags.size(); ++i )
 			c.add_field( m_no_value_tags.at( i ).cfg() );
 	}
 
 	if( m_scalar_vector_tags.is_defined() )
 	{
-		for( int i = 0; i < m_scalar_vector_tags.size(); ++i )
+		for( std::size_t i = 0; i < m_scalar_vector_tags.size(); ++i )
 			c.add_field( m_scalar_vector_tags.at( i ).cfg() );
 	}
 
 	if( m_vector_of_tags_tags.is_defined() )
 	{
-		for( int i = 0; i < m_vector_of_tags_tags.size(); ++i )
+		for( std::size_t i = 0; i < m_vector_of_tags_tags.size(); ++i )
 			c.add_field( m_vector_of_tags_tags.at( i ).cfg() );
 	}
 
 	if( m_custom_tags.is_defined() )
 	{
-		for( int i = 0; i < m_custom_tags.size(); ++i )
+		for( std::size_t i = 0; i < m_custom_tags.size(); ++i )
 			c.add_field( m_custom_tags.at( i ).cfg() );
 	}
 
@@ -1390,13 +1390,13 @@ tag_namespace_t::cfg() const
 
 	if( m_nested_namespaces.is_defined() )
 	{
-		for( int i = 0; i < m_nested_namespaces.size(); ++i )
+		for( std::size_t i = 0; i < m_nested_namespaces.size(); ++i )
 			n.add_namespace( m_nested_namespaces.at( i ).cfg() );
 	}
 
 	if( m_classes.is_defined() )
 	{
-		for( int i = 0; i < m_classes.size(); ++i )
+		for( std::size_t i = 0; i < m_classes.size(); ++i )
 			n.add_class( m_classes.at( i ).cfg() );
 	}
 
@@ -1429,25 +1429,25 @@ tag_model_t::cfg() const
 
 	if( m_root_namespace.is_defined() )
 	{
-		for( int i = 0; i < m_root_namespace.size(); ++i )
+		for( std::size_t i = 0; i < m_root_namespace.size(); ++i )
 			m.root_namespace().add_namespace( m_root_namespace.at( i ).cfg() );
 	}
 
 	if( m_root_classes.is_defined() )
 	{
-		for( int i = 0; i < m_root_classes.size(); ++i )
+		for( std::size_t i = 0; i < m_root_classes.size(); ++i )
 			m.root_namespace().add_class( m_root_classes.at( i ).cfg() );
 	}
 
 	if( m_global_includes.is_defined() )
 	{
-		for( int i = 0; i < m_global_includes.size(); ++i )
+		for( std::size_t i = 0; i < m_global_includes.size(); ++i )
 			m.add_global_include( m_global_includes.at( i ).value() );
 	}
 
 	if( m_relative_includes.is_defined() )
 	{
-		for( int i = 0; i < m_relative_includes.size(); ++i )
+		for( std::size_t i = 0; i < m_relative_includes.size(); ++i )
 			m.add_relative_include( m_relative_includes.at( i ).value() );
 	}
 

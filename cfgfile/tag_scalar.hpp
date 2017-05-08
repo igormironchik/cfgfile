@@ -519,7 +519,7 @@ public:
 				const string_t spaces = string_t( name().length() + 2,
 					c_space );
 
-				for( int i = 0; i < sections; ++i )
+				for( pos_t i = 0; i < sections; ++i )
 				{
 					if( i > 0 )
 					{

@@ -49,7 +49,6 @@
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
-#include <QDebug>
 #endif
 
 
@@ -394,8 +393,6 @@ private:
 				{
 					const QDomAttr attr = attributes.namedItem(
 						QString( "a" ) + QString::number( i ) ).toAttr();
-
-					qDebug() << attr.lineNumber();
 
 					if( !attr.isNull() )
 						tag->on_string( parser_info_t(

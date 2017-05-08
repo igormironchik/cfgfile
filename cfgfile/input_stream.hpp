@@ -69,7 +69,7 @@ public:
 
 		char_t ch = 0x00;
 
-		if( m_returned_char != 0x00 )
+		if( m_returned_char != char_t( 0x00 ) )
 		{
 			ch = m_returned_char;
 
@@ -121,7 +121,7 @@ public:
 	//! \return Is stream at end?
 	bool at_end() const
 	{
-		if( m_returned_char == 0x00 )
+		if( m_returned_char == char_t( 0x00 ) )
 #ifdef CFGFILE_QSTRING_BUILD
 			return m_stream.atEnd();
 #else
