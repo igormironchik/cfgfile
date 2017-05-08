@@ -48,8 +48,8 @@ public:
 	input_stream_t( const string_t & file_name,
 		istream_t & input )
 		:	m_stream( input )
-		,	m_line_number( 0 )
-		,	m_column_number( 0 )
+		,	m_line_number( 1 )
+		,	m_column_number( 1 )
 		,	m_file_name( file_name )
 		,	m_returned_char( 0 )
 	{
@@ -125,7 +125,20 @@ public:
 #ifdef CFGFILE_QSTRING_BUILD
 			return m_stream.atEnd();
 #else
-			return m_stream.eof();
+		{
+			char_t tmp = 0;
+
+			m_stream >> tmp;
+
+			if( tmp )
+			{
+				m_stream.putback( tmp );
+
+				return false;
+			}
+			else
+				return true;
+		}
 #endif
 		else
 			return false;

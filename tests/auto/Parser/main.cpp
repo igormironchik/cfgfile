@@ -28,24 +28,22 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Qt include.
-#include <QtTest/QtTest>
-#include <QtCore/QBuffer>
-#include <QtCore/QTextStream>
+// UnitTest include.
+#include <UnitTest/unit_test.hpp>
 
-// QtConfFile include.
-#include <QtConfFile/private/InputStream>
-#include <QtConfFile/private/Parser>
-#include <QtConfFile/private/Tag>
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/all.hpp>
+
+// C++ include.
+#include <sstream>
 
 
 class ThirdTag
-	:	public QtConfFile::Tag
+	:	public cfgfile::tag_t
 {
 public:
-	ThirdTag( Tag & owner )
-		:	QtConfFile::Tag( owner, QString( "thirdTag" ), false )
+	ThirdTag( tag_t & owner )
+		:	cfgfile::tag_t( owner, "thirdTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -67,40 +65,26 @@ public:
 		return m_withString;
 	}
 
-	QString print( int indent = 0 ) const
+	cfgfile::string_t print( int indent = 0 ) const override
 	{
-		Q_UNUSED( indent )
-
-		return QString();
-	}
-
-	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
-	{
-		Q_UNUSED( doc )
-		Q_UNUSED( parent )
+		(void) indent;
+		return cfgfile::string_t();
 	}
 
 protected:
-	void onStart( const QtConfFile::ParserInfo & info )
+	void on_start( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_started = true;
 	}
 
-	void onFinish( const QtConfFile::ParserInfo & info )
+	void on_finish( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_finished = true;
 	}
 
-	void onString( const QtConfFile::ParserInfo & info,
-		const QString & str )
+	void on_string( const cfgfile::parser_info_t &,
+		const cfgfile::string_t & ) override
 	{
-		Q_UNUSED( info )
-		Q_UNUSED( str )
-
 		m_withString = true;
 	}
 
@@ -112,11 +96,11 @@ private:
 
 
 class SecondTag
-	:	public QtConfFile::Tag
+	:	public cfgfile::tag_t
 {
 public:
-	SecondTag( Tag & owner )
-		:	QtConfFile::Tag( owner, QString( "secondTag" ), false )
+	SecondTag( tag_t & owner )
+		:	cfgfile::tag_t( owner, "secondTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -144,40 +128,26 @@ public:
 		return m_withString;
 	}
 
-	QString print( int indent = 0 ) const
+	cfgfile::string_t print( int indent = 0 ) const override
 	{
-		Q_UNUSED( indent )
-
-		return QString();
-	}
-
-	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
-	{
-		Q_UNUSED( doc )
-		Q_UNUSED( parent )
+		(void) indent;
+		return cfgfile::string_t();
 	}
 
 protected:
-	void onStart( const QtConfFile::ParserInfo & info )
+	void on_start( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_started = true;
 	}
 
-	void onFinish( const QtConfFile::ParserInfo & info )
+	void on_finish( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_finished = true;
 	}
 
-	void onString( const QtConfFile::ParserInfo & info,
-		const QString & str )
+	void on_string( const cfgfile::parser_info_t &,
+		const cfgfile::string_t & ) override
 	{
-		Q_UNUSED( info )
-		Q_UNUSED( str )
-
 		m_withString = true;
 	}
 
@@ -190,11 +160,11 @@ private:
 
 
 class FirstTag
-	:	public QtConfFile::Tag
+	:	public cfgfile::tag_t
 {
 public:
 	FirstTag()
-		:	QtConfFile::Tag( QString( "firstTag" ), false )
+		:	cfgfile::tag_t( "firstTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -222,40 +192,26 @@ public:
 		return m_withString;
 	}
 
-	QString print( int indent = 0 ) const
+	cfgfile::string_t print( int indent = 0 ) const override
 	{
-		Q_UNUSED( indent )
-
-		return QString();
-	}
-
-	void print( QDomDocument & doc, QDomElement * parent = 0 ) const
-	{
-		Q_UNUSED( doc )
-		Q_UNUSED( parent )
+		(void) indent;
+		return cfgfile::string_t();
 	}
 
 protected:
-	void onStart( const QtConfFile::ParserInfo & info )
+	void on_start( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_started = true;
 	}
 
-	void onFinish( const QtConfFile::ParserInfo & info )
+	void on_finish( const cfgfile::parser_info_t & ) override
 	{
-		Q_UNUSED( info )
-
 		m_finished = true;
 	}
 
-	void onString( const QtConfFile::ParserInfo & info,
-		const QString & str )
+	void on_string( const cfgfile::parser_info_t &,
+		const cfgfile::string_t & ) override
 	{
-		Q_UNUSED( info )
-		Q_UNUSED( str )
-
 		m_withString = true;
 	}
 
@@ -266,215 +222,181 @@ private:
 	SecondTag m_child;
 }; // class FirstTag
 
-
-class TestParser
-	:	public QObject
+TEST( Parser, test_configWithOneTag )
 {
-	Q_OBJECT
+	std::stringstream stream( "{firstTag \"lexeme1\"}" );
 
-private slots:
-	void test_configWithOneTag()
+	cfgfile::input_stream_t input( "test_configWithOneTag", stream );
+
+	FirstTag firstTag;
+
+	cfgfile::parser_t parser( firstTag, input );
+
+	parser.parse( "test_configWithOneTag" );
+
+	firstTag.set_defined();
+
+	CHECK_CONDITION( firstTag.is_defined() == true );
+	CHECK_CONDITION( firstTag.isStarted() == true );
+	CHECK_CONDITION( firstTag.isFinished() == true );
+	CHECK_CONDITION( firstTag.isWithString() == true );
+
+	CHECK_CONDITION( firstTag.secondTag().is_defined() == false );
+	CHECK_CONDITION( firstTag.secondTag().isStarted() == false );
+	CHECK_CONDITION( firstTag.secondTag().isFinished() == false );
+	CHECK_CONDITION( firstTag.secondTag().isWithString() == false );
+
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().is_defined() == false );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isStarted() == false );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isFinished() == false );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isWithString() == false );
+} // test_configWithOneTag
+
+TEST( Parser, test_configWithThreeTags )
+{
+	std::stringstream stream( "{firstTag \"lexeme1\"\r\n"
+		"\t{secondTag \"lexeme2\"\r\n"
+		"\t\t{thirdTag \"lexeme3\"}\r\n"
+		"}\r\n"
+		"}" );
+
+	cfgfile::input_stream_t input( "test_configWithThreeTags", stream );
+
+	FirstTag firstTag;
+
+	cfgfile::parser_t parser( firstTag, input );
+
+	parser.parse( "test_configWithThreeTags" );
+
+	firstTag.set_defined();
+
+	CHECK_CONDITION( firstTag.is_defined() == true );
+	CHECK_CONDITION( firstTag.isStarted() == true );
+	CHECK_CONDITION( firstTag.isFinished() == true );
+	CHECK_CONDITION( firstTag.isWithString() == true );
+
+	CHECK_CONDITION( firstTag.secondTag().is_defined() == false );
+	CHECK_CONDITION( firstTag.secondTag().isStarted() == true );
+	CHECK_CONDITION( firstTag.secondTag().isFinished() == true );
+	CHECK_CONDITION( firstTag.secondTag().isWithString() == true );
+
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().is_defined() == false );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isStarted() == true );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isFinished() == true );
+	CHECK_CONDITION( firstTag.secondTag().thirdTag().isWithString() == true );
+} // test_configWithThreeTags
+
+TEST( Parser, test_unexpectedStartCurlBrace )
+{
+	std::stringstream stream( "{{firstTag \"lexeme1\"}" );
+
+	cfgfile::input_stream_t input( "test_unexpectedStartCurlBrace", stream );
+
+	FirstTag firstTag;
+
+	cfgfile::parser_t parser( firstTag, input );
+
+	try {
+		parser.parse( "test_unexpectedStartCurlBrace" );
+	}
+	catch( cfgfile::exception_t & x )
 	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"lexeme1\"}" );
-		buffer.seek( 0 );
+		CHECK_CONDITION( x.desc() ==
+			"Unexpected start curl brace. "
+			"We expected tag name, but we've got start curl brace. "
+			"In file \"test_unexpectedStartCurlBrace\" on line 1." );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_configWithOneTag" ) );
+		return;
+	}
 
-		FirstTag firstTag;
+	CHECK_CONDITION( true == false );
+} // test_unexpectedStartCurlBrace
 
-		QtConfFile::Parser parser( firstTag, input );
+TEST( Parser, test_unexpectedTagName1 )
+{
+	std::stringstream stream( "{secondTag \"lexeme1\"}" );
 
-		try {
-		parser.parse( QLatin1String( "test_configWithOneTag" ) );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
-		}
+	cfgfile::input_stream_t input( "test_unexpectedTagName1", stream );
 
-		firstTag.setDefined();
+	FirstTag firstTag;
 
-		QVERIFY( firstTag.isDefined() == true );
-		QVERIFY( firstTag.isStarted() == true );
-		QVERIFY( firstTag.isFinished() == true );
-		QVERIFY( firstTag.isWithString() == true );
+	cfgfile::parser_t parser( firstTag, input );
 
-		QVERIFY( firstTag.secondTag().isDefined() == false );
-		QVERIFY( firstTag.secondTag().isStarted() == false );
-		QVERIFY( firstTag.secondTag().isFinished() == false );
-		QVERIFY( firstTag.secondTag().isWithString() == false );
-
-		QVERIFY( firstTag.secondTag().thirdTag().isDefined() == false );
-		QVERIFY( firstTag.secondTag().thirdTag().isStarted() == false );
-		QVERIFY( firstTag.secondTag().thirdTag().isFinished() == false );
-		QVERIFY( firstTag.secondTag().thirdTag().isWithString() == false );
-	} // test_configWithOneTag
-
-	void test_configWithThreeTags()
+	try {
+		parser.parse( "test_unexpectedTagName1" );
+	}
+	catch( cfgfile::exception_t & x )
 	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"lexeme1\"\r\n" );
-		buffer.write( "\t{secondTag \"lexeme2\"\r\n" );
-		buffer.write( "\t\t{thirdTag \"lexeme3\"}\r\n" );
-		buffer.write( "}\r\n" );
-		buffer.write( "}" );
-		buffer.seek( 0 );
+		CHECK_CONDITION( x.desc() ==
+			"Unexpected tag name. "
+			"We expected \"firstTag\", but we've got \"secondTag\". "
+			"In file \"test_unexpectedTagName1\" on line 1." );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_configWithThreeTags" ) );
+		return;
+	}
 
-		FirstTag firstTag;
+	CHECK_CONDITION( true == false );
+} // test_unexpectedTagName1
 
-		QtConfFile::Parser parser( firstTag, input );
+TEST( Parser, test_unexpectedTagName2 )
+{
+	std::stringstream stream( "{firstTag \"lexeme1\"\r\n"
+		"\t{thirdTag \"lexeme2\"}\r\n"
+		"}" );
 
-		parser.parse( QLatin1String( "test_configWithThreeTags" ) );
+	cfgfile::input_stream_t input( "test_unexpectedTagName2", stream );
 
-		firstTag.setDefined();
+	FirstTag firstTag;
 
-		QVERIFY( firstTag.isDefined() == true );
-		QVERIFY( firstTag.isStarted() == true );
-		QVERIFY( firstTag.isFinished() == true );
-		QVERIFY( firstTag.isWithString() == true );
+	cfgfile::parser_t parser( firstTag, input );
 
-		QVERIFY( firstTag.secondTag().isDefined() == false );
-		QVERIFY( firstTag.secondTag().isStarted() == true );
-		QVERIFY( firstTag.secondTag().isFinished() == true );
-		QVERIFY( firstTag.secondTag().isWithString() == true );
-
-		QVERIFY( firstTag.secondTag().thirdTag().isDefined() == false );
-		QVERIFY( firstTag.secondTag().thirdTag().isStarted() == true );
-		QVERIFY( firstTag.secondTag().thirdTag().isFinished() == true );
-		QVERIFY( firstTag.secondTag().thirdTag().isWithString() == true );
-	} // test_configWithThreeTags
-
-	void test_unexpectedStartCurlBrace()
+	try {
+		parser.parse( "test_unexpectedTagName2" );
+	}
+	catch( cfgfile::exception_t & x )
 	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{{firstTag \"lexeme1\"}" );
-		buffer.seek( 0 );
+		CHECK_CONDITION( x.desc() ==
+			"Unexpected tag name. "
+			"We expected one child tag of tag \"firstTag\", "
+			"but we've got \"thirdTag\". "
+			"In file \"test_unexpectedTagName2\" on line 2." );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_unexpectedStartCurlBrace" ) );
+		return;
+	}
 
-		FirstTag firstTag;
+	CHECK_CONDITION( true == false );
+} // test_unexpectedTagName2
 
-		QtConfFile::Parser parser( firstTag, input );
+TEST( Parser, test_unexpectedEndOfFile )
+{
+	std::stringstream stream( "{firstTag \"lexeme1\"\r\n"
+		"\t{secondTag \"lexeme2\"}\r\n" );
 
-		try {
-			parser.parse( QLatin1String( "test_unexpectedStartCurlBrace" ) );
-		}
-		catch( QtConfFile::Exception & x )
-		{
-			QCOMPARE( x.whatAsQString(),
-				QLatin1String( "Unexpected start curl brace. "
-					"We expected tag name, but we've got start curl brace. "
-					"In file \"test_unexpectedStartCurlBrace\" on line 1." ) );
+	cfgfile::input_stream_t input( "test_unexpectedEndOfFile", stream );
 
-			return;
-		}
+	FirstTag firstTag;
 
-		QVERIFY( true == false );
-	} // test_unexpectedStartCurlBrace
+	cfgfile::parser_t parser( firstTag, input );
 
-	void test_unexpectedTagName1()
+	try {
+		parser.parse( "test_unexpectedEndOfFile" );
+	}
+	catch( cfgfile::exception_t & x )
 	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{secondTag \"lexeme1\"}" );
-		buffer.seek( 0 );
+		CHECK_CONDITION( x.desc() ==
+			"Unexpected end of file. "
+			"Still unfinished tag \"firstTag\"." );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_unexpectedTagName1" ) );
+		return;
+	}
 
-		FirstTag firstTag;
+	CHECK_CONDITION( true == false );
+} // test_unexpectedEndOfFile
 
-		QtConfFile::Parser parser( firstTag, input );
 
-		try {
-			parser.parse( QLatin1String( "test_unexpectedTagName1" ) );
-		}
-		catch( QtConfFile::Exception & x )
-		{
-			QCOMPARE( x.whatAsQString(),
-				QLatin1String( "Unexpected tag name. "
-					"We expected \"firstTag\", but we've got \"secondTag\". "
-					"In file \"test_unexpectedTagName1\" on line 1." ) );
+int main()
+{
+	RUN_ALL_TESTS()
 
-			return;
-		}
-
-		QVERIFY( true == false );
-	} // test_unexpectedTagName1
-
-	void test_unexpectedTagName2()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"lexeme1\"\r\n" );
-		buffer.write( "\t{thirdTag \"lexeme2\"}\r\n" );
-		buffer.write( "}" );
-		buffer.seek( 0 );
-
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_unexpectedTagName2" ) );
-
-		FirstTag firstTag;
-
-		QtConfFile::Parser parser( firstTag, input );
-
-		try {
-			parser.parse( QLatin1String( "test_unexpectedTagName2" ) );
-		}
-		catch( QtConfFile::Exception & x )
-		{
-			QCOMPARE( x.whatAsQString(),
-				QLatin1String( "Unexpected tag name. "
-					"We expected one child tag of tag \"firstTag\", "
-					"but we've got \"thirdTag\". "
-					"In file \"test_unexpectedTagName2\" on line 2." ) );
-
-			return;
-		}
-
-		QVERIFY( true == false );
-	} // test_unexpectedTagName2
-
-	void test_unexpectedEndOfFile()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"lexeme1\"\r\n" );
-		buffer.write( "\t{secondTag \"lexeme2\"}\r\n" );
-		buffer.seek( 0 );
-
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_unexpectedEndOfFile" ) );
-
-		FirstTag firstTag;
-
-		QtConfFile::Parser parser( firstTag, input );
-
-		try {
-			parser.parse( QLatin1String( "test_unexpectedEndOfFile" ) );
-		}
-		catch( QtConfFile::Exception & x )
-		{
-			QCOMPARE( x.whatAsQString(),
-				QLatin1String( "Unexpected end of file. "
-					"Still unfinished tag \"firstTag\"." ) );
-
-			return;
-		}
-
-		QVERIFY( true == false );
-	} // test_unexpectedEndOfFile
-}; // class TestParser
-
-QTEST_MAIN( TestParser )
-
-#include "main.moc"
+	return 0;
+}

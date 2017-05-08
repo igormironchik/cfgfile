@@ -13,3 +13,5 @@ else {
 }
 
 PRE_TARGETDEPS += compiler_copy_cfg_files_make_all
+
+INCLUDEPATH += ../../..

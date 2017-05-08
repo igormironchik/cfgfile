@@ -109,7 +109,7 @@ public:
 		Repeatly adds value to the end of vector.
 	*/
 	void
-	set_value( ptr_to_tag_t & p )
+	set_value( ptr_to_tag_t p )
 	{
 		m_tags.push_back( p );
 

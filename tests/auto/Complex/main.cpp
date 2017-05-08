@@ -30,164 +30,150 @@
 
 #include "cfg.hpp"
 
-// QtConfFile include.
-#include <QtConfFile/Utils>
+// UnitTest include.
+#include <UnitTest/unit_test.hpp>
 
-// Qt include.
-#include <QtTest/QtTest>
+// C++ include.
+#include <fstream>
 
 
-class ComplexTest
-	:	public QObject
+Configuration loadConfig( const std::string & fileName )
 {
-	Q_OBJECT
+	TagConfiguration readTag;
 
-private:
-	Configuration loadConfig( const QString & fileName )
+	std::ifstream file( fileName );
+
+	try {
+		if( file.good() )
+		{
+			cfgfile::read_cfgfile( readTag, file, fileName );
+
+			file.close();
+		}
+	}
+	catch( const cfgfile::exception_t & )
 	{
-		TagConfiguration readTag;
+		file.close();
 
-		QtConfFile::readQtConfFile( readTag, fileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-
-		return readTag.configuration();
+		throw;
 	}
 
-	void checkConfig( const Configuration & cfg )
-	{
-		QCOMPARE( cfg.m_stringValue, QLatin1String( "string" ) );
-		QVERIFY( cfg.m_listOfStringValues.size() == 3 );
-		QCOMPARE( cfg.m_listOfStringValues.at( 0 ), QLatin1String( "str1" ) );
-		QCOMPARE( cfg.m_listOfStringValues.at( 1 ), QLatin1String( "str2" ) );
-		QCOMPARE( cfg.m_listOfStringValues.at( 2 ), QLatin1String( "str3" ) );
-		QVERIFY( cfg.m_intValue == 100 );
-		QVERIFY( cfg.m_vectorOfTags.size() == 2 );
-		QCOMPARE( cfg.m_vectorOfTags.at( 0 ).m_stringValue,
-			QLatin1String( "string1" ) );
-		QVERIFY( cfg.m_vectorOfTags.at( 0 ).m_intValue == 100 );
-		QCOMPARE( cfg.m_vectorOfTags.at( 1 ).m_stringValue,
-			QLatin1String( "string2" ) );
-		QVERIFY( cfg.m_vectorOfTags.at( 1 ).m_intValue == 200 );
+	return readTag.configuration();
+}
+
+void checkConfig( const Configuration & cfg )
+{
+	CHECK_CONDITION( cfg.m_stringValue == "string" )
+	CHECK_CONDITION( cfg.m_listOfStringValues.size() == 3 )
+	CHECK_CONDITION( cfg.m_listOfStringValues.at( 0 ) == "str1" )
+	CHECK_CONDITION( cfg.m_listOfStringValues.at( 1 ) == "str2" )
+	CHECK_CONDITION( cfg.m_listOfStringValues.at( 2 ) == "str3" )
+	CHECK_CONDITION( cfg.m_intValue == 100 );
+	CHECK_CONDITION( cfg.m_vectorOfTags.size() == 2 );
+	CHECK_CONDITION( cfg.m_vectorOfTags.at( 0 ).m_stringValue ==
+		"string1" )
+	CHECK_CONDITION( cfg.m_vectorOfTags.at( 0 ).m_intValue == 100 );
+	CHECK_CONDITION( cfg.m_vectorOfTags.at( 1 ).m_stringValue ==
+		"string2" )
+	CHECK_CONDITION( cfg.m_vectorOfTags.at( 1 ).m_intValue == 200 );
+}
+
+TEST( Complex, testAllIsOk )
+{
+	Configuration cfg = loadConfig( "all_is_ok.cfg" );
+
+	checkConfig( cfg );
+} // testAllIsOk
+
+TEST( Complex, testAllIsOkWithComments )
+{
+	Configuration cfg = loadConfig( "all_is_ok_with_comments.cfg" );
+
+	checkConfig( cfg );
+} // testAllIsOkWithComments
+
+TEST( Complex, testIncosistencyToStringConstraint )
+{
+	try {
+		loadConfig( "inconsistency_to_string_constraint.cfg" );
+
+		CHECK_CONDITION( true == false );
 	}
-
-private slots:
-	void testAllIsOk()
+	catch( const cfgfile::exception_t & x )
 	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "all_is_ok.cfg" ) );
+		CHECK_CONDITION( "Invalid value: \"str4\". Value must match "
+			"to the constraint in tag \"listOfStringValues\". "
+			"In file \"inconsistency_to_string_constraint.cfg\" "
+			"on line 3." == x.desc() );
+	}
+} // testIncosistencyToStringConstraint
 
-			checkConfig( cfg );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+TEST( Complex, testIncosistencyToIntConstraint )
+{
+	try {
+		loadConfig( "inconsistency_to_int_constraint.cfg" );
 
-			QVERIFY( true == false );
-		}
-	} // testAllIsOk
-
-	void testAllIsOkWithComments()
+		CHECK_CONDITION( true == false );
+	}
+	catch( const cfgfile::exception_t & x )
 	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "all_is_ok_with_comments.cfg" ) );
+		CHECK_CONDITION( "Invalid value: \"200\". Value must match "
+			"to the constraint in tag \"intValue\". "
+			"In file \"inconsistency_to_int_constraint.cfg\" "
+			"on line 4." == x.desc() );
+	}
+} // testIncosistencyToIntConstraint
 
-			checkConfig( cfg );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+TEST( Complex, testUndefinedChildMandatoryTag )
+{
+	try {
+		loadConfig( "undefined_child_mandatory_tag.cfg" );
 
-			QVERIFY( true == false );
-		}
-	} // testAllIsOkWithComments
-
-	void testIncosistencyToStringConstraint()
+		CHECK_CONDITION( true == false );
+	}
+	catch( const cfgfile::exception_t & x )
 	{
-		try {
-			loadConfig(
-				QLatin1String( "inconsistency_to_string_constraint.cfg" ) );
+		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
+			"Where parent is: \"vecOfTags\". "
+			"In file \"undefined_child_mandatory_tag.cfg\" on line 8." ==
+			x.desc() );
+	}
+} // testUndefinedChildMandatoryTag
 
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Invalid value: \"str4\". Value must match "
-				"to the constraint in tag \"listOfStringValues\". "
-				"In file \"inconsistency_to_string_constraint.cfg\" "
-				"on line 3." ), x.whatAsQString() );
-		}
-	} // testIncosistencyToStringConstraint
+TEST( Complex, testUndefinedMandatoryTag )
+{
+	try {
+		loadConfig( "undefined_mandatory_tag.cfg" );
 
-	void testIncosistencyToIntConstraint()
+		CHECK_CONDITION( true == false );
+	}
+	catch( const cfgfile::exception_t & x )
 	{
-		try {
-			loadConfig(
-				QLatin1String( "inconsistency_to_int_constraint.cfg" ) );
+		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
+			"Where parent is: \"cfg\". "
+			"In file \"undefined_mandatory_tag.cfg\" on line 14." ==
+			x.desc() );
+	}
+} // testUndefinedMandatoryTag
 
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Invalid value: \"200\". Value must match "
-				"to the constraint in tag \"intValue\". "
-				"In file \"inconsistency_to_int_constraint.cfg\" "
-				"on line 4." ), x.whatAsQString() );
-		}
-	} // testIncosistencyToIntConstraint
+TEST( Complex, testEmptyFile )
+{
+	try {
+		loadConfig( "empty_file.cfg" );
 
-	void testUndefinedChildMandatoryTag()
+		CHECK_CONDITION( true == false );
+	}
+	catch( const cfgfile::exception_t & x )
 	{
-		try {
-			loadConfig(
-				QLatin1String( "undefined_child_mandatory_tag.cfg" ) );
+		CHECK_CONDITION( "Unexpected end of file. Undefined "
+			"mandatory tag \"cfg\". In file \"empty_file.cfg\" on line 1." ==
+			x.desc() );
+	}
+} // testEmptyFile
 
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Undefined child mandatory tag: \"stringValue\". "
-				"Where parent is: \"vecOfTags\". "
-				"In file \"undefined_child_mandatory_tag.cfg\" on line 8." ),
-				x.whatAsQString() );
-		}
-	} // testUndefinedChildMandatoryTag
+int main()
+{
+	RUN_ALL_TESTS()
 
-	void testUndefinedMandatoryTag()
-	{
-		try {
-			loadConfig(
-				QLatin1String( "undefined_mandatory_tag.cfg" ) );
-
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Undefined child mandatory tag: \"stringValue\". "
-				"Where parent is: \"cfg\". "
-				"In file \"undefined_mandatory_tag.cfg\" on line 14." ),
-				x.whatAsQString() );
-		}
-	} // testUndefinedMandatoryTag
-
-	void testEmptyFile()
-	{
-		try {
-			loadConfig(
-				QLatin1String( "empty_file.cfg" ) );
-
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Unexpected end of file. Undefined "
-				"mandatory tag \"cfg\". In file \"empty_file.cfg\" on line 1." ),
-				x.whatAsQString() );
-		}
-	} // testEmptyFile
-}; // class ComplexTest
-
-QTEST_MAIN( ComplexTest )
-
-#include "main.moc"
+	return 0;
+}

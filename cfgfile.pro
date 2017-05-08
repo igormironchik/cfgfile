@@ -2,6 +2,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS = generator \
-	example
+	example \
+	tests
 
 example.depends = generator

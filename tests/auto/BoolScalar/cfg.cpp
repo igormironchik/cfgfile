@@ -61,21 +61,21 @@ Configuration::operator = ( const Configuration & other )
 //
 
 TagConfiguration::TagConfiguration()
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
-	,	m_withTrue( *this, QLatin1String( "withTrue" ), true )
-	,	m_withFalse( *this, QLatin1String( "withFalse" ), true )
+	:	cfgfile::tag_no_value_t( "cfg", true )
+	,	m_withTrue( *this, "withTrue", true )
+	,	m_withFalse( *this, "withFalse", true )
 {
 }
 
 TagConfiguration::TagConfiguration( const Configuration & cfg )
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
-	,	m_withTrue( *this, QLatin1String( "withTrue" ), true )
-	,	m_withFalse( *this, QLatin1String( "withFalse" ), true )
+	:	cfgfile::tag_no_value_t( "cfg", true )
+	,	m_withTrue( *this, "withTrue", true )
+	,	m_withFalse( *this, "withFalse", true )
 {
-	m_withTrue.setValue( cfg.m_withTrue );
-	m_withFalse.setValue( cfg.m_withFalse );
+	m_withTrue.set_value( cfg.m_withTrue );
+	m_withFalse.set_value( cfg.m_withFalse );
 
-	setDefined();
+	set_defined();
 }
 
 Configuration

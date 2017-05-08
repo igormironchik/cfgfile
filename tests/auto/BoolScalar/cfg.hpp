@@ -28,12 +28,11 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED
-#define QTCONFFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED
+#ifndef CFGFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED
+#define CFGFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/TagNoValue>
-#include <QtConfFile/TagScalar>
+// cfgfile include.
+#include <cfgfile/all.hpp>
 
 
 //
@@ -75,7 +74,7 @@ struct Configuration {
 	\endverbatim
 */
 class TagConfiguration
-	:	public QtConfFile::TagNoValue
+	:	public cfgfile::tag_no_value_t
 {
 public:
 	//! For reading.
@@ -88,8 +87,8 @@ public:
 	configuration() const;
 
 private:
-	QtConfFile::TagScalar< bool > m_withTrue;
-	QtConfFile::TagScalar< bool > m_withFalse;
+	cfgfile::tag_scalar_t< bool > m_withTrue;
+	cfgfile::tag_scalar_t< bool > m_withFalse;
 }; // class TagConfiguration
 
-#endif // QTCONFFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED
+#endif // CFGFILE__TEST__BOOL_SCALAR__CFG_HPP__INCLUDED

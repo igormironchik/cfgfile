@@ -30,118 +30,80 @@
 
 #include "cfg.hpp"
 
-// QtConfFile include.
-#include <QtConfFile/Utils>
+// C++ include.
+#include <fstream>
 
-// Qt include.
-#include <QtTest/QtTest>
+// UnitTest include.
+#include <UnitTest/unit_test.hpp>
 
 
-class BoolScalarTest
-	:	public QObject
+Configuration loadConfig( const std::string & fileName )
 {
-	Q_OBJECT
+	TagConfiguration readTag;
 
-private:
-	Configuration loadConfig( const QString & fileName )
+	std::ifstream file( fileName );
+
+	try {
+		if( file.good() )
+		{
+			cfgfile::read_cfgfile( readTag, file, fileName );
+
+			file.close();
+		}
+	}
+	catch( const cfgfile::exception_t & )
 	{
-		TagConfiguration readTag;
+		file.close();
 
-		QtConfFile::readQtConfFile( readTag, fileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-
-		return readTag.configuration();
+		throw;
 	}
 
-	void checkConfig( const Configuration & cfg )
-	{
-		QCOMPARE( cfg.m_withTrue, true );
-		QCOMPARE( cfg.m_withFalse, false );
-	}
+	return readTag.configuration();
+}
 
-private slots:
-	void testAllIsOkWithTrueAndFalse()
-	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "all_is_ok_with_true_and_false.cfg" ) );
+void checkConfig( const Configuration & cfg )
+{
+	CHECK_CONDITION( cfg.m_withTrue == true )
+	CHECK_CONDITION( cfg.m_withFalse == false )
+}
 
-			checkConfig( cfg );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+TEST( BoolScalar, testAllIsOkWithTrueAndFalse )
+{
+	Configuration cfg = loadConfig( "all_is_ok_with_true_and_false.cfg" );
 
-			QVERIFY( true == false );
-		}
-	} // testAllIsOkWithTrueAndFalse
+	checkConfig( cfg );
+} // testAllIsOkWithTrueAndFalse
 
-	void testAllIsOkWithOnAndOff()
-	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "all_is_ok_with_on_and_off.cfg" ) );
+TEST( BoolScalar, testAllIsOkWithOnAndOff )
+{
+	Configuration cfg = loadConfig( "all_is_ok_with_on_and_off.cfg" );
 
-			checkConfig( cfg );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+	checkConfig( cfg );
+} // testAllIsOkWithOnAndOff
 
-			QVERIFY( true == false );
-		}
-	} // testAllIsOkWithOnAndOff
+TEST( BoolScalar, testAllIsOkWith1And0 )
+{
+	Configuration cfg = loadConfig( "all_is_ok_with_1_and_0.cfg" );
 
-	void testAllIsOkWith1And0()
-	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "all_is_ok_with_1_and_0.cfg" ) );
+	checkConfig( cfg );
+} // testAllIsOkWith1And0
 
-			checkConfig( cfg );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+TEST( BoolScalar, testFalseInsteadOfTrue )
+{
+	Configuration cfg = loadConfig( "false_instead_of_true.cfg" );
 
-			QVERIFY( true == false );
-		}
-	} // testAllIsOkWith1And0
+	CHECK_CONDITION( cfg.m_withTrue == false )
+	CHECK_CONDITION( cfg.m_withFalse == false )
+} // testFalseInsteadOfTrue
 
-	void testFalseInsteadOfTrue()
-	{
-		try {
-			Configuration cfg = loadConfig(
-				QLatin1String( "false_instead_of_true.cfg" ) );
+TEST( BoolScalar, testInvalidValue )
+{
+	CHECK_THROW( loadConfig( "invalid_value.cfg" ), cfgfile::exception_t );
+} // testInvalidValue
 
-			QCOMPARE( cfg.m_withTrue, false );
-			QCOMPARE( cfg.m_withFalse, false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			qDebug() << x.whatAsQString();
+int main()
+{
+	RUN_ALL_TESTS()
 
-			QVERIFY( true == false );
-		}
-	} // testFalseInsteadOfTrue
-
-	void testInvalidValue()
-	{
-		try {
-			loadConfig(
-				QLatin1String( "invalid_value.cfg" ) );
-
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( QLatin1String( "Invalid value: \"123\". "
-				"In file \"invalid_value.cfg\" on line 2." ),
-				x.whatAsQString() );
-		}
-	} // testInvalidValue
-}; // class BoolScalarTest
-
-QTEST_MAIN( BoolScalarTest )
-
-#include "main.moc"
+	return 0;
+}

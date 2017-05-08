@@ -28,20 +28,15 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-#ifndef QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
-#define QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
+#ifndef CFGFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
+#define CFGFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
 
-// QtConfFile include.
-#include <QtConfFile/TagNoValue>
-#include <QtConfFile/TagScalar>
-#include <QtConfFile/TagScalarVector>
-#include <QtConfFile/TagVectorOfTags>
-#include <QtConfFile/ConstraintMinMax>
-#include <QtConfFile/ConstraintOneOf>
+// cfgfile include.
+#include <cfgfile/all.hpp>
 
-// Qt include.
-#include <QtCore/QVector>
-#include <QtCore/QString>
+// C++ include.
+#include <string>
+#include <vector>
 
 
 //
@@ -71,11 +66,11 @@
 struct Configuration {
 	struct Pair {
 		Pair();
-		Pair( const QString & stringValue, int intValue );
+		Pair( const std::string & stringValue, int intValue );
 
 		Pair & operator = ( const Pair & other );
 
-		QString m_stringValue;
+		std::string m_stringValue;
 		int m_intValue;
 	}; // struct Pair
 
@@ -83,10 +78,10 @@ struct Configuration {
 
 	Configuration & operator = ( const Configuration & other );
 
-	QString m_stringValue;
-	QVector< QString > m_listOfStringValues;
+	std::string m_stringValue;
+	std::vector< std::string > m_listOfStringValues;
 	int m_intValue;
-	QVector< Pair > m_vectorOfTags;
+	std::vector< Pair > m_vectorOfTags;
 }; // class Configuration
 
 
@@ -107,11 +102,11 @@ struct Configuration {
 	\endverbatim
 */
 class TagVecOfTags
-	:	public QtConfFile::TagNoValue
+	:	public cfgfile::tag_no_value_t
 {
 public:
 	//! For reading.
-	TagVecOfTags( const QString & name, bool isMandatory );
+	TagVecOfTags( const std::string & name, bool isMandatory );
 	//! For writing.
 	explicit TagVecOfTags( const Configuration::Pair & pair );
 
@@ -120,8 +115,8 @@ public:
 	pair() const;
 
 private:
-	QtConfFile::TagScalar< QString > m_stringValue;
-	QtConfFile::TagScalar< int > m_intValue;
+	cfgfile::tag_scalar_t< std::string > m_stringValue;
+	cfgfile::tag_scalar_t< int > m_intValue;
 }; // class TagVecOfTags
 
 
@@ -150,7 +145,7 @@ private:
 	\endverbatim
 */
 class TagConfiguration
-	:	public QtConfFile::TagNoValue
+	:	public cfgfile::tag_no_value_t
 {
 public:
 	//! For reading.
@@ -163,12 +158,12 @@ public:
 	configuration() const;
 
 private:
-	QtConfFile::TagScalar< QString > m_stringValue;
-	QtConfFile::ConstraintOneOf< QString > m_constraintForListOfStringValues;
-	QtConfFile::TagScalarVector< QString > m_listOfStringValues;
-	QtConfFile::ConstraintMinMax< int > m_constriantForIntValue;
-	QtConfFile::TagScalar< int > m_intValue;
-	QtConfFile::TagVectorOfTags< TagVecOfTags > m_vecOfTags;
+	cfgfile::tag_scalar_t< std::string > m_stringValue;
+	cfgfile::constraint_one_of_t< std::string > m_constraintForListOfStringValues;
+	cfgfile::tag_scalar_vector_t< std::string > m_listOfStringValues;
+	cfgfile::constraint_min_max_t< int > m_constriantForIntValue;
+	cfgfile::tag_scalar_t< int > m_intValue;
+	cfgfile::tag_vector_of_tags_t< TagVecOfTags > m_vecOfTags;
 }; // class TagConfiguration
 
-#endif // QTCONFFILE__TEST__COMPLEX__CFG_HPP__INCLUDED
+#endif // CFGFILE__TEST__COMPLEX__CFG_HPP__INCLUDED

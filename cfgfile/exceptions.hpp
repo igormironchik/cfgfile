@@ -50,7 +50,11 @@ class exception_t final
 {
 public:
 	explicit exception_t( string_t what )
+#if defined( CFGFILE_QSTRING_BUILD) || defined( CFGFILE_WSTRING_BUILD )
 		:	std::logic_error( "Please use desc() method of the exception." )
+#else
+		:	std::logic_error( what )
+#endif
 		,	m_what( std::move( what ) )
 	{
 	}

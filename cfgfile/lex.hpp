@@ -163,6 +163,7 @@ public:
 				else
 					throw exception_t( string_t(
 						SL( "Unrecognized back-slash sequence: \"\\" ) ) +
+						string_t( 1, new_char ) +
 						SL( "\". In file \"" ) + m_stream.file_name() +
 						SL( "\" on line " ) + pos_to_string( line_number() ) +
 						SL( "." ) );

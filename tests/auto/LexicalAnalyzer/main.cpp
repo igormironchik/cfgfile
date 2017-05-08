@@ -28,223 +28,196 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// Qt include.
-#include <QtTest/QtTest>
-#include <QtCore/QBuffer>
-#include <QtCore/QTextStream>
+// UnitTest include.
+#include <UnitTest/unit_test.hpp>
 
-// QtConfFile include.
-#include <QtConfFile/private/Lex>
-#include <QtConfFile/private/InputStream>
-#include <QtConfFile/Exceptions>
+// cfgfile include.
+#include <cfgfile/lex.hpp>
+#include <cfgfile/input_stream.hpp>
+
+// C++ include.
+#include <sstream>
 
 
-class TestLexicalAnalyzer
-	:	public QObject
+TEST( LexicalAnalyzer, test_quotedLexeme1 )
 {
-	Q_OBJECT
+	std::stringstream stream( "{firstTag \"lexeme\"}" );
 
-private slots:
-	void test_quotedLexeme1()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"lexeme\"}" );
-		buffer.seek( 0 );
+	cfgfile::input_stream_t input( "test_quotedLexeme1", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_quotedLexeme1" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
 
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
 
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
+	cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "lexeme" );
 
-        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex3.value(), QLatin1String( "lexeme" ) );
+	cfgfile::lexeme_t lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
 
-        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
-        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
+	CHECK_CONDITION( input.at_end() == true );
+}
 
-		QVERIFY( input.atEnd() == true );
+TEST( LexicalAnalyzer, test_quotedLexeme2 )
+{
+	std::stringstream stream( " \r\n\t {firstTag\"lexeme\"}" );
+
+	cfgfile::input_stream_t input( "test_quotedLexeme2", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
+
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
+
+	cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "lexeme" );
+
+	cfgfile::lexeme_t lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
+
+	CHECK_CONDITION( input.at_end() == true );
+}
+
+TEST( LexicalAnalyzer, test_backSlahSequence )
+{
+	std::stringstream stream( " \r\n\t {firstTag\"\\n\\r\\t\\\"\\\\lexeme\"}" );
+
+	cfgfile::input_stream_t input( "test_backSlahSequence", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
+
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
+
+	cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "\n\r\t\"\\lexeme" );
+
+	cfgfile::lexeme_t lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
+
+	CHECK_CONDITION( input.at_end() == true );
+}
+
+TEST( LexicalAnalyzer, test_wrongBackSlahSequence )
+{
+	std::stringstream stream( " \r\n\t {firstTag\"\\glexeme\"}" );
+
+	cfgfile::input_stream_t input( "test_wrongBackSlahSequence", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
+
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
+
+	try {
+		cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+
+		CHECK_CONDITION( true == false );
 	}
-
-	void test_quotedLexeme2()
+	catch( const cfgfile::exception_t & x )
 	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( " \r\n\t {firstTag\"lexeme\"}" );
-		buffer.seek( 0 );
-
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_quotedLexeme2" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
-
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
-
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
-
-        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex3.value(), QLatin1String( "lexeme" ) );
-
-        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
-        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
-
-		QVERIFY( input.atEnd() == true );
+		CHECK_CONDITION( x.desc() == "Unrecognized back-slash sequence: \"\\g\". "
+			"In file \"test_wrongBackSlahSequence\" on line 2." );
 	}
+}
 
-	void test_backSlahSequence()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( " \r\n\t {firstTag\"\\n\\r\\t\\\"\\\\lexeme\"}" );
-		buffer.seek( 0 );
+TEST( LexicalAnalyzer, test_oneLineComment )
+{
+	std::stringstream stream( "{firstTag \"value1\"}\r\n"
+		"|| Comment\r\n"
+		"{secondTag \"value2\"}\r\n" );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_backSlahSequence" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
+	cfgfile::input_stream_t input( "test_oneLineComment", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
 
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
 
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
 
-        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex3.value(), QLatin1String( "\n\r\t\"\\lexeme" ) );
+	cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "value1" );
 
-        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
-        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
+	cfgfile::lexeme_t lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
 
-		QVERIFY( input.atEnd() == true );
-	}
+	cfgfile::lexeme_t lex5 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex5.type() == cfgfile::lexeme_type_t::start );
 
-	void test_wrongBackSlahSequence()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( " \r\n\t {firstTag\"\\glexeme\"}" );
-		buffer.seek( 0 );
+	cfgfile::lexeme_t lex6 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex6.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex6.value() == "secondTag" );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_wrongBackSlahSequence" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
+	cfgfile::lexeme_t lex7 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex7.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex7.value() == "value2" );
 
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
+	cfgfile::lexeme_t lex8 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex8.type() == cfgfile::lexeme_type_t::finish );
+}
 
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
+TEST( LexicalAnalyzer, test_multiLineComment )
+{
+	std::stringstream stream( "{firstTag \"value1\"}\r\n"
+		"|#\r\n"
+		"  Comment\r\n"
+		"#|\r\n"
+		"{secondTag \"value2\"}\r\n" );
 
-		try {
-            QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-			QVERIFY( true == false );
-		}
-		catch( const QtConfFile::Exception & x )
-		{
-			QCOMPARE( x.whatAsQString(), QLatin1String( "Unrecognized back-slash sequence: \"\\g\". "
-				"In file \"test_wrongBackSlahSequence\" on line 2." ) );
-		}
-	}
+	cfgfile::input_stream_t input( "test_multiLineComment", stream );
+	cfgfile::lexical_analyzer_t analyzer( input );
 
-	void test_oneLineComment()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"value1\"}\r\n" );
-		buffer.write( "|| Comment\r\n" );
-		buffer.write( "{secondTag \"value2\"}\r\n" );
-		buffer.seek( 0 );
+	cfgfile::lexeme_t lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
 
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_oneLineComment" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
+	cfgfile::lexeme_t lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
 
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
+	cfgfile::lexeme_t lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "value1" );
 
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
+	cfgfile::lexeme_t lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
 
-        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex3.value(), QLatin1String( "value1" ) );
+	cfgfile::lexeme_t lex5 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex5.type() == cfgfile::lexeme_type_t::start );
 
-        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
-        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
+	cfgfile::lexeme_t lex6 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex6.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex6.value() == "secondTag" );
 
-        QtConfFile::Lexeme lex5 = analyzer.nextLexeme();
-        QVERIFY( lex5.type() == QtConfFile::StartTagLexeme );
+	cfgfile::lexeme_t lex7 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex7.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex7.value() == "value2" );
 
-        QtConfFile::Lexeme lex6 = analyzer.nextLexeme();
-        QVERIFY( lex6.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex6.value(), QLatin1String( "secondTag" ) );
+	cfgfile::lexeme_t lex8 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex8.type() == cfgfile::lexeme_type_t::finish );
+}
 
-        QtConfFile::Lexeme lex7 = analyzer.nextLexeme();
-        QVERIFY( lex7.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex7.value(), QLatin1String( "value2" ) );
+int main()
+{
+	RUN_ALL_TESTS()
 
-        QtConfFile::Lexeme lex8 = analyzer.nextLexeme();
-        QVERIFY( lex8.type() == QtConfFile::FinishTagLexeme );
-	}
-
-	void test_multiLineComment()
-	{
-		QBuffer buffer;
-		buffer.open( QBuffer::ReadWrite );
-		buffer.write( "{firstTag \"value1\"}\r\n" );
-		buffer.write( "|#\r\n" );
-		buffer.write( "  Comment\r\n" );
-		buffer.write( "#|\r\n" );
-		buffer.write( "{secondTag \"value2\"}\r\n" );
-		buffer.seek( 0 );
-
-		QtConfFile::InputStream input( &buffer, QTextCodec::codecForLocale(),
-			QLatin1String( "test_multiLineComment" ) );
-		QtConfFile::LexicalAnalyzer analyzer( input );
-
-        QtConfFile::Lexeme lex1 = analyzer.nextLexeme();
-        QVERIFY( lex1.type() == QtConfFile::StartTagLexeme );
-
-        QtConfFile::Lexeme lex2 = analyzer.nextLexeme();
-        QVERIFY( lex2.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex2.value(), QLatin1String( "firstTag" ) );
-
-        QtConfFile::Lexeme lex3 = analyzer.nextLexeme();
-        QVERIFY( lex3.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex3.value(), QLatin1String( "value1" ) );
-
-        QtConfFile::Lexeme lex4 = analyzer.nextLexeme();
-        QVERIFY( lex4.type() == QtConfFile::FinishTagLexeme );
-
-        QtConfFile::Lexeme lex5 = analyzer.nextLexeme();
-        QVERIFY( lex5.type() == QtConfFile::StartTagLexeme );
-
-        QtConfFile::Lexeme lex6 = analyzer.nextLexeme();
-        QVERIFY( lex6.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex6.value(), QLatin1String( "secondTag" ) );
-
-        QtConfFile::Lexeme lex7 = analyzer.nextLexeme();
-        QVERIFY( lex7.type() == QtConfFile::StringLexeme );
-		QCOMPARE( lex7.value(), QLatin1String( "value2" ) );
-
-        QtConfFile::Lexeme lex8 = analyzer.nextLexeme();
-        QVERIFY( lex8.type() == QtConfFile::FinishTagLexeme );
-	}
-}; // class TestLexicalAnalyzer
-
-QTEST_MAIN( TestLexicalAnalyzer )
-
-#include "main.moc"
+	return 0;
+}

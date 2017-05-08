@@ -31,8 +31,8 @@
 // Example include.
 #include "cfg.hpp"
 
-// Qt include.
-#include <QtCore/QSharedPointer>
+// C++ include.
+#include <memory>
 
 
 //
@@ -44,7 +44,7 @@ Configuration::Pair::Pair()
 {
 }
 
-Configuration::Pair::Pair( const QString & stringValue, int intValue )
+Configuration::Pair::Pair( const std::string & stringValue, int intValue )
 	:	m_stringValue( stringValue )
 	,	m_intValue( intValue )
 {
@@ -93,22 +93,22 @@ Configuration::operator = ( const Configuration & other )
 //
 
 
-TagVecOfTags::TagVecOfTags( const QString & name, bool isMandatory )
-	:	QtConfFile::TagNoValue( name, isMandatory )
-	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
-	,	m_intValue( *this, QLatin1String( "intValue" ), true )
+TagVecOfTags::TagVecOfTags( const std::string & name, bool isMandatory )
+	:	cfgfile::tag_no_value_t( name, isMandatory )
+	,	m_stringValue( *this, "stringValue", true )
+	,	m_intValue( *this, "intValue", true )
 {
 }
 
 TagVecOfTags::TagVecOfTags( const Configuration::Pair & pair )
-	:	QtConfFile::TagNoValue( QLatin1String( "vecOfTags" ), true )
-	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
-	,	m_intValue( *this, QLatin1String( "intValue" ), true )
+	:	cfgfile::tag_no_value_t( "vecOfTags", true )
+	,	m_stringValue( *this, "stringValue", true )
+	,	m_intValue( *this, "intValue", true )
 {
-	m_stringValue.setValue( pair.m_stringValue );
-	m_intValue.setValue( pair.m_intValue );
+	m_stringValue.set_value( pair.m_stringValue );
+	m_intValue.set_value( pair.m_intValue );
 
-	setDefined();
+	set_defined();
 }
 
 
@@ -129,50 +129,47 @@ TagVecOfTags::pair() const
 //
 
 TagConfiguration::TagConfiguration()
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
-	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
-	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
+	:	cfgfile::tag_no_value_t( "cfg", true )
+	,	m_stringValue( *this, "stringValue", true )
+	,	m_listOfStringValues( *this, "listOfStringValues", true )
 	,	m_constriantForIntValue( 0, 100 )
-	,	m_intValue( *this, QLatin1String( "intValue" ), true )
-	,	m_vecOfTags( *this, QLatin1String( "vecOfTags" ), true )
+	,	m_intValue( *this, "intValue", true )
+	,	m_vecOfTags( *this, "vecOfTags", true )
 {
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str1" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str2" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str3" ) );
+	m_constraintForListOfStringValues.add_value( "str1" );
+	m_constraintForListOfStringValues.add_value( "str2" );
+	m_constraintForListOfStringValues.add_value( "str3" );
 
-	m_listOfStringValues.setConstraint( &m_constraintForListOfStringValues );
-	m_intValue.setConstraint( &m_constriantForIntValue );
+	m_listOfStringValues.set_constraint( &m_constraintForListOfStringValues );
+	m_intValue.set_constraint( &m_constriantForIntValue );
 }
 
 TagConfiguration::TagConfiguration( const Configuration & cfg )
-	:	QtConfFile::TagNoValue( QLatin1String( "cfg" ), true )
-	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
-	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
+	:	cfgfile::tag_no_value_t( "cfg", true )
+	,	m_stringValue( *this, "stringValue", true )
+	,	m_listOfStringValues( *this, "listOfStringValues", true )
 	,	m_constriantForIntValue( 0, 100 )
-	,	m_intValue( *this, QLatin1String( "intValue" ), true )
-	,	m_vecOfTags( *this, QLatin1String( "vecOfTags" ), true )
+	,	m_intValue( *this, "intValue", true )
+	,	m_vecOfTags( *this, "vecOfTags", true )
 {
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str1" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str2" ) );
-	m_constraintForListOfStringValues.addValue( QLatin1String( "str3" ) );
+	m_constraintForListOfStringValues.add_value( "str1" );
+	m_constraintForListOfStringValues.add_value( "str2" );
+	m_constraintForListOfStringValues.add_value( "str3" );
 
-	m_listOfStringValues.setConstraint( &m_constraintForListOfStringValues );
-	m_intValue.setConstraint( &m_constriantForIntValue );
+	m_listOfStringValues.set_constraint( &m_constraintForListOfStringValues );
+	m_intValue.set_constraint( &m_constriantForIntValue );
 
-	m_stringValue.setValue( cfg.m_stringValue );
+	m_stringValue.set_value( cfg.m_stringValue );
 
-	foreach( QString str, cfg.m_listOfStringValues )
-		m_listOfStringValues.setValue( str );
+	for( const std::string & str : cfg.m_listOfStringValues )
+		m_listOfStringValues.set_value( str );
 
-	m_intValue.setValue( cfg.m_intValue );
+	m_intValue.set_value( cfg.m_intValue );
 
-	foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
-	{
-		QSharedPointer< TagVecOfTags > p( new TagVecOfTags( pair ) );
-		m_vecOfTags.setValue( p );
-	}
+	for( const Configuration::Pair & pair : cfg.m_vectorOfTags )
+		m_vecOfTags.set_value( std::make_shared< TagVecOfTags > ( pair ) );
 
-	setDefined();
+	set_defined();
 }
 
 Configuration
@@ -184,9 +181,8 @@ TagConfiguration::configuration() const
 	cfg.m_listOfStringValues = m_listOfStringValues.values();
 	cfg.m_intValue = m_intValue.value();
 
-	foreach( QtConfFile::TagVectorOfTags< TagVecOfTags >::PointerToTag p,
-		m_vecOfTags.values() )
-			cfg.m_vectorOfTags.push_back( p->pair() );
+	for( auto & p : m_vecOfTags.values() )
+		cfg.m_vectorOfTags.push_back( p->pair() );
 
 	return cfg;
 }
