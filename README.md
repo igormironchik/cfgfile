@@ -1,8 +1,8 @@
-Library for reading and writing configuration files with Qt (QtConfFile).
+Library for reading and writing configuration files (cfgfile).
 
 # License
 
-Copyright (c) 2012-2016 Igor Mironchik
+Copyright (c) 2017 Igor Mironchik
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -28,13 +28,14 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 # Compilling
 
-Juct run qmake and then make, as usually.
+This is header-only library. But if you want to build examples and tests juct
+run qmake and then make, as usually.
 
 # About
 
-Configuration file format is a set of tags, which are surrounded by curly brackets, with values.
-Tags can be without values, can have one, and can have several values. A sample configuration
-file is shown below:
+Configuration file format is a set of tags, which are surrounded by curly
+brackets, with values. Tags can be without values, can have one, and can have
+several values. A sample configuration file is shown below:
 
 ```          
 {cfg
@@ -54,40 +55,41 @@ file is shown below:
 }
 ```
           
-String tag's values can be framed in quotation marks if it contains white space or special characters.
-The special characters are: \n, \r, \t, \", \\, is the line breaks, tabs, quotes and backslash.
+String tag's values can be framed in quotation marks if it contains white space
+or special characters. The special characters are: \n, \r, \t, \", \\, is the
+line breaks, tabs, quotes and backslash.
           
-Parsing of the configuration file is based on a specialized class that inherits from QtConfFile::Tag
-or any derived class. For each tag in this case, define a class member that is the object of a class
-derived from QtConfFile::Tag. There are finished classes in QtConfFile for:
+Parsing of the configuration file is based on a specialized class that inherits
+from cfgfile::tag_t or any derived class. For each tag in this case, define a
+class member that is the object of a class derived from cfgfile::tag_t.
+There are finished classes in cfgfile for:
           
- * TagScalar< T > — tag with a single value,
- * TagScalarVector< T > — tag with a set of values,
- * TagNoValue — tag with no value,
- * TagVectorOfTags< T > — tag with multiple entry subordinate tag.
+ * tag_scalar_t< T > — tag with a single value,
+ * tag_scalar_vector_t< T > — tag with a set of values,
+ * tag_no_value_t — tag with no value,
+ * tag_vector_of_tags_t< T > — tag with multiple entries of subordinate tag.
           
-Each tag can have nested tags. Nesting is not limited, except your needs for this. You must
-inherit from the appropriate class tag and provide the required number of members representing
-the nested tags.
+Each tag can have nested tags. Nesting is not limited, except your needs for
+this. You must inherit from the appropriate class tag and provide the required
+number of members representing the nested tags.
           
 # Example
             
-Let's say we need ability to read and write configuration file of the following format:
+Let's say we need ability to read and write configuration file of the following
+format:
 
 ```            
 {configuration
-  {ourCoolValue <QString>}
+  {ourCoolValue <std::string>}
 }
 ```
 
-I.e. we want to have parent tag {configuration} and child tag {ourCoolValue} that will
-have one value of type QString. It's very simple to define such configuration with
-QtConfFile. Let's see:
+I.e. we want to have parent tag {configuration} and child tag {ourCoolValue}
+that will have one value of type std::string. It's very simple to define such
+configuration with cfgfile. Let's see:
             
 ```
-#include <QtConfFile/TagNoValue>
-#include <QtConfFile/TagScalar>
-#include <QtConfFile/Utils>
+#include <cfgfile/all.hpp>
 
 //
 // Configuration
@@ -100,24 +102,9 @@ public:
   {
   }
   
-  explicit Configuration( const QString & value )
+  explicit Configuration( const std::string & value )
     :  m_ourCoolValue( value )
   {
-  }
-  
-  explicit Configuration( const Configuration &amp; other )
-    :  m_ourCoolValue( other.ourCoolValue() )
-  {
-  }
-  
-  Configuration &amp; operator = ( const Configuration &amp; other )
-  {
-    if( this != &other )
-    {
-      m_ourCoolValue = other.ourCoolValue();
-    }
-    
-    return *this;
   }
   
   ~Configuration()
@@ -125,14 +112,14 @@ public:
   }
   
   //! \return Our cool value.
-  const QString &amp; ourCoolValue() const
+  const std::string &amp; ourCoolValue() const
   {
     return m_ourCoolValue;
   }
   
 private:
   //! Our cool value.
-  QString m_ourCoolValue;
+  std::string m_ourCoolValue;
 }; // class Configuration
 
 
@@ -140,24 +127,24 @@ private:
 // TagConfiguration
 //
 
-//! This is QtConfFile tag, uses to read and write configuration.
+//! This is cfgfile tag, uses to read and write configuration.
 class TagConfiguration
-  :  public QtConfFile::TagNoValue
+  :  public cfgfile::tag_no_value_t
 {
 public:
   TagConfiguration()
-    :  QtConfFile::TagNoValue( QLatin1String( "configuration" ), true )
-    ,  m_ourCoolValue( *this, QLatin1String( "ourCoolValue" ), true )
+    :  cfgfile::tag_no_value_t( "configuration", true )
+    ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
   }
   
   explicit TagConfiguration( const Configuration &amp; cfg )
-    :  QtConfFile::TagNoValue( QLatin1String( "configuration" ), true )
-    ,  m_ourCoolValue( *this, QLatin1String( "ourCoolValue" ), true )
+    :  cfgfile::tag_no_value_t( "configuration", true )
+    ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
-    m_ourCoolValue.setValue( cfg.ourCoolValue() );
+    m_ourCoolValue.set_value( cfg.ourCoolValue() );
     
-    setDefined();
+    set_defined();
   }
   
   ~TagConfiguration()
@@ -172,83 +159,80 @@ public:
   
 private:
   //! Our cool value.
-  QtConfFile::TagScalar< QString > m_ourCoolValue;
+  cfgfile::tag_scalar_t< std::string > m_ourCoolValue;
 }; // class TagConfiguration
 ```
-
-As our configuration consist one parent tag {configuration} without value and
-one child tag {ourCoolValue} with one value of type QString, so we included
-TagNoValue and TagScalar headers. Utils needed to read and write files.
             
 We need some struct/class to store data of configuration in the application,
-so we defined class Configuration on line 10. But this is only data class. To
+so we defined class Configuration. But this is only data class. To
 work with files (i.e. read and write configuration from/to file) we need to
-define class derived from QtConfFile::Tag. As our parent tag {configuration}
-doesn't have any values we derived our tag class from QtConfFile::TagNoValue, look
-at line 58. Our parent tag should have child tag with one value of type QString,
-so we can use QtConfFile::TagScalar for it, look at line 88.</p>
+define class derived from cfgfile::tag_t. As our parent tag {configuration}
+doesn't have any values we derived our tag class from cfgfile::tag_no_value_t.
+Our parent tag should have child tag with one value of type std::string,
+so we can use cfgfile::tag_scalar_t< std::string > for it
             
-Child tags must receive parent tag as argument in constructor, look at lines
-63 and 69. Second argument is the name of the tag, and third is the flag recuired our
-child tag or not.
+Child tags must receive parent tag as argument in constructor. Second argument
+is the name of the tag, and third is the flag required our child tag or not.
             
 Second constructor uses to save configuration, and first - for reading.
             
-On line 81 we defined method for constructing Configuration from parsed tag.
+We defined method for constructing Configuration from parsed tag.
 As all tags are required we did not do any checks. But if you have not required
-tag in the configuration then you can use QtConfFile::Tag::isDefined() method to
+tag in the configuration then you can use cfgfile::tag_t::is_defined() method to
 check if tag was defined.
             
-When we have data class and tag class it's very simple to read and write configuration.
-Let's see:
+When we have data class and tag class, so it's very simple to read and write
+configuration. Let's see:
             
 ```
 Configuration cfg;
             
 try {
   TagConfiguration readTag;
+
+  std::ifstream stream( "fileName.cfg" );
   
-  QtConfFile::readQtConfFile( readTag, QLatin1String( "fileName.cfg" ),
-    QTextCodec::codecForName( "UTF-8" ) );
+  cfgfile::read_cfgfile( readTag, stream, "fileName.cfg" );
   
   cfg = readTag.cfg();
 }
-catch( const QtConfFile::Exception &amp; x )
+catch( const cfgfile::exception_t &amp; x )
 {
-  qDebug() << x.whatAsQString();
+  std::cout << x.desc() << std::endl;
 }
 ```
 
 And:
             
 ```
-Configuration cfg( QLatin1String( "value" ) );
+Configuration cfg( "value" );
             
 try {
   TagConfiguration writeTag( cfg );
+
+  std::ofstream stream( "fileName.cfg" );
   
-  QtConfFile::writeQtConfFile( writeTag, QLatin1String( "fileName.cfg" ),
-    QTextCodec::codecForName( "UTF-8" ) );
+  cfgfile::write_cfgfile( writeTag, stream );
 }
-catch( const QtConfFile::Exception &amp; x )
+catch( const cfgfile::exception_t &amp; x )
 {
-  qDebug() << x.whatAsQString();
+  std::cout << x.desc(); << std::endl
 }
 ```
 
 # Generator
             
-To simplify development with QtConfFile was implemented QtConfFile generator.
+To simplify development with cfgfile was implemented cfgfile generator.
             
-QtConfFile generator this is generator of C++ header file from
+cfgfile generator this is generator of C++ header file from
 declarative description of the configuration file. By configuration file
-assumes configuration file in QtConfFile format. In generated header will
+assumes configuration file in cfgfile format. In generated header will
 be declared all necessary classes of data and configuration tags.
 
-For generation generator uses input configuration file in QtConfFile format
+For generation generator uses input configuration file in cfgfile format
 with following format:
 
-Let's say you need data class with one QString field then you should write
+Let's say you need data class with one std::string field then you should write
 following configuration file, for example:
 
 ```
@@ -258,8 +242,8 @@ following configuration file, for example:
       {base tagNoValue}
       
       {tagScalar
-        {valueType QString}
-        {name fieldWithQString}
+        {valueType std::string}
+        {name fieldWithString}
       }
     }
   }
@@ -305,35 +289,35 @@ In the above example will be generated similar to the following header file.
 namespace NamespaceName {
 
 //
-// NameOfTheClass
+// NameOfTheClass_t
 //
   
-class NameOfTheClass {
+class NameOfTheClass_t {
 public:
   c_tors();
   ~d_tor();
     
   //! \return fieldWithQString value.
-  const QString &amp; fieldWithQString() const;
-  //! Set fieldWithQString value.
-  void setFieldWithQString( const QString &amp; value );
-}; // class NameOfTheClass
+  const std::string &amp; fieldWithString() const;
+  //! Set fieldWithString value.
+  void set_fieldWithString( const std::string &amp; value );
+}; // class NameOfTheClass_t
   
   
 //
-// TagNameOfTheClass
+// tag_NameOfTheClass_t
 //
   
-class TagNameOfTheClass
-  :  public QtConfFile::TagNoValue
+class tag_NameOfTheClass_t
+  :  public cfgfile::tag_no_value_t
 {
 public:
   c_tors();
   ~d_tor();
     
   //! \return Configuration.
-  NameOfTheClass getCfg() const;
-}; // class TagNameOfTheClass
+  NameOfTheClass_t get_cfg() const;
+}; // class tag_NameOfTheClass_t
   
 } // namespace NamespaceName
 ```
@@ -343,17 +327,17 @@ For this you can use {globalInclude <string>} and {relativeInclude <string>}
 tags. When using such includes in C++ code will be added corresponding
 include directives. And checking of classes' and namespaces' names will be
 turned off. And one more restriction is that that class's name for tag
-must be equal to Tag + Name, i.e. if data structure names Data then class for
-tag must be named TagData and be placed in the same namespace as Data class/
+must be equal to tag_ + Name + _t, i.e. if data structure names Data then class for
+tag must be named tag_Data_t and be placed in the same namespace as Data class/
 structure.
             
 # Integration of Generator with QMake
             
-To integrate QtConfFile generator with qmake you need to add lines to the
+To integrate cfgfile generator with qmake you need to add lines to the
 qmake's pro file similar to the next:
             
 ```
-TO_GENERATE = example.qtconffile
+TO_GENERATE = example.cfgfile
 
 QMAKE_EXTRA_COMPILERS += generate_cfg
 generate_cfg.name = CONF_GEN
@@ -362,7 +346,7 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = HEADERS
 
-generate_cfg.commands = $$shell_path( $$absolute_path( path/to/qtconffile.generator ) ) \
+generate_cfg.commands = $$shell_path( $$absolute_path( path/to/cfgfile.generator ) ) \
 -i ${QMAKE_FILE_IN} -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
