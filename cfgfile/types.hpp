@@ -92,7 +92,7 @@ using ostream_t = QTextStream;
 using istream_t = QTextStream;
 
 //! Type of pos in stream.
-using pos_t = quint64;
+using pos_t = qint64;
 
 class string_t {
 public:
