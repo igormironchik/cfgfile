@@ -35,11 +35,11 @@
 #include <string>
 #include <iostream>
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 // Qt include.
 #include <QString>
 #include <QTextStream>
-#endif
+#endif // CFGFILE_QT_SUPPORT
 
 
 namespace cfgfile {
@@ -113,7 +113,7 @@ class string_trait_t final {
 }; // class string_trait_t
 
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 
 //
 // qstring_wrapper_t
@@ -360,7 +360,7 @@ class qstring_trait_t final {
 	}
 } // class qstring_trait_t
 
-#endif // CFGFILE_QSTRING_BUILD
+#endif // CFGFILE_QT_SUPPORT
 
 
 //
