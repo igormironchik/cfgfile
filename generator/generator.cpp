@@ -114,7 +114,7 @@ static inline void generate_includes( std::ostream & stream,
 	const std::list< std::string > & relative_includes )
 {
 	stream << "// cfgfile include.\n"
-		"#include <cfgfile/all.hpp>\n";
+		"#include <cfgfile/all.hpp>\n\n";
 
 	stream << "// C++ include.\n"
 		<< "#include <vector>\n\n";
