@@ -45,7 +45,7 @@ namespace cfgfile {
 //
 
 //! Exception in the library.
-template< typename Trait >
+template< typename Trait = string_trait_t >
 class exception_t final
 	:	public std::logic_error
 {
