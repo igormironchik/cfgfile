@@ -45,16 +45,13 @@ namespace cfgfile {
 //
 
 //! Exception in the library.
+template< typename Trait >
 class exception_t final
 	:	public std::logic_error
 {
 public:
-	explicit exception_t( string_t what )
-#if defined( CFGFILE_QSTRING_BUILD) || defined( CFGFILE_WSTRING_BUILD )
+	explicit exception_t( Trait::string_t what )
 		:	std::logic_error( "Please use desc() method of the exception." )
-#else
-		:	std::logic_error( what )
-#endif
 		,	m_what( std::move( what ) )
 	{
 	}
@@ -64,15 +61,46 @@ public:
 	}
 
 	//! \return Reason of the exception.
-	const string_t & desc() const noexcept
+	const Trait::string_t & desc() const noexcept
 	{
 		return m_what;
 	}
 
 private:
 	//! Reason of the exception.
-	string_t m_what;
+	Trait::string_t m_what;
 }; // class exception_t
+
+
+//
+// exception_t< string_trait_t >
+//
+
+template<>
+class exception_t< string_trait_t >
+	:	public std::logic_error
+{
+public:
+	explicit exception_t( string_trait_t::string_t what )
+		:	std::logic_error( what )
+		,	m_what( std::move( what ) )
+	{
+	}
+
+	~exception_t() noexcept
+	{
+	}
+
+	//! \return Reason of the exception.
+	const string_trait_t::string_t & desc() const noexcept
+	{
+		return m_what;
+	}
+
+private:
+	//! Reason of the exception.
+	string_trait_t::string_t m_what;
+}; // class exception_t< string_trait_t >
 
 } /* namespace cfgfile */
 
