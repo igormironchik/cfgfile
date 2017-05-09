@@ -31,109 +31,135 @@
 #ifndef CFGFILE__TYPES_HPP__INCLUDED
 #define CFGFILE__TYPES_HPP__INCLUDED
 
-#ifdef CFGFILE_WSTRING_BUILD
-
 // C++ include.
 #include <string>
-#include <list>
 #include <iostream>
 
-#elif defined( CFGFILE_QSTRING_BUILD )
-
+#ifdef CFGFILE_QSTRING_BUILD
 // Qt include.
 #include <QString>
 #include <QTextStream>
-
-#else
-
-// C++ include.
-#include <string>
-#include <list>
-#include <iostream>
-
 #endif
 
 
 namespace cfgfile {
 
-#ifdef CFGFILE_WSTRING_BUILD
+//
+// wstring_trait_t
+//
 
-//! String type.
-using string_t = std::wstring;
+//! Trait for std::wstring support.
+class wstring_trait_t final {
+	//! String type.
+	using string_t = std::wstring;
 
-//! Char type.
-using char_t = string_t::value_type;
+	//! Char type.
+	using char_t = string_t::value_type;
 
-//! Out stream type.
-using ostream_t = std::wostream;
+	//! Out stream type.
+	using ostream_t = std::wostream;
 
-//! In stream type.
-using istream_t = std::wistream;
+	//! In stream type.
+	using istream_t = std::wistream;
 
-//! Type of pos in stream.
-using pos_t = std::streamoff;
+	//! Type of pos in stream.
+	using pos_t = std::streamoff;
 
-#define SL(str) L##str
+	static inline string_t to_string( pos_t pos )
+	{
+		return std::to_wstring( pos );
+	}
 
-static inline string_t pos_to_string( pos_t pos )
-{
-	return std::to_wstring( pos );
-}
+	static inline string_t from_ascii( const std::string & str )
+	{
+		std::wstring res;
+		res.assign( str.cbegin(), str.cend() );
 
-#elif defined( CFGFILE_QSTRING_BUILD )
+		return res;
+	}
+}; // class wstring_trait_t
 
-//! Char type.
-using char_t = QChar;
 
-//! Out stream type.
-using ostream_t = QTextStream;
+//
+// string_trait_t
+//
 
-//! In stream type.
-using istream_t = QTextStream;
+//! Trait for std::string support.
+class string_trait_t final {
+	//! String type.
+	using string_t = std::string;
 
-//! Type of pos in stream.
-using pos_t = qint64;
+	//! Char type.
+	using char_t = string_t::value_type;
 
-class string_t {
+	//! Input stream type.
+	using istream_t = std::istream;
+
+	//! Type of pos in stream.
+	using pos_t = std::streamoff;
+
+	//! Output stream type.
+	using ostream_t = std::ostream;
+
+	static inline string_t pos_to_string( pos_t pos )
+	{
+		return std::to_string( pos );
+	}
+
+	static inline string_t from_ascii( const std::string & str )
+	{
+		return str;
+	}
+}; // class string_trait_t
+
+
+#ifdef CFGFILE_QSTRING_BUILD
+
+//
+// qstring_wrapper_t
+//
+
+//! QString wrapper.
+class qstring_wrapper_t {
 public:
 	using size_type = int;
 
-	string_t()
+	qstring_wrapper_t()
 	{
 	}
 
-	string_t( size_type size, char_t ch )
+	qstring_wrapper_t( size_type size, char_t ch )
 		:	m_str( size, ch )
 	{
 	}
 
-	string_t( const char * str )
+	qstring_wrapper_t( const char * str )
 		:	m_str( str )
 	{
 	}
 
-	string_t( const QString & other )
+	qstring_wrapper_t( const QString & other )
 		:	m_str( other )
 	{
 	}
 
 
-	string_t( const char_t * unicode, size_type size = -1 )
+	qstring_wrapper_t( const char_t * unicode, size_type size = -1 )
 		:	m_str( unicode, size )
 	{
 	}
 
-	string_t( char_t ch )
+	qstring_wrapper_t( char_t ch )
 		:	m_str( ch )
 	{
 	}
 
-	string_t( QLatin1String str )
+	qstring_wrapper_t( QLatin1String str )
 		:	m_str( str )
 	{
 	}
 
-	string_t( const QByteArray & ba )
+	qstring_wrapper_t( const QByteArray & ba )
 		:	m_str( ba )
 	{
 	}
@@ -160,12 +186,12 @@ public:
 		return m_str.indexOf( ch );
 	}
 
-	inline int find( const string_t & str ) const
+	inline int find( const qstring_wrapper_t & str ) const
 	{
 		return m_str.indexOf( str.m_str );
 	}
 
-	inline int rfind( const string_t & str ) const
+	inline int rfind( const qstring_wrapper_t & str ) const
 	{
 		return m_str.lastIndexOf( str.m_str );
 	}
@@ -175,7 +201,8 @@ public:
 		return m_str.lastIndexOf( ch );
 	}
 
-	string_t & replace( size_type pos, size_type count, const string_t & v )
+	qstring_wrapper_t & replace( size_type pos, size_type count,
+		const qstring_wrapper_t & v )
 	{
 		m_str.replace( pos, count, v.m_str );
 
@@ -217,43 +244,49 @@ public:
 		return m_str.length();
 	}
 
-	inline string_t substr( size_type pos, size_type count = npos ) const
+	inline qstring_wrapper_t substr( size_type pos, size_type count = npos ) const
 	{
 		return m_str.mid( pos, count );
 	}
 
-	friend bool operator == ( const string_t & s1, const string_t & s2 )
+	friend bool operator == ( const qstring_wrapper_t & s1,
+		const qstring_wrapper_t & s2 )
 	{
 		return ( s1.m_str == s2.m_str );
 	}
 
-	friend string_t operator + ( const string_t & s1, const string_t & s2 )
+	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
+		const qstring_wrapper_t & s2 )
 	{
 		return string_t( s1.m_str + s2.m_str );
 	}
 
-	friend string_t operator + ( const string_t & s1, const char * s2 )
+	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
+		const char * s2 )
 	{
 		return string_t( s1.m_str + s2 );
 	}
 
-	friend string_t operator + ( const char * s1, const string_t & s2 )
+	friend qstring_wrapper_t operator + ( const char * s1,
+		const qstring_wrapper_t & s2 )
 	{
 		return string_t( s1 + s2.m_str );
 	}
 
-	friend string_t operator + ( const string_t & s1, const char ch )
+	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
+		const char ch )
 	{
 		return string_t( s1.m_str + ch );
 	}
 
-	friend string_t operator + ( const char ch, const string_t & s2 )
+	friend qstring_wrapper_t operator + ( const char ch,
+		const qstring_wrapper_t & s2 )
 	{
 		return string_t( ch + s2.m_str );
 	}
 
 	friend ostream_t & operator << ( ostream_t & to,
-		const string_t & what )
+		const qstring_wrapper_t & what )
 	{
 		to << what.m_str;
 
@@ -265,14 +298,14 @@ public:
 		return m_str[ pos ];
 	}
 
-	inline string_t & append( const string_t & other )
+	inline qstring_wrapper_t & append( const qstring_wrapper_t & other )
 	{
 		m_str.append( other.m_str );
 
 		return *this;
 	}
 
-	inline string_t & append( size_type count, char_t ch )
+	inline qstring_wrapper_t & append( size_type count, char_t ch )
 	{
 		m_str.append( QString( count, ch ) );
 
@@ -292,40 +325,42 @@ public:
 private:
 	//! Actual string.
 	QString m_str;
-}; // class string_t
+}; // class qstring_wrapper_t
 
-#define SL(str) str
 
-static inline string_t pos_to_string( pos_t pos )
-{
-	return QString::number( pos );
-}
+//
+// qstring_trait_t
+//
 
-#else
+//! Trait for QString support.
+class qstring_trait_t final {
+	//! String type.
+	using string_t = qstring_wrapper_t;
 
-//! String type.
-using string_t = std::string;
+	//! Char type.
+	using char_t = QChar;
 
-//! Char type.
-using char_t = string_t::value_type;
+	//! Out stream type.
+	using ostream_t = QTextStream;
 
-//! Input stream type.
-using istream_t = std::istream;
+	//! In stream type.
+	using istream_t = QTextStream;
 
-//! Type of pos in stream.
-using pos_t = std::streamoff;
+	//! Type of pos in stream.
+	using pos_t = qint64;
 
-//! Output stream type.
-using ostream_t = std::ostream;
+	static inline string_t to_string( pos_t pos )
+	{
+		return QString::number( pos );
+	}
 
-#define SL(str) str
+	static inline string_t from_ascii( const std::string & str )
+	{
+		return qstring_wrapper_t( QString( str.c_str() ) );
+	}
+} // class qstring_trait_t
 
-static inline string_t pos_to_string( pos_t pos )
-{
-	return std::to_string( pos );
-}
-
-#endif
+#endif // CFGFILE_QSTRING_BUILD
 
 
 //
