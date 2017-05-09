@@ -504,7 +504,7 @@ static inline void generate_cfg_init( std::ostream & stream,
 						<< f.name() << std::string( "_" )
 						<< generate_tag_name_from_class_name( f.value_type() )
 						<< std::string( "_;\n\n" )
-						<< std::string( "\t\t\tfor( int i = 0; i < m_" )
+						<< std::string( "\t\t\tfor( std::size_t i = 0; i < m_" )
 						<< f.name() << std::string( ".size(); ++i )\n" )
 						<< std::string( "\t\t\t\t" )
 						<< f.name() << std::string( "_" )
