@@ -42,13 +42,7 @@
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
-#elif defined( CFGFILE_WSTRING_BUILD )
-// C++ include.
-#include <cwctype>
-#else
-// C++ include.
-#include <cctype>
-#endif // CFGFILE_QT_SUPPORT
+#endif
 
 
 namespace cfgfile {
@@ -69,29 +63,14 @@ enum class file_format_t {
 namespace details {
 
 //
-// is_space
-//
-
-//! Checks if character is whitespace character.
-static inline bool is_space( char_t ch )
-{
-#ifdef CFGFILE_QT_SUPPORT
-	return ch.isSpace();
-#elif defined( CFGFILE_WSTRING_BUILD )
-	return std::iswspace( ch );
-#else
-	return std::isspace( (unsigned char) ch );
-#endif
-}
-
-//
 // determine_format_t
 //
 
 //! Determine format of the configuration file.
+template< typename Trait = string_trait_t >
 class determine_format_t final {
 public:
-	determine_format_t( istream_t & stream )
+	determine_format_t( Trait::istream_t & stream )
 		:	m_stream( stream )
 	{
 	}
@@ -99,21 +78,15 @@ public:
 	//! Determine file's format.
 	file_format_t format()
 	{
-		static const char_t xml = Trait::from_ascii( '<' );
+		static const Trait::char_t xml = Trait::from_ascii( '<' );
 
-		char_t ch = 0x00;
+		Trait::char_t ch = 0x00;
 
-		while(
-#ifdef CFGFILE_QT_SUPPORT
-			!m_stream.atEnd()
-#else
-			!m_stream.eof()
-#endif
-		)
+		while( !Trait::is_at_end( m_stream ) )
 		{
 			m_stream >> ch;
 
-			if( is_space( ch ) )
+			if( Trait::is_space( ch ) )
 				continue;
 
 			if( ch == xml )
@@ -127,7 +100,7 @@ public:
 
 private:
 	//! Stream.
-	istream_t & m_stream;
+	Trait::istream_t & m_stream;
 }; // class determine_format_t
 
 } /* namespace details */
@@ -138,13 +111,14 @@ private:
 //
 
 //! Read cfgfile configuration file.
+template< typename Trait = string_trait_t >
 static inline void read_cfgfile(
 	//! Configuration tag.
-	tag_t & tag,
+	tag_t< Trait > & tag,
 	//! Stream.
-	istream_t & stream,
+	Trait::istream_t & stream,
 	//! File name.
-	const string_t & file_name )
+	const Trait::string_t & file_name )
 {
 	file_format_t fmt = file_format_t::cfgfile_format;
 
@@ -154,19 +128,15 @@ static inline void read_cfgfile(
 		fmt = d.format();
 	}
 
-#ifdef CFGFILE_QT_SUPPORT
-	stream.seek( 0 );
-#else
-	stream.seekg( 0 );
-#endif
+	Trait::to_begin( stream );
 
 	switch( fmt )
 	{
 		case file_format_t::cfgfile_format :
 		{
-			input_stream_t is( file_name, stream );
+			input_stream_t< Trait > is( file_name, stream );
 
-			parser_t parser( tag, is );
+			parser_t< Trait > parser( tag, is );
 
 			parser.parse( file_name );
 		}
@@ -192,17 +162,18 @@ static inline void read_cfgfile(
 						.arg( QString::number( line ) )
 						.arg( QString::number( column ) ) );
 
-			parser_t parser( tag, doc );
+			parser_t< Trait > parser( tag, doc );
 
 			parser.parse( file_name );
 #else
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
-				"with CFGFILE_XML_SUPPORT" ) ) );
+			throw exception_t< Trait >(
+				Trait::from_ascii( "To use XML format build cfgfile "
+					"with CFGFILE_XML_SUPPORT" ) );
 #endif // CFGFILE_XML_SUPPORT
 #else
-			throw exception_t< Trait >( string_t(
-					Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) ) +
-				file_name + Trait::from_ascii( "\" failed." ) );
+			throw exception_t< Trait >(
+				Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) ) +
+				file_name + Trait::from_ascii( "\" failed." );
 #endif // CFGFILE_QT_SUPPORT
 		}
 			break;
@@ -218,11 +189,12 @@ static inline void read_cfgfile(
 //
 
 //! Write cfgfile configuration file.
+template< typename Trait >
 static inline void write_cfgfile(
 	//! Configuration tag.
-	const tag_t & tag,
+	const tag_t< Trait > & tag,
 	//! Stream.
-	ostream_t & stream,
+	Trait::ostream_t & stream,
 	//! Format of the file.
 	file_format_t fmt = file_format_t::cfgfile_format )
 {
@@ -230,7 +202,7 @@ static inline void write_cfgfile(
 	{
 		case file_format_t::cfgfile_format :
 		{
-			const string_t content = tag.print();
+			const Trait::string_t content = tag.print();
 
 			stream << content;
 		}
@@ -246,11 +218,13 @@ static inline void write_cfgfile(
 
 			stream << doc.toString( 4 );
 #else
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
-				"with CFGFILE_XML_SUPPORT" ) ) );
+			throw exception_t< Trait >(
+				Trait::from_ascii( "To use XML format build cfgfile "
+					"with CFGFILE_XML_SUPPORT" ) );
 #endif // CFGFILE_XML_SUPPORT
 #else
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "XML supported only with Qt." ) ) );
+			throw exception_t< Trait >(
+				Trait::from_ascii( "XML supported only with Qt." ) );
 #endif // CFGFILE_QT_SUPPORT
 		}
 			break;

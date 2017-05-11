@@ -34,6 +34,8 @@
 // C++ include.
 #include <string>
 #include <iostream>
+#include <cwctype>
+#include <cctype>
 
 #ifdef CFGFILE_QT_SUPPORT
 // Qt include.
@@ -103,6 +105,16 @@ class wstring_trait_t final {
 		else
 			return true;
 	}
+
+	static inline bool is_space( char_t ch )
+	{
+		return std::iswspace( ch );
+	}
+
+	static inline void to_begin( istream_t & stream )
+	{
+		stream.seekg( 0 );
+	}
 }; // class wstring_trait_t
 
 
@@ -161,6 +173,16 @@ class string_trait_t final {
 		}
 		else
 			return true;
+	}
+
+	static inline bool is_space( char_t ch )
+	{
+		return std::isspace( (unsigned char) ch );
+	}
+
+	static inline void to_begin( istream_t & stream )
+	{
+		stream.seekg( 0 );
 	}
 }; // class string_trait_t
 
@@ -423,6 +445,16 @@ class qstring_trait_t final {
 	static inline bool is_at_end( istream_t & stream )
 	{
 		return stream.atEnd();
+	}
+
+	static inline bool is_space( char_t ch )
+	{
+		return ch.isSpace();
+	}
+
+	static inline void to_begin( istream_t & stream )
+	{
+		stream.seek( 0 );
 	}
 } // class qstring_trait_t
 
