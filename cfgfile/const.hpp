@@ -56,9 +56,17 @@ struct const_t {
 	static const Trait::char_t c_line_feed = Trait::from_ascii( '\r' );
 	static const Trait::char_t c_vertical_bar = Trait::from_ascii( '|' );
 	static const Trait::char_t c_sharp = Trait::from_ascii( '#' );
+
 	static const Trait::string_t c_one_line_comment = Trait::from_ascii( "||" );
 	static const Trait::string_t c_start_multi_line_comment = Trait::from_ascii( "|#" );
 	static const Trait::string_t c_finish_multi_line_comment = Trait::from_ascii( "#|" );
+
+	static const Trait::string_t c_on = Trait::from_ascii( "on" );
+	static const Trait::string_t c_off = Trait::from_ascii( "off" );
+	static const Trait::string_t c_true = Trait::from_ascii( "true" );
+	static const Trait::string_t c_false = Trait::from_ascii( "false" );
+	static const Trait::string_t c_1 = Trait::from_ascii( "1" );
+	static const Trait::string_t c_0 = Trait::from_ascii( "0" );
 }; // struct const_t
 
 } /* namespace cfgfile */

@@ -35,6 +35,7 @@
 #include "parser_info.hpp"
 #include "exceptions.hpp"
 #include "types.hpp"
+#include "const.hpp"
 
 #ifdef CFGFILE_QT_SUPPORT
 // Qt include.
@@ -862,13 +863,13 @@ template<>
 class format_t< std::string, string_trait_t > {
 public:
 	//! Format value to string.
-	static string_trait_t::string_t to_string( const Trait::string_t & value )
+	static string_trait_t::string_t to_string( const std::string & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static string_trait_t::string_t from_string( const parser_info_t< string_trait_t > &,
+	static std::string from_string( const parser_info_t< string_trait_t > &,
 		const string_trait_t::string_t & value )
 	{
 		return value;
@@ -907,66 +908,166 @@ public:
 	//! Format value to string.
 	static qstring_trait_t::string_t to_string( const std::string & value )
 	{
-		return QString::fromUtf8( value.c_str() );
+		return QString::fromStdString( value );
 	}
 
 	//! Format value from string.
 	static std::string from_string( const parser_info_t< qstring_trait_t > &,
 		const qstring_trait_t::string_t & value )
 	{
-		return value.toUtf8().toStdString();
+		return value.toStdString();
 	}
 }; // class format_t< std::string >
 #endif // CFGFILE_QT_SUPPORT
 
 
-#ifdef CFGFILE_QT_SUPPORT
 template<>
-class format_t< QString > {
+class format_t< std::wstring, string_trait_t > {
 public:
 	//! Format value to string.
-	static QString to_string( const QString & value )
+	static string_trait_t::string_t to_string( const std::wstring & value )
+	{
+		std::string res;
+		res.assign( value.cbegin(), value.cend() );
+
+		return res;
+	}
+
+	//! Format value from string.
+	static std::wstring from_string( const parser_info_t< string_trait_t > &,
+		const string_trait_t::string_t & value )
+	{
+		std::wstring res;
+		res.assign( value.cbegin(), value.cend() );
+
+		return res;
+	}
+}; // class format_t< std::wstring >
+
+
+template<>
+class format_t< std::wstring, wstring_trait_t > {
+public:
+	//! Format value to string.
+	static wstring_trait_t::string_t to_string( const std::wstring & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static QString from_string( const parser_info_t< Trait > &, const QString & value )
+	static std::wstring from_string( const parser_info_t< wstring_trait_t > &,
+		const wstring_trait_t::string_t & value )
+	{
+		return value;
+	}
+}; // class format_t< std::wstring >
+
+
+#ifdef CFGFILE_QT_SUPPORT
+template<>
+class format_t< std::wstring, qstring_trait_t > {
+public:
+	//! Format value to string.
+	static qstring_trait_t::string_t to_string( const std::wstring & value )
+	{
+		return QString::fromStdWString( value );
+	}
+
+	//! Format value from string.
+	static std::wstring from_string( const parser_info_t< qstring_trait_t > &,
+		const qstring_trait_t::string_t & value )
+	{
+		return value.toStdWString();
+	}
+}; // class format_t< std::wstring >
+#endif // CFGFILE_QT_SUPPORT
+
+
+#ifdef CFGFILE_QT_SUPPORT
+template<>
+class format_t< QString, string_trait_t > {
+public:
+	//! Format value to string.
+	static string_trait_t::string_t to_string( const QString & value )
+	{
+		return value.toStdString();
+	}
+
+	//! Format value from string.
+	static QString from_string( const parser_info_t< string_trait_t > &,
+		const string_trait_t::string_t & value )
+	{
+		return QString::fromStdString( value );
+	}
+}; // class format_t< QString >
+
+
+template<>
+class format_t< QString, wstring_trait_t > {
+public:
+	//! Format value to string.
+	static wstring_trait_t::string_t to_string( const QString & value )
+	{
+		return value.toStdWString();
+	}
+
+	//! Format value from string.
+	static QString from_string( const parser_info_t< wstring_trait_t > &,
+		const wstring_trait_t::string_t & value )
+	{
+		return QString::fromStdWString( value );
+	}
+}; // class format_t< QString >
+
+
+template<>
+class format_t< QString, qstring_trait_t > {
+public:
+	//! Format value to string.
+	static qstring_trait_t::string_t to_string( const QString & value )
+	{
+		return value;
+	}
+
+	//! Format value from string.
+	static QString from_string( const parser_info_t< qstring_trait_t > &,
+		const qstring_trait_t::string_t & value )
 	{
 		return value;
 	}
 }; // class format_t< QString >
-#endif
+#endif // CFGFILE_QT_SUPPORT
 
 
-static const Trait::string_t c_on = Trait::from_ascii( "on" );
-static const Trait::string_t c_off = Trait::from_ascii( "off" );
-static const Trait::string_t c_true = Trait::from_ascii( "true" );
-static const Trait::string_t c_false = Trait::from_ascii( "false" );
-static const Trait::string_t c_1 = Trait::from_ascii( "1" );
-static const Trait::string_t c_0 = Trait::from_ascii( "0" );
-
-template<>
-class format_t< bool > {
+template< typename Trait >
+class format_t< bool, Trait > {
 public:
 	//! Format value to string.
 	static Trait::string_t to_string( const bool & value )
 	{
-		return ( value ? Trait::from_ascii( "true" ) : Trait::from_ascii( "false" ) );
+		return ( value ? const_t< Trait >::c_true :
+			const_t< Trait >::c_false );
 	}
 
 	//! Format value from string.
-	static bool from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
+	static bool from_string( const parser_info_t< Trait > & info,
+		const Trait::string_t & value )
 	{
-		if( value == c_on || value == c_true || value == c_1 )
+		if( value == const_t< Trait >::c_on ||
+			value == const_t< Trait >::c_true ||
+			value == const_t< Trait >::c_1 )
 			return true;
-		else if( value == c_off || value == c_false || value == c_0 )
+		else if( value == const_t< Trait >::c_off ||
+			value == const_t< Trait >::c_false ||
+			value == const_t< Trait >::c_0 )
 			return false;
 		else
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Invalid value: \"" ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+				Trait::to_string( info.line_number() ) +
+				Trait::from_ascii( "." ) );
 	}
 }; // class format_t< bool >
 
