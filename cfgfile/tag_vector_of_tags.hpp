@@ -53,12 +53,12 @@ namespace cfgfile {
 	Subordinate tag must have following constructor
 
 	\code
-		tag_t( const string_t & name, bool is_mandatory );
+		tag_t< Trait >( const Trait::string_t & name, bool is_mandatory );
 	\endcode
 */
-template< class T >
+template< class T, class Trait >
 class tag_vector_of_tags_t
-	:	public tag_t
+	:	public tag_t< Trait >
 {
 public:
 	//! Type of the pointer to the subordinate tag,
@@ -66,15 +66,15 @@ public:
 	//! Type of the vector of subordinate tags.
 	typedef std::vector< ptr_to_tag_t > vector_of_tags_t;
 
-	explicit tag_vector_of_tags_t( const string_t & name,
+	explicit tag_vector_of_tags_t( const Trait::string_t & name,
 		bool is_mandatory = false )
-		:	tag_t( name, is_mandatory )
+		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
-	tag_vector_of_tags_t( tag_t & owner, const string_t & name,
+	tag_vector_of_tags_t( tag_t< Trait > & owner, const Trait::string_t & name,
 		bool is_mandatory = false )
-		:	tag_t( owner, name, is_mandatory )
+		:	tag_t< Trait >( owner, name, is_mandatory )
 	{
 	}
 
@@ -109,7 +109,7 @@ public:
 		Repeatly adds value to the end of vector.
 	*/
 	void
-	set_value( ptr_to_tag_t p )
+	set_value( ptr_to_tag_t< Trait > p )
 	{
 		m_tags.push_back( p );
 
@@ -142,7 +142,7 @@ public:
 	//! \return List with children.
 	const child_tags_list_t & children() const override
 	{
-		static const tag_t::child_tags_list_t empty;
+		static const tag_t< Trait >::child_tags_list_t empty;
 
 		if( m_current )
 			return m_current->children();
@@ -151,13 +151,13 @@ public:
 	}
 
 	//! Print tag to the output.
-	string_t print( int indent = 0 ) const override
+	Trait::string_t print( int indent = 0 ) const override
 	{
-		string_t result;
+		Trait::string_t result;
 
 		if( is_defined() )
 		{
-			for( const ptr_to_tag_t & p : m_tags )
+			for( const ptr_to_tag_t< Trait > & p : m_tags )
 				result.append( p->print( indent ) );
 		}
 
@@ -170,7 +170,7 @@ public:
 	{
 		if( is_defined() )
 		{
-			for( const ptr_to_tag_t & p : m_tags )
+			for( const ptr_to_tag_t< Trait > & p : m_tags )
 				p->print( doc, parent );
 		}
 	}
@@ -191,10 +191,11 @@ public:
 		m_tags.push_back( m_current );
 		m_current.reset();
 
-		for( const tag_t * tag : children() )
+		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
@@ -206,7 +207,7 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const string_t & str ) override
+		const Trait::string_t & str ) override
 	{
 		m_current->on_string( info, str );
 	}
