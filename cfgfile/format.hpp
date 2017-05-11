@@ -49,17 +49,18 @@ namespace cfgfile {
 //
 
 //! Format template value to the string and back.
-template< class T >
+template< class T, class Trait >
 class format_t {
 public:
 	//! Format value to string.
-	static string_t to_string( const T & )
+	static Trait::string_t to_string( const T & )
 	{
-		return string_t();
+		return Trait::string_t();
 	}
 
 	//! Format value from string.
-	static T from_string( const parser_info_t< Trait > &, const string_t & )
+	static T from_string( const parser_info_t< Trait > &,
+		const Trait::string_t & )
 	{
 		return T();
 	}
@@ -67,65 +68,123 @@ public:
 
 
 template<>
-class format_t< int > {
+class format_t< int, string_trait_t > {
 public:
 	//! Format value to string.
-	static string_t to_string( const int & value )
+	static string_trait_t::string_t to_string( const int & value )
 	{
-#ifdef CFGFILE_QT_SUPPORT
-		return QString::number( value );
-#elif defined( CFGFILE_WSTRING_BUILD )
-		return std::to_wstring( value );
-#else
 		return std::to_string( value );
-#endif
 	}
 
 	//! Format value from string.
-	static int from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static int from_string( const parser_info_t< string_trait_t > & info,
+		const string_trait_t::string_t & value )
 	{
-#ifdef CFGFILE_QT_SUPPORT
-		bool ok = false;
-		int result = ((QString)value).toInt( &ok );
-
-		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
-				value + Trait::from_ascii( "\". In file \"" ) +
-				info.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
-		else
-			return result;
-#else
 		try {
 			std::size_t pos = 0;
 
 			int result = std::stoi( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
-					value + Trait::from_ascii( "\". In file \"" ) +
-					info.file_name() + Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+				throw exception_t< string_trait_t >(
+					string_trait_t::from_ascii( "Invalid value: \"" ) +
+					value + string_trait_t::from_ascii( "\". In file \"" ) +
+					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					string_trait_t::to_string( info.line_number() ) +
+					string_trait_t::from_ascii( "." ) );
 
 			return result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
-				value + Trait::from_ascii( "\". In file \"" ) +
-				info.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+			throw exception_t< string_trait_t >(
+				string_trait_t::from_ascii( "Invalid value: \"" ) +
+				value + string_trait_t::from_ascii( "\". In file \"" ) +
+				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				string_trait_t::to_string( info.line_number() ) +
+				string_trait_t::from_ascii( "." ) );
 		}
-#endif
 	}
 }; // class format_t< int >
+
+
+template<>
+class format_t< int, wstring_trait_t > {
+public:
+	//! Format value to string.
+	static wstring_trait_t::string_t to_string( const int & value )
+	{
+		return std::to_wstring( value );
+	}
+
+	//! Format value from string.
+	static int from_string( const parser_info_t< wstring_trait_t > & info,
+		const wstring_trait_t::string_t & value )
+	{
+		try {
+			std::size_t pos = 0;
+
+			int result = std::stoi( value, &pos );
+
+			if( pos != value.length() )
+				throw exception_t< wstring_trait_t >(
+					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
+					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
+					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					wstring_trait_t::to_string( info.line_number() ) +
+					wstring_trait_t::from_ascii( "." ) );
+
+			return result;
+		}
+		catch( const std::exception & )
+		{
+			throw exception_t< wstring_trait_t >(
+				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
+				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
+				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				wstring_trait_t::to_string( info.line_number() ) +
+				wstring_trait_t::from_ascii( "." ) );
+		}
+	}
+}; // class format_t< int >
+
+
+#ifdef CFGFILE_QT_SUPPORT
+template<>
+class format_t< int, qstring_trait_t > {
+public:
+	//! Format value to string.
+	static qstring_trait_t::string_t to_string( const int & value )
+	{
+		return QString::number( value );
+	}
+
+	//! Format value from string.
+	static int from_string( const parser_info_t< qstring_trait_t > & info,
+		const qstring_trait_t::string_t & value )
+	{
+		bool ok = false;
+		int result = ((QString)value).toInt( &ok );
+
+		if( !ok )
+			throw exception_t< qstring_trait_t >(
+				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
+				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
+				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				qstring_trait_t::to_string( info.line_number() ) +
+				qstring_trait_t::from_ascii( "." ) );
+		else
+			return result;
+	}
+}; // class format_t< int >
+#endif // CFGFILE_QT_SUPPORT
 
 
 template<>
 class format_t< unsigned int > {
 public:
 	//! Format value to string.
-	static string_t to_string( const unsigned int & value )
+	static Trait::string_t to_string( const unsigned int & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -137,14 +196,14 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned int from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static unsigned int from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned int result = ((QString)value).toUInt( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -157,7 +216,7 @@ public:
 			int result = std::stoi( value, &pos );
 
 			if( pos != value.length() || result < 0 )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -166,7 +225,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -180,7 +239,7 @@ template<>
 class format_t< long > {
 public:
 	//! Format value to string.
-	static string_t to_string( const long & value )
+	static Trait::string_t to_string( const long & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -192,14 +251,14 @@ public:
 	}
 
 	//! Format value from string.
-	static long from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static long from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		long result = ((QString)value).toLong( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -212,7 +271,7 @@ public:
 			long result = std::stol( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -221,7 +280,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -235,7 +294,7 @@ template<>
 class format_t< unsigned long > {
 public:
 	//! Format value to string.
-	static string_t to_string( const unsigned long & value )
+	static Trait::string_t to_string( const unsigned long & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -247,14 +306,14 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned long from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static unsigned long from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned long result = ((QString)value).toULong( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -267,7 +326,7 @@ public:
 			long result = std::stol( value, &pos );
 
 			if( pos != value.length() || result < 0 )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -276,7 +335,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -290,7 +349,7 @@ template<>
 class format_t< long long > {
 public:
 	//! Format value to string.
-	static string_t to_string( const long long & value )
+	static Trait::string_t to_string( const long long & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -302,14 +361,14 @@ public:
 	}
 
 	//! Format value from string.
-	static long long from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static long long from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		long long result = ((QString)value).toLongLong( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -322,7 +381,7 @@ public:
 			long long result = std::stoll( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -331,7 +390,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -345,7 +404,7 @@ template<>
 class format_t< unsigned long long > {
 public:
 	//! Format value to string.
-	static string_t to_string( const unsigned long long & value )
+	static Trait::string_t to_string( const unsigned long long & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -357,14 +416,14 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned long long from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static unsigned long long from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned long long result = ((QString)value).toULongLong( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -377,7 +436,7 @@ public:
 			long long result = std::stoll( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -386,7 +445,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -400,7 +459,7 @@ template<>
 class format_t< double > {
 public:
 	//! Format value to string.
-	static string_t to_string( const double & value )
+	static Trait::string_t to_string( const double & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
@@ -412,14 +471,14 @@ public:
 	}
 
 	//! Format value from string.
-	static double from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static double from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 #ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		double result = ((QString)value).toDouble( &ok );
 
 		if( !ok )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -432,7 +491,7 @@ public:
 			double result = std::stod( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					value + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -441,7 +500,7 @@ public:
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -452,20 +511,20 @@ public:
 
 
 template<>
-class format_t< string_t > {
+class format_t< Trait::string_t > {
 public:
 	//! Format value to string.
-	static string_t to_string( const string_t & value )
+	static Trait::string_t to_string( const Trait::string_t & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static string_t from_string( const parser_info_t< Trait > &, const string_t & value )
+	static Trait::string_t from_string( const parser_info_t< Trait > &, const Trait::string_t & value )
 	{
 		return value;
 	}
-}; // class format_t< string_t >
+}; // class format_t< Trait::string_t >
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -486,31 +545,31 @@ public:
 #endif
 
 
-static const string_t c_on = Trait::from_ascii( "on" );
-static const string_t c_off = Trait::from_ascii( "off" );
-static const string_t c_true = Trait::from_ascii( "true" );
-static const string_t c_false = Trait::from_ascii( "false" );
-static const string_t c_1 = Trait::from_ascii( "1" );
-static const string_t c_0 = Trait::from_ascii( "0" );
+static const Trait::string_t c_on = Trait::from_ascii( "on" );
+static const Trait::string_t c_off = Trait::from_ascii( "off" );
+static const Trait::string_t c_true = Trait::from_ascii( "true" );
+static const Trait::string_t c_false = Trait::from_ascii( "false" );
+static const Trait::string_t c_1 = Trait::from_ascii( "1" );
+static const Trait::string_t c_0 = Trait::from_ascii( "0" );
 
 template<>
 class format_t< bool > {
 public:
 	//! Format value to string.
-	static string_t to_string( const bool & value )
+	static Trait::string_t to_string( const bool & value )
 	{
 		return ( value ? Trait::from_ascii( "true" ) : Trait::from_ascii( "false" ) );
 	}
 
 	//! Format value from string.
-	static bool from_string( const parser_info_t< Trait > & info, const string_t & value )
+	static bool from_string( const parser_info_t< Trait > & info, const Trait::string_t & value )
 	{
 		if( value == c_on || value == c_true || value == c_1 )
 			return true;
 		else if( value == c_off || value == c_false || value == c_0 )
 			return false;
 		else
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 				value + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
