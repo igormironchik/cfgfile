@@ -859,20 +859,66 @@ public:
 
 
 template<>
-class format_t< Trait::string_t > {
+class format_t< std::string, string_trait_t > {
 public:
 	//! Format value to string.
-	static Trait::string_t to_string( const Trait::string_t & value )
+	static string_trait_t::string_t to_string( const Trait::string_t & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static Trait::string_t from_string( const parser_info_t< Trait > &, const Trait::string_t & value )
+	static string_trait_t::string_t from_string( const parser_info_t< string_trait_t > &,
+		const string_trait_t::string_t & value )
 	{
 		return value;
 	}
-}; // class format_t< Trait::string_t >
+}; // class format_t< std::string >
+
+
+template<>
+class format_t< std::string, wstring_trait_t > {
+public:
+	//! Format value to string.
+	static wstring_trait_t::string_t to_string( const std::string & value )
+	{
+		std::wstring res;
+		res.assign( value.cbegin(), value.cend() );
+
+		return res;
+	}
+
+	//! Format value from string.
+	static std::string from_string( const parser_info_t< wstring_trait_t > &,
+		const wstring_trait_t::string_t & value )
+	{
+		std::string res;
+		res.assign( value.cbegin(), value.cend() );
+
+		return res;
+	}
+}; // class format_t< std::string >
+
+
+#ifdef CFGFILE_QT_SUPPORT
+template<>
+class format_t< std::string, qstring_trait_t > {
+public:
+	//! Format value to string.
+	static qstring_trait_t::string_t to_string( const std::string & value )
+	{
+		return QString::fromUtf8( value.c_str() );
+	}
+
+	//! Format value from string.
+	static std::string from_string( const parser_info_t< qstring_trait_t > &,
+		const qstring_trait_t::string_t & value )
+	{
+		return value.toUtf8().toStdString();
+	}
+}; // class format_t< std::string >
+#endif // CFGFILE_QT_SUPPORT
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
