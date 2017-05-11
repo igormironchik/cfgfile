@@ -90,10 +90,10 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( v ) )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					string_t( format_t< T >::to_string( v ) ) +
-					SL( "\". Value must match to the constraint in tag \"" ) +
-					name() + SL( "\"." ) );
+					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					name() + Trait::from_ascii( "\"." ) );
 		}
 
 		m_value = v;
@@ -187,48 +187,48 @@ public:
 #endif
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		if( !is_defined() )
-			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
-				name() + SL( "\". In file \"" ) + info.file_name() +
-				SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+				name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+				Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
-					tag->name() + SL( "\". Where parent is: \"" ) +
-					name() + SL( "\". In file \"" ) + info.file_name() +
-					SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+					Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
 		if( !is_defined() )
 		{
 			if( is_any_child_defined() )
-				throw exception_t( string_t( SL( "Value \"" ) ) + str +
-					SL( "\" for tag \"" ) + name() +
-					SL( "\" must be defined before any child tag. In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Value \"" ) ) + str +
+					Trait::from_ascii( "\" for tag \"" ) + name() +
+					Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			T value = format_t< T >::from_string( info, str );
 
 			if( m_constraint )
 			{
 				if( !m_constraint->check( value ) )
-					throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-						str + SL( "\". Value must match to the constraint in tag \"" ) +
-						name() + SL( "\". In file \"" ) + info.file_name() +
-						SL( "\" on line " ) +
-						pos_to_string( info.line_number() ) + SL( "." ) );
+					throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+						str + Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+						name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+						Trait::from_ascii( "\" on line " ) +
+						Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 			}
 
 			m_value = value;
@@ -236,10 +236,10 @@ public:
 			set_defined();
 		}
 		else
-			throw exception_t( string_t( SL( "Value for the tag \"" ) ) +
-				name() + SL( "\" already defined. In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Value for the tag \"" ) ) +
+				name() + Trait::from_ascii( "\" already defined. In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 	}
 
 private:
@@ -372,47 +372,47 @@ public:
 #endif
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		if( !is_defined() )
-			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
-				name() + SL( "\". In file \"" ) + info.file_name() +
-				SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+				name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+				Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
-					tag->name() + SL( "\". Where parent is: \"" ) +
-					name() + SL( "\". In file \"" ) + info.file_name() +
-					SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+					Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
 		if( !is_defined() )
 		{
 			if( is_any_child_defined() )
-				throw exception_t( string_t( SL( "Value \"" ) ) + str +
-					SL( "\" for tag \"" ) + name() +
-					SL( "\" must be defined before any child tag. In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Value \"" ) ) + str +
+					Trait::from_ascii( "\" for tag \"" ) + name() +
+					Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			m_value = format_t< bool >::from_string( info, str );
 
 			set_defined();
 		}
 		else
-			throw exception_t( string_t( SL( "Value for the tag \"" ) ) +
-				name() + SL( "\" already defined. In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Value for the tag \"" ) ) +
+				name() + Trait::from_ascii( "\" already defined. In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 	}
 
 private:
@@ -464,10 +464,10 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( v ) )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					format_t< string_t >::to_string( v ) +
-					SL( "\". Value must match to the constraint in tag \"" ) +
-					name() + SL( "\"." ) );
+					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					name() + Trait::from_ascii( "\"." ) );
 		}
 
 		m_value = v;
@@ -589,45 +589,45 @@ public:
 #endif
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		if( m_constraint )
 		{
 			if( !m_constraint->check( m_value ) )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					m_value + SL( "\". Value must match to the constraint in tag \"" ) +
-					name() + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					m_value + Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 
 		if( !is_defined() )
-			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
-				name() + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+				name() + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
-					tag->name() + SL( "\". Where parent is: \"" ) +
-					name() + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
 		if( is_any_child_defined() )
-			throw exception_t( string_t( SL( "Value \"" ) ) + str +
-				SL( "\" for tag \"" ) + name() +
-				SL( "\" must be defined before any child tag. In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Value \"" ) ) + str +
+				Trait::from_ascii( "\" for tag \"" ) + name() +
+				Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		const string_t value = format_t< string_t >::from_string( info, str );
 
@@ -687,10 +687,10 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( v ) )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					string_t( format_t< QString >::to_string( v ) ) +
-					SL( "\". Value must match to the constraint in tag \"" ) +
-					name() + SL( "\"." ) );
+					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					name() + Trait::from_ascii( "\"." ) );
 		}
 
 		m_value = v;
@@ -812,46 +812,46 @@ public:
 #endif // CFGFILE_XML_BUILD
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		if( m_constraint )
 		{
 			if( !m_constraint->check( m_value ) )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
 					string_t( m_value ) +
-					SL( "\". Value must match to the constraint in tag \"" ) +
-					name() + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 
 		if( !is_defined() )
-			throw exception_t( string_t( SL( "Undefined value of tag: \"" ) ) +
-				name() + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+				name() + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
-					tag->name() + SL( "\". Where parent is: \"" ) +
-					name() + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
 		if( is_any_child_defined() )
-			throw exception_t( string_t( SL( "Value \"" ) ) + str +
-				SL( "\" for tag \"" ) + name() +
-				SL( "\" must be defined before any child tag. In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Value \"" ) ) + str +
+				Trait::from_ascii( "\" for tag \"" ) + name() +
+				Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 		const QString value = format_t< QString >::from_string( info, str );
 

@@ -43,19 +43,18 @@ namespace cfgfile {
 //
 
 //! Input stream for parser.
+template< typename Trait = string_trait_t >
 class input_stream_t final {
 public:
-	input_stream_t( const string_t & file_name,
-		istream_t & input )
+	input_stream_t( const Trait::string_t & file_name,
+		Trait::istream_t & input )
 		:	m_stream( input )
 		,	m_line_number( 1 )
 		,	m_column_number( 1 )
 		,	m_file_name( file_name )
 		,	m_returned_char( 0 )
 	{
-#ifndef CFGFILE_QSTRING_BUILD
-		m_stream >> std::noskipws;
-#endif
+		Trait::noskipws( m_stream );
 	}
 
 	~input_stream_t()
@@ -122,24 +121,7 @@ public:
 	bool at_end() const
 	{
 		if( m_returned_char == char_t( 0x00 ) )
-#ifdef CFGFILE_QSTRING_BUILD
-			return m_stream.atEnd();
-#else
-		{
-			char_t tmp = 0;
-
-			m_stream >> tmp;
-
-			if( tmp )
-			{
-				m_stream.putback( tmp );
-
-				return false;
-			}
-			else
-				return true;
-		}
-#endif
+			return Trait::is_at_end( m_stream );
 		else
 			return false;
 	}
@@ -182,15 +164,15 @@ private:
 	DISABLE_COPY( input_stream_t )
 
 	//! Underline input stream.
-	istream_t & m_stream;
+	Trait::istream_t & m_stream;
 	//! Line number.
-	pos_t m_line_number;
+	Trait::pos_t m_line_number;
 	//! Column number.
-	pos_t m_column_number;
+	Trait::pos_t m_column_number;
 	//! File name.
-	string_t m_file_name;
+	Trait::string_t m_file_name;
 	//! Returned char.
-	char_t m_returned_char;
+	Trait::char_t m_returned_char;
 }; // class input_stream_t
 
 } /* namespace cfgfile */

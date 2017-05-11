@@ -571,7 +571,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info );
+	void on_finish( const parser_info_t< Trait > & info );
 
 private:
 	//! Name.
@@ -608,7 +608,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info );
+	void on_finish( const parser_info_t< Trait > & info );
 
 private:
 	//! Value type.

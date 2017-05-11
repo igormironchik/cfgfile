@@ -61,6 +61,7 @@ enum class lexeme_type_t {
 //
 
 //! Lexeme.
+template< typename Trait = string_trait_t >
 class lexeme_t final {
 public:
 	lexeme_t()
@@ -81,7 +82,7 @@ public:
 	}
 
     //! \return Lexeme value.
-    const string_t & value() const
+    const Trait::string_t & value() const
 	{
 		return m_value;
 	}
@@ -96,7 +97,7 @@ private:
     //! Lexeme type.
     lexeme_type_t m_type;
     //! Lexeme value.
-    string_t m_value;
+    Trait::string_t m_value;
 }; // class lexeme_t
 
 
@@ -105,6 +106,7 @@ private:
 //
 
 //! Lexical analyzer.
+template< typename Trait = string_trait_t >
 class lexical_analyzer_t final {
 public:
 	explicit lexical_analyzer_t( input_stream_t & stream )
@@ -161,12 +163,12 @@ public:
 				else if( process_back_slash( new_char ) )
 					result.push_back( new_char );
 				else
-					throw exception_t( string_t(
-						SL( "Unrecognized back-slash sequence: \"\\" ) ) +
+					throw exception_t< Trait >( string_t(
+						Trait::from_ascii( "Unrecognized back-slash sequence: \"\\" ) ) +
 						string_t( 1, new_char ) +
-						SL( "\". In file \"" ) + m_stream.file_name() +
-						SL( "\" on line " ) + pos_to_string( line_number() ) +
-						SL( "." ) );
+						Trait::from_ascii( "\". In file \"" ) + m_stream.file_name() +
+						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "." ) );
 			}
 			else if( ch == c_begin_tag )
 			{
@@ -204,11 +206,11 @@ public:
 			else if( ch == c_carriage_return || ch == c_line_feed )
 			{
 				if( quoted_lexeme )
-					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
-						SL( "New line detected. In file \"" ) +
+					throw exception_t< Trait >( string_t( Trait::from_ascii( "Unfinished quoted lexeme. " ) ) +
+						Trait::from_ascii( "New line detected. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + pos_to_string( line_number() ) +
-						SL( "." ) );
+						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "." ) );
 				else
 					break;
 			}
@@ -256,11 +258,11 @@ public:
 			if( m_stream.at_end() )
 			{
 				if( quoted_lexeme )
-					throw exception_t( string_t( SL( "Unfinished quoted lexeme. " ) ) +
-						SL( "End of file riched. In file \"" ) +
+					throw exception_t< Trait >( string_t( Trait::from_ascii( "Unfinished quoted lexeme. " ) ) +
+						Trait::from_ascii( "End of file riched. In file \"" ) +
 						m_stream.file_name() +
-						SL( "\" on line " ) + pos_to_string( line_number() ) +
-						SL( "." ) );
+						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "." ) );
 				else if( result.empty() )
 					return lexeme_t( lexeme_type_t::null, string_t() );
 				else
@@ -283,13 +285,13 @@ public:
 	}
 
 	//! \return Line number.
-	pos_t line_number() const
+	Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	pos_t column_number() const
+	Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
@@ -328,10 +330,10 @@ private:
 	bool process_back_slash( char_t & ch )
 	{
 		if( m_stream.at_end() )
-			throw exception_t( string_t( SL( "Unexpected end of file. "
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Unexpected end of file. "
 					"Unfinished back slash sequence. In file \"" ) ) +
-				m_stream.file_name() + SL( "\" on line " ) +
-				pos_to_string( m_stream.line_number() ) + SL( "." ) );
+				m_stream.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( m_stream.line_number() ) + Trait::from_ascii( "." ) );
 
 		ch = m_stream.get();
 
@@ -397,9 +399,9 @@ private:
 	//! Input stream.
 	input_stream_t & m_stream;
 	//! Line number.
-	pos_t m_line_number;
+	Trait::pos_t m_line_number;
 	//! Column number.
-	pos_t m_column_number;
+	Trait::pos_t m_column_number;
 }; // class lexical_analyzer_t
 
 } /* namespace cfgfile */

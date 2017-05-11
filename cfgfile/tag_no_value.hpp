@@ -123,34 +123,34 @@ public:
 #endif
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
 					tag->name() +
-					SL( "\". Where parent is: \"" ) + name() +
-					SL( "\". In file \"" ) + info.file_name() +
-					SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) +
-					SL( "." ) );
+					Trait::from_ascii( "\". Where parent is: \"" ) + name() +
+					Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+					Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) +
+					Trait::from_ascii( "." ) );
 		}
 
 		set_defined();
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
-		throw exception_t( string_t( SL( "Tag \"" ) ) +
-			name() + SL( "\" doesn't allow any values. "
+		throw exception_t< Trait >( string_t( Trait::from_ascii( "Tag \"" ) ) +
+			name() + Trait::from_ascii( "\" doesn't allow any values. "
 				"But we've got this: \"" ) +
-			str + SL( "\". In file \"" ) + info.file_name() +
-			SL( "\" on line " ) +
-			pos_to_string( info.line_number() ) +
-			SL( "." ) );
+			str + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
+			Trait::from_ascii( "\" on line " ) +
+			Trait::to_string( info.line_number() ) +
+			Trait::from_ascii( "." ) );
 	}
 }; // class tag_no_value_t
 

@@ -99,7 +99,7 @@ public:
 	//! Determine file's format.
 	file_format_t format()
 	{
-		static const char_t xml = SL( '<' );
+		static const char_t xml = Trait::from_ascii( '<' );
 
 		char_t ch = 0x00;
 
@@ -185,7 +185,7 @@ static inline void read_cfgfile(
 			const QString data = stream.readAll();
 
 			if( !doc.setContent( data, true, &error, &line, &column ) )
-				throw exception_t( QString( "Unable to parse XML "
+				throw exception_t< Trait >( QString( "Unable to parse XML "
 					"from file: \"%1\". \"%2\" On line %3, column %4." )
 						.arg( file_name )
 						.arg( error )
@@ -196,13 +196,13 @@ static inline void read_cfgfile(
 
 			parser.parse( file_name );
 #else
-			throw exception_t( string_t( SL( "To use XML format build cfgfile "
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
 				"with CFGFILE_XML_BUILD" ) ) );
 #endif // CFGFILE_XML_BUILD
 #else
-			throw exception_t( string_t(
-					SL( "XML supported only with Qt. Parsing of file \"" ) ) +
-				file_name + SL( "\" failed." ) );
+			throw exception_t< Trait >( string_t(
+					Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) ) +
+				file_name + Trait::from_ascii( "\" failed." ) );
 #endif // CFGFILE_QSTRING_BUILD
 		}
 			break;
@@ -246,11 +246,11 @@ static inline void write_cfgfile(
 
 			stream << doc.toString( 4 );
 #else
-			throw exception_t( string_t( SL( "To use XML format build cfgfile "
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
 				"with CFGFILE_XML_BUILD" ) ) );
 #endif // CFGFILE_XML_BUILD
 #else
-			throw exception_t( string_t( SL( "XML supported only with Qt." ) ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "XML supported only with Qt." ) ) );
 #endif // CFGFILE_QSTRING_BUILD
 		}
 			break;

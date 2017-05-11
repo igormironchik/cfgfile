@@ -174,17 +174,17 @@ public:
 #endif
 
     //! Called when tag parsing started.
-	virtual void on_start( const parser_info_t & info )
+	virtual void on_start( const parser_info_t< Trait > & info )
 	{
 		m_line_number = info.line_number();
 		m_column_number = info.column_number();
 	}
 
     //! Called when tag parsing finished.
-	virtual void on_finish( const parser_info_t & info ) = 0;
+	virtual void on_finish( const parser_info_t< Trait > & info ) = 0;
 
 	//! Called when string found.
-	virtual void on_string( const parser_info_t & info,
+	virtual void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) = 0;
 
 protected:

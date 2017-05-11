@@ -72,17 +72,17 @@ public:
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t & ) override
+	void on_start( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t & ) override
+	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t &,
+	void on_string( const cfgfile::parser_info_t< Trait > &,
 		const cfgfile::string_t & ) override
 	{
 		m_withString = true;
@@ -135,17 +135,17 @@ public:
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t & ) override
+	void on_start( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t & ) override
+	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t &,
+	void on_string( const cfgfile::parser_info_t< Trait > &,
 		const cfgfile::string_t & ) override
 	{
 		m_withString = true;
@@ -199,17 +199,17 @@ public:
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t & ) override
+	void on_start( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t & ) override
+	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t &,
+	void on_string( const cfgfile::parser_info_t< Trait > &,
 		const cfgfile::string_t & ) override
 	{
 		m_withString = true;
@@ -299,7 +299,7 @@ TEST( Parser, test_unexpectedStartCurlBrace )
 	try {
 		parser.parse( "test_unexpectedStartCurlBrace" );
 	}
-	catch( cfgfile::exception_t & x )
+	catch( cfgfile::exception_t< Trait > & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected start curl brace. "
@@ -325,7 +325,7 @@ TEST( Parser, test_unexpectedTagName1 )
 	try {
 		parser.parse( "test_unexpectedTagName1" );
 	}
-	catch( cfgfile::exception_t & x )
+	catch( cfgfile::exception_t< Trait > & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected tag name. "
@@ -353,7 +353,7 @@ TEST( Parser, test_unexpectedTagName2 )
 	try {
 		parser.parse( "test_unexpectedTagName2" );
 	}
-	catch( cfgfile::exception_t & x )
+	catch( cfgfile::exception_t< Trait > & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected tag name. "
@@ -381,7 +381,7 @@ TEST( Parser, test_unexpectedEndOfFile )
 	try {
 		parser.parse( "test_unexpectedEndOfFile" );
 	}
-	catch( cfgfile::exception_t & x )
+	catch( cfgfile::exception_t< Trait > & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected end of file. "

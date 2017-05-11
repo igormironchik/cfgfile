@@ -38,13 +38,13 @@
 namespace cfgfile {
 
 //
-// parser_info_t
+// parser_info_t< Trait >
 //
 
 //! Information about parsed file and current state of parsing.
-class parser_info_t {
+class parser_info_t< Trait > {
 public:
-	parser_info_t( const string_t & file_name, pos_t line_number,
+	parser_info_t< Trait >( const string_t & file_name, pos_t line_number,
 		pos_t column_number )
 		:	m_file_name( file_name )
 		,	m_line_number( line_number )
@@ -77,7 +77,7 @@ private:
 	pos_t m_line_number;
 	//! Column number.
 	pos_t m_column_number;
-}; // class parser_info_t
+}; // class parser_info_t< Trait >
 
 } /* namespace cfgfile */
 

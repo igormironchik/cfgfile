@@ -177,7 +177,7 @@ public:
 #endif
 
 	//! Called when tag parsing started.
-	void on_start( const parser_info_t & info ) override
+	void on_start( const parser_info_t< Trait > & info ) override
 	{
 		m_current = std::make_shared< T > ( name(), is_mandatory() );
 		m_current->set_parent( parent() );
@@ -185,7 +185,7 @@ public:
 	}
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t & info ) override
+	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		m_current->on_finish( info );
 		m_tags.push_back( m_current );
@@ -194,18 +194,18 @@ public:
 		for( const tag_t * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t( string_t( SL( "Undefined child mandatory tag: \"" ) ) +
-					tag->name() + SL( "\". Where parent is: \"" ) +
-					name() + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					name() + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 
 		set_defined();
 	}
 
 	//! Called when string found.
-	void on_string( const parser_info_t & info,
+	void on_string( const parser_info_t< Trait > & info,
 		const string_t & str ) override
 	{
 		m_current->on_string( info, str );

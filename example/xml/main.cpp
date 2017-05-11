@@ -60,7 +60,7 @@ int main( int argc, char ** argv )
 
 		inFile.close();
 	}
-	catch( const cfgfile::exception_t & x )
+	catch( const cfgfile::exception_t< Trait > & x )
 	{
 		inFile.close();
 
@@ -124,7 +124,7 @@ int main( int argc, char ** argv )
 
 		outFile.close();
 	}
-	catch( const cfgfile::exception_t & x )
+	catch( const cfgfile::exception_t< Trait > & x )
 	{
 		outFile.close();
 

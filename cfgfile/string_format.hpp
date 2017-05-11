@@ -46,7 +46,7 @@ namespace cfgfile {
 static inline string_t to_cfgfile_format( const string_t & what )
 {
 	if( what.empty() )
-		return SL( "\"\"" );
+		return Trait::from_ascii( "\"\"" );
 
 	if( what.find( c_begin_tag ) == string_t::npos &&
 		what.find( c_end_tag ) == string_t::npos &&
@@ -69,15 +69,15 @@ static inline string_t to_cfgfile_format( const string_t & what )
 		for( const char_t & ch : what )
 		{
 			if( ch == c_quotes )
-				result.append( SL( "\\\"" ) );
+				result.append( Trait::from_ascii( "\\\"" ) );
 			else if( ch == c_carriage_return )
-				result.append( SL( "\\n" ) );
+				result.append( Trait::from_ascii( "\\n" ) );
 			else if( ch == c_line_feed )
-				result.append( SL( "\\r" ) );
+				result.append( Trait::from_ascii( "\\r" ) );
 			else if( ch == c_tab )
-				result.append( SL( "\\t" ) );
+				result.append( Trait::from_ascii( "\\t" ) );
 			else if( ch == c_back_slash )
-				result.append( SL( "\\\\" ) );
+				result.append( Trait::from_ascii( "\\\\" ) );
 			else
 				result.push_back( ch );
 		}
@@ -110,11 +110,11 @@ static inline string_t from_cfgfile_format( const string_t & what )
 				str.replace( where, old_value.length(), new_value );
 		};
 
-		replace( result, string_t( 1, c_carriage_return ), SL( "\\n" ) );
-		replace( result, string_t( 1, c_quotes ), SL( "\\\"" ) );
-		replace( result, string_t( 1, c_line_feed ), SL( "\\r" ) );
-		replace( result, string_t( 1, c_tab ), SL( "\\t" ) );
-		replace( result, string_t( 1, c_back_slash ), SL( "\\\\" ) );
+		replace( result, string_t( 1, c_carriage_return ), Trait::from_ascii( "\\n" ) );
+		replace( result, string_t( 1, c_quotes ), Trait::from_ascii( "\\\"" ) );
+		replace( result, string_t( 1, c_line_feed ), Trait::from_ascii( "\\r" ) );
+		replace( result, string_t( 1, c_tab ), Trait::from_ascii( "\\t" ) );
+		replace( result, string_t( 1, c_back_slash ), Trait::from_ascii( "\\\\" ) );
 
 		return result;
 	}

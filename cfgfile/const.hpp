@@ -37,22 +37,22 @@
 
 namespace cfgfile {
 
-static const char_t c_begin_tag = SL('{' );
-static const char_t c_end_tag = SL( '}' );
-static const char_t c_quotes = SL( '"' );
-static const char_t c_n = SL( 'n' );
-static const char_t c_t = SL( 't' );
-static const char_t c_r = SL( 'r' );
-static const char_t c_back_slash = SL( '\\' );
-static const char_t c_space = SL( ' ' );
-static const char_t c_tab = SL( '\t' );
-static const char_t c_carriage_return = SL( '\n' );
-static const char_t c_line_feed = SL( '\r' );
-static const char_t c_vertical_bar = SL( '|' );
-static const char_t c_sharp = SL( '#' );
-static const string_t c_one_line_comment = SL( "||" );
-static const string_t c_start_multi_line_comment = SL( "|#" );
-static const string_t c_finish_multi_line_comment = SL( "#|" );
+static const char_t c_begin_tag = Trait::from_ascii('{' );
+static const char_t c_end_tag = Trait::from_ascii( '}' );
+static const char_t c_quotes = Trait::from_ascii( '"' );
+static const char_t c_n = Trait::from_ascii( 'n' );
+static const char_t c_t = Trait::from_ascii( 't' );
+static const char_t c_r = Trait::from_ascii( 'r' );
+static const char_t c_back_slash = Trait::from_ascii( '\\' );
+static const char_t c_space = Trait::from_ascii( ' ' );
+static const char_t c_tab = Trait::from_ascii( '\t' );
+static const char_t c_carriage_return = Trait::from_ascii( '\n' );
+static const char_t c_line_feed = Trait::from_ascii( '\r' );
+static const char_t c_vertical_bar = Trait::from_ascii( '|' );
+static const char_t c_sharp = Trait::from_ascii( '#' );
+static const string_t c_one_line_comment = Trait::from_ascii( "||" );
+static const string_t c_start_multi_line_comment = Trait::from_ascii( "|#" );
+static const string_t c_finish_multi_line_comment = Trait::from_ascii( "#|" );
 
 } /* namespace cfgfile */
 

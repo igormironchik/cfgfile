@@ -933,7 +933,7 @@ model_t::check_class( const class_t & c,
 
 	if( std::find( prev_defined_classes.cbegin(), prev_defined_classes.cend(),
 		class_name ) != prev_defined_classes.cend() )
-			throw cfgfile::exception_t( std::string( "Redefinition of class_t \"" ) +
+			throw cfgfile::exception_t< Trait >( std::string( "Redefinition of class_t \"" ) +
 				class_name + "\". Line " + std::to_string( c.line_number() ) +
 				", column " + std::to_string( c.column_number() ) +	"." );
 
@@ -951,7 +951,7 @@ model_t::check_class( const class_t & c,
 				case field_t::scalar_vector_field_type :
 				{
 					if( f.name().empty() )
-						throw cfgfile::exception_t( std::string(
+						throw cfgfile::exception_t< Trait >( std::string(
 							"Base of class_t field_t's name is empty. Line " ) +
 							std::to_string( f.line_number() ) +
 							", column " + std::to_string( f.column_number() ) +
@@ -964,7 +964,7 @@ model_t::check_class( const class_t & c,
 			}
 		}
 		else if( f.name().empty() )
-			throw cfgfile::exception_t( std::string(
+			throw cfgfile::exception_t< Trait >( std::string(
 				"field_t name of class_t \"" ) + class_name +
 				"\" Line " + std::to_string( f.line_number() ) +
 				", column " + std::to_string( f.column_number() ) +
@@ -972,7 +972,7 @@ model_t::check_class( const class_t & c,
 
 		if( std::find( fields.cbegin(), fields.cend(), f.name() ) !=
 			fields.cend() )
-				throw cfgfile::exception_t( std::string( "field_t \"" ) +
+				throw cfgfile::exception_t< Trait >( std::string( "field_t \"" ) +
 					f.name() + "\" already defined in class_t \"" +
 					class_name + "\". Line " +
 					std::to_string( f.line_number() ) +
@@ -987,7 +987,7 @@ model_t::check_class( const class_t & c,
 				if( !check_is_class_defined( full_name( c, f.value_type() ),
 					class_name, prev_defined_classes ) )
 				{
-					throw cfgfile::exception_t( std::string( "Value type \"" ) +
+					throw cfgfile::exception_t< Trait >( std::string( "Value type \"" ) +
 						f.value_type() + "\" of member \"" +
 						f.name() + "\" of class \"" +
 						class_name + "\" wasn't defined. Line " +
@@ -1101,7 +1101,7 @@ static inline field_t::field_type_t field_type_from_string( const std::string & 
 static inline void throw_constraint_redefinition( const std::string & class_name,
 	const std::string & field_name, long long line_number, long long column_number )
 {
-	throw cfgfile::exception_t( std::string( "Redefinition of "
+	throw cfgfile::exception_t< Trait >( std::string( "Redefinition of "
 			"constraint in class \"" ) + class_name +
 		"\", field \"" + field_name +
 		"\". Line " + std::to_string( line_number ) +
@@ -1170,7 +1170,7 @@ tag_field_t::cfg() const
 }
 
 void
-tag_field_t::on_finish( const parser_info_t & info )
+tag_field_t::on_finish( const parser_info_t< Trait > & info )
 {
 	switch( field_type_from_string( name() ) )
 	{
@@ -1179,7 +1179,7 @@ tag_field_t::on_finish( const parser_info_t & info )
 		case field_t::vector_of_tags_field_type :
 		{
 			if( !m_value_type.is_defined() )
-				throw cfgfile::exception_t( std::string( "Undefined required "
+				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
 						"tag \"" ) + c_value_type_tag_name +
 					"\" in tag \"" + name() +
 					"\". Line " + std::to_string( info.line_number() ) +
@@ -1259,7 +1259,7 @@ tag_base_class_t::cfg() const
 }
 
 void
-tag_base_class_t::on_finish( const parser_info_t & info )
+tag_base_class_t::on_finish( const parser_info_t< Trait > & info )
 {
 	switch( field_type_from_string( value() ) )
 	{
@@ -1268,14 +1268,14 @@ tag_base_class_t::on_finish( const parser_info_t & info )
 		case field_t::vector_of_tags_field_type :
 		{
 			if( !m_value_type.is_defined() )
-				throw cfgfile::exception_t( std::string( "Undefined required "
+				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
 						"tag \"" ) + c_value_type_tag_name +
 					"\" in tag \"" + c_base_class_tag_name +
 					"\". Line " + std::to_string( info.line_number() ) +
 					", column " + std::to_string( info.column_number() ) + "." );
 
 			if( !m_name.is_defined() )
-				throw cfgfile::exception_t( std::string( "Undefined required "
+				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
 						"tag \"" ) + c_field_name_tag_name +
 					"\" in tag \"" + c_base_class_tag_name +
 					"\". Line " + std::to_string( info.line_number() ) +

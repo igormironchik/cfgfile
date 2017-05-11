@@ -130,7 +130,7 @@ TEST( LexicalAnalyzer, test_wrongBackSlahSequence )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t & x )
+	catch( const cfgfile::exception_t< Trait > & x )
 	{
 		CHECK_CONDITION( x.desc() == "Unrecognized back-slash sequence: \"\\g\". "
 			"In file \"test_wrongBackSlahSequence\" on line 2." );

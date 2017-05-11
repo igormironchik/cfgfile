@@ -51,7 +51,7 @@ Configuration loadConfig( const std::string & fileName )
 			file.close();
 		}
 	}
-	catch( const cfgfile::exception_t & )
+	catch( const cfgfile::exception_t< Trait > & )
 	{
 		file.close();
 
@@ -98,7 +98,7 @@ TEST( BoolScalar, testFalseInsteadOfTrue )
 
 TEST( BoolScalar, testInvalidValue )
 {
-	CHECK_THROW( loadConfig( "invalid_value.cfg" ), cfgfile::exception_t );
+	CHECK_THROW( loadConfig( "invalid_value.cfg" ), cfgfile::exception_t< Trait > );
 } // testInvalidValue
 
 int main()

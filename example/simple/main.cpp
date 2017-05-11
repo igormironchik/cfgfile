@@ -56,7 +56,7 @@ int main( int, char ** )
 			return 1;
 		}
 	}
-	catch( const cfgfile::exception_t & x )
+	catch( const cfgfile::exception_t< Trait > & x )
 	{
 		in.close();
 
@@ -118,7 +118,7 @@ int main( int, char ** )
 			return 1;
 		}
 	}
-	catch( const cfgfile::exception_t & x )
+	catch( const cfgfile::exception_t< Trait > & x )
 	{
 		out.close();
 

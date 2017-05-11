@@ -59,7 +59,7 @@ public:
 	}
 
 	//! Format value from string.
-	static T from_string( const parser_info_t &, const string_t & )
+	static T from_string( const parser_info_t< Trait > &, const string_t & )
 	{
 		return T();
 	}
@@ -82,17 +82,17 @@ public:
 	}
 
 	//! Format value from string.
-	static int from_string( const parser_info_t & info, const string_t & value )
+	static int from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		int result = ((QString)value).toInt( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -102,19 +102,19 @@ public:
 			int result = std::stoi( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -137,17 +137,17 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned int from_string( const parser_info_t & info, const string_t & value )
+	static unsigned int from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		unsigned int result = ((QString)value).toUInt( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -157,19 +157,19 @@ public:
 			int result = std::stoi( value, &pos );
 
 			if( pos != value.length() || result < 0 )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (unsigned int) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -192,17 +192,17 @@ public:
 	}
 
 	//! Format value from string.
-	static long from_string( const parser_info_t & info, const string_t & value )
+	static long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		long result = ((QString)value).toLong( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -212,19 +212,19 @@ public:
 			long result = std::stol( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (unsigned int) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -247,17 +247,17 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned long from_string( const parser_info_t & info, const string_t & value )
+	static unsigned long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		unsigned long result = ((QString)value).toULong( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -267,19 +267,19 @@ public:
 			long result = std::stol( value, &pos );
 
 			if( pos != value.length() || result < 0 )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (unsigned long) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -302,17 +302,17 @@ public:
 	}
 
 	//! Format value from string.
-	static long long from_string( const parser_info_t & info, const string_t & value )
+	static long long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		long long result = ((QString)value).toLongLong( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -322,19 +322,19 @@ public:
 			long long result = std::stoll( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (long long) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -357,17 +357,17 @@ public:
 	}
 
 	//! Format value from string.
-	static unsigned long long from_string( const parser_info_t & info, const string_t & value )
+	static unsigned long long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		unsigned long long result = ((QString)value).toULongLong( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -377,19 +377,19 @@ public:
 			long long result = std::stoll( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (unsigned long long) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -412,17 +412,17 @@ public:
 	}
 
 	//! Format value from string.
-	static double from_string( const parser_info_t & info, const string_t & value )
+	static double from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 #ifdef CFGFILE_QSTRING_BUILD
 		bool ok = false;
 		double result = ((QString)value).toDouble( &ok );
 
 		if( !ok )
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		else
 			return result;
 #else
@@ -432,19 +432,19 @@ public:
 			double result = std::stod( value, &pos );
 
 			if( pos != value.length() )
-				throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-					value + SL( "\". In file \"" ) +
-					info.file_name() + SL( "\" on line " ) +
-					pos_to_string( info.line_number() ) + SL( "." ) );
+				throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+					value + Trait::from_ascii( "\". In file \"" ) +
+					info.file_name() + Trait::from_ascii( "\" on line " ) +
+					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
 			return (unsigned int) result;
 		}
 		catch( const std::exception & )
 		{
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 #endif
 	}
@@ -461,7 +461,7 @@ public:
 	}
 
 	//! Format value from string.
-	static string_t from_string( const parser_info_t &, const string_t & value )
+	static string_t from_string( const parser_info_t< Trait > &, const string_t & value )
 	{
 		return value;
 	}
@@ -478,7 +478,7 @@ public:
 	}
 
 	//! Format value from string.
-	static QString from_string( const parser_info_t &, const QString & value )
+	static QString from_string( const parser_info_t< Trait > &, const QString & value )
 	{
 		return value;
 	}
@@ -486,12 +486,12 @@ public:
 #endif
 
 
-static const string_t c_on = SL( "on" );
-static const string_t c_off = SL( "off" );
-static const string_t c_true = SL( "true" );
-static const string_t c_false = SL( "false" );
-static const string_t c_1 = SL( "1" );
-static const string_t c_0 = SL( "0" );
+static const string_t c_on = Trait::from_ascii( "on" );
+static const string_t c_off = Trait::from_ascii( "off" );
+static const string_t c_true = Trait::from_ascii( "true" );
+static const string_t c_false = Trait::from_ascii( "false" );
+static const string_t c_1 = Trait::from_ascii( "1" );
+static const string_t c_0 = Trait::from_ascii( "0" );
 
 template<>
 class format_t< bool > {
@@ -499,21 +499,21 @@ public:
 	//! Format value to string.
 	static string_t to_string( const bool & value )
 	{
-		return ( value ? SL( "true" ) : SL( "false" ) );
+		return ( value ? Trait::from_ascii( "true" ) : Trait::from_ascii( "false" ) );
 	}
 
 	//! Format value from string.
-	static bool from_string( const parser_info_t & info, const string_t & value )
+	static bool from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
 		if( value == c_on || value == c_true || value == c_1 )
 			return true;
 		else if( value == c_off || value == c_false || value == c_0 )
 			return false;
 		else
-			throw exception_t( string_t( SL( "Invalid value: \"" ) ) +
-				value + SL( "\". In file \"" ) +
-				info.file_name() + SL( "\" on line " ) +
-				pos_to_string( info.line_number() ) + SL( "." ) );
+			throw exception_t< Trait >( string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				value + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 	}
 }; // class format_t< bool >
 

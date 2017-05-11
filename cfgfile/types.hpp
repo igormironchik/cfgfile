@@ -77,6 +77,27 @@ class wstring_trait_t final {
 
 		return res;
 	}
+
+	static inline void noskipws( istream_t & stream )
+	{
+		stream >> std::noskipws;
+	}
+
+	static inline bool is_at_end( istream_t & stream )
+	{
+		char_t tmp = 0;
+
+		stream >> tmp;
+
+		if( tmp )
+		{
+			stream.putback( tmp );
+
+			return false;
+		}
+		else
+			return true;
+	}
 }; // class wstring_trait_t
 
 
@@ -101,7 +122,7 @@ class string_trait_t final {
 	//! Output stream type.
 	using ostream_t = std::ostream;
 
-	static inline string_t pos_to_string( pos_t pos )
+	static inline string_t to_string( pos_t pos )
 	{
 		return std::to_string( pos );
 	}
@@ -109,6 +130,27 @@ class string_trait_t final {
 	static inline string_t from_ascii( const std::string & str )
 	{
 		return str;
+	}
+
+	static inline void noskipws( istream_t & stream )
+	{
+		stream >> std::noskipws;
+	}
+
+	static inline bool is_at_end( istream_t & stream )
+	{
+		char_t tmp = 0;
+
+		stream >> tmp;
+
+		if( tmp )
+		{
+			stream.putback( tmp );
+
+			return false;
+		}
+		else
+			return true;
 	}
 }; // class string_trait_t
 
@@ -357,6 +399,15 @@ class qstring_trait_t final {
 	static inline string_t from_ascii( const std::string & str )
 	{
 		return qstring_wrapper_t( QString( str.c_str() ) );
+	}
+
+	static inline void noskipws( istream_t & )
+	{
+	}
+
+	static inline bool is_at_end( istream_t & stream )
+	{
+		return stream.atEnd();
 	}
 } // class qstring_trait_t
 
