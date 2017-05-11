@@ -64,10 +64,10 @@ from cfgfile::tag_t or any derived class. For each tag in this case, define a
 class member that is the object of a class derived from cfgfile::tag_t.
 There are finished classes in cfgfile for:
           
- * tag_scalar_t< T > — tag with a single value,
- * tag_scalar_vector_t< T > — tag with a set of values,
- * tag_no_value_t — tag with no value,
- * tag_vector_of_tags_t< T > — tag with multiple entries of subordinate tag.
+ * tag_scalar_t< T, Trait > — tag with a single value,
+ * tag_scalar_vector_t< T, Trait > — tag with a set of values,
+ * tag_no_value_t< Trait > — tag with no value,
+ * tag_vector_of_tags_t< T, Trait > — tag with multiple entries of subordinate tag.
           
 Each tag can have nested tags. Nesting is not limited, except your needs for
 this. You must inherit from the appropriate class tag and provide the required
@@ -129,17 +129,17 @@ private:
 
 //! This is cfgfile tag, uses to read and write configuration.
 class TagConfiguration
-  :  public cfgfile::tag_no_value_t
+  :  public cfgfile::tag_no_value_t<>
 {
 public:
   TagConfiguration()
-    :  cfgfile::tag_no_value_t( "configuration", true )
+    :  cfgfile::tag_no_value_t<>( "configuration", true )
     ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
   }
   
   explicit TagConfiguration( const Configuration & cfg )
-    :  cfgfile::tag_no_value_t( "configuration", true )
+    :  cfgfile::tag_no_value_t<>( "configuration", true )
     ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
     m_ourCoolValue.set_value( cfg.ourCoolValue() );
@@ -307,9 +307,10 @@ public:
 //
 // tag_NameOfTheClass
 //
-  
+
+template< typename Trait >
 class tag_NameOfTheClass
-  :  public cfgfile::tag_no_value_t
+  :  public cfgfile::tag_no_value_t< Trait >
 {
 public:
   c_tors();
