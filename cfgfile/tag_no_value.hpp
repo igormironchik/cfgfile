@@ -51,19 +51,20 @@ namespace cfgfile {
 //
 
 //! Tag without a value.
+template< typename Trait >
 class tag_no_value_t
-	:	public tag_t
+	:	public tag_t< Trait >
 {
 public:
-	explicit tag_no_value_t( const string_t & name,
+	explicit tag_no_value_t( const Trait::string_t & name,
 		bool is_mandatory = false )
-		:	tag_t( name, is_mandatory )
+		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
-	tag_no_value_t( tag_t & owner, const string_t & name,
+	tag_no_value_t( tag_t< Trait > & owner, const Trait::string_t & name,
 		bool is_mandatory = false )
-		:	tag_t( owner, name, is_mandatory )
+		:	tag_t< Trait >( owner, name, is_mandatory )
 	{
 	}
 
@@ -72,13 +73,13 @@ public:
 	}
 
 	//! Print tag to the output.
-	string_t print( int indent = 0 ) const override
+	Trait::string_t print( int indent = 0 ) const override
 	{
-		string_t result;
+		Trait::string_t result;
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, const_t< Trait >::c_tab ) );
+			result.append( Trait::string_t( indent, const_t< Trait >::c_tab ) );
 
 			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
@@ -87,10 +88,10 @@ public:
 			{
 				result.push_back( const_t< Trait >::c_carriage_return );
 
-				for( const tag_t * tag : children() )
+				for( const tag_t< Trait > * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, const_t< Trait >::c_tab ) );
+				result.append( Trait::string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
 			result.push_back( const_t< Trait >::c_end_tag );
@@ -115,7 +116,7 @@ public:
 
 			if( !children().empty() )
 			{
-				for( const tag_t * tag : children() )
+				for( const tag_t< Trait > * tag : children() )
 					tag->print( doc, &this_element );
 			}
 		}
@@ -125,10 +126,11 @@ public:
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
-		for( const tag_t * tag : children() )
+		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >( string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() +
 					Trait::from_ascii( "\". Where parent is: \"" ) + name() +
 					Trait::from_ascii( "\". In file \"" ) + info.file_name() +
@@ -142,9 +144,9 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const string_t & str ) override
+		const Trait::string_t & str ) override
 	{
-		throw exception_t< Trait >( string_t( Trait::from_ascii( "Tag \"" ) ) +
+		throw exception_t< Trait >( Trait::from_ascii( "Tag \"" ) +
 			name() + Trait::from_ascii( "\" doesn't allow any values. "
 				"But we've got this: \"" ) +
 			str + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
