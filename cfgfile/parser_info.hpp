@@ -38,14 +38,15 @@
 namespace cfgfile {
 
 //
-// parser_info_t< Trait >
+// parser_info_t
 //
 
 //! Information about parsed file and current state of parsing.
-class parser_info_t< Trait > {
+template< typename Trait = string_trait_t >
+class parser_info_t {
 public:
-	parser_info_t< Trait >( const string_t & file_name, pos_t line_number,
-		pos_t column_number )
+	parser_info_t( const Trait::string_t & file_name, Trait::pos_t line_number,
+		Trait::pos_t column_number )
 		:	m_file_name( file_name )
 		,	m_line_number( line_number )
 		,	m_column_number( column_number )
@@ -53,31 +54,31 @@ public:
 	}
 
 	//! \return File name.
-	const string_t & file_name() const
+	const Trait::string_t & file_name() const
 	{
 		return m_file_name;
 	}
 
 	//! \return Line number.
-	pos_t line_number() const
+	Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	pos_t column_number() const
+	Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
 
 private:
 	//! File name.
-	string_t m_file_name;
+	Trait::string_t m_file_name;
 	//! Line number.
-	pos_t m_line_number;
+	Trait::pos_t m_line_number;
 	//! Column number.
-	pos_t m_column_number;
-}; // class parser_info_t< Trait >
+	Trait::pos_t m_column_number;
+}; // class parser_info_t
 
 } /* namespace cfgfile */
 
