@@ -38,7 +38,7 @@
 #include "parser.hpp"
 #include "exceptions.hpp"
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
@@ -48,7 +48,7 @@
 #else
 // C++ include.
 #include <cctype>
-#endif // CFGFILE_QSTRING_BUILD
+#endif // CFGFILE_QT_SUPPORT
 
 
 namespace cfgfile {
@@ -75,7 +75,7 @@ namespace details {
 //! Checks if character is whitespace character.
 static inline bool is_space( char_t ch )
 {
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 	return ch.isSpace();
 #elif defined( CFGFILE_WSTRING_BUILD )
 	return std::iswspace( ch );
@@ -104,7 +104,7 @@ public:
 		char_t ch = 0x00;
 
 		while(
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 			!m_stream.atEnd()
 #else
 			!m_stream.eof()
@@ -154,7 +154,7 @@ static inline void read_cfgfile(
 		fmt = d.format();
 	}
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 	stream.seek( 0 );
 #else
 	stream.seekg( 0 );
@@ -174,8 +174,8 @@ static inline void read_cfgfile(
 
 		case file_format_t::xml_format :
 		{
-#ifdef CFGFILE_QSTRING_BUILD
-#ifdef CFGFILE_XML_BUILD
+#ifdef CFGFILE_QT_SUPPORT
+#ifdef CFGFILE_XML_SUPPORT
 			QDomDocument doc;
 
 			QString error;
@@ -197,13 +197,13 @@ static inline void read_cfgfile(
 			parser.parse( file_name );
 #else
 			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
-				"with CFGFILE_XML_BUILD" ) ) );
-#endif // CFGFILE_XML_BUILD
+				"with CFGFILE_XML_SUPPORT" ) ) );
+#endif // CFGFILE_XML_SUPPORT
 #else
 			throw exception_t< Trait >( string_t(
 					Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) ) +
 				file_name + Trait::from_ascii( "\" failed." ) );
-#endif // CFGFILE_QSTRING_BUILD
+#endif // CFGFILE_QT_SUPPORT
 		}
 			break;
 
@@ -238,8 +238,8 @@ static inline void write_cfgfile(
 
 		case file_format_t::xml_format :
 		{
-#ifdef CFGFILE_QSTRING_BUILD
-#ifdef CFGFILE_XML_BUILD
+#ifdef CFGFILE_QT_SUPPORT
+#ifdef CFGFILE_XML_SUPPORT
 			QDomDocument doc;
 
 			tag.print( doc );
@@ -247,11 +247,11 @@ static inline void write_cfgfile(
 			stream << doc.toString( 4 );
 #else
 			throw exception_t< Trait >( string_t( Trait::from_ascii( "To use XML format build cfgfile "
-				"with CFGFILE_XML_BUILD" ) ) );
-#endif // CFGFILE_XML_BUILD
+				"with CFGFILE_XML_SUPPORT" ) ) );
+#endif // CFGFILE_XML_SUPPORT
 #else
 			throw exception_t< Trait >( string_t( Trait::from_ascii( "XML supported only with Qt." ) ) );
-#endif // CFGFILE_QSTRING_BUILD
+#endif // CFGFILE_QT_SUPPORT
 		}
 			break;
 

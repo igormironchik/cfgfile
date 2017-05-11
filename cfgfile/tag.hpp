@@ -31,7 +31,7 @@
 #ifndef CFGFILE__TAG_HPP__INCLUDED
 #define CFGFILE__TAG_HPP__INCLUDED
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
@@ -53,14 +53,15 @@ namespace cfgfile {
 //
 
 //! Base class for the tags in the configuration file.
+template< typename Trait = string_trait_t >
 class tag_t {
 public:
-    friend class parser_t;
+    friend class parser_t< Trait >;
 
     //! List with children.
-    typedef std::list< tag_t* > child_tags_list_t;
+    typedef std::list< tag_t< Trait >* > child_tags_list_t;
 
-    explicit tag_t( const string_t & name, bool is_mandatory = false )
+    explicit tag_t( const Trait::string_t & name, bool is_mandatory = false )
 		:   m_name( name )
 		,   m_is_mandatory( is_mandatory )
 		,   m_is_defined( false )
@@ -70,7 +71,8 @@ public:
 	{
 	}
 
-    tag_t( tag_t & owner, const string_t & name, bool is_mandatory = false )
+    tag_t( tag_t< Trait > & owner, const Trait::string_t & name,
+		bool is_mandatory = false )
 		:   m_name( name )
 		,   m_is_mandatory( is_mandatory )
 		,   m_is_defined( false )
@@ -86,7 +88,7 @@ public:
 	}
 
     //! Add child tag.
-    void add_child( tag_t & tag )
+    void add_child( tag_t< Trait > & tag )
 	{
 		if( std::find( m_child_tags.cbegin(), m_child_tags.cend(), &tag ) ==
 			m_child_tags.cend() )
@@ -98,7 +100,7 @@ public:
 	}
 
     //! Remove child tag.
-    void remove_child( tag_t & tag )
+    void remove_child( tag_t< Trait > & tag )
 	{
 		auto it = std::find( m_child_tags.cbegin(), m_child_tags.cend(), &tag );
 
@@ -111,13 +113,13 @@ public:
 	}
 
 	//! \return Parent tag.
-	const tag_t * parent() const
+	const tag_t< Trait > * parent() const
 	{
 		return m_parent;
 	}
 
     //! \return Name of the tag.
-    const string_t & name() const
+    const Trait::string_t & name() const
 	{
 		return m_name;
 	}
@@ -131,7 +133,7 @@ public:
     //! \return Is this tag defined?
     bool is_defined() const
 	{
-		for( const tag_t * tag : children() )
+		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
 				return false;
@@ -147,13 +149,13 @@ public:
 	}
 
 	//! \return Line number.
-	pos_t line_number() const
+	Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	pos_t column_number() const
+	Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
@@ -165,9 +167,9 @@ public:
 	}
 
 	//! Print tag to the output.
-	virtual string_t print( int indent = 0 ) const = 0;
+	virtual Trait::string_t print( int indent = 0 ) const = 0;
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
 	virtual void print( QDomDocument & doc,
 		QDomElement * parent = 0 ) const = 0;
@@ -188,10 +190,10 @@ public:
 		const string_t & str ) = 0;
 
 protected:
-	template< class T > friend class tag_vector_of_tags_t;
+	template< class T, Trait > friend class tag_vector_of_tags_t;
 
 	//! Set parent tag.
-	void set_parent( const tag_t * p )
+	void set_parent( const tag_t< Trait > * p )
 	{
 		m_parent = p;
 	}
@@ -200,7 +202,7 @@ protected:
 	bool is_any_child_defined() const
 	{
 		if( std::any_of( m_child_tags.cbegin(), m_child_tags.cend(),
-			[] ( tag_t * tag ) { return ( tag->is_defined() ); } ) )
+			[] ( tag_t< Trait > * tag ) { return ( tag->is_defined() ); } ) )
 				return true;
 
 		return false;
@@ -210,7 +212,7 @@ private:
     DISABLE_COPY( tag_t )
 
 	//! Name.
-	string_t m_name;
+	Trait::string_t m_name;
 	//! Is tag mandatory?
     bool m_is_mandatory;
 	//! Is tag defined?
@@ -218,11 +220,11 @@ private:
 	//! Children.
     child_tags_list_t m_child_tags;
 	//! Parent.
-	const tag_t * m_parent;
+	const tag_t< Trait > * m_parent;
 	//! Line number.
-	pos_t m_line_number;
+	Trait::pos_t m_line_number;
 	//! Column number.
-	pos_t m_column_number;
+	Trait::pos_t m_column_number;
 }; // class tag_t
 
 } /* namespace cfgfile */

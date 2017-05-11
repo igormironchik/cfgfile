@@ -39,7 +39,7 @@
 #include "exceptions.hpp"
 #include "const.hpp"
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
@@ -157,7 +157,7 @@ public:
 		return result;
 	}
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
@@ -342,7 +342,7 @@ public:
 		return result;
 	}
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
@@ -559,7 +559,7 @@ public:
 		return result;
 	}
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
@@ -644,7 +644,7 @@ private:
 }; // class tag_scalar_t
 
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 
 //
 // tag_scalar_t< QString >
@@ -782,7 +782,7 @@ public:
 		return result;
 	}
 
-#ifdef CFGFILE_XML_BUILD
+#ifdef CFGFILE_XML_SUPPORT
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
@@ -809,7 +809,7 @@ public:
 			}
 		}
 	}
-#endif // CFGFILE_XML_BUILD
+#endif // CFGFILE_XML_SUPPORT
 
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
@@ -867,7 +867,7 @@ private:
 	constraint_t< QString > * m_constraint;
 }; // class tag_scalar_t< QString >
 
-#endif // CFGFILE_QSTRING_BUILD
+#endif // CFGFILE_QT_SUPPORT
 
 } /* namespace cfgfile */
 

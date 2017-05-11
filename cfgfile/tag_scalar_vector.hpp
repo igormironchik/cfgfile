@@ -40,7 +40,7 @@
 #include "exceptions.hpp"
 #include "parser_info.hpp"
 
-#if defined( CFGFILE_string_t_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_string_t_BUILD ) && defined( CFGFILE_XML_SUPPORT )
 // Qt include.
 #include <QDomDocument>
 #include <QDomElement>
@@ -195,7 +195,7 @@ public:
 		return result;
 	}
 
-#if defined( CFGFILE_QSTRING_BUILD ) && defined( CFGFILE_XML_BUILD )
+#if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{

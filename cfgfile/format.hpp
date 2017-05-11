@@ -36,7 +36,7 @@
 #include "exceptions.hpp"
 #include "types.hpp"
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 // Qt include.
 #include <QString>
 #endif
@@ -72,7 +72,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const int & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -84,7 +84,7 @@ public:
 	//! Format value from string.
 	static int from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		int result = ((QString)value).toInt( &ok );
 
@@ -127,7 +127,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const unsigned int & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -139,7 +139,7 @@ public:
 	//! Format value from string.
 	static unsigned int from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned int result = ((QString)value).toUInt( &ok );
 
@@ -182,7 +182,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const long & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -194,7 +194,7 @@ public:
 	//! Format value from string.
 	static long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		long result = ((QString)value).toLong( &ok );
 
@@ -237,7 +237,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const unsigned long & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -249,7 +249,7 @@ public:
 	//! Format value from string.
 	static unsigned long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned long result = ((QString)value).toULong( &ok );
 
@@ -292,7 +292,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const long long & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -304,7 +304,7 @@ public:
 	//! Format value from string.
 	static long long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		long long result = ((QString)value).toLongLong( &ok );
 
@@ -347,7 +347,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const unsigned long long & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -359,7 +359,7 @@ public:
 	//! Format value from string.
 	static unsigned long long from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		unsigned long long result = ((QString)value).toULongLong( &ok );
 
@@ -402,7 +402,7 @@ public:
 	//! Format value to string.
 	static string_t to_string( const double & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		return QString::number( value );
 #elif defined( CFGFILE_WSTRING_BUILD )
 		return std::to_wstring( value );
@@ -414,7 +414,7 @@ public:
 	//! Format value from string.
 	static double from_string( const parser_info_t< Trait > & info, const string_t & value )
 	{
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 		bool ok = false;
 		double result = ((QString)value).toDouble( &ok );
 
@@ -467,7 +467,7 @@ public:
 	}
 }; // class format_t< string_t >
 
-#ifdef CFGFILE_QSTRING_BUILD
+#ifdef CFGFILE_QT_SUPPORT
 template<>
 class format_t< QString > {
 public:
