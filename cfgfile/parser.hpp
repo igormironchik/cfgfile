@@ -64,7 +64,7 @@ namespace details {
 template< typename Trait >
 class parser_base_t {
 public:
-	explicit parser_base_t( tag_t & tag )
+	explicit parser_base_t( tag_t< Trait > & tag )
 		:	m_tag( tag )
 	{
 	}
@@ -74,7 +74,7 @@ public:
 	}
 
 	//! Do parsing.
-	virtual void parse( const Trait::string_t & file_name ) = 0;
+	virtual void parse( const typename Trait::string_t & file_name ) = 0;
 
 protected:
 
@@ -89,7 +89,7 @@ protected:
 		check_is_child_mandatory_tags_defined( m_tag, true );
 	}
 
-	void check_is_child_mandatory_tags_defined( const tag_t & tag,
+	void check_is_child_mandatory_tags_defined( const tag_t< Trait > & tag,
 		bool first = false )
 	{
 		if( first )
@@ -147,7 +147,7 @@ public:
 	}
 
 	//! Do parsing.
-	void parse( const Trait::string_t & file_name )
+	void parse( const typename Trait::string_t & file_name )
 	{
 		if( !start_first_tag_parsing() )
 			return;
@@ -274,7 +274,7 @@ private:
 	}
 
 	void start_tag_parsing( const tag_t< Trait > & parent,
-		const tag_t< Trait >::child_tags_list_t & list )
+		const typename tag_t< Trait >::child_tags_list_t & list )
 	{
 		lexeme_t< Trait > lexeme = m_lex.next_lexeme();
 
@@ -331,7 +331,7 @@ public:
 	}
 
 	//! Do parsing.
-	void parse( const Trait::string_t & file_name ) override
+	void parse( const typename Trait::string_t & file_name ) override
 	{
 		QDomElement element = m_dom.documentElement();
 
@@ -381,7 +381,7 @@ public:
 
 private:
 	//! Parse tag.
-	void parse_tag( const QDomElement & e, const Trait::string_t & file_name )
+	void parse_tag( const QDomElement & e, const typename Trait::string_t & file_name )
 	{
 		for( QDomNode n = e.firstChild(); !n.isNull();
 			n = n.nextSibling() )
@@ -390,7 +390,7 @@ private:
 
 			if( !child.isNull() )
 			{
-				tag_t * tag = find_tag( child.tagName(),
+				tag_t< Trait > * tag = find_tag( child.tagName(),
 					m_stack.top()->children() );
 
 				if( !tag )
@@ -446,7 +446,7 @@ private:
 							file_name,
 							text.lineNumber(),
 							text.columnNumber() ),
-						from_cfgfile_format( text.data() ) );
+						from_cfgfile_format< Trait >( text.data() ) );
 				}
 				else
 					throw exception_t< Trait >(
@@ -464,8 +464,8 @@ private:
 	}
 
 	//! Find tag.
-	tag_t< Trait > * find_tag( const Trait::string_t & name,
-		const tag_t< Trait >::child_tags_list_t & list )
+	tag_t< Trait > * find_tag( const typename Trait::string_t & name,
+		const typename tag_t< Trait >::child_tags_list_t & list )
 	{
 		for( tag_t< Trait > * tag : list )
 		{
@@ -490,7 +490,7 @@ private:
 //
 
 //! Parser of the configuration file.
-template< typename Trait >
+template< typename Trait = string_trait_t >
 class parser_t final {
 public:
 	parser_t( tag_t< Trait > & tag, input_stream_t< Trait > & stream )
@@ -511,7 +511,7 @@ public:
         Parse input stream.
         \throw exception_t< Trait > on errors.
     */
-	void parse( const Trait::string_t & file_name )
+	void parse( const typename Trait::string_t & file_name )
 	{
 		m_d->parse( file_name );
 	}

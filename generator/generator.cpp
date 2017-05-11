@@ -149,13 +149,13 @@ static inline std::string generate_setter_method_name( const std::string & name 
 
 static inline std::string generate_class_name( const std::string & name )
 {
-	const auto pos = name.rfind( cfg::const_t::c_namespace_separator );
+	const auto pos = name.rfind( cfg::c_namespace_separator );
 
 	std::string res = ( pos == std::string::npos ? std::string() :
-		name.substr( 0, pos + cfg::const_t::c_namespace_separator.length() ) );
+		name.substr( 0, pos + cfg::c_namespace_separator.length() ) );
 	res.append( "tag_" );
 	res.append( ( pos == std::string::npos ? name :
-		name.substr( pos + cfg::const_t::c_namespace_separator.length() ) ) );
+		name.substr( pos + cfg::c_namespace_separator.length() ) ) );
 
 	return res;
 }
@@ -170,15 +170,15 @@ static inline std::string generate_base_class_name( const std::string & base,
 {
 	if( base == cfg::c_scalar_tag_name )
 		return std::string( "cfgfile::tag_scalar_t< " ) + value_type +
-			std::string( " >" );
-	else if( base == cfg::const_t::c_no_value_tag_name )
-		return std::string( "cfgfile::tag_no_value_t" );
+			std::string( ", Trait >" );
+	else if( base == cfg::c_no_value_tag_name )
+		return std::string( "cfgfile::tag_no_value_t< Trait >" );
 	else if( base == cfg::c_scalar_vector_tag_name )
 		return std::string( "cfgfile::tag_scalar_vector_t< " ) + value_type +
-				std::string( " >" );
+				std::string( ", Trait >" );
 	else if( base == cfg::c_vector_of_tags_tag_name )
 		return std::string( "cfgfile::tag_vector_of_tags_t< " ) + value_type +
-				std::string( " >" );
+				std::string( ", Trait >" );
 	else
 		return generate_class_name( base );
 } // generate_base_class_name
@@ -220,8 +220,8 @@ static inline void generate_fields_in_ctor( std::ostream & stream,
 		if( !f.is_base() )
 		{
 			stream << std::string( "\t\t,\tm_" )
-				<< f.name() << std::string( "( *this, cfgfile::string_t( SL( \"" )
-				<< f.name() << std::string( "\" ) ), " )
+				<< f.name() << std::string( "( *this, Trait::from_ascii( \"" )
+				<< f.name() << std::string( "\" ), " )
 				<< bool_to_string( f.is_required() )
 				<< std::string( " )\n" );
 
@@ -611,10 +611,10 @@ static inline void generate_cfg_set( std::ostream & stream,
 						<< std::string( "\t\t{\n" )
 						<< std::string( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
-						<< std::string( " >::ptr_to_tag_t p(\n" )
+						<< std::string( "< Trait > >::ptr_to_tag_t p(\n" )
 						<< std::string( "\t\t\t\tnew " )
 						<< generate_class_name( f.value_type() )
-						<< std::string( "( \"" )
+						<< std::string( "< Trait >( \"" )
 						<< f.name() << std::string( "\", " )
 						<< bool_to_string( f.is_required() )
 						<< std::string( " ) );\n\n" )
@@ -681,7 +681,7 @@ static inline void generate_private_tag_members( std::ostream & stream,
 			{
 				case cfg::field_t::no_value_field_type :
 				{
-					stream << std::string( "\tcfgfile::tag_no_value_t m_" )
+					stream << std::string( "\tcfgfile::tag_no_value_t< Trait > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
@@ -689,7 +689,7 @@ static inline void generate_private_tag_members( std::ostream & stream,
 				case cfg::field_t::scalar_field_type :
 				{
 					stream << std::string( "\tcfgfile::tag_scalar_t< " )
-						<< f.value_type() << std::string( " > m_" )
+						<< f.value_type() << std::string( ", Trait > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
@@ -697,7 +697,7 @@ static inline void generate_private_tag_members( std::ostream & stream,
 				case cfg::field_t::scalar_vector_field_type :
 				{
 					stream << std::string( "\tcfgfile::tag_scalar_vector_t< " )
-						<< f.value_type() << std::string( " > m_" )
+						<< f.value_type() << std::string( ", Trait > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
@@ -706,7 +706,8 @@ static inline void generate_private_tag_members( std::ostream & stream,
 				{
 					stream << std::string( "\tcfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
-						<< std::string( " > m_" )
+						<< "< Trait >"
+						<< std::string( ", Trait > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
@@ -715,7 +716,7 @@ static inline void generate_private_tag_members( std::ostream & stream,
 				{
 					stream << std::string( "\t" )
 						<< generate_class_name( f.value_type() )
-						<< std::string( " m_" )
+						<< std::string( "< Trait > m_" )
 						<< f.name() << std::string( ";\n" );
 				}
 					break;
@@ -769,6 +770,7 @@ static inline void generate_tag_class( std::ostream & stream,
 		<< tag_class_name << std::string( "\n"
 									   "//\n\n" );
 
+	stream << std::string( "template< typename Trait >\n" );
 	stream << std::string( "class " ) << tag_class_name
 		<< std::string( "\n"
 						  "\t:\tpublic " );
@@ -787,8 +789,8 @@ static inline void generate_tag_class( std::ostream & stream,
 	stream << std::string( "\t" ) << tag_class_name
 		<< std::string( "()\n"
 						  "\t\t:\t" )
-		<< base_tag << std::string( "( cfgfile::string_t( SL( \"" )
-		<< tag_name << std::string( "\" ) ), true )\n" );
+		<< base_tag << std::string( "( Trait::from_ascii( \"" )
+		<< tag_name << std::string( "\" ), true )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
@@ -803,8 +805,8 @@ static inline void generate_tag_class( std::ostream & stream,
 		<< std::string( "( const " ) << c->name()
 		<< std::string( " & cfg )\n"
 						  "\t\t:\t" )
-		<< base_tag << std::string( "( cfgfile::string_t( SL( \"" )
-		<< tag_name << std::string( "\" ) ), true )\n" );
+		<< base_tag << std::string( "( Trait::from_ascii( \"" )
+		<< tag_name << std::string( "\" ), true )\n" );
 
 	generate_fields_in_ctor( stream, c );
 
@@ -818,7 +820,7 @@ static inline void generate_tag_class( std::ostream & stream,
 
 	// 3
 	stream << std::string( "\t" ) << tag_class_name
-		<< std::string( "( const cfgfile::string_t & name, bool is_mandatory )\n" )
+		<< std::string( "( const typename Trait::string_t & name, bool is_mandatory )\n" )
 		<< std::string( "\t\t:\t" )
 		<< base_tag << std::string( "( name, is_mandatory )\n" );
 
@@ -832,7 +834,7 @@ static inline void generate_tag_class( std::ostream & stream,
 
 	// 4
 	stream << std::string( "\t" ) << tag_class_name
-		<< std::string( "( cfgfile::tag_t & owner, const cfgfile::string_t & name, "
+		<< std::string( "( cfgfile::tag_t< Trait > & owner, const typename Trait::string_t & name, "
 						  "bool is_mandatory )\n" )
 		<< std::string( "\t\t:\t" )
 		<< base_tag << std::string( "( owner, name, is_mandatory )\n" );

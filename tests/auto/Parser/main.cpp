@@ -39,11 +39,11 @@
 
 
 class ThirdTag
-	:	public cfgfile::tag_t
+	:	public cfgfile::tag_t<>
 {
 public:
-	ThirdTag( tag_t & owner )
-		:	cfgfile::tag_t( owner, "thirdTag", false )
+	ThirdTag( tag_t<> & owner )
+		:	cfgfile::tag_t<>( owner, "thirdTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -65,25 +65,25 @@ public:
 		return m_withString;
 	}
 
-	cfgfile::string_t print( int indent = 0 ) const override
+	std::string print( int indent = 0 ) const override
 	{
 		(void) indent;
-		return cfgfile::string_t();
+		return std::string();
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t< Trait > & ) override
+	void on_start( const cfgfile::parser_info_t<> & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
+	void on_finish( const cfgfile::parser_info_t<> & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t< Trait > &,
-		const cfgfile::string_t & ) override
+	void on_string( const cfgfile::parser_info_t<> &,
+		const std::string & ) override
 	{
 		m_withString = true;
 	}
@@ -96,11 +96,11 @@ private:
 
 
 class SecondTag
-	:	public cfgfile::tag_t
+	:	public cfgfile::tag_t<>
 {
 public:
-	SecondTag( tag_t & owner )
-		:	cfgfile::tag_t( owner, "secondTag", false )
+	SecondTag( tag_t<> & owner )
+		:	cfgfile::tag_t<>( owner, "secondTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -128,25 +128,25 @@ public:
 		return m_withString;
 	}
 
-	cfgfile::string_t print( int indent = 0 ) const override
+	std::string print( int indent = 0 ) const override
 	{
 		(void) indent;
-		return cfgfile::string_t();
+		return std::string();
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t< Trait > & ) override
+	void on_start( const cfgfile::parser_info_t<> & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
+	void on_finish( const cfgfile::parser_info_t<> & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t< Trait > &,
-		const cfgfile::string_t & ) override
+	void on_string( const cfgfile::parser_info_t<> &,
+		const std::string & ) override
 	{
 		m_withString = true;
 	}
@@ -160,11 +160,11 @@ private:
 
 
 class FirstTag
-	:	public cfgfile::tag_t
+	:	public cfgfile::tag_t<>
 {
 public:
 	FirstTag()
-		:	cfgfile::tag_t( "firstTag", false )
+		:	cfgfile::tag_t<>( "firstTag", false )
 		,	m_started( false )
 		,	m_finished( false )
 		,	m_withString( false )
@@ -192,25 +192,25 @@ public:
 		return m_withString;
 	}
 
-	cfgfile::string_t print( int indent = 0 ) const override
+	std::string print( int indent = 0 ) const override
 	{
 		(void) indent;
-		return cfgfile::string_t();
+		return std::string();
 	}
 
 protected:
-	void on_start( const cfgfile::parser_info_t< Trait > & ) override
+	void on_start( const cfgfile::parser_info_t<> & ) override
 	{
 		m_started = true;
 	}
 
-	void on_finish( const cfgfile::parser_info_t< Trait > & ) override
+	void on_finish( const cfgfile::parser_info_t<> & ) override
 	{
 		m_finished = true;
 	}
 
-	void on_string( const cfgfile::parser_info_t< Trait > &,
-		const cfgfile::string_t & ) override
+	void on_string( const cfgfile::parser_info_t<> &,
+		const std::string & ) override
 	{
 		m_withString = true;
 	}
@@ -226,11 +226,11 @@ TEST( Parser, test_configWithOneTag )
 {
 	std::stringstream stream( "{firstTag \"lexeme1\"}" );
 
-	cfgfile::input_stream_t input( "test_configWithOneTag", stream );
+	cfgfile::input_stream_t<> input( "test_configWithOneTag", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	parser.parse( "test_configWithOneTag" );
 
@@ -260,11 +260,11 @@ TEST( Parser, test_configWithThreeTags )
 		"}\r\n"
 		"}" );
 
-	cfgfile::input_stream_t input( "test_configWithThreeTags", stream );
+	cfgfile::input_stream_t<> input( "test_configWithThreeTags", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	parser.parse( "test_configWithThreeTags" );
 
@@ -290,16 +290,16 @@ TEST( Parser, test_unexpectedStartCurlBrace )
 {
 	std::stringstream stream( "{{firstTag \"lexeme1\"}" );
 
-	cfgfile::input_stream_t input( "test_unexpectedStartCurlBrace", stream );
+	cfgfile::input_stream_t<> input( "test_unexpectedStartCurlBrace", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	try {
 		parser.parse( "test_unexpectedStartCurlBrace" );
 	}
-	catch( cfgfile::exception_t< Trait > & x )
+	catch( cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected start curl brace. "
@@ -316,16 +316,16 @@ TEST( Parser, test_unexpectedTagName1 )
 {
 	std::stringstream stream( "{secondTag \"lexeme1\"}" );
 
-	cfgfile::input_stream_t input( "test_unexpectedTagName1", stream );
+	cfgfile::input_stream_t<> input( "test_unexpectedTagName1", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	try {
 		parser.parse( "test_unexpectedTagName1" );
 	}
-	catch( cfgfile::exception_t< Trait > & x )
+	catch( cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected tag name. "
@@ -344,16 +344,16 @@ TEST( Parser, test_unexpectedTagName2 )
 		"\t{thirdTag \"lexeme2\"}\r\n"
 		"}" );
 
-	cfgfile::input_stream_t input( "test_unexpectedTagName2", stream );
+	cfgfile::input_stream_t<> input( "test_unexpectedTagName2", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	try {
 		parser.parse( "test_unexpectedTagName2" );
 	}
-	catch( cfgfile::exception_t< Trait > & x )
+	catch( cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected tag name. "
@@ -372,16 +372,16 @@ TEST( Parser, test_unexpectedEndOfFile )
 	std::stringstream stream( "{firstTag \"lexeme1\"\r\n"
 		"\t{secondTag \"lexeme2\"}\r\n" );
 
-	cfgfile::input_stream_t input( "test_unexpectedEndOfFile", stream );
+	cfgfile::input_stream_t<> input( "test_unexpectedEndOfFile", stream );
 
 	FirstTag firstTag;
 
-	cfgfile::parser_t parser( firstTag, input );
+	cfgfile::parser_t<> parser( firstTag, input );
 
 	try {
 		parser.parse( "test_unexpectedEndOfFile" );
 	}
-	catch( cfgfile::exception_t< Trait > & x )
+	catch( cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( x.desc() ==
 			"Unexpected end of file. "

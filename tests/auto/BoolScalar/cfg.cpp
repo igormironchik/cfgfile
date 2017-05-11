@@ -61,14 +61,14 @@ Configuration::operator = ( const Configuration & other )
 //
 
 TagConfiguration::TagConfiguration()
-	:	cfgfile::tag_no_value_t( "cfg", true )
+	:	cfgfile::tag_no_value_t<>( "cfg", true )
 	,	m_withTrue( *this, "withTrue", true )
 	,	m_withFalse( *this, "withFalse", true )
 {
 }
 
 TagConfiguration::TagConfiguration( const Configuration & cfg )
-	:	cfgfile::tag_no_value_t( "cfg", true )
+	:	cfgfile::tag_no_value_t<>( "cfg", true )
 	,	m_withTrue( *this, "withTrue", true )
 	,	m_withFalse( *this, "withFalse", true )
 {

@@ -50,7 +50,7 @@ class exception_t final
 	:	public std::logic_error
 {
 public:
-	explicit exception_t( Trait::string_t what )
+	explicit exception_t( typename Trait::string_t what )
 		:	std::logic_error( "Please use desc() method of the exception." )
 		,	m_what( std::move( what ) )
 	{
@@ -61,14 +61,14 @@ public:
 	}
 
 	//! \return Reason of the exception.
-	const Trait::string_t & desc() const noexcept
+	const typename Trait::string_t & desc() const noexcept
 	{
 		return m_what;
 	}
 
 private:
 	//! Reason of the exception.
-	Trait::string_t m_what;
+	typename Trait::string_t m_what;
 }; // class exception_t
 
 
@@ -81,7 +81,7 @@ class exception_t< string_trait_t >
 	:	public std::logic_error
 {
 public:
-	explicit exception_t( string_trait_t::string_t what )
+	explicit exception_t( typename string_trait_t::string_t what )
 		:	std::logic_error( what )
 		,	m_what( std::move( what ) )
 	{
@@ -92,14 +92,14 @@ public:
 	}
 
 	//! \return Reason of the exception.
-	const string_trait_t::string_t & desc() const noexcept
+	const typename string_trait_t::string_t & desc() const noexcept
 	{
 		return m_what;
 	}
 
 private:
 	//! Reason of the exception.
-	string_trait_t::string_t m_what;
+	typename string_trait_t::string_t m_what;
 }; // class exception_t< string_trait_t >
 
 } /* namespace cfgfile */

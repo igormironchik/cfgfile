@@ -56,12 +56,13 @@ namespace cfgfile {
 template< typename Trait = string_trait_t >
 class tag_t {
 public:
-    friend class parser_t< Trait >;
+    template< typename Trait > friend class parser_t;
 
     //! List with children.
     typedef std::list< tag_t< Trait >* > child_tags_list_t;
 
-    explicit tag_t( const Trait::string_t & name, bool is_mandatory = false )
+    explicit tag_t( const typename Trait::string_t & name,
+		bool is_mandatory = false )
 		:   m_name( name )
 		,   m_is_mandatory( is_mandatory )
 		,   m_is_defined( false )
@@ -71,7 +72,7 @@ public:
 	{
 	}
 
-    tag_t( tag_t< Trait > & owner, const Trait::string_t & name,
+    tag_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:   m_name( name )
 		,   m_is_mandatory( is_mandatory )
@@ -119,7 +120,7 @@ public:
 	}
 
     //! \return Name of the tag.
-    const Trait::string_t & name() const
+    const typename Trait::string_t & name() const
 	{
 		return m_name;
 	}
@@ -149,13 +150,13 @@ public:
 	}
 
 	//! \return Line number.
-	Trait::pos_t line_number() const
+	typename Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	Trait::pos_t column_number() const
+	typename Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
@@ -167,7 +168,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	virtual Trait::string_t print( int indent = 0 ) const = 0;
+	virtual typename Trait::string_t print( int indent = 0 ) const = 0;
 
 #if defined( CFGFILE_QT_SUPPORT ) && defined( CFGFILE_XML_SUPPORT )
 	//! Print tag to the output.
@@ -187,10 +188,10 @@ public:
 
 	//! Called when string found.
 	virtual void on_string( const parser_info_t< Trait > & info,
-		const string_t & str ) = 0;
+		const typename Trait::string_t & str ) = 0;
 
 protected:
-	template< class T, Trait > friend class tag_vector_of_tags_t;
+	template< class T, class Trait > friend class tag_vector_of_tags_t;
 
 	//! Set parent tag.
 	void set_parent( const tag_t< Trait > * p )
@@ -212,7 +213,7 @@ private:
     DISABLE_COPY( tag_t )
 
 	//! Name.
-	Trait::string_t m_name;
+	typename Trait::string_t m_name;
 	//! Is tag mandatory?
     bool m_is_mandatory;
 	//! Is tag defined?
@@ -222,9 +223,9 @@ private:
 	//! Parent.
 	const tag_t< Trait > * m_parent;
 	//! Line number.
-	Trait::pos_t m_line_number;
+	typename Trait::pos_t m_line_number;
 	//! Column number.
-	Trait::pos_t m_column_number;
+	typename Trait::pos_t m_column_number;
 }; // class tag_t
 
 } /* namespace cfgfile */

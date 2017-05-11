@@ -185,7 +185,7 @@ int main( int argc, char ** argv )
 
 		model.check();
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t< cfgfile::string_trait_t > & x )
 	{
 		in.close();
 

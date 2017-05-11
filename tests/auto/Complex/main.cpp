@@ -51,7 +51,7 @@ Configuration loadConfig( const std::string & fileName )
 			file.close();
 		}
 	}
-	catch( const cfgfile::exception_t< Trait > & )
+	catch( const cfgfile::exception_t<> & )
 	{
 		file.close();
 
@@ -99,7 +99,7 @@ TEST( Complex, testIncosistencyToStringConstraint )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( "Invalid value: \"str4\". Value must match "
 			"to the constraint in tag \"listOfStringValues\". "
@@ -115,7 +115,7 @@ TEST( Complex, testIncosistencyToIntConstraint )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( "Invalid value: \"200\". Value must match "
 			"to the constraint in tag \"intValue\". "
@@ -131,7 +131,7 @@ TEST( Complex, testUndefinedChildMandatoryTag )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
 			"Where parent is: \"vecOfTags\". "
@@ -147,7 +147,7 @@ TEST( Complex, testUndefinedMandatoryTag )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
 			"Where parent is: \"cfg\". "
@@ -163,7 +163,7 @@ TEST( Complex, testEmptyFile )
 
 		CHECK_CONDITION( true == false );
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t<> & x )
 	{
 		CHECK_CONDITION( "Unexpected end of file. Undefined "
 			"mandatory tag \"cfg\". In file \"empty_file.cfg\" on line 1." ==

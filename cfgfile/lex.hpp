@@ -69,7 +69,7 @@ public:
 	{
 	}
 
-    lexeme_t( lexeme_type_t type, const string_t & value )
+    lexeme_t( lexeme_type_t type, const typename Trait::string_t & value )
 		:	m_type( type )
 		,	m_value( value )
 	{
@@ -82,7 +82,7 @@ public:
 	}
 
     //! \return Lexeme value.
-    const Trait::string_t & value() const
+    const typename Trait::string_t & value() const
 	{
 		return m_value;
 	}
@@ -97,7 +97,7 @@ private:
     //! Lexeme type.
     lexeme_type_t m_type;
     //! Lexeme value.
-    Trait::string_t m_value;
+    typename Trait::string_t m_value;
 }; // class lexeme_t
 
 
@@ -109,7 +109,7 @@ private:
 template< typename Trait = string_trait_t >
 class lexical_analyzer_t final {
 public:
-	explicit lexical_analyzer_t( input_stream_t & stream )
+	explicit lexical_analyzer_t( input_stream_t< Trait > & stream )
 		:	m_stream( stream )
 		,	m_line_number( m_stream.line_number() )
 		,	m_column_number( m_stream.column_number() )
@@ -121,9 +121,9 @@ public:
 
 		\throw Exception on lexical error.
 	*/
-	lexeme_t next_lexeme()
+	lexeme_t< Trait > next_lexeme()
 	{
-		string_t result;
+		typename Trait::string_t result;
 
 		bool quoted_lexeme = false;
 		bool first_symbol = true;
@@ -135,11 +135,11 @@ public:
 		m_column_number = m_stream.column_number();
 
 		if( m_stream.at_end() )
-			return lexeme_t( lexeme_type_t::null, string_t() );
+			return lexeme_t< Trait >( lexeme_type_t::null, Trait::string_t() );
 
 		while( true )
 		{
-			char_t ch = m_stream.get();
+			typename Trait::char_t ch = m_stream.get();
 
 			if( ch == const_t< Trait >::c_quotes )
 			{
@@ -156,16 +156,16 @@ public:
 			}
 			else if( ch == const_t< Trait >::c_back_slash )
 			{
-				char_t new_char = 0x00;
+				typename Trait::char_t new_char = 0x00;
 
 				if( !quoted_lexeme )
 					result.push_back( ch );
 				else if( process_back_slash( new_char ) )
 					result.push_back( new_char );
 				else
-					throw exception_t< Trait >( string_t(
-						Trait::from_ascii( "Unrecognized back-slash sequence: \"\\" ) ) +
-						string_t( 1, new_char ) +
+					throw exception_t< Trait >(
+						Trait::from_ascii( "Unrecognized back-slash sequence: \"\\" ) +
+						Trait::string_t( 1, new_char ) +
 						Trait::from_ascii( "\". In file \"" ) + m_stream.file_name() +
 						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
@@ -173,7 +173,8 @@ public:
 			else if( ch == const_t< Trait >::c_begin_tag )
 			{
 				if( result.empty() )
-					return lexeme_t( lexeme_type_t::start, string_t( 1, ch ) );
+					return lexeme_t< Trait >( lexeme_type_t::start,
+						Trait::string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -186,7 +187,8 @@ public:
 			else if( ch == const_t< Trait >::c_end_tag )
 			{
 				if( result.empty() )
-					return lexeme_t( lexeme_type_t::finish, string_t( 1, ch ) );
+					return lexeme_t< Trait >( lexeme_type_t::finish,
+						Trait::string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -206,7 +208,8 @@ public:
 			else if( ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
 			{
 				if( quoted_lexeme )
-					throw exception_t< Trait >( string_t( Trait::from_ascii( "Unfinished quoted lexeme. " ) ) +
+					throw exception_t< Trait >(
+						Trait::from_ascii( "Unfinished quoted lexeme. " ) +
 						Trait::from_ascii( "New line detected. In file \"" ) +
 						m_stream.file_name() +
 						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
@@ -220,7 +223,7 @@ public:
 					result.push_back( ch );
 				else
 				{
-					char_t next_char = m_stream.get();
+					typename Trait::char_t next_char = m_stream.get();
 
 					if( next_char == const_t< Trait >::c_vertical_bar )
 					{
@@ -258,13 +261,15 @@ public:
 			if( m_stream.at_end() )
 			{
 				if( quoted_lexeme )
-					throw exception_t< Trait >( string_t( Trait::from_ascii( "Unfinished quoted lexeme. " ) ) +
+					throw exception_t< Trait >(
+						Trait::from_ascii( "Unfinished quoted lexeme. " ) +
 						Trait::from_ascii( "End of file riched. In file \"" ) +
 						m_stream.file_name() +
 						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
 				else if( result.empty() )
-					return lexeme_t( lexeme_type_t::null, string_t() );
+					return lexeme_t< Trait >( lexeme_type_t::null,
+						Trait::string_t() );
 				else
 					break;
 			}
@@ -275,30 +280,30 @@ public:
 				skip_comment = false;
 		}
 
-		return lexeme_t( lexeme_type_t::string, result );
+		return lexeme_t< Trait >( lexeme_type_t::string, result );
 	}
 
     //! \return Input stream.
-    input_stream_t & input_stream()
+    input_stream_t< Trait > & input_stream()
 	{
 		return m_stream;
 	}
 
 	//! \return Line number.
-	Trait::pos_t line_number() const
+	typename Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	Trait::pos_t column_number() const
+	typename Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
 
 private:
 	//! \return Is character a space character?
-	bool is_space_char( char_t ch )
+	bool is_space_char( typename Trait::char_t ch )
 	{
 		if( ch == const_t< Trait >::c_space || ch == const_t< Trait >::c_tab ||
 			ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
@@ -313,7 +318,7 @@ private:
 		if( m_stream.at_end() )
 			return;
 
-		char_t ch = m_stream.get();
+		typename Trait::char_t ch = m_stream.get();
 
 		while( is_space_char( ch ) )
 		{
@@ -327,11 +332,12 @@ private:
 	}
 
 	//! Process back-slash sequence.
-	bool process_back_slash( char_t & ch )
+	bool process_back_slash( typename Trait::char_t & ch )
 	{
 		if( m_stream.at_end() )
-			throw exception_t< Trait >( string_t( Trait::from_ascii( "Unexpected end of file. "
-					"Unfinished back slash sequence. In file \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Unexpected end of file. "
+					"Unfinished back slash sequence. In file \"" ) +
 				m_stream.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_stream.line_number() ) + Trait::from_ascii( "." ) );
 
@@ -358,7 +364,7 @@ private:
 	{
 		if( !m_stream.at_end() )
 		{
-			char_t ch = m_stream.get();
+			typename Trait::char_t ch = m_stream.get();
 
 			while( ch != const_t< Trait >::c_carriage_return && ch != const_t< Trait >::c_line_feed &&
 				!m_stream.at_end() )
@@ -371,12 +377,12 @@ private:
 	{
 		if( !m_stream.at_end() )
 		{
-			char_t ch = m_stream.get();
+			typename Trait::char_t ch = m_stream.get();
 
 			if( m_stream.at_end() )
 				return;
 
-			char_t next_char = m_stream.get();
+			typename Trait::char_t next_char = m_stream.get();
 
 			if( ch == const_t< Trait >::c_sharp && next_char == const_t< Trait >::c_vertical_bar )
 				return;
@@ -397,11 +403,11 @@ private:
 	DISABLE_COPY( lexical_analyzer_t )
 
 	//! Input stream.
-	input_stream_t & m_stream;
+	input_stream_t< Trait > & m_stream;
 	//! Line number.
-	Trait::pos_t m_line_number;
+	typename Trait::pos_t m_line_number;
 	//! Column number.
-	Trait::pos_t m_column_number;
+	typename Trait::pos_t m_column_number;
 }; // class lexical_analyzer_t
 
 } /* namespace cfgfile */

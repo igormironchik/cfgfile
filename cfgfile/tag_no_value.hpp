@@ -51,19 +51,19 @@ namespace cfgfile {
 //
 
 //! Tag without a value.
-template< typename Trait >
+template< typename Trait = string_trait_t >
 class tag_no_value_t
 	:	public tag_t< Trait >
 {
 public:
-	explicit tag_no_value_t( const Trait::string_t & name,
+	explicit tag_no_value_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
-	tag_no_value_t( tag_t< Trait > & owner, const Trait::string_t & name,
-		bool is_mandatory = false )
+	tag_no_value_t( tag_t< Trait > & owner,
+		const typename Trait::string_t & name, bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 	{
 	}
@@ -73,7 +73,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -144,7 +144,7 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		throw exception_t< Trait >( Trait::from_ascii( "Tag \"" ) +
 			name() + Trait::from_ascii( "\" doesn't allow any values. "

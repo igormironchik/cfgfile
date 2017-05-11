@@ -44,7 +44,8 @@ namespace cfgfile {
 
 //! Format string to cfgfile format.
 template< typename Trait >
-static inline Trait::string_t to_cfgfile_format( const Trait::string_t & what )
+static inline typename Trait::string_t to_cfgfile_format(
+	const typename Trait::string_t & what )
 {
 	if( what.empty() )
 		return Trait::from_ascii( "\"\"" );
@@ -96,7 +97,8 @@ static inline Trait::string_t to_cfgfile_format( const Trait::string_t & what )
 
 //! Format string from cfgfile format.
 template< typename Trait = string_trait_t >
-static inline Trait::string_t from_cfgfile_format( const Trait::string_t & what )
+static inline typename Trait::string_t from_cfgfile_format(
+	const typename Trait::string_t & what )
 {
 	if( what.find( const_t< Trait >::c_quotes ) == 0 &&
 		what.rfind( const_t< Trait >::c_quotes ) == what.length() - 1 )

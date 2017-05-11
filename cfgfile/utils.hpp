@@ -70,7 +70,7 @@ namespace details {
 template< typename Trait = string_trait_t >
 class determine_format_t final {
 public:
-	determine_format_t( Trait::istream_t & stream )
+	determine_format_t( typename Trait::istream_t & stream )
 		:	m_stream( stream )
 	{
 	}
@@ -100,7 +100,7 @@ public:
 
 private:
 	//! Stream.
-	Trait::istream_t & m_stream;
+	typename Trait::istream_t & m_stream;
 }; // class determine_format_t
 
 } /* namespace details */
@@ -116,14 +116,14 @@ static inline void read_cfgfile(
 	//! Configuration tag.
 	tag_t< Trait > & tag,
 	//! Stream.
-	Trait::istream_t & stream,
+	typename Trait::istream_t & stream,
 	//! File name.
-	const Trait::string_t & file_name )
+	const typename Trait::string_t & file_name )
 {
 	file_format_t fmt = file_format_t::cfgfile_format;
 
 	{
-		details::determine_format_t d( stream );
+		details::determine_format_t< Trait > d( stream );
 
 		fmt = d.format();
 	}
@@ -172,8 +172,8 @@ static inline void read_cfgfile(
 #endif // CFGFILE_XML_SUPPORT
 #else
 			throw exception_t< Trait >(
-				Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) ) +
-				file_name + Trait::from_ascii( "\" failed." );
+				Trait::from_ascii( "XML supported only with Qt. Parsing of file \"" ) +
+				file_name + Trait::from_ascii( "\" failed." ) );
 #endif // CFGFILE_QT_SUPPORT
 		}
 			break;
@@ -194,7 +194,7 @@ static inline void write_cfgfile(
 	//! Configuration tag.
 	const tag_t< Trait > & tag,
 	//! Stream.
-	Trait::ostream_t & stream,
+	typename Trait::ostream_t & stream,
 	//! Format of the file.
 	file_format_t fmt = file_format_t::cfgfile_format )
 {

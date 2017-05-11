@@ -48,7 +48,7 @@ namespace cfg {
 //! Main cfg tag's name.
 static const std::string c_main_cfg_tag_name( "forGeneration" );
 //! Namespace tag's name.
-static const std::string const_t::c_namespace_tag_name( "namespace" );
+static const std::string c_namespace_tag_name( "namespace" );
 //! Class tag's name.
 static const std::string c_class_tag_name( "class" );
 //! Base class tag's name.
@@ -66,7 +66,7 @@ static const std::string c_max_tag_name( "max" );
 //! Scalar field tag's name.
 static const std::string c_scalar_tag_name( "tagScalar" );
 //! No-value field tag's name.
-static const std::string const_t::c_no_value_tag_name( "tagNoValue" );
+static const std::string c_no_value_tag_name( "tagNoValue" );
 //! Scalar vector field tag's name.
 static const std::string c_scalar_vector_tag_name( "tagScalarVector" );
 //! Vector of tags field tag's name.
@@ -74,7 +74,7 @@ static const std::string c_vector_of_tags_tag_name( "tagVectorOfTags" );
 //! Custom tag field tag's name.
 static const std::string c_custom_tag_name( "tag" );
 //! Namespace separator.
-static const std::string const_t::c_namespace_separator( "::" );
+static const std::string c_namespace_separator( "::" );
 //! Global include tag's name.
 static const std::string c_global_include_tag_name( "globalInclude" );
 //! Relative include tag's name.
@@ -521,10 +521,11 @@ private:
 
 //! Tag for min_max_constraint_t.
 class tag_min_max_constraint_t
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t<>
 {
 public:
-	explicit tag_min_max_constraint_t( cfgfile::tag_t & owner );
+	explicit tag_min_max_constraint_t(
+		cfgfile::tag_t< cfgfile::string_trait_t > & owner );
 	~tag_min_max_constraint_t();
 
 	//! \return Constraint.
@@ -547,7 +548,8 @@ class tag_one_of_constraint_t
 	:	public cfgfile::tag_scalar_vector_t< std::string >
 {
 public:
-	explicit tag_one_of_constraint_t( cfgfile::tag_t & owner );
+	explicit tag_one_of_constraint_t(
+		cfgfile::tag_t< cfgfile::string_trait_t > & owner );
 	~tag_one_of_constraint_t();
 
 	//! \return Constraint.
@@ -561,7 +563,7 @@ public:
 
 //! Tag for Field.
 class tag_field_t
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t<>
 {
 public:
 	tag_field_t( const std::string & name, bool is_mandatory );
@@ -571,7 +573,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t< Trait > & info );
+	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info );
 
 private:
 	//! Name.
@@ -583,7 +585,7 @@ private:
 	//! One of constraint.
 	tag_one_of_constraint_t m_one_of_constraint;
 	//! Is required?
-	cfgfile::tag_no_value_t m_is_required;
+	cfgfile::tag_no_value_t<> m_is_required;
 	//! Default value.
 	cfgfile::tag_scalar_t< std::string > m_default_value;
 }; // class tag_field_t
@@ -597,8 +599,8 @@ class tag_base_class_t
 	:	public cfgfile::tag_scalar_t< std::string >
 {
 public:
-	tag_base_class_t( cfgfile::tag_t & owner, const std::string & name,
-		bool is_mandatory );
+	tag_base_class_t( cfgfile::tag_t< cfgfile::string_trait_t > & owner,
+		const std::string & name, bool is_mandatory );
 	~tag_base_class_t();
 
 	//! \return Value type.
@@ -608,7 +610,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t< Trait > & info );
+	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info );
 
 private:
 	//! Value type.
@@ -622,7 +624,7 @@ private:
 	//! One of constraint.
 	tag_one_of_constraint_t m_one_of_constraint;
 	//! Is required?
-	cfgfile::tag_no_value_t m_is_required;
+	cfgfile::tag_no_value_t<> m_is_required;
 	//! Default value.
 	cfgfile::tag_scalar_t< std::string > m_default_value;
 }; // class tag_base_class_t

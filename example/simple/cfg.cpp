@@ -91,14 +91,14 @@ configuration_t::operator = ( const configuration_t & other )
 
 
 tag_vec_of_tags_t::tag_vec_of_tags_t( const std::string & name, bool isMandatory )
-	:	cfgfile::tag_no_value_t( name, isMandatory )
+	:	cfgfile::tag_no_value_t<>( name, isMandatory )
 	,	m_stringValue( *this, "stringValue", true )
 	,	m_intValue( *this, "intValue", true )
 {
 }
 
 tag_vec_of_tags_t::tag_vec_of_tags_t( const configuration_t::pair_t & pair )
-	:	cfgfile::tag_no_value_t( "vecOfTags", true )
+	:	cfgfile::tag_no_value_t<>( "vecOfTags", true )
 	,	m_stringValue( *this, "stringValue", true )
 	,	m_intValue( *this, "intValue", true )
 {
@@ -126,7 +126,7 @@ tag_vec_of_tags_t::pair() const
 //
 
 tag_configuration_t::tag_configuration_t()
-	:	cfgfile::tag_no_value_t( "cfg", true )
+	:	cfgfile::tag_no_value_t<>( "cfg", true )
 	,	m_stringValue( *this, "stringValue", true )
 	,	m_listOfStringValues( *this, "listOfStringValues", true )
 	,	m_constriantForIntValue( 0, 100 )
@@ -142,7 +142,7 @@ tag_configuration_t::tag_configuration_t()
 }
 
 tag_configuration_t::tag_configuration_t( const configuration_t & cfg )
-	:	cfgfile::tag_no_value_t( "cfg", true )
+	:	cfgfile::tag_no_value_t<>( "cfg", true )
 	,	m_stringValue( *this, "stringValue", true )
 	,	m_listOfStringValues( *this, "listOfStringValues", true )
 	,	m_constriantForIntValue( 0, 100 )

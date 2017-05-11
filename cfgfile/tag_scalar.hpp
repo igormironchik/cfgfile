@@ -54,19 +54,19 @@ namespace cfgfile {
 //
 
 //! Tag with scalar value.
-template< class T, class Trait >
+template< class T, class Trait = string_trait_t >
 class tag_scalar_t
 	:	public tag_t< Trait >
 {
 public:
-	explicit tag_scalar_t( const Trait::string_t & name,
+	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 		,	m_constraint( nullptr )
 	{
 	}
 
-	tag_scalar_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 		,	m_constraint( nullptr )
@@ -93,7 +93,7 @@ public:
 			if( !m_constraint->check( v ) )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Invalid value: \"" ) +
-					Trait::string_t( format_t< T >::to_string( v ) ) +
+					Trait::string_t( format_t< T, Trait >::to_string( v ) ) +
 					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\"." ) );
 		}
@@ -125,7 +125,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -137,8 +137,9 @@ public:
 			result.append( name() );
 			result.push_back( const_t< Trait >::c_space );
 
-			Trait::string_t value = format_t< T >::to_string( m_value );
-			value = to_cfgfile_format( value );
+			typename Trait::string_t value =
+				format_t< T, Trait >::to_string( m_value );
+			value = to_cfgfile_format< Trait >( value );
 
 			result.append( value );
 
@@ -172,8 +173,8 @@ public:
 			else
 				parent->appendChild( this_element );
 
-			QString value = format_t< T >::to_string( m_value );
-			value = to_cfgfile_format( value );
+			QString value = format_t< T, Trait >::to_string( m_value );
+			value = to_cfgfile_format< Trait >( value );
 
 			QDomText data = doc.createTextNode( value );
 
@@ -212,7 +213,7 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		if( !is_defined() )
 		{
@@ -262,18 +263,19 @@ private:
 //
 
 //! Tag with bool value.
-template<>
-class tag_scalar_t< bool >
+template< typename Trait >
+class tag_scalar_t< bool, Trait >
 	:	public tag_t< Trait >
 {
 public:
-	explicit tag_scalar_t( const Trait::string_t & name, bool is_mandatory = false )
+	explicit tag_scalar_t( const typename Trait::string_t & name,
+		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 		,	m_value( false )
 	{
 	}
 
-	tag_scalar_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 		,	m_value( false )
@@ -315,7 +317,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -327,8 +329,8 @@ public:
 			result.append( name() );
 			result.push_back( const_t< Trait >::c_space );
 
-			Trait::string_t value = format_t< bool >::to_string( m_value );
-			value = to_cfgfile_format( value );
+			Trait::string_t value = format_t< bool, Trait >::to_string( m_value );
+			value = to_cfgfile_format< Trait >( value );
 
 			result.append( value );
 
@@ -382,7 +384,8 @@ public:
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
 		if( !is_defined() )
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -390,7 +393,8 @@ public:
 		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
 					Trait::from_ascii( "\" on line " ) +
@@ -400,23 +404,25 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		if( !is_defined() )
 		{
 			if( is_any_child_defined() )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Value \"" ) ) + str +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Value \"" ) + str +
 					Trait::from_ascii( "\" for tag \"" ) + name() +
 					Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
-			m_value = format_t< bool >::from_string( info, str );
+			m_value = format_t< bool, Trait >::from_string( info, str );
 
 			set_defined();
 		}
 		else
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Value for the tag \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Value for the tag \"" ) +
 				name() + Trait::from_ascii( "\" already defined. In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -432,21 +438,22 @@ private:
 // tag_scalar_t< Trait::string_t >
 //
 
-static const pos_t c_max_string_length = 80;
-
 //! Tag with bool value.
-template<>
-class tag_scalar_t< Trait::string_t >
+template< typename Trait >
+class tag_scalar_t< typename Trait::string_t, Trait >
 	:	public tag_t< Trait >
 {
+	static const typename Trait::pos_t c_max_string_length = 80;
+
 public:
-	explicit tag_scalar_t( const Trait::string_t & name, bool is_mandatory = false )
+	explicit tag_scalar_t( const typename Trait::string_t & name,
+		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 		,	m_constraint( nullptr )
 	{
 	}
 
-	tag_scalar_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 		,	m_constraint( nullptr )
@@ -458,7 +465,7 @@ public:
 	}
 
 	//! \return Value of the tag.
-	const Trait::string_t &
+	const typename Trait::string_t &
 	value() const
 	{
 		return m_value;
@@ -466,13 +473,14 @@ public:
 
 	//! Set value.
 	void
-	set_value( const Trait::string_t & v )
+	set_value( const typename Trait::string_t & v )
 	{
 		if( m_constraint )
 		{
 			if( !m_constraint->check( v ) )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
-					format_t< Trait::string_t >::to_string( v ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Invalid value: \"" ) +
+					format_t< typename Trait::string_t, Trait >::to_string( v ) +
 					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\"." ) );
 		}
@@ -490,7 +498,7 @@ public:
 		otherwise nothing with \a receiver will happen.
 	*/
 	void
-	query_opt_value( Trait::string_t & receiver )
+	query_opt_value( typename Trait::string_t & receiver )
 	{
 		if( is_defined() )
 			receiver = m_value;
@@ -498,13 +506,13 @@ public:
 
 	//! Set constraint for the tag's value.
 	void
-	set_constraint( constraint_t< Trait::string_t > * c )
+	set_constraint( constraint_t< typename Trait::string_t > * c )
 	{
 		m_constraint = c;
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -516,17 +524,19 @@ public:
 			result.append( name() );
 			result.push_back( const_t< Trait >::c_space );
 
-			Trait::string_t value = format_t< Trait::string_t >::to_string( m_value );
+			typename Trait::string_t value =
+				format_t< Trait::string_t, Trait >::to_string( m_value );
 
-			const pos_t sections = ( value.length() / c_max_string_length +
+			const Trait::pos_t sections = ( value.length() / c_max_string_length +
 				( value.length() % c_max_string_length > 0 ? 1 : 0 ) );
 
 			if( sections )
 			{
-				const Trait::string_t spaces = Trait::string_t( name().length() + 2,
-					const_t< Trait >::c_space );
+				const typename Trait::string_t spaces =
+					Trait::string_t( name().length() + 2,
+						const_t< Trait >::c_space );
 
-				for( pos_t i = 0; i < sections; ++i )
+				for( Trait::pos_t i = 0; i < sections; ++i )
 				{
 					if( i > 0 )
 					{
@@ -537,7 +547,7 @@ public:
 						result.append( spaces );
 					}
 
-					const Trait::string_t tmp = to_cfgfile_format(
+					const typename Trait::string_t tmp = to_cfgfile_format< Trait > (
 						value.substr( i * c_max_string_length, c_max_string_length ) );
 
 					result.append( tmp );
@@ -601,7 +611,8 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( m_value ) )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Invalid value: \"" ) +
 					m_value + Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
@@ -609,7 +620,8 @@ public:
 		}
 
 		if( !is_defined() )
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				name() + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -617,7 +629,8 @@ public:
 		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
@@ -627,16 +640,18 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		if( is_any_child_defined() )
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Value \"" ) ) + str +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Value \"" ) + str +
 				Trait::from_ascii( "\" for tag \"" ) + name() +
 				Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
-		const Trait::string_t value = format_t< Trait::string_t >::from_string( info, str );
+		const typename Trait::string_t value =
+			format_t< Trait::string_t, Trait >::from_string( info, str );
 
 		m_value.append( value );
 
@@ -645,9 +660,9 @@ public:
 
 private:
 	//! Value of the tag.
-	Trait::string_t m_value;
+	typename Trait::string_t m_value;
 	//! Constraint.
-	constraint_t< Trait::string_t > * m_constraint;
+	constraint_t< typename Trait::string_t > * m_constraint;
 }; // class tag_scalar_t
 
 
@@ -658,18 +673,20 @@ private:
 //
 
 //! Tag with bool value.
-template<>
-class tag_scalar_t< QString >
+template< typename Trait >
+class tag_scalar_t< QString, Trait >
 	:	public tag_t< Trait >
 {
+	static const typename Trait::pos_t c_max_string_length = 80;
+
 public:
-	explicit tag_scalar_t( const Trait::string_t & name, bool is_mandatory = false )
+	explicit tag_scalar_t( const typename Trait::string_t & name, bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 		,	m_constraint( nullptr )
 	{
 	}
 
-	tag_scalar_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 		,	m_constraint( nullptr )
@@ -694,8 +711,9 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( v ) )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
-					Trait::string_t( format_t< QString >::to_string( v ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Invalid value: \"" ) +
+					Trait::string_t( format_t< QString, Trait >::to_string( v ) ) +
 					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\"." ) );
 		}
@@ -727,7 +745,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -739,17 +757,17 @@ public:
 			result.append( name() );
 			result.push_back( const_t< Trait >::c_space );
 
-			QString value = format_t< QString >::to_string( m_value );
+			QString value = format_t< QString, Trait >::to_string( m_value );
 
-			const pos_t sections = ( value.length() / c_max_string_length +
+			const typename Trait::pos_t sections = ( value.length() / c_max_string_length +
 				( value.length() % c_max_string_length > 0 ? 1 : 0 ) );
 
 			if( sections )
 			{
-				const Trait::string_t spaces = Trait::string_t( name().length() + 2,
+				const typename Trait::string_t spaces = Trait::string_t( name().length() + 2,
 					const_t< Trait >::c_space );
 
-				for( pos_t i = 0; i < sections; ++i )
+				for( typename Trait::pos_t i = 0; i < sections; ++i )
 				{
 					if( i > 0 )
 					{
@@ -760,7 +778,7 @@ public:
 						result.append( spaces );
 					}
 
-					const Trait::string_t tmp = to_cfgfile_format(
+					const typename Trait::string_t tmp = to_cfgfile_format< Trait >(
 						value.mid( i * c_max_string_length, c_max_string_length ) );
 
 					result.append( tmp );
@@ -802,8 +820,9 @@ public:
 			else
 				parent->appendChild( this_element );
 
-			Trait::string_t value = format_t< Trait::string_t >::to_string( m_value );
-			value = to_cfgfile_format( value );
+			typename Trait::string_t value =
+				format_t< Trait::string_t, Trait >::to_string( m_value );
+			value = to_cfgfile_format< Trait >( value );
 
 			QDomText data = doc.createTextNode( value );
 
@@ -824,7 +843,8 @@ public:
 		if( m_constraint )
 		{
 			if( !m_constraint->check( m_value ) )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Invalid value: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Invalid value: \"" ) +
 					Trait::string_t( m_value ) +
 					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) +
@@ -833,7 +853,8 @@ public:
 		}
 
 		if( !is_defined() )
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined value of tag: \"" ) ) +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				name() + Trait::from_ascii( "\". In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
@@ -841,7 +862,8 @@ public:
 		for( const tag_t< Trait > * tag : children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Undefined child mandatory tag: \"" ) ) +
+				throw exception_t< Trait >(
+					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
 					name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
@@ -851,16 +873,17 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		if( is_any_child_defined() )
-			throw exception_t< Trait >( Trait::string_t( Trait::from_ascii( "Value \"" ) ) + str +
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Value \"" ) + str +
 				Trait::from_ascii( "\" for tag \"" ) + name() +
 				Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 
-		const QString value = format_t< QString >::from_string( info, str );
+		const QString value = format_t< QString, Trait >::from_string( info, str );
 
 		m_value.append( value );
 

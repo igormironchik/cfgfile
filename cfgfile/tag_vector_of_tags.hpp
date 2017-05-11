@@ -56,7 +56,7 @@ namespace cfgfile {
 		tag_t< Trait >( const Trait::string_t & name, bool is_mandatory );
 	\endcode
 */
-template< class T, class Trait >
+template< typename T, typename Trait = string_trait_t >
 class tag_vector_of_tags_t
 	:	public tag_t< Trait >
 {
@@ -66,13 +66,14 @@ public:
 	//! Type of the vector of subordinate tags.
 	typedef std::vector< ptr_to_tag_t > vector_of_tags_t;
 
-	explicit tag_vector_of_tags_t( const Trait::string_t & name,
+	explicit tag_vector_of_tags_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
-	tag_vector_of_tags_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_vector_of_tags_t( tag_t< Trait > & owner,
+		const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 	{
@@ -109,7 +110,7 @@ public:
 		Repeatly adds value to the end of vector.
 	*/
 	void
-	set_value( ptr_to_tag_t< Trait > p )
+	set_value( ptr_to_tag_t p )
 	{
 		m_tags.push_back( p );
 
@@ -151,13 +152,13 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
 		if( is_defined() )
 		{
-			for( const ptr_to_tag_t< Trait > & p : m_tags )
+			for( const ptr_to_tag_t & p : m_tags )
 				result.append( p->print( indent ) );
 		}
 
@@ -170,7 +171,7 @@ public:
 	{
 		if( is_defined() )
 		{
-			for( const ptr_to_tag_t< Trait > & p : m_tags )
+			for( const ptr_to_tag_t & p : m_tags )
 				p->print( doc, parent );
 		}
 	}
@@ -207,7 +208,7 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		m_current->on_string( info, str );
 	}

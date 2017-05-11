@@ -74,7 +74,7 @@ struct Configuration {
 	\endverbatim
 */
 class TagConfiguration
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t<>
 {
 public:
 	//! For reading.

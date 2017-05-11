@@ -45,8 +45,9 @@ namespace cfgfile {
 template< typename Trait = string_trait_t >
 class parser_info_t {
 public:
-	parser_info_t( const Trait::string_t & file_name, Trait::pos_t line_number,
-		Trait::pos_t column_number )
+	parser_info_t( const typename Trait::string_t & file_name,
+		typename Trait::pos_t line_number,
+		typename Trait::pos_t column_number )
 		:	m_file_name( file_name )
 		,	m_line_number( line_number )
 		,	m_column_number( column_number )
@@ -54,30 +55,30 @@ public:
 	}
 
 	//! \return File name.
-	const Trait::string_t & file_name() const
+	const typename Trait::string_t & file_name() const
 	{
 		return m_file_name;
 	}
 
 	//! \return Line number.
-	Trait::pos_t line_number() const
+	typename Trait::pos_t line_number() const
 	{
 		return m_line_number;
 	}
 
 	//! \return Column number.
-	Trait::pos_t column_number() const
+	typename Trait::pos_t column_number() const
 	{
 		return m_column_number;
 	}
 
 private:
 	//! File name.
-	Trait::string_t m_file_name;
+	typename Trait::string_t m_file_name;
 	//! Line number.
-	Trait::pos_t m_line_number;
+	typename Trait::pos_t m_line_number;
 	//! Column number.
-	Trait::pos_t m_column_number;
+	typename Trait::pos_t m_column_number;
 }; // class parser_info_t
 
 } /* namespace cfgfile */

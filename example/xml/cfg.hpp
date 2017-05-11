@@ -104,7 +104,7 @@ struct Configuration {
 	\endverbatim
 */
 class TagVecOfTags
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >
 {
 public:
 	//! For reading.
@@ -117,8 +117,8 @@ public:
 	pair() const;
 
 private:
-	cfgfile::tag_scalar_t< QString > m_stringValue;
-	cfgfile::tag_scalar_t< int > m_intValue;
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > m_stringValue;
+	cfgfile::tag_scalar_t< int, cfgfile::qstring_trait_t > m_intValue;
 }; // class TagVecOfTags
 
 
@@ -147,7 +147,7 @@ private:
 	\endverbatim
 */
 class TagConfiguration
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >
 {
 public:
 	//! For reading.
@@ -160,12 +160,12 @@ public:
 	configuration() const;
 
 private:
-	cfgfile::tag_scalar_t< QString > m_stringValue;
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > m_stringValue;
 	cfgfile::constraint_one_of_t< QString > m_constraintForListOfStringValues;
-	cfgfile::tag_scalar_vector_t< QString > m_listOfStringValues;
+	cfgfile::tag_scalar_vector_t< QString, cfgfile::qstring_trait_t > m_listOfStringValues;
 	cfgfile::constraint_min_max_t< int > m_constriantForIntValue;
-	cfgfile::tag_scalar_t< int > m_intValue;
-	cfgfile::tag_vector_of_tags_t< TagVecOfTags > m_vecOfTags;
+	cfgfile::tag_scalar_t< int, cfgfile::qstring_trait_t > m_intValue;
+	cfgfile::tag_vector_of_tags_t< TagVecOfTags, cfgfile::qstring_trait_t > m_vecOfTags;
 }; // class TagConfiguration
 
 #endif // cfgfile__EXAMPLE__CFG_HPP__INCLUDED

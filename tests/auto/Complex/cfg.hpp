@@ -102,7 +102,7 @@ struct Configuration {
 	\endverbatim
 */
 class TagVecOfTags
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t<>
 {
 public:
 	//! For reading.
@@ -145,7 +145,7 @@ private:
 	\endverbatim
 */
 class TagConfiguration
-	:	public cfgfile::tag_no_value_t
+	:	public cfgfile::tag_no_value_t<>
 {
 public:
 	//! For reading.

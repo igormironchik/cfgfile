@@ -94,14 +94,14 @@ Configuration::operator = ( const Configuration & other )
 
 
 TagVecOfTags::TagVecOfTags( const QString & name, bool isMandatory )
-	:	cfgfile::tag_no_value_t( name, isMandatory )
+	:	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >( name, isMandatory )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 {
 }
 
 TagVecOfTags::TagVecOfTags( const Configuration::Pair & pair )
-	:	cfgfile::tag_no_value_t( QLatin1String( "vecOfTags" ), true )
+	:	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >( QLatin1String( "vecOfTags" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_intValue( *this, QLatin1String( "intValue" ), true )
 {
@@ -129,7 +129,7 @@ TagVecOfTags::pair() const
 //
 
 TagConfiguration::TagConfiguration()
-	:	cfgfile::tag_no_value_t( QLatin1String( "cfg" ), true )
+	:	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >( QLatin1String( "cfg" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
 	,	m_constriantForIntValue( 0, 100 )
@@ -145,7 +145,7 @@ TagConfiguration::TagConfiguration()
 }
 
 TagConfiguration::TagConfiguration( const Configuration & cfg )
-	:	cfgfile::tag_no_value_t( QLatin1String( "cfg" ), true )
+	:	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t >( QLatin1String( "cfg" ), true )
 	,	m_stringValue( *this, QLatin1String( "stringValue" ), true )
 	,	m_listOfStringValues( *this, QLatin1String( "listOfStringValues" ), true )
 	,	m_constriantForIntValue( 0, 100 )

@@ -58,21 +58,22 @@ namespace cfgfile {
 //
 
 //! Tag with multiple scalar values.
-template< class T, class Trait >
+template< class T, class Trait = string_trait_t >
 class tag_scalar_vector_t
 	:	public tag_t< Trait >
 {
 public:
 	typedef std::vector< T > values_vector_t;
 
-	explicit tag_scalar_vector_t( const Trait::string_t & name,
+	explicit tag_scalar_vector_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 		,	m_constraint( nullptr )
 	{
 	}
 
-	tag_scalar_vector_t( tag_t< Trait > & owner, const Trait::string_t & name,
+	tag_scalar_vector_t( tag_t< Trait > & owner,
+		const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
 		,	m_constraint( nullptr )
@@ -117,7 +118,7 @@ public:
 			if( !m_constraint->check( v ) )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Invalid value: \"" ) +
-					Trait::string_t( format_t< T >::to_string( v ) ) +
+					Trait::string_t( format_t< T, Trait >::to_string( v ) ) +
 					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
 					name() + Trait::from_ascii( "\"." ) );
 		}
@@ -158,7 +159,7 @@ public:
 	}
 
 	//! Print tag to the output.
-	Trait::string_t print( int indent = 0 ) const override
+	typename Trait::string_t print( int indent = 0 ) const override
 	{
 		Trait::string_t result;
 
@@ -172,9 +173,10 @@ public:
 			{
 				result.push_back( const_t< Trait >::c_space );
 
-				Trait::string_t value = format_t< T >::to_string( v );
+				typename Trait::string_t value =
+					format_t< T, Trait >::to_string( v );
 
-				value = to_cfgfile_format( value );
+				value = to_cfgfile_format< Trait >( value );
 
 				result.append( value );
 			}
@@ -213,9 +215,10 @@ public:
 
 			for( const T & v : m_values )
 			{
-				Trait::string_t value = format_t< T >::to_string( v );
+				typename Trait::string_t value =
+					format_t< T, Trait >::to_string( v );
 
-				value = to_cfgfile_format( value );
+				value = to_cfgfile_format< Trait >( value );
 
 				QString tmp = value;
 
@@ -254,7 +257,7 @@ public:
 
 	//! Called when string found.
 	void on_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & str ) override
+		const typename Trait::string_t & str ) override
 	{
 		if( is_any_child_defined() )
 			throw exception_t< Trait >(

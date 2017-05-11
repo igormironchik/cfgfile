@@ -52,7 +52,7 @@ int main()
 	std::ofstream out( "generator.cfg" );
 
 	try {
-		generator::tag_b_t tag( b );
+		generator::tag_b_t< cfgfile::string_trait_t > tag( b );
 
 		if( out.good() )
 		{
@@ -68,7 +68,7 @@ int main()
 			return 1;
 		}
 	}
-	catch( const cfgfile::exception_t< Trait > & x )
+	catch( const cfgfile::exception_t< cfgfile::string_trait_t > & x )
 	{
 		out.close();
 

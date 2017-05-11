@@ -34,8 +34,8 @@
 // cfgfile include.
 #include "parser_info.hpp"
 #include "exceptions.hpp"
-#include "types.hpp"
 #include "const.hpp"
+#include "types.hpp"
 
 #ifdef CFGFILE_QT_SUPPORT
 // Qt include.
@@ -54,14 +54,14 @@ template< class T, class Trait >
 class format_t {
 public:
 	//! Format value to string.
-	static Trait::string_t to_string( const T & )
+	static typename Trait::string_t to_string( const T & )
 	{
 		return Trait::string_t();
 	}
 
 	//! Format value from string.
 	static T from_string( const parser_info_t< Trait > &,
-		const Trait::string_t & )
+		const typename Trait::string_t & )
 	{
 		return T();
 	}
@@ -915,7 +915,7 @@ public:
 	static std::string from_string( const parser_info_t< qstring_trait_t > &,
 		const qstring_trait_t::string_t & value )
 	{
-		return value.toStdString();
+		return ((QString)value).toStdString();
 	}
 }; // class format_t< std::string >
 #endif // CFGFILE_QT_SUPPORT
@@ -977,7 +977,7 @@ public:
 	static std::wstring from_string( const parser_info_t< qstring_trait_t > &,
 		const qstring_trait_t::string_t & value )
 	{
-		return value.toStdWString();
+		return ((QString)value).toStdWString();
 	}
 }; // class format_t< std::wstring >
 #endif // CFGFILE_QT_SUPPORT
@@ -1043,7 +1043,7 @@ template< typename Trait >
 class format_t< bool, Trait > {
 public:
 	//! Format value to string.
-	static Trait::string_t to_string( const bool & value )
+	static typename Trait::string_t to_string( const bool & value )
 	{
 		return ( value ? const_t< Trait >::c_true :
 			const_t< Trait >::c_false );
@@ -1051,7 +1051,7 @@ public:
 
 	//! Format value from string.
 	static bool from_string( const parser_info_t< Trait > & info,
-		const Trait::string_t & value )
+		const typename Trait::string_t & value )
 	{
 		if( value == const_t< Trait >::c_on ||
 			value == const_t< Trait >::c_true ||

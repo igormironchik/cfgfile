@@ -289,7 +289,7 @@ field_t::set_base( bool on )
 //
 
 class_t::class_t()
-	:	m_base_name( const_t::c_no_value_tag_name )
+	:	m_base_name( c_no_value_tag_name )
 	,	m_line_number( -1 )
 	,	m_column_number( -1 )
 	,	m_index( 0 )
@@ -847,7 +847,7 @@ static inline std::string full_name( const class_t & c,
 	{
 		if( !nm->name().empty() )
 		{
-			name.insert( 0, const_t::c_namespace_separator );
+			name.insert( 0, c_namespace_separator );
 			name.insert( 0, nm->name() );
 		}
 
@@ -886,10 +886,10 @@ check_is_class_defined( const std::string & class_to_check,
 	};
 
 	const std::list< std::string > to_check =
-		split( class_to_check, const_t::c_namespace_separator );
+		split( class_to_check, c_namespace_separator );
 
 	const std::list< std::string > this_class =
-		split( this_class_name, const_t::c_namespace_separator );
+		split( this_class_name, c_namespace_separator );
 
 	const std::size_t min = std::min( to_check.size(), this_class.size() );
 
@@ -898,7 +898,7 @@ check_is_class_defined( const std::string & class_to_check,
 		std::list< std::string > to_check_tmp = to_check;
 		std::list< std::string > this_class_tmp = this_class;
 		std::list< std::string > class_tmp =
-			split( c, const_t::c_namespace_separator );
+			split( c, c_namespace_separator );
 
 		if( to_check_tmp == class_tmp )
 		{
@@ -933,7 +933,7 @@ model_t::check_class( const class_t & c,
 
 	if( std::find( prev_defined_classes.cbegin(), prev_defined_classes.cend(),
 		class_name ) != prev_defined_classes.cend() )
-			throw cfgfile::exception_t< Trait >( std::string( "Redefinition of class_t \"" ) +
+			throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Redefinition of class_t \"" ) +
 				class_name + "\". Line " + std::to_string( c.line_number() ) +
 				", column " + std::to_string( c.column_number() ) +	"." );
 
@@ -951,7 +951,7 @@ model_t::check_class( const class_t & c,
 				case field_t::scalar_vector_field_type :
 				{
 					if( f.name().empty() )
-						throw cfgfile::exception_t< Trait >( std::string(
+						throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string(
 							"Base of class_t field_t's name is empty. Line " ) +
 							std::to_string( f.line_number() ) +
 							", column " + std::to_string( f.column_number() ) +
@@ -964,7 +964,7 @@ model_t::check_class( const class_t & c,
 			}
 		}
 		else if( f.name().empty() )
-			throw cfgfile::exception_t< Trait >( std::string(
+			throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string(
 				"field_t name of class_t \"" ) + class_name +
 				"\" Line " + std::to_string( f.line_number() ) +
 				", column " + std::to_string( f.column_number() ) +
@@ -972,7 +972,7 @@ model_t::check_class( const class_t & c,
 
 		if( std::find( fields.cbegin(), fields.cend(), f.name() ) !=
 			fields.cend() )
-				throw cfgfile::exception_t< Trait >( std::string( "field_t \"" ) +
+				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "field_t \"" ) +
 					f.name() + "\" already defined in class_t \"" +
 					class_name + "\". Line " +
 					std::to_string( f.line_number() ) +
@@ -987,7 +987,7 @@ model_t::check_class( const class_t & c,
 				if( !check_is_class_defined( full_name( c, f.value_type() ),
 					class_name, prev_defined_classes ) )
 				{
-					throw cfgfile::exception_t< Trait >( std::string( "Value type \"" ) +
+					throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Value type \"" ) +
 						f.value_type() + "\" of member \"" +
 						f.name() + "\" of class \"" +
 						class_name + "\" wasn't defined. Line " +
@@ -1022,8 +1022,9 @@ model_t::set_include_guard( const std::string & guard )
 // tag_min_max_constraint_t
 //
 
-tag_min_max_constraint_t::tag_min_max_constraint_t( cfgfile::tag_t & owner )
-	:	cfgfile::tag_no_value_t( owner, c_min_max_constraint_tag_name, false )
+tag_min_max_constraint_t::tag_min_max_constraint_t(
+	cfgfile::tag_t< cfgfile::string_trait_t > & owner )
+	:	cfgfile::tag_no_value_t<> ( owner, c_min_max_constraint_tag_name, false )
 	,	m_min( *this, c_min_tag_name, true )
 	,	m_max( *this, c_max_tag_name, true )
 {
@@ -1045,7 +1046,8 @@ tag_min_max_constraint_t::cfg() const
 // tag_one_of_constraint_t
 //
 
-tag_one_of_constraint_t::tag_one_of_constraint_t( cfgfile::tag_t & owner )
+tag_one_of_constraint_t::tag_one_of_constraint_t(
+	cfgfile::tag_t< cfgfile::string_trait_t > & owner )
 	:	cfgfile::tag_scalar_vector_t< std::string > ( owner,
 			c_one_of_constraint_tag_name, false )
 {
@@ -1068,7 +1070,7 @@ tag_one_of_constraint_t::cfg() const
 //
 
 tag_field_t::tag_field_t( const std::string & name, bool is_mandatory )
-	:	cfgfile::tag_no_value_t( name, is_mandatory )
+	:	cfgfile::tag_no_value_t<> ( name, is_mandatory )
 	,	m_name( *this, c_field_name_tag_name, true )
 	,	m_value_type( *this, c_value_type_tag_name, false )
 	,	m_min_max_constraint( *this )
@@ -1086,7 +1088,7 @@ static inline field_t::field_type_t field_type_from_string( const std::string & 
 {
 	if( type == c_scalar_tag_name )
 		return field_t::scalar_field_type;
-	else if( type == const_t::c_no_value_tag_name )
+	else if( type == c_no_value_tag_name )
 		return field_t::no_value_field_type;
 	else if( type == c_scalar_vector_tag_name )
 		return field_t::scalar_vector_field_type;
@@ -1101,15 +1103,16 @@ static inline field_t::field_type_t field_type_from_string( const std::string & 
 static inline void throw_constraint_redefinition( const std::string & class_name,
 	const std::string & field_name, long long line_number, long long column_number )
 {
-	throw cfgfile::exception_t< Trait >( std::string( "Redefinition of "
+	throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Redefinition of "
 			"constraint in class \"" ) + class_name +
 		"\", field \"" + field_name +
 		"\". Line " + std::to_string( line_number ) +
 		", column " + std::to_string( column_number ) + "." );
 }
 
-static inline void check_constraints( const cfgfile::tag_t & c1,
-	const cfgfile::tag_t & c2,
+static inline void check_constraints(
+	const cfgfile::tag_t< cfgfile::string_trait_t > & c1,
+	const cfgfile::tag_t< cfgfile::string_trait_t > & c2,
 	const std::string & class_name, const std::string& field_name )
 {
 	if( c1.is_defined() && c2.is_defined() )
@@ -1170,7 +1173,7 @@ tag_field_t::cfg() const
 }
 
 void
-tag_field_t::on_finish( const parser_info_t< Trait > & info )
+tag_field_t::on_finish( const parser_info_t< cfgfile::string_trait_t > & info )
 {
 	switch( field_type_from_string( name() ) )
 	{
@@ -1179,7 +1182,7 @@ tag_field_t::on_finish( const parser_info_t< Trait > & info )
 		case field_t::vector_of_tags_field_type :
 		{
 			if( !m_value_type.is_defined() )
-				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
+				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Undefined required "
 						"tag \"" ) + c_value_type_tag_name +
 					"\" in tag \"" + name() +
 					"\". Line " + std::to_string( info.line_number() ) +
@@ -1191,7 +1194,7 @@ tag_field_t::on_finish( const parser_info_t< Trait > & info )
 			break;
 	}
 
-	cfgfile::tag_no_value_t::on_finish( info );
+	cfgfile::tag_no_value_t<>::on_finish( info );
 }
 
 
@@ -1199,7 +1202,8 @@ tag_field_t::on_finish( const parser_info_t< Trait > & info )
 // tag_base_class_t
 //
 
-tag_base_class_t::tag_base_class_t( cfgfile::tag_t & owner,
+tag_base_class_t::tag_base_class_t(
+	cfgfile::tag_t< cfgfile::string_trait_t > & owner,
 	const std::string & name, bool is_mandatory )
 	:	cfgfile::tag_scalar_t< std::string > ( owner, name, is_mandatory )
 	,	m_value_type( *this, c_value_type_tag_name, false )
@@ -1210,7 +1214,7 @@ tag_base_class_t::tag_base_class_t( cfgfile::tag_t & owner,
 	,	m_default_value( *this, c_default_value_tag_name, false )
 {
 	m_constraint.add_value( c_scalar_tag_name );
-	m_constraint.add_value( const_t::c_no_value_tag_name );
+	m_constraint.add_value( c_no_value_tag_name );
 	m_constraint.add_value( c_scalar_vector_tag_name );
 
 	set_constraint( &m_constraint );
@@ -1259,7 +1263,7 @@ tag_base_class_t::cfg() const
 }
 
 void
-tag_base_class_t::on_finish( const parser_info_t< Trait > & info )
+tag_base_class_t::on_finish( const parser_info_t< cfgfile::string_trait_t > & info )
 {
 	switch( field_type_from_string( value() ) )
 	{
@@ -1268,14 +1272,14 @@ tag_base_class_t::on_finish( const parser_info_t< Trait > & info )
 		case field_t::vector_of_tags_field_type :
 		{
 			if( !m_value_type.is_defined() )
-				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
+				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Undefined required "
 						"tag \"" ) + c_value_type_tag_name +
 					"\" in tag \"" + c_base_class_tag_name +
 					"\". Line " + std::to_string( info.line_number() ) +
 					", column " + std::to_string( info.column_number() ) + "." );
 
 			if( !m_name.is_defined() )
-				throw cfgfile::exception_t< Trait >( std::string( "Undefined required "
+				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Undefined required "
 						"tag \"" ) + c_field_name_tag_name +
 					"\" in tag \"" + c_base_class_tag_name +
 					"\". Line " + std::to_string( info.line_number() ) +
@@ -1299,7 +1303,7 @@ tag_class_t::tag_class_t( const std::string & name, bool is_mandatory )
 	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
 	,	m_base_class_name( *this, c_base_class_tag_name, false )
 	,	m_scalar_tags( *this, c_scalar_tag_name, false )
-	,	m_no_value_tags( *this, const_t::c_no_value_tag_name, false )
+	,	m_no_value_tags( *this, c_no_value_tag_name, false )
 	,	m_scalar_vector_tags( *this, c_scalar_vector_tag_name, false )
 	,	m_vector_of_tags_tags( *this, c_vector_of_tags_tag_name, false )
 	,	m_custom_tags( *this, c_custom_tag_name, false )
@@ -1320,7 +1324,7 @@ tag_class_t::cfg() const
 	{
 		c.set_base_name( m_base_class_name.value() );
 
-		if( c.base_name() != const_t::c_no_value_tag_name )
+		if( c.base_name() != c_no_value_tag_name )
 		{
 			c.set_base_value_type( m_base_class_name.value_type() );
 
@@ -1371,7 +1375,7 @@ tag_class_t::cfg() const
 
 tag_namespace_t::tag_namespace_t( const std::string & name, bool is_mandatory )
 	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
-	,	m_nested_namespaces( *this, const_t::c_namespace_tag_name, false )
+	,	m_nested_namespaces( *this, c_namespace_tag_name, false )
 	,	m_classes( *this, c_class_tag_name, false )
 {
 }
@@ -1410,7 +1414,7 @@ tag_namespace_t::cfg() const
 
 tag_model_t::tag_model_t()
 	:	cfgfile::tag_scalar_t< std::string > ( c_main_cfg_tag_name, true )
-	,	m_root_namespace( *this, const_t::c_namespace_tag_name, false )
+	,	m_root_namespace( *this, c_namespace_tag_name, false )
 	,	m_root_classes( *this, c_class_tag_name, false )
 	,	m_global_includes( *this, c_global_include_tag_name, false )
 	,	m_relative_includes( *this, c_relative_include_tag_name, false )

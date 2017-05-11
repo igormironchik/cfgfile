@@ -51,7 +51,7 @@ namespace cfgfile {
 //
 
 //! Trait for std::wstring support.
-class wstring_trait_t final {
+struct wstring_trait_t final {
 	//! String type.
 	using string_t = std::wstring;
 
@@ -115,7 +115,7 @@ class wstring_trait_t final {
 	{
 		stream.seekg( 0 );
 	}
-}; // class wstring_trait_t
+}; // struct wstring_trait_t
 
 
 //
@@ -123,7 +123,7 @@ class wstring_trait_t final {
 //
 
 //! Trait for std::string support.
-class string_trait_t final {
+struct string_trait_t final {
 	//! String type.
 	using string_t = std::string;
 
@@ -184,7 +184,7 @@ class string_trait_t final {
 	{
 		stream.seekg( 0 );
 	}
-}; // class string_trait_t
+}; // struct string_trait_t
 
 
 #ifdef CFGFILE_QT_SUPPORT
@@ -202,7 +202,7 @@ public:
 	{
 	}
 
-	qstring_wrapper_t( size_type size, char_t ch )
+	qstring_wrapper_t( size_type size, QChar ch )
 		:	m_str( size, ch )
 	{
 	}
@@ -218,12 +218,12 @@ public:
 	}
 
 
-	qstring_wrapper_t( const char_t * unicode, size_type size = -1 )
+	qstring_wrapper_t( const QChar * unicode, size_type size = -1 )
 		:	m_str( unicode, size )
 	{
 	}
 
-	qstring_wrapper_t( char_t ch )
+	qstring_wrapper_t( QChar ch )
 		:	m_str( ch )
 	{
 	}
@@ -255,7 +255,7 @@ public:
 
 	static const int npos = -1;
 
-	inline int find( char_t ch ) const
+	inline int find( QChar ch ) const
 	{
 		return m_str.indexOf( ch );
 	}
@@ -270,7 +270,7 @@ public:
 		return m_str.lastIndexOf( str.m_str );
 	}
 
-	inline int rfind( char_t ch ) const
+	inline int rfind( QChar ch ) const
 	{
 		return m_str.lastIndexOf( ch );
 	}
@@ -332,34 +332,34 @@ public:
 	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
 		const qstring_wrapper_t & s2 )
 	{
-		return string_t( s1.m_str + s2.m_str );
+		return qstring_wrapper_t( s1.m_str + s2.m_str );
 	}
 
 	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
 		const char * s2 )
 	{
-		return string_t( s1.m_str + s2 );
+		return qstring_wrapper_t( s1.m_str + s2 );
 	}
 
 	friend qstring_wrapper_t operator + ( const char * s1,
 		const qstring_wrapper_t & s2 )
 	{
-		return string_t( s1 + s2.m_str );
+		return qstring_wrapper_t( s1 + s2.m_str );
 	}
 
 	friend qstring_wrapper_t operator + ( const qstring_wrapper_t & s1,
 		const char ch )
 	{
-		return string_t( s1.m_str + ch );
+		return qstring_wrapper_t( s1.m_str + ch );
 	}
 
 	friend qstring_wrapper_t operator + ( const char ch,
 		const qstring_wrapper_t & s2 )
 	{
-		return string_t( ch + s2.m_str );
+		return qstring_wrapper_t( ch + s2.m_str );
 	}
 
-	friend ostream_t & operator << ( ostream_t & to,
+	friend QTextStream & operator << ( QTextStream & to,
 		const qstring_wrapper_t & what )
 	{
 		to << what.m_str;
@@ -367,7 +367,7 @@ public:
 		return to;
 	}
 
-	inline const char_t operator [] ( size_type pos ) const
+	inline const QChar operator [] ( size_type pos ) const
 	{
 		return m_str[ pos ];
 	}
@@ -379,7 +379,7 @@ public:
 		return *this;
 	}
 
-	inline qstring_wrapper_t & append( size_type count, char_t ch )
+	inline qstring_wrapper_t & append( size_type count, QChar ch )
 	{
 		m_str.append( QString( count, ch ) );
 
@@ -391,7 +391,7 @@ public:
 		m_str.clear();
 	}
 
-	inline void push_back( char_t ch )
+	inline void push_back( QChar ch )
 	{
 		m_str.append( ch );
 	}
@@ -407,7 +407,7 @@ private:
 //
 
 //! Trait for QString support.
-class qstring_trait_t final {
+struct qstring_trait_t final {
 	//! String type.
 	using string_t = qstring_wrapper_t;
 
@@ -456,7 +456,7 @@ class qstring_trait_t final {
 	{
 		stream.seek( 0 );
 	}
-} // class qstring_trait_t
+}; // struct qstring_trait_t
 
 #endif // CFGFILE_QT_SUPPORT
 
