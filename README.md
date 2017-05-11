@@ -31,6 +31,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 This is header-only library. But if you want to build examples and tests juct
 run qmake and then make, as usually.
 
+To build with Qt support define CFGFILE_QT_SUPPORT. To build with XML support
+define CFGFILE_QT_SUPPORT and CFGFILE_XML_SUPPORT. XML supported only with Qt.
+
 # About
 
 Configuration file format is a set of tags, which are surrounded by curly
