@@ -156,24 +156,24 @@ public:
 
 		while( !lexeme.is_null() )
 		{
-			if( !m_stack.empty() )
+			if( !this->m_stack.empty() )
 			{
 				if( lexeme.type() == lexeme_type_t::start )
-					start_tag_parsing( *m_stack.top(),
-						m_stack.top()->children() );
+					start_tag_parsing( *this->m_stack.top(),
+						this->m_stack.top()->children() );
 				else if( lexeme.type() == lexeme_type_t::string )
-					m_stack.top()->on_string( parser_info_t< Trait >(
+					this->m_stack.top()->on_string( parser_info_t< Trait >(
 							file_name,
 							m_lex.line_number(),
 							m_lex.column_number() ),
 						lexeme.value() );
 				else if( lexeme.type() == lexeme_type_t::finish )
 				{
-					m_stack.top()->on_finish( parser_info_t< Trait >(
+					this->m_stack.top()->on_finish( parser_info_t< Trait >(
 						file_name,
 						m_lex.line_number(),
 						m_lex.column_number() ) );
-					m_stack.pop();
+					this->m_stack.pop();
 				}
 			}
 			else
@@ -190,7 +190,7 @@ public:
 			lexeme = m_lex.next_lexeme();
 		}
 
-		check_parser_state_after_parsing();
+		this->check_parser_state_after_parsing();
 	}
 
 private:
@@ -199,15 +199,15 @@ private:
 	{
 		lexeme_t< Trait > lexeme = m_lex.next_lexeme();
 
-		if( m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
+		if( this->m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
 			throw exception_t< Trait >( Trait::from_ascii( "Unexpected end of file. "
-					"Undefined mandatory tag \"" ) + m_tag.name() +
+					"Undefined mandatory tag \"" ) + this->m_tag.name() +
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_lex.input_stream().line_number() ) +
 				Trait::from_ascii( "." ) );
-		else if( !m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
+		else if( !this->m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
 			return false;
 		else if( lexeme.type() != lexeme_type_t::start )
 			throw exception_t< Trait >(
@@ -220,10 +220,10 @@ private:
 
 		lexeme = m_lex.next_lexeme();
 
-		if( !start_tag_parsing( lexeme, m_tag ) )
+		if( !start_tag_parsing( lexeme, this->m_tag ) )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Unexpected tag name. "
-					"We expected \"" ) + m_tag.name() +
+					"We expected \"" ) + this->m_tag.name() +
 				Trait::from_ascii( "\", but we've got \"" ) + lexeme.value() +
 				Trait::from_ascii( "\". In file \"" ) + m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
@@ -260,7 +260,7 @@ private:
 				Trait::from_ascii( "." ) );
 		else if( tag.name() == lexeme.value() )
 		{
-			m_stack.push( &tag );
+			this->m_stack.push( &tag );
 
 			tag.on_start( parser_info_t< Trait >(
 				m_lex.input_stream().file_name(),
@@ -335,10 +335,10 @@ public:
 	{
 		QDomElement element = m_dom.documentElement();
 
-		if( element.isNull() && m_tag.is_mandatory() )
+		if( element.isNull() && this->m_tag.is_mandatory() )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Unexpected end of file. "
-					"Undefined mandatory tag \"" ) + m_tag.name() +
+					"Undefined mandatory tag \"" ) + this->m_tag.name() +
 				Trait::from_ascii( "\". In file \"" ) + file_name +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( element.lineNumber() ) +
@@ -346,20 +346,20 @@ public:
 
 		if( !element.isNull() )
 		{
-			if( element.tagName() != m_tag.name() )
+			if( element.tagName() != this->m_tag.name() )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Unexpected tag name. "
-						"We expected \"" ) + m_tag.name() +
+						"We expected \"" ) + this->m_tag.name() +
 					Trait::from_ascii( "\", but we've got \"" ) +
-					Trait::string_t( element.tagName() ) +
+					typename Trait::string_t( element.tagName() ) +
 					Trait::from_ascii( "\". In file \"" ) + file_name +
 					Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( element.lineNumber() ) +
 					Trait::from_ascii( "." ) );
 
-			m_stack.push( &m_tag );
+			this->m_stack.push( &this->m_tag );
 
-			m_tag.on_start( parser_info_t< Trait >( file_name,
+			this->m_tag.on_start( parser_info_t< Trait >( file_name,
 				element.lineNumber(),
 				element.columnNumber() ) );
 		}
@@ -368,15 +368,15 @@ public:
 
 		if( !element.isNull() )
 		{
-			m_stack.top()->on_finish( parser_info_t< Trait >(
+			this->m_stack.top()->on_finish( parser_info_t< Trait >(
 				file_name,
 				element.lineNumber(),
 				element.columnNumber() ) );
 
-			m_stack.pop();
+			this->m_stack.pop();
 		}
 
-		check_parser_state_after_parsing();
+		this->check_parser_state_after_parsing();
 	}
 
 private:
@@ -391,21 +391,21 @@ private:
 			if( !child.isNull() )
 			{
 				tag_t< Trait > * tag = find_tag( child.tagName(),
-					m_stack.top()->children() );
+					this->m_stack.top()->children() );
 
 				if( !tag )
 					throw exception_t< Trait >(
 						Trait::from_ascii( "Unexpected tag name. "
 							"We expected one child tag of tag \"" ) +
-						m_stack.top()->name() +
+						this->m_stack.top()->name() +
 						Trait::from_ascii( "\", but we've got \"" ) +
-						Trait::string_t( child.tagName() ) +
+						typename Trait::string_t( child.tagName() ) +
 						Trait::from_ascii( "\". In file \"" ) + file_name +
 						Trait::from_ascii( "\" on line " ) +
 						Trait::to_string( child.lineNumber() ) +
 						Trait::from_ascii( "." ) );
 
-				m_stack.push( tag );
+				this->m_stack.push( tag );
 
 				tag->on_start( parser_info_t< Trait >( file_name,
 					child.lineNumber(),
@@ -434,7 +434,7 @@ private:
 					child.lineNumber(),
 					child.columnNumber() ) );
 
-				m_stack.pop();
+				this->m_stack.pop();
 			}
 			else
 			{
@@ -442,7 +442,7 @@ private:
 
 				if( !text.isNull() )
 				{
-					m_stack.top()->on_string( parser_info_t< Trait >(
+					this->m_stack.top()->on_string( parser_info_t< Trait >(
 							file_name,
 							text.lineNumber(),
 							text.columnNumber() ),
@@ -452,9 +452,9 @@ private:
 					throw exception_t< Trait >(
 						Trait::from_ascii( "Unexpected tag name. "
 							"We expected one child tag of tag \"" ) +
-						m_stack.top()->name() +
+						this->m_stack.top()->name() +
 						Trait::from_ascii( "\", but we've got \"" ) +
-						Trait::string_t( n.nodeName() ) +
+						typename Trait::string_t( n.nodeName() ) +
 						Trait::from_ascii( "\". In file \"" ) + file_name +
 						Trait::from_ascii( "\" on line " ) +
 						Trait::to_string( n.lineNumber() ) +

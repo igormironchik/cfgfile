@@ -114,7 +114,7 @@ public:
 	{
 		m_tags.push_back( p );
 
-		set_defined();
+		this->set_defined();
 	}
 
 	//! Set values.
@@ -123,7 +123,7 @@ public:
 	{
 		m_tags = v;
 
-		set_defined();
+		this->set_defined();
 	}
 
 	/*!
@@ -136,14 +136,14 @@ public:
 	void
 	query_opt_values( vector_of_tags_t & receiver )
 	{
-		if( is_defined() )
+		if( this->is_defined() )
 			receiver = m_tags;
 	}
 
 	//! \return List with children.
-	const child_tags_list_t & children() const override
+	const typename tag_t< Trait >::child_tags_list_t & children() const override
 	{
-		static const tag_t< Trait >::child_tags_list_t empty;
+		static const typename tag_t< Trait >::child_tags_list_t empty;
 
 		if( m_current )
 			return m_current->children();
@@ -154,9 +154,9 @@ public:
 	//! Print tag to the output.
 	typename Trait::string_t print( int indent = 0 ) const override
 	{
-		Trait::string_t result;
+		typename Trait::string_t result;
 
-		if( is_defined() )
+		if( this->is_defined() )
 		{
 			for( const ptr_to_tag_t & p : m_tags )
 				result.append( p->print( indent ) );
@@ -169,7 +169,7 @@ public:
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
-		if( is_defined() )
+		if( this->is_defined() )
 		{
 			for( const ptr_to_tag_t & p : m_tags )
 				p->print( doc, parent );
@@ -180,8 +180,8 @@ public:
 	//! Called when tag parsing started.
 	void on_start( const parser_info_t< Trait > & info ) override
 	{
-		m_current = std::make_shared< T > ( name(), is_mandatory() );
-		m_current->set_parent( parent() );
+		m_current = std::make_shared< T > ( this->name(), this->is_mandatory() );
+		m_current->set_parent( this->parent() );
 		m_current->on_start( info );
 	}
 
@@ -198,12 +198,12 @@ public:
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
-					name() + Trait::from_ascii( "\". In file \"" ) +
+					this->name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
 		}
 
-		set_defined();
+		this->set_defined();
 	}
 
 	//! Called when string found.

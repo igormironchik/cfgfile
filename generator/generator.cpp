@@ -544,7 +544,7 @@ static inline void generate_cfg_init( std::ostream & stream,
 				{
 					stream << std::string( "\t\tc." )
 						<< generate_setter_method_name( f.name() )
-						<< std::string( "( value() );\n" );
+						<< std::string( "( this->value() );\n" );
 				}
 					break;
 
@@ -552,7 +552,7 @@ static inline void generate_cfg_init( std::ostream & stream,
 				{
 					stream << std::string( "\t\tc." )
 						<< generate_setter_method_name( f.name() )
-						<< std::string( "( values() );\n" );
+						<< std::string( "( this->values() );\n" );
 				}
 					break;
 
@@ -609,7 +609,7 @@ static inline void generate_cfg_set( std::ostream & stream,
 						<< f.value_type() << std::string( " & v : cfg." )
 						<< f.name() << std::string( "() )\n" )
 						<< std::string( "\t\t{\n" )
-						<< std::string( "\t\t\tcfgfile::tag_vector_of_tags_t< " )
+						<< std::string( "\t\t\ttypename cfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
 						<< std::string( "< Trait > >::ptr_to_tag_t p(\n" )
 						<< std::string( "\t\t\t\tnew " )
@@ -644,14 +644,14 @@ static inline void generate_cfg_set( std::ostream & stream,
 			{
 				case cfg::field_t::scalar_field_type :
 				{
-					stream << std::string( "\t\tset_value( cfg." )
+					stream << std::string( "\t\tthis->set_value( cfg." )
 						<< f.name() << std::string( "() );\n" );
 				}
 					break;
 
 				case cfg::field_t::scalar_vector_field_type :
 				{
-					stream << std::string( "\t\tset_values( cfg." )
+					stream << std::string( "\t\tthis->set_values( cfg." )
 						<< f.name() << std::string( "() );\n" );
 				}
 					break;
@@ -662,7 +662,7 @@ static inline void generate_cfg_set( std::ostream & stream,
 		}
 	}
 
-	stream << std::string( "\n\t\tset_defined();\n" );
+	stream << std::string( "\n\t\tthis->set_defined();\n" );
 } // generate_cfg_set
 
 

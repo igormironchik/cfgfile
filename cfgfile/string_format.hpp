@@ -64,11 +64,11 @@ static inline typename Trait::string_t to_cfgfile_format(
 			return what;
 	else
 	{
-		Trait::string_t result;
+		typename Trait::string_t result;
 
 		result.push_back( const_t< Trait >::c_quotes );
 
-		for( const Trait::char_t & ch : what )
+		for( const typename Trait::char_t & ch : what )
 		{
 			if( ch == const_t< Trait >::c_quotes )
 				result.append( Trait::from_ascii( "\\\"" ) );
@@ -103,26 +103,27 @@ static inline typename Trait::string_t from_cfgfile_format(
 	if( what.find( const_t< Trait >::c_quotes ) == 0 &&
 		what.rfind( const_t< Trait >::c_quotes ) == what.length() - 1 )
 	{
-		Trait::string_t result = what.substr( 1, what.length() - 2 );
+		typename Trait::string_t result = what.substr( 1, what.length() - 2 );
 
-		auto replace = [] ( Trait::string_t & str, const Trait::string_t & old_value,
-			const Trait::string_t & new_value )
+		auto replace = [] ( typename Trait::string_t & str,
+			const typename Trait::string_t & old_value,
+			const typename Trait::string_t & new_value )
 		{
-			Trait::string_t::size_type where = Trait::string_t::npos;
+			typename Trait::string_t::size_type where = Trait::string_t::npos;
 
 			while( ( where = str.find( old_value ) ) != Trait::string_t::npos )
 				str.replace( where, old_value.length(), new_value );
 		};
 
-		replace( result, Trait::string_t( 1, const_t< Trait >::c_carriage_return ),
+		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_carriage_return ),
 			Trait::from_ascii( "\\n" ) );
-		replace( result, Trait::string_t( 1, const_t< Trait >::c_quotes ),
+		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_quotes ),
 			Trait::from_ascii( "\\\"" ) );
-		replace( result, Trait::string_t( 1, const_t< Trait >::c_line_feed ),
+		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_line_feed ),
 			Trait::from_ascii( "\\r" ) );
-		replace( result, Trait::string_t( 1, const_t< Trait >::c_tab ),
+		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_tab ),
 			Trait::from_ascii( "\\t" ) );
-		replace( result, Trait::string_t( 1, const_t< Trait >::c_back_slash ),
+		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_back_slash ),
 			Trait::from_ascii( "\\\\" ) );
 
 		return result;

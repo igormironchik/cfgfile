@@ -68,7 +68,7 @@ public:
 
 		typename Trait::char_t ch = 0x00;
 
-		if( m_returned_char != Trait::char_t( 0x00 ) )
+		if( m_returned_char != typename Trait::char_t( 0x00 ) )
 		{
 			ch = m_returned_char;
 
@@ -120,7 +120,7 @@ public:
 	//! \return Is stream at end?
 	bool at_end() const
 	{
-		if( m_returned_char == Trait::char_t( 0x00 ) )
+		if( m_returned_char == typename Trait::char_t( 0x00 ) )
 			return Trait::is_at_end( m_stream );
 		else
 			return false;

@@ -56,7 +56,7 @@ public:
 	//! Format value to string.
 	static typename Trait::string_t to_string( const T & )
 	{
-		return Trait::string_t();
+		return typename Trait::string_t();
 	}
 
 	//! Format value from string.

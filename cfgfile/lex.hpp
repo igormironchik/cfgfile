@@ -135,7 +135,7 @@ public:
 		m_column_number = m_stream.column_number();
 
 		if( m_stream.at_end() )
-			return lexeme_t< Trait >( lexeme_type_t::null, Trait::string_t() );
+			return lexeme_t< Trait >( lexeme_type_t::null, typename Trait::string_t() );
 
 		while( true )
 		{
@@ -165,7 +165,7 @@ public:
 				else
 					throw exception_t< Trait >(
 						Trait::from_ascii( "Unrecognized back-slash sequence: \"\\" ) +
-						Trait::string_t( 1, new_char ) +
+						typename Trait::string_t( 1, new_char ) +
 						Trait::from_ascii( "\". In file \"" ) + m_stream.file_name() +
 						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
@@ -174,7 +174,7 @@ public:
 			{
 				if( result.empty() )
 					return lexeme_t< Trait >( lexeme_type_t::start,
-						Trait::string_t( 1, ch ) );
+						typename Trait::string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -188,7 +188,7 @@ public:
 			{
 				if( result.empty() )
 					return lexeme_t< Trait >( lexeme_type_t::finish,
-						Trait::string_t( 1, ch ) );
+						typename Trait::string_t( 1, ch ) );
 				else if( quoted_lexeme )
 					result.push_back( ch );
 				else
@@ -269,7 +269,7 @@ public:
 						Trait::from_ascii( "." ) );
 				else if( result.empty() )
 					return lexeme_t< Trait >( lexeme_type_t::null,
-						Trait::string_t() );
+						typename Trait::string_t() );
 				else
 					break;
 			}

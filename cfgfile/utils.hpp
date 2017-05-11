@@ -78,9 +78,9 @@ public:
 	//! Determine file's format.
 	file_format_t format()
 	{
-		static const Trait::char_t xml = Trait::from_ascii( '<' );
+		static const typename Trait::char_t xml = Trait::from_ascii( '<' );
 
-		Trait::char_t ch = 0x00;
+		typename Trait::char_t ch = 0x00;
 
 		while( !Trait::is_at_end( m_stream ) )
 		{
@@ -202,7 +202,7 @@ static inline void write_cfgfile(
 	{
 		case file_format_t::cfgfile_format :
 		{
-			const Trait::string_t content = tag.print();
+			const typename Trait::string_t content = tag.print();
 
 			stream << content;
 		}

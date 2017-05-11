@@ -56,7 +56,7 @@ namespace cfgfile {
 template< typename Trait = string_trait_t >
 class tag_t {
 public:
-    template< typename Trait > friend class parser_t;
+    template< typename T1 > friend class parser_t;
 
     //! List with children.
     typedef std::list< tag_t< Trait >* > child_tags_list_t;
@@ -191,7 +191,7 @@ public:
 		const typename Trait::string_t & str ) = 0;
 
 protected:
-	template< class T, class Trait > friend class tag_vector_of_tags_t;
+	template< class T1, class T2 > friend class tag_vector_of_tags_t;
 
 	//! Set parent tag.
 	void set_parent( const tag_t< Trait > * p )

@@ -75,23 +75,23 @@ public:
 	//! Print tag to the output.
 	typename Trait::string_t print( int indent = 0 ) const override
 	{
-		Trait::string_t result;
+		typename Trait::string_t result;
 
-		if( is_defined() )
+		if( this->is_defined() )
 		{
-			result.append( Trait::string_t( indent, const_t< Trait >::c_tab ) );
+			result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
 
 			result.push_back( const_t< Trait >::c_begin_tag );
-			result.append( name() );
+			result.append( this->name() );
 
-			if( !children().empty() )
+			if( !this->children().empty() )
 			{
 				result.push_back( const_t< Trait >::c_carriage_return );
 
-				for( const tag_t< Trait > * tag : children() )
+				for( const tag_t< Trait > * tag : this->children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( Trait::string_t( indent, const_t< Trait >::c_tab ) );
+				result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
 			result.push_back( const_t< Trait >::c_end_tag );
@@ -105,18 +105,18 @@ public:
 	//! Print tag to the output.
 	void print( QDomDocument & doc, QDomElement * parent = 0 ) const override
 	{
-		if( is_defined() )
+		if( this->is_defined() )
 		{
-			QDomElement this_element = doc.createElement( name() );
+			QDomElement this_element = doc.createElement( this->name() );
 
 			if( !parent )
 				doc.appendChild( this_element );
 			else
 				parent->appendChild( this_element );
 
-			if( !children().empty() )
+			if( !this->children().empty() )
 			{
-				for( const tag_t< Trait > * tag : children() )
+				for( const tag_t< Trait > * tag : this->children() )
 					tag->print( doc, &this_element );
 			}
 		}
@@ -126,20 +126,20 @@ public:
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
-		for( const tag_t< Trait > * tag : children() )
+		for( const tag_t< Trait > * tag : this->children() )
 		{
 			if( tag->is_mandatory() && !tag->is_defined() )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() +
-					Trait::from_ascii( "\". Where parent is: \"" ) + name() +
+					Trait::from_ascii( "\". Where parent is: \"" ) + this->name() +
 					Trait::from_ascii( "\". In file \"" ) + info.file_name() +
 					Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) +
 					Trait::from_ascii( "." ) );
 		}
 
-		set_defined();
+		this->set_defined();
 	}
 
 	//! Called when string found.
@@ -147,7 +147,7 @@ public:
 		const typename Trait::string_t & str ) override
 	{
 		throw exception_t< Trait >( Trait::from_ascii( "Tag \"" ) +
-			name() + Trait::from_ascii( "\" doesn't allow any values. "
+			this->name() + Trait::from_ascii( "\" doesn't allow any values. "
 				"But we've got this: \"" ) +
 			str + Trait::from_ascii( "\". In file \"" ) + info.file_name() +
 			Trait::from_ascii( "\" on line " ) +
