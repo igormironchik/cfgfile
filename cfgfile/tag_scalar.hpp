@@ -129,11 +129,11 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
-			result.push_back( c_begin_tag );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
-			result.push_back( c_space );
+			result.push_back( const_t< Trait >::c_space );
 
 			string_t value = format_t< T >::to_string( m_value );
 			value = to_cfgfile_format( value );
@@ -142,16 +142,16 @@ public:
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;
@@ -314,11 +314,11 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
-			result.push_back( c_begin_tag );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
-			result.push_back( c_space );
+			result.push_back( const_t< Trait >::c_space );
 
 			string_t value = format_t< bool >::to_string( m_value );
 			value = to_cfgfile_format( value );
@@ -327,16 +327,16 @@ public:
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;
@@ -503,11 +503,11 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
-			result.push_back( c_begin_tag );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
-			result.push_back( c_space );
+			result.push_back( const_t< Trait >::c_space );
 
 			string_t value = format_t< string_t >::to_string( m_value );
 
@@ -517,15 +517,15 @@ public:
 			if( sections )
 			{
 				const string_t spaces = string_t( name().length() + 2,
-					c_space );
+					const_t< Trait >::c_space );
 
 				for( pos_t i = 0; i < sections; ++i )
 				{
 					if( i > 0 )
 					{
-						result.push_back( c_carriage_return );
+						result.push_back( const_t< Trait >::c_carriage_return );
 
-						result.append( string_t( indent, c_tab ) );
+						result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
 						result.append( spaces );
 					}
@@ -538,22 +538,22 @@ public:
 			}
 			else
 			{
-				result.push_back( c_quotes );
-				result.push_back( c_quotes );
+				result.push_back( const_t< Trait >::c_quotes );
+				result.push_back( const_t< Trait >::c_quotes );
 			}
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;
@@ -726,11 +726,11 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
-			result.push_back( c_begin_tag );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
-			result.push_back( c_space );
+			result.push_back( const_t< Trait >::c_space );
 
 			QString value = format_t< QString >::to_string( m_value );
 
@@ -740,15 +740,15 @@ public:
 			if( sections )
 			{
 				const string_t spaces = string_t( name().length() + 2,
-					c_space );
+					const_t< Trait >::c_space );
 
 				for( pos_t i = 0; i < sections; ++i )
 				{
 					if( i > 0 )
 					{
-						result.push_back( c_carriage_return );
+						result.push_back( const_t< Trait >::c_carriage_return );
 
-						result.append( string_t( indent, c_tab ) );
+						result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
 						result.append( spaces );
 					}
@@ -761,22 +761,22 @@ public:
 			}
 			else
 			{
-				result.push_back( c_quotes );
-				result.push_back( c_quotes );
+				result.push_back( const_t< Trait >::c_quotes );
+				result.push_back( const_t< Trait >::c_quotes );
 			}
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;

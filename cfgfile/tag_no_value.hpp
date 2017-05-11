@@ -78,23 +78,23 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
 
-			result.push_back( c_begin_tag );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;

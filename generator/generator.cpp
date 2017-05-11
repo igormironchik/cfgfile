@@ -149,13 +149,13 @@ static inline std::string generate_setter_method_name( const std::string & name 
 
 static inline std::string generate_class_name( const std::string & name )
 {
-	const auto pos = name.rfind( cfg::c_namespace_separator );
+	const auto pos = name.rfind( cfg::const_t::c_namespace_separator );
 
 	std::string res = ( pos == std::string::npos ? std::string() :
-		name.substr( 0, pos + cfg::c_namespace_separator.length() ) );
+		name.substr( 0, pos + cfg::const_t::c_namespace_separator.length() ) );
 	res.append( "tag_" );
 	res.append( ( pos == std::string::npos ? name :
-		name.substr( pos + cfg::c_namespace_separator.length() ) ) );
+		name.substr( pos + cfg::const_t::c_namespace_separator.length() ) ) );
 
 	return res;
 }
@@ -171,7 +171,7 @@ static inline std::string generate_base_class_name( const std::string & base,
 	if( base == cfg::c_scalar_tag_name )
 		return std::string( "cfgfile::tag_scalar_t< " ) + value_type +
 			std::string( " >" );
-	else if( base == cfg::c_no_value_tag_name )
+	else if( base == cfg::const_t::c_no_value_tag_name )
 		return std::string( "cfgfile::tag_no_value_t" );
 	else if( base == cfg::c_scalar_vector_tag_name )
 		return std::string( "cfgfile::tag_scalar_vector_t< " ) + value_type +

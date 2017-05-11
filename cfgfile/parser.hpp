@@ -424,7 +424,7 @@ private:
 								attr.lineNumber(),
 								attr.columnNumber() ),
 							from_cfgfile_format< Trait >( attr.value()
-								.prepend( c_quotes ).append( c_quotes ) ) );
+								.prepend( const_t< Trait >::c_quotes ).append( const_t< Trait >::c_quotes ) ) );
 				}
 
 				parse_tag( child, file_name );

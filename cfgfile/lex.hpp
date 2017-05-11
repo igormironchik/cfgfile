@@ -141,7 +141,7 @@ public:
 		{
 			char_t ch = m_stream.get();
 
-			if( ch == c_quotes )
+			if( ch == const_t< Trait >::c_quotes )
 			{
 				if( quoted_lexeme )
 					break;
@@ -154,7 +154,7 @@ public:
 					break;
 				}
 			}
-			else if( ch == c_back_slash )
+			else if( ch == const_t< Trait >::c_back_slash )
 			{
 				char_t new_char = 0x00;
 
@@ -170,7 +170,7 @@ public:
 						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
 			}
-			else if( ch == c_begin_tag )
+			else if( ch == const_t< Trait >::c_begin_tag )
 			{
 				if( result.empty() )
 					return lexeme_t( lexeme_type_t::start, string_t( 1, ch ) );
@@ -183,7 +183,7 @@ public:
 					break;
 				}
 			}
-			else if( ch == c_end_tag )
+			else if( ch == const_t< Trait >::c_end_tag )
 			{
 				if( result.empty() )
 					return lexeme_t( lexeme_type_t::finish, string_t( 1, ch ) );
@@ -196,14 +196,14 @@ public:
 					break;
 				}
 			}
-			else if( ch == c_space || ch == c_tab )
+			else if( ch == const_t< Trait >::c_space || ch == const_t< Trait >::c_tab )
 			{
 				if( quoted_lexeme )
 					result.push_back( ch );
 				else
 					break;
 			}
-			else if( ch == c_carriage_return || ch == c_line_feed )
+			else if( ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
 			{
 				if( quoted_lexeme )
 					throw exception_t< Trait >( string_t( Trait::from_ascii( "Unfinished quoted lexeme. " ) ) +
@@ -214,7 +214,7 @@ public:
 				else
 					break;
 			}
-			else if( ch == c_vertical_bar )
+			else if( ch == const_t< Trait >::c_vertical_bar )
 			{
 				if( quoted_lexeme )
 					result.push_back( ch );
@@ -222,7 +222,7 @@ public:
 				{
 					char_t next_char = m_stream.get();
 
-					if( next_char == c_vertical_bar )
+					if( next_char == const_t< Trait >::c_vertical_bar )
 					{
 						skip_comment = true;
 
@@ -233,7 +233,7 @@ public:
 						else
 							break;
 					}
-					else if( next_char == c_sharp )
+					else if( next_char == const_t< Trait >::c_sharp )
 					{
 						skip_comment = true;
 
@@ -300,8 +300,8 @@ private:
 	//! \return Is character a space character?
 	bool is_space_char( char_t ch )
 	{
-		if( ch == c_space || ch == c_tab ||
-			ch == c_carriage_return || ch == c_line_feed )
+		if( ch == const_t< Trait >::c_space || ch == const_t< Trait >::c_tab ||
+			ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
 				return true;
 		else
 			return false;
@@ -337,16 +337,16 @@ private:
 
 		ch = m_stream.get();
 
-		if( ch == c_n )
-			ch = c_carriage_return;
-		else if( ch == c_t )
-			ch = c_tab;
-		else if( ch == c_r )
-			ch = c_line_feed;
-		else if( ch == c_quotes )
-			ch = c_quotes;
-		else if( ch == c_back_slash )
-			ch = c_back_slash;
+		if( ch == const_t< Trait >::c_n )
+			ch = const_t< Trait >::c_carriage_return;
+		else if( ch == const_t< Trait >::c_t )
+			ch = const_t< Trait >::c_tab;
+		else if( ch == const_t< Trait >::c_r )
+			ch = const_t< Trait >::c_line_feed;
+		else if( ch == const_t< Trait >::c_quotes )
+			ch = const_t< Trait >::c_quotes;
+		else if( ch == const_t< Trait >::c_back_slash )
+			ch = const_t< Trait >::c_back_slash;
 		else
 			return false;
 
@@ -360,7 +360,7 @@ private:
 		{
 			char_t ch = m_stream.get();
 
-			while( ch != c_carriage_return && ch != c_line_feed &&
+			while( ch != const_t< Trait >::c_carriage_return && ch != const_t< Trait >::c_line_feed &&
 				!m_stream.at_end() )
 					ch = m_stream.get();
 		}
@@ -378,7 +378,7 @@ private:
 
 			char_t next_char = m_stream.get();
 
-			if( ch == c_sharp && next_char == c_vertical_bar )
+			if( ch == const_t< Trait >::c_sharp && next_char == const_t< Trait >::c_vertical_bar )
 				return;
 
 			while( !m_stream.at_end() )
@@ -387,7 +387,7 @@ private:
 
 				next_char = m_stream.get();
 
-				if( ch == c_sharp && next_char == c_vertical_bar )
+				if( ch == const_t< Trait >::c_sharp && next_char == const_t< Trait >::c_vertical_bar )
 					break;
 			}
 		}

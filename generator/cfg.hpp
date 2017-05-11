@@ -48,7 +48,7 @@ namespace cfg {
 //! Main cfg tag's name.
 static const std::string c_main_cfg_tag_name( "forGeneration" );
 //! Namespace tag's name.
-static const std::string c_namespace_tag_name( "namespace" );
+static const std::string const_t::c_namespace_tag_name( "namespace" );
 //! Class tag's name.
 static const std::string c_class_tag_name( "class" );
 //! Base class tag's name.
@@ -66,7 +66,7 @@ static const std::string c_max_tag_name( "max" );
 //! Scalar field tag's name.
 static const std::string c_scalar_tag_name( "tagScalar" );
 //! No-value field tag's name.
-static const std::string c_no_value_tag_name( "tagNoValue" );
+static const std::string const_t::c_no_value_tag_name( "tagNoValue" );
 //! Scalar vector field tag's name.
 static const std::string c_scalar_vector_tag_name( "tagScalarVector" );
 //! Vector of tags field tag's name.
@@ -74,7 +74,7 @@ static const std::string c_vector_of_tags_tag_name( "tagVectorOfTags" );
 //! Custom tag field tag's name.
 static const std::string c_custom_tag_name( "tag" );
 //! Namespace separator.
-static const std::string c_namespace_separator( "::" );
+static const std::string const_t::c_namespace_separator( "::" );
 //! Global include tag's name.
 static const std::string c_global_include_tag_name( "globalInclude" );
 //! Relative include tag's name.

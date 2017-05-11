@@ -289,7 +289,7 @@ field_t::set_base( bool on )
 //
 
 class_t::class_t()
-	:	m_base_name( c_no_value_tag_name )
+	:	m_base_name( const_t::c_no_value_tag_name )
 	,	m_line_number( -1 )
 	,	m_column_number( -1 )
 	,	m_index( 0 )
@@ -847,7 +847,7 @@ static inline std::string full_name( const class_t & c,
 	{
 		if( !nm->name().empty() )
 		{
-			name.insert( 0, c_namespace_separator );
+			name.insert( 0, const_t::c_namespace_separator );
 			name.insert( 0, nm->name() );
 		}
 
@@ -886,10 +886,10 @@ check_is_class_defined( const std::string & class_to_check,
 	};
 
 	const std::list< std::string > to_check =
-		split( class_to_check, c_namespace_separator );
+		split( class_to_check, const_t::c_namespace_separator );
 
 	const std::list< std::string > this_class =
-		split( this_class_name, c_namespace_separator );
+		split( this_class_name, const_t::c_namespace_separator );
 
 	const std::size_t min = std::min( to_check.size(), this_class.size() );
 
@@ -898,7 +898,7 @@ check_is_class_defined( const std::string & class_to_check,
 		std::list< std::string > to_check_tmp = to_check;
 		std::list< std::string > this_class_tmp = this_class;
 		std::list< std::string > class_tmp =
-			split( c, c_namespace_separator );
+			split( c, const_t::c_namespace_separator );
 
 		if( to_check_tmp == class_tmp )
 		{
@@ -1086,7 +1086,7 @@ static inline field_t::field_type_t field_type_from_string( const std::string & 
 {
 	if( type == c_scalar_tag_name )
 		return field_t::scalar_field_type;
-	else if( type == c_no_value_tag_name )
+	else if( type == const_t::c_no_value_tag_name )
 		return field_t::no_value_field_type;
 	else if( type == c_scalar_vector_tag_name )
 		return field_t::scalar_vector_field_type;
@@ -1210,7 +1210,7 @@ tag_base_class_t::tag_base_class_t( cfgfile::tag_t & owner,
 	,	m_default_value( *this, c_default_value_tag_name, false )
 {
 	m_constraint.add_value( c_scalar_tag_name );
-	m_constraint.add_value( c_no_value_tag_name );
+	m_constraint.add_value( const_t::c_no_value_tag_name );
 	m_constraint.add_value( c_scalar_vector_tag_name );
 
 	set_constraint( &m_constraint );
@@ -1299,7 +1299,7 @@ tag_class_t::tag_class_t( const std::string & name, bool is_mandatory )
 	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
 	,	m_base_class_name( *this, c_base_class_tag_name, false )
 	,	m_scalar_tags( *this, c_scalar_tag_name, false )
-	,	m_no_value_tags( *this, c_no_value_tag_name, false )
+	,	m_no_value_tags( *this, const_t::c_no_value_tag_name, false )
 	,	m_scalar_vector_tags( *this, c_scalar_vector_tag_name, false )
 	,	m_vector_of_tags_tags( *this, c_vector_of_tags_tag_name, false )
 	,	m_custom_tags( *this, c_custom_tag_name, false )
@@ -1320,7 +1320,7 @@ tag_class_t::cfg() const
 	{
 		c.set_base_name( m_base_class_name.value() );
 
-		if( c.base_name() != c_no_value_tag_name )
+		if( c.base_name() != const_t::c_no_value_tag_name )
 		{
 			c.set_base_value_type( m_base_class_name.value_type() );
 
@@ -1371,7 +1371,7 @@ tag_class_t::cfg() const
 
 tag_namespace_t::tag_namespace_t( const std::string & name, bool is_mandatory )
 	:	cfgfile::tag_scalar_t< std::string > ( name, is_mandatory )
-	,	m_nested_namespaces( *this, c_namespace_tag_name, false )
+	,	m_nested_namespaces( *this, const_t::c_namespace_tag_name, false )
 	,	m_classes( *this, c_class_tag_name, false )
 {
 }
@@ -1410,7 +1410,7 @@ tag_namespace_t::cfg() const
 
 tag_model_t::tag_model_t()
 	:	cfgfile::tag_scalar_t< std::string > ( c_main_cfg_tag_name, true )
-	,	m_root_namespace( *this, c_namespace_tag_name, false )
+	,	m_root_namespace( *this, const_t::c_namespace_tag_name, false )
 	,	m_root_classes( *this, c_class_tag_name, false )
 	,	m_global_includes( *this, c_global_include_tag_name, false )
 	,	m_relative_includes( *this, c_relative_include_tag_name, false )

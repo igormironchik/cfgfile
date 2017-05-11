@@ -99,7 +99,7 @@ public:
 	{
 		m_column_number -= 1;
 
-		if( ch == c_carriage_return || ch == c_line_feed )
+		if( ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
 			m_line_number -= 1;
 
 		m_returned_char = ch;
@@ -135,15 +135,15 @@ public:
 private:
 	bool is_new_line( char_t & ch )
 	{
-		if( ch == c_carriage_return )
+		if( ch == const_t< Trait >::c_carriage_return )
 			return true;
-		else if( ch == c_line_feed )
+		else if( ch == const_t< Trait >::c_line_feed )
 		{
 			char_t next_char = 0x00;
 
 			m_stream >> next_char;
 
-			if( next_char == c_carriage_return )
+			if( next_char == const_t< Trait >::c_carriage_return )
 			{
 				ch = next_char;
 

@@ -78,6 +78,11 @@ class wstring_trait_t final {
 		return res;
 	}
 
+	static inline char_t from_ascii( char ch )
+	{
+		return (char_t) ch;
+	}
+
 	static inline void noskipws( istream_t & stream )
 	{
 		stream >> std::noskipws;
@@ -130,6 +135,11 @@ class string_trait_t final {
 	static inline string_t from_ascii( const std::string & str )
 	{
 		return str;
+	}
+
+	static inline char_t from_ascii( char ch )
+	{
+		return ch;
 	}
 
 	static inline void noskipws( istream_t & stream )
@@ -399,6 +409,11 @@ class qstring_trait_t final {
 	static inline string_t from_ascii( const std::string & str )
 	{
 		return qstring_wrapper_t( QString( str.c_str() ) );
+	}
+
+	static inline char_t from_ascii( char ch )
+	{
+		return QLatin1Char( ch );
 	}
 
 	static inline void noskipws( istream_t & )

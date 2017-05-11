@@ -163,13 +163,13 @@ public:
 
 		if( is_defined() )
 		{
-			result.append( string_t( indent, c_tab ) );
-			result.push_back( c_begin_tag );
+			result.append( string_t( indent, const_t< Trait >::c_tab ) );
+			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( name() );
 
 			for( const T & v : m_values )
 			{
-				result.push_back( c_space );
+				result.push_back( const_t< Trait >::c_space );
 
 				string_t value = format_t< T >::to_string( v );
 
@@ -180,16 +180,16 @@ public:
 
 			if( !children().empty() )
 			{
-				result.push_back( c_carriage_return );
+				result.push_back( const_t< Trait >::c_carriage_return );
 
 				for( const tag_t * tag : children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( string_t( indent, c_tab ) );
+				result.append( string_t( indent, const_t< Trait >::c_tab ) );
 			}
 
-			result.push_back( c_end_tag );
-			result.push_back( c_carriage_return );
+			result.push_back( const_t< Trait >::c_end_tag );
+			result.push_back( const_t< Trait >::c_carriage_return );
 		}
 
 		return result;
@@ -218,7 +218,7 @@ public:
 
 				QString tmp = value;
 
-				if( tmp.startsWith( c_quotes ) && tmp.endsWith( c_quotes ) )
+				if( tmp.startsWith( const_t< Trait >::c_quotes ) && tmp.endsWith( const_t< Trait >::c_quotes ) )
 					tmp = tmp.mid( 1, tmp.length() - 2 );
 
 				this_element.setAttribute( QString( "a" ) + QString::number( i ),

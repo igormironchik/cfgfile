@@ -37,22 +37,29 @@
 
 namespace cfgfile {
 
-static const char_t c_begin_tag = Trait::from_ascii('{' );
-static const char_t c_end_tag = Trait::from_ascii( '}' );
-static const char_t c_quotes = Trait::from_ascii( '"' );
-static const char_t c_n = Trait::from_ascii( 'n' );
-static const char_t c_t = Trait::from_ascii( 't' );
-static const char_t c_r = Trait::from_ascii( 'r' );
-static const char_t c_back_slash = Trait::from_ascii( '\\' );
-static const char_t c_space = Trait::from_ascii( ' ' );
-static const char_t c_tab = Trait::from_ascii( '\t' );
-static const char_t c_carriage_return = Trait::from_ascii( '\n' );
-static const char_t c_line_feed = Trait::from_ascii( '\r' );
-static const char_t c_vertical_bar = Trait::from_ascii( '|' );
-static const char_t c_sharp = Trait::from_ascii( '#' );
-static const string_t c_one_line_comment = Trait::from_ascii( "||" );
-static const string_t c_start_multi_line_comment = Trait::from_ascii( "|#" );
-static const string_t c_finish_multi_line_comment = Trait::from_ascii( "#|" );
+//
+// const_t
+//
+
+template< typename Trait >
+struct const_t {
+	static const Trait::char_t c_begin_tag = Trait::from_ascii( '{' );
+	static const Trait::char_t c_end_tag = Trait::from_ascii( '}' );
+	static const Trait::char_t c_quotes = Trait::from_ascii( '"' );
+	static const Trait::char_t c_n = Trait::from_ascii( 'n' );
+	static const Trait::char_t c_t = Trait::from_ascii( 't' );
+	static const Trait::char_t c_r = Trait::from_ascii( 'r' );
+	static const Trait::char_t c_back_slash = Trait::from_ascii( '\\' );
+	static const Trait::char_t c_space = Trait::from_ascii( ' ' );
+	static const Trait::char_t c_tab = Trait::from_ascii( '\t' );
+	static const Trait::char_t c_carriage_return = Trait::from_ascii( '\n' );
+	static const Trait::char_t c_line_feed = Trait::from_ascii( '\r' );
+	static const Trait::char_t c_vertical_bar = Trait::from_ascii( '|' );
+	static const Trait::char_t c_sharp = Trait::from_ascii( '#' );
+	static const Trait::string_t c_one_line_comment = Trait::from_ascii( "||" );
+	static const Trait::string_t c_start_multi_line_comment = Trait::from_ascii( "|#" );
+	static const Trait::string_t c_finish_multi_line_comment = Trait::from_ascii( "#|" );
+}; // struct const_t
 
 } /* namespace cfgfile */
 
