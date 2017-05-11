@@ -37,6 +37,9 @@
 #include "const.hpp"
 #include "types.hpp"
 
+// C++ include.
+#include <limits>
+
 #ifdef CFGFILE_QT_SUPPORT
 // Qt include.
 #include <QString>
@@ -197,15 +200,16 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			int result = std::stoi( value, &pos );
+			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 )
-				throw exception_t< string_trait_t >(
-					string_trait_t::from_ascii( "Invalid value: \"" ) +
-					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
-					string_trait_t::to_string( info.line_number() ) +
-					string_trait_t::from_ascii( "." ) );
+			if( pos != value.length() || result < 0 ||
+				result > std::numeric_limits< unsigned int >::max() )
+					throw exception_t< string_trait_t >(
+						string_trait_t::from_ascii( "Invalid value: \"" ) +
+						value + string_trait_t::from_ascii( "\". In file \"" ) +
+						info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+						string_trait_t::to_string( info.line_number() ) +
+						string_trait_t::from_ascii( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -238,15 +242,16 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			int result = std::stoi( value, &pos );
+			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 )
-				throw exception_t< wstring_trait_t >(
-					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
-					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
-					wstring_trait_t::to_string( info.line_number() ) +
-					wstring_trait_t::from_ascii( "." ) );
+			if( pos != value.length() || result < 0 ||
+				result > std::numeric_limits< unsigned int >::max() )
+					throw exception_t< wstring_trait_t >(
+						wstring_trait_t::from_ascii( "Invalid value: \"" ) +
+						value + wstring_trait_t::from_ascii( "\". In file \"" ) +
+						info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+						wstring_trait_t::to_string( info.line_number() ) +
+						wstring_trait_t::from_ascii( "." ) );
 
 			return (unsigned int) result;
 		}
@@ -423,7 +428,7 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			long result = std::stol( value, &pos );
+			unsigned long result = std::stoul( value, &pos );
 
 			if( pos != value.length() || result < 0 )
 				throw exception_t< string_trait_t >(
@@ -433,7 +438,7 @@ public:
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
-			return (unsigned long) result;
+			return result;
 		}
 		catch( const std::exception & )
 		{
@@ -464,7 +469,7 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			long result = std::stol( value, &pos );
+			unsigned long result = std::stoul( value, &pos );
 
 			if( pos != value.length() || result < 0 )
 				throw exception_t< wstring_trait_t >(
@@ -474,7 +479,7 @@ public:
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
-			return (unsigned long) result;
+			return result;
 		}
 		catch( const std::exception & )
 		{
@@ -649,7 +654,7 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			long long result = std::stoll( value, &pos );
+			unsigned long long result = std::stoull( value, &pos );
 
 			if( pos != value.length() )
 				throw exception_t< string_trait_t >(
@@ -659,7 +664,7 @@ public:
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
-			return (unsigned long long) result;
+			return result;
 		}
 		catch( const std::exception & )
 		{
@@ -690,7 +695,7 @@ public:
 		try {
 			std::size_t pos = 0;
 
-			long long result = std::stoll( value, &pos );
+			unsigned long long result = std::stoull( value, &pos );
 
 			if( pos != value.length() )
 				throw exception_t< wstring_trait_t >(
@@ -700,7 +705,7 @@ public:
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
-			return (unsigned long long) result;
+			return result;
 		}
 		catch( const std::exception & )
 		{
@@ -835,7 +840,7 @@ public:
 	//! Format value to string.
 	static qstring_trait_t::string_t to_string( const double & value )
 	{
-		return QString::number( value );
+		return QString::number( value, 'g', 999 );
 	}
 
 	//! Format value from string.
