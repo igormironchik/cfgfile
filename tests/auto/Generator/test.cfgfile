@@ -1,0 +1,23 @@
+
+{forGeneration GENERATED
+	{namespace generator
+		{class a_t
+			{tagScalar
+				{valueType std::string}
+				{name string_field}
+			}
+		}
+
+		{class b_t
+			{base tagScalar
+				{valueType int}
+				{name integer_field}
+			}
+
+			{tagVectorOfTags
+				{valueType a_t}
+				{name a_vector}
+			}
+		}
+	}
+}

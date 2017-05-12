@@ -4,5 +4,6 @@ SUBDIRS += BoolScalar \
            Complex \
            LexicalAnalyzer \
            Parser \
-	   Format
+	   Format \
+	   Generator
            
