@@ -61,7 +61,7 @@ class tag_custom_t
 {
 public:
 	tag_custom_t( cfgfile::tag_t< Trait > & owner,
-		typename Trait::string_t & name,
+		const typename Trait::string_t & name,
 		bool is_mandatory = true )
 		:	cfgfile::tag_no_value_t< Trait > ( owner, name, is_mandatory )
 		,	m_value( *this, "value", true )
@@ -69,7 +69,7 @@ public:
 	}
 
 	tag_custom_t( const custom_t & cfg, cfgfile::tag_t< Trait > & owner,
-		typename Trait::string_t & name,
+		const typename Trait::string_t & name,
 		bool is_mandatory = true )
 		:	cfgfile::tag_no_value_t< Trait > ( owner, name, is_mandatory )
 		,	m_value( *this, "value", true )
