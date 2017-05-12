@@ -34,6 +34,10 @@
 // UnitTest include.
 #include <UnitTest/unit_test.hpp>
 
+// test include.
+#include "test.hpp"
+
+
 TEST( Generator, testAllIsOk )
 {
 } // testAllIsOk

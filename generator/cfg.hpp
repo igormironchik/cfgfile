@@ -289,6 +289,11 @@ public:
 	//! Set name of the class.
 	void set_name( const std::string & n );
 
+	//! \return Tag name if defined.
+	const std::string & tag_name() const;
+	//! Set tag name.
+	void set_tag_name( const std::string & n );
+
 	//! \return Base class name.
 	const std::string & base_name() const;
 	//! Set base class name.
@@ -341,6 +346,8 @@ protected:
 private:
 	//! Name of the class.
 	std::string m_name;
+	//! Tag name if defined.
+	std::string m_tag_name;
 	//! Base class name.
 	std::string m_base_name;
 	//! Base value type.
@@ -605,6 +612,9 @@ public:
 
 	//! \return Value type.
 	std::string value_type() const;
+
+	//! \return Tag name.
+	std::string tag_name() const;
 
 	//! \return Field.
 	field_t cfg() const;

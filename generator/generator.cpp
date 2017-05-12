@@ -189,9 +189,12 @@ static inline std::string generate_base_class_name( const std::string & base,
 //
 
 static inline std::string generate_tag_name_from_class_name(
-	const std::string & name )
+	const std::string & name, const std::string & tag_name )
 {
-	return name;
+	if( !tag_name.empty() )
+		return tag_name;
+	else
+		return name;
 } // generate_tag_name_from_class_name
 
 
@@ -502,20 +505,17 @@ static inline void generate_cfg_init( std::ostream & stream,
 						<< std::string( "\t\t\tstd::vector< " )
 						<< f.value_type() << std::string( " > " )
 						<< f.name() << std::string( "_" )
-						<< generate_tag_name_from_class_name( f.value_type() )
 						<< std::string( "_;\n\n" )
 						<< std::string( "\t\t\tfor( std::size_t i = 0; i < m_" )
 						<< f.name() << std::string( ".size(); ++i )\n" )
 						<< std::string( "\t\t\t\t" )
 						<< f.name() << std::string( "_" )
-						<< generate_tag_name_from_class_name( f.value_type() )
 						<< std::string( "_.push_back( m_" ) << f.name()
 						<< std::string( ".at( i ).get_cfg() );\n\n" )
 						<< std::string( "\t\t\tc." )
 						<< generate_setter_method_name( f.name() )
 						<< std::string( "( " )
 						<< f.name() << std::string( "_" )
-						<< generate_tag_name_from_class_name( f.value_type() )
 						<< std::string( "_ );\n" )
 						<< std::string( "\t\t}\n" );
 				}
@@ -784,7 +784,8 @@ static inline void generate_tag_class( std::ostream & stream,
 
 	// c_tors.
 	// 1
-	const std::string tag_name = generate_tag_name_from_class_name( c->name() );
+	const std::string tag_name = generate_tag_name_from_class_name( c->name(),
+		c->tag_name() );
 
 	stream << std::string( "\t" ) << tag_class_name
 		<< std::string( "()\n"

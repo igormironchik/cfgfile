@@ -4,7 +4,7 @@ DESTDIR = .
 CONFIG += console c++14
 QT -= gui core
 
-HEADERS +=
+HEADERS += custom.hpp
 
 SOURCES += main.cpp
 

@@ -303,6 +303,7 @@ class_t::~class_t()
 
 class_t::class_t( const class_t & other )
 	:	m_name( other.name() )
+	,	m_tag_name( other.tag_name() )
 	,	m_base_name( other.base_name() )
 	,	m_base_value_type( other.base_value_type() )
 	,	m_fields( other.fields() )
@@ -318,6 +319,7 @@ class_t::operator = ( const class_t & other )
 	if( this != &other )
 	{
 		m_name = other.name();
+		m_tag_name = other.tag_name();
 		m_base_name = other.base_name();
 		m_base_value_type = other.base_value_type();
 		m_fields = other.fields();
@@ -339,6 +341,18 @@ const std::string &
 class_t::name() const
 {
 	return m_name;
+}
+
+const std::string &
+class_t::tag_name() const
+{
+	return m_tag_name;
+}
+
+void
+class_t::set_tag_name( const std::string & n )
+{
+	m_tag_name = n;
 }
 
 void
@@ -1230,6 +1244,15 @@ tag_base_class_t::value_type() const
 	return m_value_type.value();
 }
 
+std::string
+tag_base_class_t::tag_name() const
+{
+	if( m_name.is_defined() )
+		return m_name.value();
+	else
+		return std::string();
+}
+
 field_t
 tag_base_class_t::cfg() const
 {
@@ -1323,6 +1346,8 @@ tag_class_t::cfg() const
 	if( m_base_class_name.is_defined() )
 	{
 		c.set_base_name( m_base_class_name.value() );
+
+		c.set_tag_name( m_base_class_name.tag_name() );
 
 		if( c.base_name() != c_no_value_tag_name )
 		{

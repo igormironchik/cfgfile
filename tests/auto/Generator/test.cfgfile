@@ -1,22 +1,50 @@
 
 {forGeneration GENERATED
-	{namespace generator
-		{class a_t
+
+	{relativeInclude custom.hpp}
+
+	{namespace cfg
+		{class tags_t
+			{base tagNoValue
+				{name tags}
+			}
+
 			{tagScalar
 				{valueType std::string}
 				{name string_field}
+				{oneOfConstraint one two three}
+				{required}
+			}
+
+			{tagNoValue
+				{name no_value_field}
+				{required}
+			}
+
+			{tagScalarVector
+				{valueType int}
+				{name int_field}
+				{minMaxConstraint {min 0} {max 500}}
+				{required}
+				{defaultValue 100}
+			}
+
+			{tag
+				{valueType custom_t}
+				{name custom_field}
+				{required}
 			}
 		}
 
-		{class b_t
-			{base tagScalar
-				{valueType int}
-				{name integer_field}
+		{class vector_t
+			{base tagNoValue
+				{name vector}
 			}
 
 			{tagVectorOfTags
-				{valueType a_t}
-				{name a_vector}
+				{valueType tags_t}
+				{name vector}
+				{required}
 			}
 		}
 	}
