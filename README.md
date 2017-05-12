@@ -334,6 +334,10 @@ turned off. And one more restriction is that that class's name for tag
 must be equal to tag_ + Name, i.e. if data structure names Data then class for
 tag must be named tag_Data and be placed in the same namespace as Data class/
 structure.
+
+## Example
+
+Look at example/generator and tests/auto/Generator
             
 # Integration of Generator with QMake
             
