@@ -61,7 +61,7 @@ namespace details {
 //
 
 //! Base implementation of parser.
-template< typename Trait >
+template< typename Trait = string_trait_t >
 class parser_base_t {
 public:
 	explicit parser_base_t( tag_t< Trait > & tag )
@@ -200,20 +200,23 @@ private:
 		lexeme_t< Trait > lexeme = m_lex.next_lexeme();
 
 		if( this->m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
-			throw exception_t< Trait >( Trait::from_ascii( "Unexpected end of file. "
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Unexpected end of file. "
 					"Undefined mandatory tag \"" ) + this->m_tag.name() +
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_lex.input_stream().line_number() ) +
 				Trait::from_ascii( "." ) );
-		else if( !this->m_tag.is_mandatory() && lexeme.type() == lexeme_type_t::null )
-			return false;
+		else if( !this->m_tag.is_mandatory() &&
+			lexeme.type() == lexeme_type_t::null )
+				return false;
 		else if( lexeme.type() != lexeme_type_t::start )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Expected start curl brace, "
 					"but we've got \"" ) + lexeme.value() +
-				Trait::from_ascii( "\". In file \"" ) + m_lex.input_stream().file_name() +
+				Trait::from_ascii( "\". In file \"" ) +
+				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_lex.input_stream().line_number() ) +
 				Trait::from_ascii( "." ) );
@@ -225,7 +228,8 @@ private:
 				Trait::from_ascii( "Unexpected tag name. "
 					"We expected \"" ) + this->m_tag.name() +
 				Trait::from_ascii( "\", but we've got \"" ) + lexeme.value() +
-				Trait::from_ascii( "\". In file \"" ) + m_lex.input_stream().file_name() +
+				Trait::from_ascii( "\". In file \"" ) +
+				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_lex.input_stream().line_number() ) +
 				Trait::from_ascii( "." ) );
@@ -253,7 +257,8 @@ private:
 				Trait::to_string( m_lex.input_stream().line_number() ) +
 				Trait::from_ascii( "." ) );
 		else if( lexeme.type() == lexeme_type_t::null )
-			throw exception_t< Trait >( Trait::from_ascii( "Unexpected end of file. "
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Unexpected end of file. "
 					"In file \"" ) + m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
 				Trait::to_string( m_lex.input_stream().line_number() ) +
@@ -315,7 +320,7 @@ private:
 //
 
 //! Implementation of parser in XML format.
-template< typename Trait >
+template< typename Trait = qstring_trait_t >
 class parser_dom_impl_t final
 	:	public parser_base_t< Trait >
 {
@@ -381,7 +386,8 @@ public:
 
 private:
 	//! Parse tag.
-	void parse_tag( const QDomElement & e, const typename Trait::string_t & file_name )
+	void parse_tag( const QDomElement & e,
+		const typename Trait::string_t & file_name )
 	{
 		for( QDomNode n = e.firstChild(); !n.isNull();
 			n = n.nextSibling() )
@@ -424,7 +430,8 @@ private:
 								attr.lineNumber(),
 								attr.columnNumber() ),
 							from_cfgfile_format< Trait >( attr.value()
-								.prepend( const_t< Trait >::c_quotes ).append( const_t< Trait >::c_quotes ) ) );
+								.prepend( const_t< Trait >::c_quotes )
+								.append( const_t< Trait >::c_quotes ) ) );
 				}
 
 				parse_tag( child, file_name );

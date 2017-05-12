@@ -197,10 +197,12 @@ public:
 			if( tag->is_mandatory() && !tag->is_defined() )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
-					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					tag->name() +
+					Trait::from_ascii( "\". Where parent is: \"" ) +
 					this->name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+					Trait::to_string( info.line_number() ) +
+					Trait::from_ascii( "." ) );
 		}
 
 		this->set_defined();

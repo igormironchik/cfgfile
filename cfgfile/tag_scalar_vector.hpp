@@ -118,8 +118,10 @@ public:
 			if( !m_constraint->check( v ) )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Invalid value: \"" ) +
-					typename Trait::string_t( format_t< T, Trait >::to_string( v ) ) +
-					Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					typename Trait::string_t(
+						format_t< T, Trait >::to_string( v ) ) +
+					Trait::from_ascii( "\". Value must match to the "
+						"constraint in tag \"" ) +
 					this->name() + Trait::from_ascii( "\"." ) );
 		}
 
@@ -165,7 +167,8 @@ public:
 
 		if( this->is_defined() )
 		{
-			result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
+			result.append( typename Trait::string_t( indent,
+				const_t< Trait >::c_tab ) );
 			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( this->name() );
 
@@ -188,7 +191,8 @@ public:
 				for( const tag_t< Trait > * tag : this->children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
+				result.append( typename Trait::string_t( indent,
+					const_t< Trait >::c_tab ) );
 			}
 
 			result.push_back( const_t< Trait >::c_end_tag );
@@ -222,8 +226,9 @@ public:
 
 				QString tmp = value;
 
-				if( tmp.startsWith( const_t< Trait >::c_quotes ) && tmp.endsWith( const_t< Trait >::c_quotes ) )
-					tmp = tmp.mid( 1, tmp.length() - 2 );
+				if( tmp.startsWith( const_t< Trait >::c_quotes ) &&
+					tmp.endsWith( const_t< Trait >::c_quotes ) )
+						tmp = tmp.mid( 1, tmp.length() - 2 );
 
 				this_element.setAttribute( QString( "a" ) + QString::number( i ),
 					tmp );
@@ -248,10 +253,12 @@ public:
 			if( tag->is_mandatory() && !tag->is_defined() )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
-					tag->name() + Trait::from_ascii( "\". Where parent is: \"" ) +
+					tag->name() +
+					Trait::from_ascii( "\". Where parent is: \"" ) +
 					this->name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+					Trait::to_string( info.line_number() ) +
+					Trait::from_ascii( "." ) );
 		}
 	}
 
@@ -263,9 +270,11 @@ public:
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Value \"" ) + str +
 				Trait::from_ascii( "\" for tag \"" ) + this->name() +
-				Trait::from_ascii( "\" must be defined before any child tag. In file \"" ) +
+				Trait::from_ascii( "\" must be defined before any child "
+					"tag. In file \"" ) +
 				info.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+				Trait::to_string( info.line_number() ) +
+				Trait::from_ascii( "." ) );
 
 		const T value = format_t< T, Trait >::from_string( info, str );
 
@@ -274,10 +283,12 @@ public:
 			if( !m_constraint->check( value ) )
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Invalid value: \"" ) +
-					str + Trait::from_ascii( "\". Value must match to the constraint in tag \"" ) +
+					str + Trait::from_ascii( "\". Value must match to the "
+						"constraint in tag \"" ) +
 					this->name() + Trait::from_ascii( "\". In file \"" ) +
 					info.file_name() + Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( info.line_number() ) + Trait::from_ascii( "." ) );
+					Trait::to_string( info.line_number() ) +
+					Trait::from_ascii( "." ) );
 		}
 
 		m_values.push_back( value );

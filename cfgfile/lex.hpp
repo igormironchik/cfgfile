@@ -135,7 +135,8 @@ public:
 		m_column_number = m_stream.column_number();
 
 		if( m_stream.at_end() )
-			return lexeme_t< Trait >( lexeme_type_t::null, typename Trait::string_t() );
+			return lexeme_t< Trait >( lexeme_type_t::null,
+				typename Trait::string_t() );
 
 		while( true )
 		{
@@ -164,10 +165,13 @@ public:
 					result.push_back( new_char );
 				else
 					throw exception_t< Trait >(
-						Trait::from_ascii( "Unrecognized back-slash sequence: \"\\" ) +
+						Trait::from_ascii( "Unrecognized back-slash "
+							"sequence: \"\\" ) +
 						typename Trait::string_t( 1, new_char ) +
-						Trait::from_ascii( "\". In file \"" ) + m_stream.file_name() +
-						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "\". In file \"" ) +
+						m_stream.file_name() +
+						Trait::from_ascii( "\" on line " ) +
+						Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
 			}
 			else if( ch == const_t< Trait >::c_begin_tag )
@@ -198,21 +202,24 @@ public:
 					break;
 				}
 			}
-			else if( ch == const_t< Trait >::c_space || ch == const_t< Trait >::c_tab )
+			else if( ch == const_t< Trait >::c_space ||
+				ch == const_t< Trait >::c_tab )
 			{
 				if( quoted_lexeme )
 					result.push_back( ch );
 				else
 					break;
 			}
-			else if( ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
+			else if( ch == const_t< Trait >::c_carriage_return ||
+				ch == const_t< Trait >::c_line_feed )
 			{
 				if( quoted_lexeme )
 					throw exception_t< Trait >(
 						Trait::from_ascii( "Unfinished quoted lexeme. " ) +
 						Trait::from_ascii( "New line detected. In file \"" ) +
 						m_stream.file_name() +
-						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "\" on line " ) +
+						Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
 				else
 					break;
@@ -265,7 +272,8 @@ public:
 						Trait::from_ascii( "Unfinished quoted lexeme. " ) +
 						Trait::from_ascii( "End of file riched. In file \"" ) +
 						m_stream.file_name() +
-						Trait::from_ascii( "\" on line " ) + Trait::to_string( line_number() ) +
+						Trait::from_ascii( "\" on line " ) +
+						Trait::to_string( line_number() ) +
 						Trait::from_ascii( "." ) );
 				else if( result.empty() )
 					return lexeme_t< Trait >( lexeme_type_t::null,
@@ -306,7 +314,8 @@ private:
 	bool is_space_char( typename Trait::char_t ch )
 	{
 		if( ch == const_t< Trait >::c_space || ch == const_t< Trait >::c_tab ||
-			ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
+			ch == const_t< Trait >::c_carriage_return ||
+			ch == const_t< Trait >::c_line_feed )
 				return true;
 		else
 			return false;
@@ -339,7 +348,8 @@ private:
 				Trait::from_ascii( "Unexpected end of file. "
 					"Unfinished back slash sequence. In file \"" ) +
 				m_stream.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_stream.line_number() ) + Trait::from_ascii( "." ) );
+				Trait::to_string( m_stream.line_number() ) +
+				Trait::from_ascii( "." ) );
 
 		ch = m_stream.get();
 
@@ -366,7 +376,8 @@ private:
 		{
 			typename Trait::char_t ch = m_stream.get();
 
-			while( ch != const_t< Trait >::c_carriage_return && ch != const_t< Trait >::c_line_feed &&
+			while( ch != const_t< Trait >::c_carriage_return &&
+				ch != const_t< Trait >::c_line_feed &&
 				!m_stream.at_end() )
 					ch = m_stream.get();
 		}
@@ -384,8 +395,9 @@ private:
 
 			typename Trait::char_t next_char = m_stream.get();
 
-			if( ch == const_t< Trait >::c_sharp && next_char == const_t< Trait >::c_vertical_bar )
-				return;
+			if( ch == const_t< Trait >::c_sharp &&
+				next_char == const_t< Trait >::c_vertical_bar )
+					return;
 
 			while( !m_stream.at_end() )
 			{
@@ -393,8 +405,9 @@ private:
 
 				next_char = m_stream.get();
 
-				if( ch == const_t< Trait >::c_sharp && next_char == const_t< Trait >::c_vertical_bar )
-					break;
+				if( ch == const_t< Trait >::c_sharp &&
+					next_char == const_t< Trait >::c_vertical_bar )
+						break;
 			}
 		}
 	}

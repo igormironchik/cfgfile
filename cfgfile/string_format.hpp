@@ -115,15 +115,20 @@ static inline typename Trait::string_t from_cfgfile_format(
 				str.replace( where, old_value.length(), new_value );
 		};
 
-		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_carriage_return ),
+		replace( result, typename Trait::string_t( 1,
+				const_t< Trait >::c_carriage_return ),
 			Trait::from_ascii( "\\n" ) );
-		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_quotes ),
+		replace( result, typename Trait::string_t( 1,
+				const_t< Trait >::c_quotes ),
 			Trait::from_ascii( "\\\"" ) );
-		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_line_feed ),
+		replace( result, typename Trait::string_t( 1,
+				const_t< Trait >::c_line_feed ),
 			Trait::from_ascii( "\\r" ) );
-		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_tab ),
+		replace( result, typename Trait::string_t( 1,
+				const_t< Trait >::c_tab ),
 			Trait::from_ascii( "\\t" ) );
-		replace( result, typename Trait::string_t( 1, const_t< Trait >::c_back_slash ),
+		replace( result, typename Trait::string_t( 1,
+				const_t< Trait >::c_back_slash ),
 			Trait::from_ascii( "\\\\" ) );
 
 		return result;

@@ -93,7 +93,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -134,7 +135,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -145,7 +147,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -174,7 +177,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -207,7 +211,8 @@ public:
 					throw exception_t< string_trait_t >(
 						string_trait_t::from_ascii( "Invalid value: \"" ) +
 						value + string_trait_t::from_ascii( "\". In file \"" ) +
-						info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+						info.file_name() +
+						string_trait_t::from_ascii( "\" on line " ) +
 						string_trait_t::to_string( info.line_number() ) +
 						string_trait_t::from_ascii( "." ) );
 
@@ -218,7 +223,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -249,7 +255,8 @@ public:
 					throw exception_t< wstring_trait_t >(
 						wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 						value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-						info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+						info.file_name() +
+						wstring_trait_t::from_ascii( "\" on line " ) +
 						wstring_trait_t::to_string( info.line_number() ) +
 						wstring_trait_t::from_ascii( "." ) );
 
@@ -260,7 +267,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -289,7 +297,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -321,7 +330,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -332,7 +342,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -362,7 +373,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -373,7 +385,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -402,7 +415,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -434,7 +448,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -445,7 +460,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -475,7 +491,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -486,7 +503,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -515,7 +533,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -547,7 +566,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -558,7 +578,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -588,7 +609,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -599,7 +621,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -628,7 +651,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -660,7 +684,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -671,7 +696,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -701,7 +727,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -712,7 +739,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -741,7 +769,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else
@@ -773,7 +802,8 @@ public:
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					string_trait_t::from_ascii( "\" on line " ) +
 					string_trait_t::to_string( info.line_number() ) +
 					string_trait_t::from_ascii( "." ) );
 
@@ -784,7 +814,8 @@ public:
 			throw exception_t< string_trait_t >(
 				string_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + string_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + string_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				string_trait_t::from_ascii( "\" on line " ) +
 				string_trait_t::to_string( info.line_number() ) +
 				string_trait_t::from_ascii( "." ) );
 		}
@@ -814,7 +845,8 @@ public:
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-					info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+					info.file_name() +
+					wstring_trait_t::from_ascii( "\" on line " ) +
 					wstring_trait_t::to_string( info.line_number() ) +
 					wstring_trait_t::from_ascii( "." ) );
 
@@ -825,7 +857,8 @@ public:
 			throw exception_t< wstring_trait_t >(
 				wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + wstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + wstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				wstring_trait_t::from_ascii( "\" on line " ) +
 				wstring_trait_t::to_string( info.line_number() ) +
 				wstring_trait_t::from_ascii( "." ) );
 		}
@@ -854,7 +887,8 @@ public:
 			throw exception_t< qstring_trait_t >(
 				qstring_trait_t::from_ascii( "Invalid value: \"" ) +
 				value + qstring_trait_t::from_ascii( "\". In file \"" ) +
-				info.file_name() + qstring_trait_t::from_ascii( "\" on line " ) +
+				info.file_name() +
+				qstring_trait_t::from_ascii( "\" on line " ) +
 				qstring_trait_t::to_string( info.line_number() ) +
 				qstring_trait_t::from_ascii( "." ) );
 		else

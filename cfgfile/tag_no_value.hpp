@@ -79,7 +79,8 @@ public:
 
 		if( this->is_defined() )
 		{
-			result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
+			result.append( typename Trait::string_t( indent,
+				const_t< Trait >::c_tab ) );
 
 			result.push_back( const_t< Trait >::c_begin_tag );
 			result.append( this->name() );
@@ -91,7 +92,8 @@ public:
 				for( const tag_t< Trait > * tag : this->children() )
 					result.append( tag->print( indent + 1 ) );
 
-				result.append( typename Trait::string_t( indent, const_t< Trait >::c_tab ) );
+				result.append( typename Trait::string_t( indent,
+					const_t< Trait >::c_tab ) );
 			}
 
 			result.push_back( const_t< Trait >::c_end_tag );
@@ -132,7 +134,8 @@ public:
 				throw exception_t< Trait >(
 					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
 					tag->name() +
-					Trait::from_ascii( "\". Where parent is: \"" ) + this->name() +
+					Trait::from_ascii( "\". Where parent is: \"" ) +
+					this->name() +
 					Trait::from_ascii( "\". In file \"" ) + info.file_name() +
 					Trait::from_ascii( "\" on line " ) +
 					Trait::to_string( info.line_number() ) +

@@ -99,8 +99,9 @@ public:
 	{
 		m_column_number -= 1;
 
-		if( ch == const_t< Trait >::c_carriage_return || ch == const_t< Trait >::c_line_feed )
-			m_line_number -= 1;
+		if( ch == const_t< Trait >::c_carriage_return ||
+			ch == const_t< Trait >::c_line_feed )
+				m_line_number -= 1;
 
 		m_returned_char = ch;
 	}
