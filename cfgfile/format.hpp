@@ -206,7 +206,7 @@ public:
 
 			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 ||
+			if( pos != value.length() ||
 				result > std::numeric_limits< unsigned int >::max() )
 					throw exception_t< string_trait_t >(
 						string_trait_t::from_ascii( "Invalid value: \"" ) +
@@ -250,7 +250,7 @@ public:
 
 			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 ||
+			if( pos != value.length() ||
 				result > std::numeric_limits< unsigned int >::max() )
 					throw exception_t< wstring_trait_t >(
 						wstring_trait_t::from_ascii( "Invalid value: \"" ) +
@@ -444,7 +444,7 @@ public:
 
 			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 )
+			if( pos != value.length() )
 				throw exception_t< string_trait_t >(
 					string_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + string_trait_t::from_ascii( "\". In file \"" ) +
@@ -487,7 +487,7 @@ public:
 
 			unsigned long result = std::stoul( value, &pos );
 
-			if( pos != value.length() || result < 0 )
+			if( pos != value.length() )
 				throw exception_t< wstring_trait_t >(
 					wstring_trait_t::from_ascii( "Invalid value: \"" ) +
 					value + wstring_trait_t::from_ascii( "\". In file \"" ) +
