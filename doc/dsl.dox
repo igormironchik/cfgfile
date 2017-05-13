@@ -1,0 +1,110 @@
+
+/*!
+	\page dsl DSL for generation
+
+	To simplify development with cfgfile was implemented cfgfile generator.
+
+	cfgfile generator this is generator of C++ header file from
+	declarative description of the configuration file. By configuration file
+	assumes configuration file in cfgfile format. In generated header will
+	be declared all necessary classes of data and configuration tags.
+
+	For generation generator uses input configuration file in cfgfile format
+	with following format:
+
+	Let's say you need data class with one std::string field then you should write
+	following configuration file, for example:
+
+	\code{.unparsed}
+	{forGeneration ifndefMacro
+	  {namespace NamespaceName
+	    {class NameOfTheClass
+	      {base tagNoValue}
+
+	      {tagScalar
+	        {valueType std::string}
+	        {name fieldWithString}
+	      }
+	    }
+	  }
+	}
+	\endcode
+
+	Each configuration file for generator must has one {forGeneration} tag and all
+	nested tags must be defined in this tag. {forGeneration} tag require string for
+	#ifndef directive (include guard). There you can use {namespace} tag for
+	generation data classes and tags in the specified C++ namespace. Namespaces can
+	be nested. To declare data class and tag you should use {class} tag.
+	{class} tag can has {base} tag to define base class of the configuration tag.
+	{base} tag can has following values: tagNoValue, tagScalar, tagScalarVector.
+	tagNoValue is not mandatory in this case. To define field in data class you can
+	use following tags: {tagScalar} for scalar tag, {tagNoValue} for no-value tag,
+	{tagScalarVector} for vector of scalar values, {tag} for already defined tag,
+	{tagVectorOfTags} for vector of already defined tags.
+
+	{tagScalar}, {tagScalarVector} require C++ type defined in {valueType} tag.
+	In this situation C++ type should be defined as string, that mean that, for
+	example, unsigned int C++ type should be declared as "unsigned int".
+
+	{tag} and {tagVectorOfTags} require class name with namespace if it is exist.
+	Class name should be defined in {valueType} tag.
+	Namespace and class name should be separated with ::
+
+	All of field tags must have {name} tag with name of the field as value. If
+	{base} defined with tagScalar or tagScalarVector then {valueType} and {name}
+	must be defined. {base tagNoValue} is not necessary, if {base} is not defined
+	then tagNoValue will be used as base class.
+
+	Fields can have {required} tag to mark field as required.
+
+	All of field tags can have {minMaxConstraint} or {oneOfConstraint} to define
+	constraint for the field's value. {minMaxConstraint} require two tags
+	{min value} and {max value}, and {oneOfConstraint} require list of values.
+	For example, {minMaxConstraint {min 0} {max 100}},
+	{oneOfConstraint one two three}.
+
+	In the above example will be generated similar to the following header file.
+
+	\code
+	namespace NamespaceName {
+
+	class NameOfTheClass {
+	public:
+	  c_tors();
+	  ~d_tor();
+
+	  //! \return fieldWithQString value.
+	  const std::string & fieldWithString() const;
+	  //! Set fieldWithString value.
+	  void set_fieldWithString( const std::string & value );
+	}; // class NameOfTheClass
+
+
+	//
+	// tag_NameOfTheClass
+	//
+
+	template< typename Trait >
+	class tag_NameOfTheClass
+	  :  public cfgfile::tag_no_value_t< Trait >
+	{
+	public:
+	  c_tors();
+	  ~d_tor();
+
+	  //! \return Configuration.
+	  NameOfTheClass get_cfg() const;
+	}; // class tag_NameOfTheClass
+
+	} // namespace NamespaceName
+	\endcode
+
+	Additionally you can use custom data structures and tags in the generator.
+	For this you can use {globalInclude string} and {relativeInclude string}
+	tags. When using such includes in C++ code will be added corresponding
+	include directives. And checking of classes' and namespaces' names will be
+	turned off. And one more restriction is that that class's name for tag
+	must be equal to tag_ + Name, i.e. if data structure names Data then class for
+	tag must be named tag_Data and be placed in the same namespace as Data class/
+	structure.
+*/
