@@ -1,0 +1,113 @@
+
+/*!
+	\mainpage
+
+	cfgfile - is a header-only library for reading/saving configuration files.
+	The main approach of cfgfile that you define root tag of configuration with
+	all nececcary child nested tags. Once you define hierarchy of tags that
+	describes the schema of your configuration you can read and save configuration
+	files from/to any supported stream. cfgfile supports std::istream,
+	std::wistream and QTextStream for reading. Tag in the schema is a class
+	derived from cfgfile::tag_t< Trait > or any ready to use derived classes.
+	To simplify a life you can use generator to generate C++ classed of data
+	and tags wtih DSL.
+
+	Let's say you have data structure representing configuration of your
+	application.
+
+	\code
+	struct data_t {
+	  std::string m_value;
+	};
+	\endcode
+
+	And you want to save this structure in the following format.
+
+	\code
+	{data
+		{value <string>}
+	}
+	\endcode
+
+	Then you can define tag for cfgfile to read and save such configuration file.
+
+	\code
+	template< typename Trait >
+	class tag_data_t
+	  :  public cfgfile::tag_no_value_t< Trait >
+	{
+	public:
+	  tag_data_t()
+	    :  cfgfile::tag_no_value_t< Trait > ( "data", true )
+		,  m_value( *this, "value", true )
+	  {}
+
+	  tag_data_t( const data_t & cfg )
+	    :  cfgfile::tag_no_value_t< Trait > ( "data", true )
+	    ,  m_value( *this, "value", true )
+	  {
+	    m_value.set_value( cfg.m_value );
+
+	    set_defined();
+	  }
+
+	  data_t cfg() const
+	  {
+	    data_t d;
+		d.m_value = m_value.value();
+
+	    return d;
+	  }
+
+	private:
+	  cfgfile::tag_scalar_t< std::string, Trait > m_value;
+	};
+	\endcode
+
+	Once you defined data structure and tag you can read and write configuration.
+
+	\code
+	data_t cfg;
+	cfg.m_value = "value";
+
+	std::ofstream stream( "conf.cfg" );
+
+	tag_data_t< cfgfile::string_trait_t > tag( cfg );
+
+	try {
+	  cfgfile::write_cfgfile( tag, stream );
+
+	  stream.close();
+	}
+	catch( const cfgfile::exception_t< cfgfile::string_trait_t > & x )
+	{
+	  stream.close();
+
+	  std::cout << x.desc() << std::endl;
+	}
+	\endcode
+
+	And
+
+	\code
+	data_t cfg;
+
+	tag_data_t< cfgfile::string_trait_t > tag;
+
+	std::ifstream stream( "conf.cfg" );
+
+	try {
+	  cfgfile::read_cfgfile( tag, stream, "conf.cfg" );
+
+	  stream.close();
+
+	  cfg = tag.cfg();
+	}
+	catch( const cfgfile::exception_t< cfgfile::string_trait_t > & x )
+	{
+	  stream.close();
+
+	  std::cout << x.desc() << std::endl;
+	}
+	\endcode
+*/
