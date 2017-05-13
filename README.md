@@ -189,18 +189,22 @@ configuration. Let's see:
             
 ```
 Configuration cfg;
+
+std::ifstream stream( "fileName.cfg" );
             
 try {
   TagConfiguration readTag;
-
-  std::ifstream stream( "fileName.cfg" );
   
   cfgfile::read_cfgfile( readTag, stream, "fileName.cfg" );
+
+  stream.close();
   
   cfg = readTag.cfg();
 }
 catch( const cfgfile::exception_t & x )
 {
+  stream.close();
+
   std::cout << x.desc() << std::endl;
 }
 ```
@@ -209,16 +213,20 @@ And:
             
 ```
 Configuration cfg( "value" );
+
+std::ofstream stream( "fileName.cfg" );
             
 try {
   TagConfiguration writeTag( cfg );
-
-  std::ofstream stream( "fileName.cfg" );
   
   cfgfile::write_cfgfile( writeTag, stream );
+
+  stream.close();
 }
 catch( const cfgfile::exception_t & x )
 {
+  stream.close();
+
   std::cout << x.desc(); << std::endl
 }
 ```
