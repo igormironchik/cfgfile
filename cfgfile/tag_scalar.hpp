@@ -467,7 +467,7 @@ private:
 // tag_scalar_t< Trait::string_t >
 //
 
-//! Tag with bool value.
+//! Tag with string value.
 template< typename Trait >
 class tag_scalar_t< typename Trait::string_t, Trait >
 	:	public tag_t< Trait >
@@ -717,7 +717,7 @@ private:
 // tag_scalar_t< QString >
 //
 
-//! Tag with bool value.
+//! Tag with QString value.
 template< typename Trait >
 class tag_scalar_t< QString, Trait >
 	:	public tag_t< Trait >
