@@ -4,13 +4,13 @@
 
 	cfgfile - is a header-only library for reading/saving configuration files.
 	The main approach of cfgfile that you define root tag of configuration with
-	all nececcary child nested tags. Once you define hierarchy of tags that
+	all neseccary child nested tags. Once you define hierarchy of tags that
 	describes the schema of your configuration you can read and save configuration
 	files from/to any supported stream. cfgfile supports std::istream,
 	std::wistream and QTextStream for reading. Tag in the schema is a class
 	derived from cfgfile::tag_t< Trait > or any ready to use derived classes.
 	To simplify a life you can use generator to generate C++ classed of data
-	and tags wtih DSL.
+	and tags with DSL.
 
 	Let's say you have data structure representing configuration of your
 	application.
