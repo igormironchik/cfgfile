@@ -16,3 +16,7 @@ enable_testing()
 add_test( NAME test.bool_scalar
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/BoolScalar/test.bool_scalar
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/BoolScalar )
+
+add_test( NAME test.complex
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Complex/test.complex
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Complex )
