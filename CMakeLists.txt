@@ -20,3 +20,19 @@ add_test( NAME test.bool_scalar
 add_test( NAME test.complex
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Complex/test.complex
 	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Complex )
+
+add_test( NAME test.format
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Format/test.format
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Format )
+
+add_test( NAME test.generator
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Generator/test.generator
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Generator )
+
+add_test( NAME test.lexical_analyzer
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/LexicalAnalyzer/test.lexical_analyzer
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/LexicalAnalyzer )
+
+add_test( NAME test.parser
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Parser/test.parser
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/Parser )
