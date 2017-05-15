@@ -9,3 +9,10 @@ project( cfgfile )
 
 add_subdirectory( generator )
 add_subdirectory( example )
+add_subdirectory( tests )
+
+enable_testing()
+
+add_test( NAME test.bool_scalar
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/BoolScalar/test.bool_scalar
+	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tests/auto/BoolScalar )

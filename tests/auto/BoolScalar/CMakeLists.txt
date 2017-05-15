@@ -1,0 +1,22 @@
+
+project( test.bool_scalar )
+
+set( SRC main.cpp
+	cfg.hpp
+	cfg.cpp )
+
+file( COPY all_is_ok_with_1_and_0.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY all_is_ok_with_on_and_off.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY all_is_ok_with_true_and_false.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY false_instead_of_true.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY invalid_value.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+    
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/../../.. )
+
+add_executable( test.bool_scalar ${SRC} )
