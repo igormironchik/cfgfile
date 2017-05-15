@@ -72,9 +72,9 @@
 
 	std::ofstream stream( "conf.cfg" );
 
-	tag_data_t< cfgfile::string_trait_t > tag( cfg );
-
 	try {
+	  tag_data_t< cfgfile::string_trait_t > tag( cfg );
+
 	  cfgfile::write_cfgfile( tag, stream );
 
 	  stream.close();
@@ -92,11 +92,11 @@
 	\code
 	data_t cfg;
 
-	tag_data_t< cfgfile::string_trait_t > tag;
-
 	std::ifstream stream( "conf.cfg" );
 
 	try {
+	  tag_data_t< cfgfile::string_trait_t > tag;
+
 	  cfgfile::read_cfgfile( tag, stream, "conf.cfg" );
 
 	  stream.close();

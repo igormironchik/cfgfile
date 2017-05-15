@@ -40,6 +40,7 @@
 // cfgfile include.
 #include "parser_info.hpp"
 #include "types.hpp"
+#include "exceptions.hpp"
 
 // C++ include.
 #include <list>
@@ -91,6 +92,20 @@ public:
     //! Add child tag.
     void add_child( tag_t< Trait > & tag )
 	{
+		if( std::find_if( m_child_tags.cbegin(), m_child_tags.cend(),
+			[ &tag ] ( const tag_t< Trait > * t )
+			{
+				return ( tag.name() == t->name() );
+			} ) != m_child_tags.cend() )
+		{
+			throw exception_t< Trait > (
+				Trait::from_ascii( "Tag with name \"" ) +
+				tag.name() +
+				Trait::from_ascii( "\" already exists in parent tag \"" ) +
+				this->name() +
+				Trait::from_ascii( "\"." ) );
+		}
+
 		if( std::find( m_child_tags.cbegin(), m_child_tags.cend(), &tag ) ==
 			m_child_tags.cend() )
 		{
