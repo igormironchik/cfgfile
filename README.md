@@ -367,4 +367,3 @@ generate_cfg.commands = $$shell_path( $$absolute_path( path/to/cfgfile.generator
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 ```
-
