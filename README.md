@@ -34,6 +34,17 @@ run qmake and then make, as usually.
 To build with Qt support define CFGFILE_QT_SUPPORT. To build with XML support
 define CFGFILE_QT_SUPPORT and CFGFILE_XML_SUPPORT. XML supported only with Qt.
 
+# Run tests
+
+With CMake just run runtests.rb in the build directory. This script will be
+copied there during the build process.
+
+With QMake use QtCreator IDE to run tests manually. You can use runtests.rb too
+but you should copy the script manually into the build directory. And on Windows
+executables place in debug/release subfolders whereas *.cfg files of tests
+copy into the build directory so you have to copy *.cfg files by hands into
+the debug/release subfolders.
+
 # About
 
 Configuration file format is a set of tags, which are surrounded by curly

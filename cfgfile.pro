@@ -6,3 +6,5 @@ SUBDIRS = generator \
 	tests
 
 example.depends = generator
+
+OTHER_FILES = runtests.rb
