@@ -102,7 +102,7 @@ I.e. we want to have parent tag {configuration} and child tag {ourCoolValue}
 that will have one value of type std::string. It's very simple to define such
 configuration with cfgfile. Let's see:
             
-```
+```cpp
 #include <cfgfile/all.hpp>
 
 //
@@ -198,7 +198,7 @@ check if tag was defined.
 When we have data class and tag class, so it's very simple to read and write
 configuration. Let's see:
             
-```
+```cpp
 Configuration cfg;
 
 std::ifstream stream( "fileName.cfg" );
@@ -222,7 +222,7 @@ catch( const cfgfile::exception_t<> & x )
 
 And:
             
-```
+```cpp
 Configuration cfg( "value" );
 
 std::ofstream stream( "fileName.cfg" );
@@ -307,7 +307,7 @@ For example, {minMaxConstraint {min 0} {max 100}},
 
 In the above example will be generated similar to the following header file.
 
-```
+```cpp
 namespace NamespaceName {
 
 //
