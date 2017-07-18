@@ -20,9 +20,18 @@ end
 tests = find_tests( "tests" )
 
 tests.each { |t|
+
+	stop = false
+
 	Dir.chdir( File.dirname( t ) ) {
 		if !system( t )
+			stop = true
+
 			break
 		end
 	}
+
+	if stop
+		break
+	end
 }
