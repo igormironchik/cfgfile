@@ -36,7 +36,7 @@ define CFGFILE_QT_SUPPORT and CFGFILE_XML_SUPPORT. XML supported only with Qt.
 
 # Run tests
 
-With CMake just run runtests.rb in the build directory. This script will be
+With CMake just run runtests.rb or ctest in the build directory. This script will be
 copied there during the build process.
 
 With QMake use QtCreator IDE to run tests manually. You can use runtests.rb too
