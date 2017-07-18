@@ -212,7 +212,7 @@ try {
   
   cfg = readTag.cfg();
 }
-catch( const cfgfile::exception_t & x )
+catch( const cfgfile::exception_t<> & x )
 {
   stream.close();
 
@@ -234,7 +234,7 @@ try {
 
   stream.close();
 }
-catch( const cfgfile::exception_t & x )
+catch( const cfgfile::exception_t<> & x )
 {
   stream.close();
 

@@ -7,4 +7,5 @@ SUBDIRS = generator \
 
 example.depends = generator
 
-OTHER_FILES = runtests.rb
+OTHER_FILES = runtests.rb \
+	README.md
