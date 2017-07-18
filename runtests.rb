@@ -26,8 +26,6 @@ tests.each { |t|
 	Dir.chdir( File.dirname( t ) ) {
 		if !system( t )
 			stop = true
-
-			break
 		end
 	}
 
