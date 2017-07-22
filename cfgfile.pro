@@ -8,4 +8,6 @@ SUBDIRS = generator \
 example.depends = generator
 
 OTHER_FILES = runtests.rb \
-	README.md
+	README.md \
+	doc/dsl.dox \
+	doc/mainpage.dox
