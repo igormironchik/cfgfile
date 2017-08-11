@@ -68,15 +68,11 @@ struct Configuration {
 		Pair();
 		Pair( const std::string & stringValue, int intValue );
 
-		Pair & operator = ( const Pair & other );
-
 		std::string m_stringValue;
 		int m_intValue;
 	}; // struct Pair
 
 	Configuration();
-
-	Configuration & operator = ( const Configuration & other );
 
 	std::string m_stringValue;
 	std::vector< std::string > m_listOfStringValues;

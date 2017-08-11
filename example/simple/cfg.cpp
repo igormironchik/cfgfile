@@ -47,18 +47,6 @@ configuration_t::pair_t::pair_t( const std::string & stringValue, int intValue )
 {
 }
 
-configuration_t::pair_t &
-configuration_t::pair_t::operator = ( const configuration_t::pair_t & other )
-{
-	if( &other != this )
-	{
-		m_stringValue == other.m_stringValue;
-		m_intValue = other.m_intValue;
-	}
-
-	return *this;
-}
-
 
 //
 // configuration_t
@@ -68,20 +56,6 @@ configuration_t::pair_t::operator = ( const configuration_t::pair_t & other )
 configuration_t::configuration_t()
 	:	m_intValue( 0 )
 {
-}
-
-configuration_t &
-configuration_t::operator = ( const configuration_t & other )
-{
-	if( this != &other )
-	{
-		m_stringValue = other.m_stringValue;
-		m_listOfStringValues = other.m_listOfStringValues;
-		m_intValue = other.m_intValue;
-		m_vectorOfTags = other.m_vectorOfTags;
-	}
-
-	return *this;
 }
 
 

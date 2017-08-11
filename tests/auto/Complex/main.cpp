@@ -97,7 +97,7 @@ TEST( Complex, testIncosistencyToStringConstraint )
 	try {
 		loadConfig( "inconsistency_to_string_constraint.cfg" );
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
@@ -113,7 +113,7 @@ TEST( Complex, testIncosistencyToIntConstraint )
 	try {
 		loadConfig( "inconsistency_to_int_constraint.cfg" );
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
@@ -129,7 +129,7 @@ TEST( Complex, testUndefinedChildMandatoryTag )
 	try {
 		loadConfig( "undefined_child_mandatory_tag.cfg" );
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
@@ -145,7 +145,7 @@ TEST( Complex, testUndefinedMandatoryTag )
 	try {
 		loadConfig( "undefined_mandatory_tag.cfg" );
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
@@ -161,7 +161,7 @@ TEST( Complex, testEmptyFile )
 	try {
 		loadConfig( "empty_file.cfg" );
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{

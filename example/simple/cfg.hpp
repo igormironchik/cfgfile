@@ -67,15 +67,11 @@ struct configuration_t {
 		pair_t();
 		pair_t( const std::string & stringValue, int intValue );
 
-		pair_t & operator = ( const pair_t & other );
-
 		std::string m_stringValue;
 		int m_intValue;
 	}; // struct Pair
 
 	configuration_t();
-
-	configuration_t & operator = ( const configuration_t & other );
 
 	std::string m_stringValue;
 	std::vector< std::string > m_listOfStringValues;

@@ -43,18 +43,6 @@ Configuration::Configuration()
 {
 }
 
-Configuration &
-Configuration::operator = ( const Configuration & other )
-{
-	if( this != &other )
-	{
-		m_withTrue = other.m_withTrue;
-		m_withFalse = other.m_withFalse;
-	}
-
-	return *this;
-}
-
 
 //
 // TagConfiguration

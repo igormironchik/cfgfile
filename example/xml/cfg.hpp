@@ -70,15 +70,11 @@ struct Configuration {
 		Pair();
 		Pair( const QString & stringValue, int intValue );
 
-		Pair & operator = ( const Pair & other );
-
 		QString m_stringValue;
 		int m_intValue;
 	}; // struct Pair
 
 	Configuration();
-
-	Configuration & operator = ( const Configuration & other );
 
 	QString m_stringValue;
 	std::vector< QString > m_listOfStringValues;

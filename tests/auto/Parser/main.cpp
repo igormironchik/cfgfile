@@ -42,7 +42,7 @@ class ThirdTag
 	:	public cfgfile::tag_t<>
 {
 public:
-	ThirdTag( tag_t<> & owner )
+	explicit ThirdTag( tag_t<> & owner )
 		:	cfgfile::tag_t<>( owner, "thirdTag", false )
 		,	m_started( false )
 		,	m_finished( false )
@@ -99,7 +99,7 @@ class SecondTag
 	:	public cfgfile::tag_t<>
 {
 public:
-	SecondTag( tag_t<> & owner )
+	explicit SecondTag( tag_t<> & owner )
 		:	cfgfile::tag_t<>( owner, "secondTag", false )
 		,	m_started( false )
 		,	m_finished( false )
@@ -309,7 +309,7 @@ TEST( Parser, test_unexpectedStartCurlBrace )
 		return;
 	}
 
-	CHECK_CONDITION( true == false );
+	CHECK_CONDITION( false );
 } // test_unexpectedStartCurlBrace
 
 TEST( Parser, test_unexpectedTagName1 )
@@ -335,7 +335,7 @@ TEST( Parser, test_unexpectedTagName1 )
 		return;
 	}
 
-	CHECK_CONDITION( true == false );
+	CHECK_CONDITION( false );
 } // test_unexpectedTagName1
 
 TEST( Parser, test_unexpectedTagName2 )
@@ -364,7 +364,7 @@ TEST( Parser, test_unexpectedTagName2 )
 		return;
 	}
 
-	CHECK_CONDITION( true == false );
+	CHECK_CONDITION( false );
 } // test_unexpectedTagName2
 
 TEST( Parser, test_unexpectedEndOfFile )
@@ -390,7 +390,7 @@ TEST( Parser, test_unexpectedEndOfFile )
 		return;
 	}
 
-	CHECK_CONDITION( true == false );
+	CHECK_CONDITION( false );
 } // test_unexpectedEndOfFile
 
 

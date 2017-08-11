@@ -52,8 +52,6 @@
 struct Configuration {
 	Configuration();
 
-	Configuration & operator = ( const Configuration & other );
-
 	bool m_withTrue;
 	bool m_withFalse;
 }; // class Configuration

@@ -128,7 +128,7 @@ TEST( LexicalAnalyzer, test_wrongBackSlahSequence )
 	try {
 		cfgfile::lexeme_t<> lex3 = analyzer.next_lexeme();
 
-		CHECK_CONDITION( true == false );
+		CHECK_CONDITION( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{

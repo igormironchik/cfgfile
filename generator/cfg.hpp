@@ -191,9 +191,6 @@ public:
 	field_t();
 	~field_t();
 
-	field_t( const field_t & other );
-	field_t & operator = ( const field_t & other );
-
 	bool operator == ( const std::string & n ) const;
 
 	//! \return Type of the field.

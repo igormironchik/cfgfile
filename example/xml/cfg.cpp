@@ -50,18 +50,6 @@ Configuration::Pair::Pair( const QString & stringValue, int intValue )
 {
 }
 
-Configuration::Pair &
-Configuration::Pair::operator = ( const Configuration::Pair & other )
-{
-	if( &other != this )
-	{
-		m_stringValue == other.m_stringValue;
-		m_intValue = other.m_intValue;
-	}
-
-	return *this;
-}
-
 
 //
 // Configuration
@@ -71,20 +59,6 @@ Configuration::Pair::operator = ( const Configuration::Pair & other )
 Configuration::Configuration()
 	:	m_intValue( 0 )
 {
-}
-
-Configuration &
-Configuration::operator = ( const Configuration & other )
-{
-	if( this != &other )
-	{
-		m_stringValue = other.m_stringValue;
-		m_listOfStringValues = other.m_listOfStringValues;
-		m_intValue = other.m_intValue;
-		m_vectorOfTags = other.m_vectorOfTags;
-	}
-
-	return *this;
 }
 
 

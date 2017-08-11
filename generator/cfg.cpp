@@ -120,7 +120,8 @@ one_of_constraint_t::values() const
 //
 
 field_t::field_t()
-	:	m_line_number( -1 )
+	:	m_type( unknown_field_type )
+	,	m_line_number( -1 )
 	,	m_column_number( -1 )
 	,	m_is_required( false )
 	,	m_is_base( false )
@@ -129,38 +130,6 @@ field_t::field_t()
 
 field_t::~field_t()
 {
-}
-
-field_t::field_t( const field_t & other )
-	:	m_type( other.type() )
-	,	m_value_type( other.value_type() )
-	,	m_name( other.name() )
-	,	m_constraint( other.constraint() )
-	,	m_line_number( other.line_number() )
-	,	m_column_number( other.column_number() )
-	,	m_is_required( other.is_required() )
-	,	m_default_value( other.default_value() )
-	,	m_is_base( other.is_base() )
-{
-}
-
-field_t &
-field_t::operator = ( const field_t & other )
-{
-	if( this != & other )
-	{
-		m_type = other.type();
-		m_value_type = other.value_type();
-		m_name = other.name();
-		m_constraint = other.constraint();
-		m_line_number = other.line_number();
-		m_column_number = other.column_number();
-		m_is_required = other.is_required();
-		m_default_value = other.default_value();
-		m_is_base = other.is_base();
-	}
-
-	return *this;
 }
 
 bool
@@ -310,6 +279,7 @@ class_t::class_t( const class_t & other )
 	,	m_line_number( other.line_number() )
 	,	m_column_number( other.column_number() )
 	,	m_index( other.index() )
+	,	m_parent( nullptr )
 {
 }
 
@@ -326,6 +296,7 @@ class_t::operator = ( const class_t & other )
 		m_line_number = other.line_number();
 		m_column_number = other.column_number();
 		m_index = other.index();
+		m_parent = nullptr;
 	}
 
 	return *this;
@@ -503,6 +474,7 @@ namespace_t::namespace_t( const namespace_t & other )
 	,	m_classes( other.classes() )
 	,	m_line_number( other.line_number() )
 	,	m_column_number( other.column_number() )
+	,	m_parent( nullptr )
 {
 }
 
@@ -516,6 +488,7 @@ namespace_t::operator = ( const namespace_t & other )
 		m_classes = other.classes();
 		m_line_number = other.line_number();
 		m_column_number = other.column_number();
+		m_parent = nullptr;
 	}
 
 	return *this;
