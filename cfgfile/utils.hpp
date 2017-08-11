@@ -70,7 +70,7 @@ namespace details {
 template< typename Trait = string_trait_t >
 class determine_format_t final {
 public:
-	determine_format_t( typename Trait::istream_t & stream )
+	explicit determine_format_t( typename Trait::istream_t & stream )
 		:	m_stream( stream )
 	{
 	}
