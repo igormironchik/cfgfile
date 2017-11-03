@@ -35,6 +35,6 @@ script:
   - cd ..
   - |
     coveralls --build-root build --gcov-options '\-lp' \
-      -e build/CMakeMakefiles -e build/tests/auto/Generator/test.hpp \
+      -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
       -e build/example -e Args -e doc -e example \
       -e generator -e UnitTest -e tests
