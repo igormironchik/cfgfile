@@ -15,7 +15,7 @@ file( COPY test.cfg
 
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.hpp
 	PRE_BUILD
-	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../../generator/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i test.cfgfile -o ${CMAKE_CURRENT_BINARY_DIR}/test.hpp
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../../generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i test.cfgfile -o ${CMAKE_CURRENT_BINARY_DIR}/test.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
     

@@ -6,7 +6,7 @@ set( SRC main.cpp
 
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/example.hpp
 	PRE_BUILD
-	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../generator/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i example.cfgfile -o ${CMAKE_CURRENT_BINARY_DIR}/example.hpp
+	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i example.cfgfile -o ${CMAKE_CURRENT_BINARY_DIR}/example.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
     
