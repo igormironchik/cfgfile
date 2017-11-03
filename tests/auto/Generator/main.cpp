@@ -62,6 +62,30 @@ cfg::vector_t load_config( const std::string & file_name )
 	return read_tag.get_cfg();
 }
 
+const std::string c_dummy_file_name = "dummy.cfg";
+
+void write_config( const cfg::vector_t & cfg )
+{
+	cfg::tag_vector_t< cfgfile::string_trait_t > write_tag( cfg );
+
+	std::ofstream file( c_dummy_file_name );
+
+	try {
+		if( file.good() )
+		{
+			cfgfile::write_cfgfile( write_tag, file );
+
+			file.close();
+		}
+	}
+	catch( const cfgfile::exception_t<> & )
+	{
+		file.close();
+
+		throw;
+	}
+}
+
 void check_config( const cfg::vector_t & cfg )
 {
 	CHECK_CONDITION( cfg.vector().size() == 1 )
@@ -76,7 +100,15 @@ void check_config( const cfg::vector_t & cfg )
 
 TEST( Generator, testAllIsOk )
 {
-	check_config( load_config( "test.cfg" ) );
+	auto cfg = load_config( "test.cfg" );
+
+	check_config( cfg );
+
+	write_config( cfg );
+
+	cfg = load_config( c_dummy_file_name );
+
+	check_config( cfg );
 } // testAllIsOk
 
 int main()
