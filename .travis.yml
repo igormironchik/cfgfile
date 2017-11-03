@@ -1,0 +1,39 @@
+
+sudo: required
+dist: trusty
+
+language:
+  - cpp
+
+compiler:
+  - gcc
+
+before_install:
+  - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+  - sudo apt-get update -qq
+  - pip install --user cpp-coveralls
+
+install:
+  - sudo apt-get -y install qt55base
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - cmake
+      - g++-4.9
+
+script:
+  - export CXX="g++-4.9" CC="gcc-4.9"
+  - source /opt/qt55/bin/qt55-env.sh
+  - mkdir build
+  - cd build
+  - cmake -DENABLE_COVERAGE=ON ..
+  - make
+  - ctest
+  - cd ..
+  - |
+    coveralls --build-root build --gcov-options '\-lp' \
+      -e build/CMakeFiles -e Args -e doc -e example \
+      -e generator -e UnitTest -e tests
