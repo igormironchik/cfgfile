@@ -5,5 +5,6 @@ SUBDIRS += BoolScalar \
            LexicalAnalyzer \
            Parser \
 	   Format \
-	   Generator
+	   Generator \
+	   InputStream
            
