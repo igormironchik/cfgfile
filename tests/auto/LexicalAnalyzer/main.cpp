@@ -291,6 +291,32 @@ TEST( LexicalAnalyzer, test_backSlash2 )
 	}
 }
 
+TEST( LexicalAnalyzer, test_unfinishedQuoted )
+{
+	std::stringstream stream( "{cfg \"" );
+
+	cfgfile::input_stream_t<> input( "test_unfinishedQuoted", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	try {
+		analyzer.next_lexeme();
+
+		CHECK_CONDITION( false );
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unfinished quoted lexeme. "
+			"End of file riched. In file \"test_unfinishedQuoted\" on line 1." )
+	}
+}
+
 TEST( LexicalAnalyzer, test_startEndTagInString )
 {
 	std::stringstream stream( "{cfg \"a{}\"}" );
