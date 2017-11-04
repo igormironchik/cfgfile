@@ -12,3 +12,5 @@ OTHER_FILES = runtests.rb \
 	doc/dsl.dox \
 	doc/mainpage.dox \
 	.travis.yml
+
+include( cfgfile/cfgfile.pri )

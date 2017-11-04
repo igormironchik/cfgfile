@@ -65,7 +65,7 @@ TEST( LexicalAnalyzer, test_quotedLexeme1 )
 
 TEST( LexicalAnalyzer, test_quotedLexeme2 )
 {
-	std::stringstream stream( " \r\n\t {firstTag\"lexeme\"}" );
+	std::stringstream stream( " \r\n\t {firstTag\"lex eme|\"}" );
 
 	cfgfile::input_stream_t<> input( "test_quotedLexeme2", stream );
 	cfgfile::lexical_analyzer_t<> analyzer( input );
@@ -79,12 +79,39 @@ TEST( LexicalAnalyzer, test_quotedLexeme2 )
 
 	cfgfile::lexeme_t<> lex3 = analyzer.next_lexeme();
 	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
-	CHECK_CONDITION( lex3.value() == "lexeme" );
+	CHECK_CONDITION( lex3.value() == "lex eme|" );
 
 	cfgfile::lexeme_t<> lex4 = analyzer.next_lexeme();
 	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
 
 	CHECK_CONDITION( input.at_end() == true );
+}
+
+TEST( LexicalAnalyzer, test_quotedLexeme3 )
+{
+	std::stringstream stream( " \r\n\t {firstTag\"\n\"}" );
+
+	cfgfile::input_stream_t<> input( "test_quotedLexeme2", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	cfgfile::lexeme_t<> lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	cfgfile::lexeme_t<> lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "firstTag" );
+
+	try {
+		analyzer.next_lexeme();
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unfinished quoted lexeme. "
+			"New line detected. In file \"test_quotedLexeme2"
+			"\" on line 2." )
+	}
 }
 
 TEST( LexicalAnalyzer, test_backSlahSequence )
@@ -213,6 +240,144 @@ TEST( LexicalAnalyzer, test_multiLineComment )
 
 	cfgfile::lexeme_t<> lex8 = analyzer.next_lexeme();
 	CHECK_CONDITION( lex8.type() == cfgfile::lexeme_type_t::finish );
+}
+
+TEST( LexicalAnalyzer, test_backSlash )
+{
+	std::stringstream stream( "{cfg \\n}" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	auto lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "\\n" );
+
+	auto lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
+}
+
+TEST( LexicalAnalyzer, test_backSlash2 )
+{
+	std::stringstream stream( "{cfg \"\\" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash2", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	try {
+		analyzer.next_lexeme();
+
+		CHECK_CONDITION( false );
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unexpected end of file. "
+			"Unfinished back slash sequence. In file \"test_backSlash2"
+			"\" on line 1." )
+	}
+}
+
+TEST( LexicalAnalyzer, test_startEndTagInString )
+{
+	std::stringstream stream( "{cfg \"a{}\"}" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	auto lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "a{}" );
+
+	auto lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::finish );
+}
+
+TEST( LexicalAnalyzer, test_startTag )
+{
+	std::stringstream stream( "{cfg a{}" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	auto lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "a" );
+
+	auto lex4 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex5 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex5.type() == cfgfile::lexeme_type_t::finish );
+}
+
+TEST( LexicalAnalyzer, test_vertBar )
+{
+	std::stringstream stream( "{cfg |a" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	auto lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "|a" );
+}
+
+TEST( LexicalAnalyzer, test_vertBar2 )
+{
+	std::stringstream stream( "{cfg |" );
+
+	cfgfile::input_stream_t<> input( "test_backSlash", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex2.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex2.value() == "cfg" );
+
+	auto lex3 = analyzer.next_lexeme();
+	CHECK_CONDITION( lex3.type() == cfgfile::lexeme_type_t::string );
+	CHECK_CONDITION( lex3.value() == "|" );
+
+	auto lex4 = analyzer.next_lexeme();
+
+	CHECK_CONDITION( lex4.type() == cfgfile::lexeme_type_t::null )
 }
 
 int main()

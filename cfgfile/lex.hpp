@@ -230,36 +230,41 @@ public:
 					result.push_back( ch );
 				else
 				{
-					typename Trait::char_t next_char = m_stream.get();
-
-					if( next_char == const_t< Trait >::c_vertical_bar )
+					if( !m_stream.at_end() )
 					{
-						skip_comment = true;
+						typename Trait::char_t next_char = m_stream.get();
 
-						skip_one_line_comment();
+						if( next_char == const_t< Trait >::c_vertical_bar )
+						{
+							skip_comment = true;
 
-						if( first_symbol )
-							skip_spaces();
+							skip_one_line_comment();
+
+							if( first_symbol )
+								skip_spaces();
+							else
+								break;
+						}
+						else if( next_char == const_t< Trait >::c_sharp )
+						{
+							skip_comment = true;
+
+							skip_multi_line_comment();
+
+							if( first_symbol )
+								skip_spaces();
+							else
+								break;
+						}
 						else
-							break;
-					}
-					else if( next_char == const_t< Trait >::c_sharp )
-					{
-						skip_comment = true;
+						{
+							result.push_back( ch );
 
-						skip_multi_line_comment();
-
-						if( first_symbol )
-							skip_spaces();
-						else
-							break;
+							m_stream.put_back( next_char );
+						}
 					}
 					else
-					{
 						result.push_back( ch );
-
-						m_stream.put_back( next_char );
-					}
 				}
 			}
 			else
