@@ -393,6 +393,56 @@ TEST( Parser, test_unexpectedEndOfFile )
 	CHECK_CONDITION( false );
 } // test_unexpectedEndOfFile
 
+class empty_tag_t
+	:	public cfgfile::tag_t<>
+{
+public:
+	empty_tag_t( const std::string & name, bool is_mandatory = false )
+		:	cfgfile::tag_t<> ( name, is_mandatory )
+	{
+	}
+
+	virtual ~empty_tag_t()
+	{
+	}
+
+	std::string print( int indent = 0 ) const override
+	{
+		(void) indent;
+	}
+
+	void on_finish( const cfgfile::parser_info_t<> & ) override
+	{
+	}
+
+	void on_string( const cfgfile::parser_info_t<> &,
+		const typename std::string & ) override
+	{
+	}
+};
+
+TEST( Parser, test_undefinedFirstMandatoryTag )
+{
+	std::stringstream stream( "{cfg}" );
+
+	cfgfile::input_stream_t<> input( "test_undefinedFirstMandatoryTag", stream );
+
+	empty_tag_t tag( "cfg", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_undefinedFirstMandatoryTag" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() ==
+			"Undefined mandatory tag: \"cfg\"." );
+	}
+} // test_unexpectedEndOfFile
+
 
 int main()
 {
