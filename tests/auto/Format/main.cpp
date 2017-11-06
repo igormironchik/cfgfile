@@ -386,6 +386,21 @@ TEST( Format, Failed )
 			exception_t< string_trait_t > );
 } // Failed
 
+TEST( Format, test_traits )
+{
+	CHECK_CONDITION( wstring_trait_t::from_ascii( "abc" ) ==
+		L"abc" )
+
+	CHECK_CONDITION( qstring_wrapper_t( "str1" ) + qstring_wrapper_t( "str2" ) ==
+		qstring_wrapper_t( "str1str2" ) )
+
+	CHECK_CONDITION( qstring_trait_t::to_string( 123 ) ==
+		qstring_wrapper_t( "123" ) )
+
+	CHECK_CONDITION( qstring_trait_t::from_ascii( "abc" ) ==
+		qstring_wrapper_t( "abc" ) )
+}
+
 int main()
 {
 	RUN_ALL_TESTS()
