@@ -580,6 +580,22 @@ TEST( Parser, test_tagNoValueWithValue )
 	}
 }
 
+TEST( Parser, test_tagRedefinition )
+{
+	try {
+		cfgfile::tag_no_value_t<> tag( "cfg" );
+		cfgfile::tag_no_value_t<> c1( tag, "c" );
+		cfgfile::tag_no_value_t<> c2( tag, "c" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Tag with name \"c\" "
+			"already exists in parent tag \"cfg\"." )
+	}
+}
+
 
 int main()
 {
