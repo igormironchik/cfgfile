@@ -614,6 +614,17 @@ TEST( Parser, test_tag_scalar_vector_set_value )
 	CHECK_CONDITION( tag.values().at( 0 ) == 100 )
 	CHECK_CONDITION( tag.values().at( 1 ) == 200 )
 	CHECK_CONDITION( tag.values().at( 2 ) == 300 )
+
+	try {
+		tag.set_value( 400 );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Invalid value: \"400\". "
+			"Value must match to the constraint in tag \"cfg\"." )
+	}
 }
 
 TEST( Parser, test_tag_scalar_vector_undefined_child )
