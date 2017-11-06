@@ -103,7 +103,7 @@ void check_config( const cfg::vector_t & cfg )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar().string_field() == "one" )
 
 	CHECK_CONDITION( cfg.vector().at( 0 ).string_scalar().string_scalar() == "string" )
-	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().string_field() == "one" )
+	CHECK_CONDITION( cfg.vector().at( 0 ).string_scalar().string_field().empty() )
 
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().size() == 3 )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 0 ) == 100 )
