@@ -4,6 +4,49 @@
 	{relativeInclude custom.hpp}
 
 	{namespace cfg
+
+		{class bool_scalar_t
+			{base tagScalar
+				{valueType bool}
+				{name bool_scalar}
+			}
+
+			{tagScalar
+				{valueType std::string}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
+		{class string_scalar_t
+			{base tagScalar
+				{valueType std::string}
+				{name string_scalar}
+			}
+
+			{tagScalar
+				{valueType std::string}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
+		{class int_scalar_t
+			{base tagScalar
+				{valueType int}
+				{name int_scalar}
+			}
+
+			{tagScalar
+				{valueType std::string}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
 		{class tags_t
 			{base tagNoValue
 				{name tags}
@@ -32,6 +75,24 @@
 			{tag
 				{valueType custom_t}
 				{name custom_field}
+				{required}
+			}
+
+			{tag
+				{valueType bool_scalar_t}
+				{name bool_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType int_scalar_t}
+				{name int_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType string_scalar_t}
+				{name string_scalar}
 				{required}
 			}
 		}

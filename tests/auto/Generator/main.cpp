@@ -95,6 +95,15 @@ void check_config( const cfg::vector_t & cfg )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_field().at( 0 ) == 100 )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_field().at( 1 ) == 200 )
 	CHECK_CONDITION( cfg.vector().at( 0 ).custom_field().m_value == 300 )
+
+	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().bool_scalar() == true )
+	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().string_field() == "one" )
+
+	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar().int_scalar() == 100 )
+	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar().string_field() == "one" )
+
+	CHECK_CONDITION( cfg.vector().at( 0 ).string_scalar().string_scalar() == "string" )
+	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().string_field() == "one" )
 }
 
 
