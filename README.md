@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/igormironchik/cfgfile.svg?branch=master)](https://travis-ci.org/igormironchik/cfgfile)[![Build status](https://ci.appveyor.com/api/projects/status/cnbd2a60dyj25qcj/branch/master?svg=true)](https://ci.appveyor.com/project/igormironchik/cfgfile/branch/master)[![Coverage Status](https://coveralls.io/repos/github/igormironchik/cfgfile/badge.svg?branch=master)](https://coveralls.io/github/igormironchik/cfgfile?branch=master)
+
 Library for reading and writing configuration files (cfgfile).
 
 # License
