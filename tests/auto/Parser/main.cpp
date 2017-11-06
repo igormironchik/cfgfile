@@ -409,6 +409,8 @@ public:
 	std::string print( int indent = 0 ) const override
 	{
 		(void) indent;
+
+		return std::string();
 	}
 
 	void on_finish( const cfgfile::parser_info_t<> & ) override
