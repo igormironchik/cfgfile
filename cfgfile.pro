@@ -11,6 +11,7 @@ OTHER_FILES = runtests.rb \
 	README.md \
 	doc/dsl.dox \
 	doc/mainpage.dox \
-	.travis.yml
+	.travis.yml \
+	doc/Doxyfile
 
 include( cfgfile/cfgfile.pri )
