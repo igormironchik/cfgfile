@@ -996,6 +996,33 @@ TEST( Parser, test_tag_string_scalar_redefinition_of_value )
 	}
 }
 
+TEST( Parser, test_tag_string_scalar_constraint )
+{
+	std::stringstream stream( "{cfg 200}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_string_scalar_constraint", stream );
+
+	cfgfile::tag_scalar_t< std::string > tag( "cfg", true );
+	cfgfile::constraint_one_of_t< std::string > c;
+	c.add_value( "100" );
+	tag.set_constraint( &c );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_string_scalar_constraint" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		auto s = x.desc();
+		CHECK_CONDITION( x.desc() == "Invalid value: \"200\". Value must match "
+			"to the constraint in tag \"cfg\". In file "
+			"\"test_tag_string_scalar_constraint\" on line 1." )
+	}
+}
+
 
 int main()
 {

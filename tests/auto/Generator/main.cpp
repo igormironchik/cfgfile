@@ -109,7 +109,10 @@ void check_config( const cfg::vector_t & cfg )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 0 ) == 100 )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 1 ) == 200 )
 	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 2 ) == 300 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().string_field() == "one" )
+	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().string_field() ==
+		"StringStringStringStringStringStringStringString"
+		"StringStringStringStringStringStringStringString"
+		"StringStringStringString" )
 }
 
 
