@@ -23,6 +23,7 @@
 			{base tagScalar
 				{valueType std::string}
 				{name string_scalar}
+				{oneOfConstraint "\"string\""}
 			}
 
 			{tagScalar
@@ -37,6 +38,22 @@
 			{base tagScalar
 				{valueType int}
 				{name int_scalar}
+				{oneOfConstraint 100 200 300}
+			}
+
+			{tagScalar
+				{valueType std::string}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
+		{class scalar_vector_t
+			{base tagScalarVector
+				{valueType int}
+				{name int_scalar_vector}
+				{oneOfConstraint 100 200 300}
 			}
 
 			{tagScalar
@@ -93,6 +110,12 @@
 			{tag
 				{valueType string_scalar_t}
 				{name string_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType scalar_vector_t}
+				{name int_scalar_vector}
 				{required}
 			}
 		}

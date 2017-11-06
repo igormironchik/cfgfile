@@ -284,7 +284,7 @@ static inline void generate_constraints_in_ctor( std::ostream & stream,
 							<< f.name() << std::string( ".set_constraint( &m_" )
 							<< f.name() << std::string( "_constraint );\n\n" );
 					else
-						stream << std::string( "\t\tset_constraint( &m_" )
+						stream << std::string( "\t\tthis->set_constraint( &m_" )
 							<< f.name() << std::string( "_constraint );\n\n" );
 				}
 					break;
@@ -307,7 +307,7 @@ static inline void generate_constraints_in_ctor( std::ostream & stream,
 							<< f.name() << std::string( ".set_constraint( &m_" )
 							<< f.name() << std::string( "_constraint );\n\n" );
 					else
-						stream << std::string( "\t\tset_constraint( &m_" )
+						stream << std::string( "\t\tthis->set_constraint( &m_" )
 							<< f.name() << std::string( "_constraint );\n\n" );
 				}
 					break;
