@@ -576,6 +576,14 @@ TEST( Format, test_exceptions )
 		exception_t< qstring_trait_t > )
 }
 
+TEST( StringFormat, test_to_cfg_file_format )
+{
+	CHECK_CONDITION( to_cfgfile_format< string_trait_t > ( "" ) == "\"\"" )
+
+	CHECK_CONDITION( to_cfgfile_format< string_trait_t > ( "\"\n\r\t\\a" ) ==
+		"\"\\\"\\n\\r\\t\\\\a\"" )
+}
+
 int main()
 {
 	RUN_ALL_TESTS()
