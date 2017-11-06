@@ -402,6 +402,12 @@ public:
 	{
 	}
 
+	empty_tag_t( cfgfile::tag_t<> & parent,
+		const std::string & name, bool is_mandatory = false )
+		:	cfgfile::tag_t<> ( parent, name, is_mandatory )
+	{
+	}
+
 	virtual ~empty_tag_t()
 	{
 	}
@@ -443,7 +449,7 @@ TEST( Parser, test_undefinedFirstMandatoryTag )
 		CHECK_CONDITION( x.desc() ==
 			"Undefined mandatory tag: \"cfg\"." );
 	}
-} // test_unexpectedEndOfFile
+}
 
 
 int main()

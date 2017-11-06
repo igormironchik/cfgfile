@@ -86,36 +86,11 @@ protected:
 					"Still unfinished tag \"" ) + m_stack.top()->name() +
 				Trait::from_ascii( "\"." ) );
 
-		check_is_child_mandatory_tags_defined( m_tag, true );
-	}
-
-	void check_is_child_mandatory_tags_defined( const tag_t< Trait > & tag,
-		bool first = false )
-	{
-		if( first )
-		{
-			if( tag.is_mandatory() && !tag.is_defined() )
-				throw exception_t< Trait >(
-					Trait::from_ascii( "Undefined mandatory tag: \"" ) +
-					tag.name() + Trait::from_ascii( "\"." ) );
-
-			for( tag_t< Trait > * t : tag.children() )
-				check_is_child_mandatory_tags_defined( *t );
-		}
-		else if( tag.is_mandatory() && !tag.is_defined() )
-		{
+		if( m_tag.is_mandatory() && !m_tag.is_defined() )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Undefined mandatory tag: \"" ) +
-				tag.name() + Trait::from_ascii( "\"." ) );
-		}
-
-		if( tag.is_mandatory() )
-		{
-			for( tag_t< Trait > * t : tag.children() )
-				check_is_child_mandatory_tags_defined( *t );
-		}
+				m_tag.name() + Trait::from_ascii( "\"." ) );
 	}
-
 
 protected:
 	//! Tag.
