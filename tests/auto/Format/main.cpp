@@ -401,6 +401,181 @@ TEST( Format, test_traits )
 		qstring_wrapper_t( "abc" ) )
 }
 
+TEST( Format, test_exceptions )
+{
+	parser_info_t< string_trait_t > ps( "test.cfg", 1, 1 );
+	parser_info_t< wstring_trait_t > pw( L"test.cfg", 1, 1 );
+	parser_info_t< qstring_trait_t > pq( "test.cfg", 1, 1 );
+
+	CHECK_THROW( ( format_t< int, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< int, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< int, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< int, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< int, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< int, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< long, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< long, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< long long, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
+		"999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
+		L"999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
+		"999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< double, string_trait_t >::from_string( ps,
+		"999 999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< double, wstring_trait_t >::from_string( pw,
+		L"999 999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< double, qstring_trait_t >::from_string( pq,
+		"999 999" ) ),
+		exception_t< qstring_trait_t > )
+
+	CHECK_THROW( ( format_t< double, string_trait_t >::from_string( ps,
+		"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
+		exception_t< string_trait_t > )
+
+	CHECK_THROW( ( format_t< double, wstring_trait_t >::from_string( pw,
+		L"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
+		exception_t< wstring_trait_t > )
+
+	CHECK_THROW( ( format_t< double, qstring_trait_t >::from_string( pq,
+		"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
+		exception_t< qstring_trait_t > )
+}
+
 int main()
 {
 	RUN_ALL_TESTS()
