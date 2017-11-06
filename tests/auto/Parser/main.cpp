@@ -451,6 +451,112 @@ TEST( Parser, test_undefinedFirstMandatoryTag )
 	}
 }
 
+TEST( Parser, test_undefinedFirstTag )
+{
+	std::stringstream stream( "" );
+
+	cfgfile::input_stream_t<> input( "test_undefinedFirstTag", stream );
+
+	empty_tag_t tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	parser.parse( "test_undefinedFirstTag" );
+
+	CHECK_CONDITION( true );
+}
+
+TEST( Parser, test_unexpectedContent )
+{
+	std::stringstream stream( "{cfg} abc" );
+
+	cfgfile::input_stream_t<> input( "test_unexpectedContent", stream );
+
+	empty_tag_t tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_unexpectedContent" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unexpected content. "
+			"We've finished parsing, but we've got this: \"abc\". "
+			"In file \"test_unexpectedContent\" on line 1." )
+	}
+}
+
+TEST( Parser, test_unexpectedContent2 )
+{
+	std::stringstream stream( "abc" );
+
+	cfgfile::input_stream_t<> input( "test_unexpectedContent", stream );
+
+	empty_tag_t tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_unexpectedContent" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Expected start curl brace, "
+			"but we've got \"abc\". In file \"test_unexpectedContent\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_unexpectedFinish )
+{
+	std::stringstream stream( "{}" );
+
+	cfgfile::input_stream_t<> input( "test_unexpectedFinish", stream );
+
+	empty_tag_t tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_unexpectedFinish" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unexpected finish curl brace. "
+			"We expected tag name, but we've got finish curl brace. "
+			"In file \"test_unexpectedFinish\" on line 1." )
+	}
+}
+
+TEST( Parser, test_unexpectedEndOfFile2 )
+{
+	std::stringstream stream( "{" );
+
+	cfgfile::input_stream_t<> input( "test_unexpectedEndOfFile", stream );
+
+	empty_tag_t tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_unexpectedEndOfFile" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unexpected end of file. "
+			"In file \"test_unexpectedEndOfFile\" on line 1." )
+	}
+}
+
 
 int main()
 {
