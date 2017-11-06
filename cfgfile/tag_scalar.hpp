@@ -196,7 +196,7 @@ public:
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
-		if( !this->is_defined() )
+		if( !this->is_defined_member_value() )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				this->name() + Trait::from_ascii( "\". In file \"" ) +
@@ -223,7 +223,7 @@ public:
 	void on_string( const parser_info_t< Trait > & info,
 		const typename Trait::string_t & str ) override
 	{
-		if( !this->is_defined() )
+		if( !this->is_defined_member_value() )
 		{
 			if( this->is_any_child_defined() )
 				throw exception_t< Trait >(
@@ -403,7 +403,7 @@ public:
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
-		if( !this->is_defined() )
+		if( !this->is_defined_member_value() )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				this->name() + Trait::from_ascii( "\". In file \"" ) +
@@ -431,7 +431,7 @@ public:
 	void on_string( const parser_info_t< Trait > & info,
 		const typename Trait::string_t & str ) override
 	{
-		if( !this->is_defined() )
+		if( !this->is_defined_member_value() )
 		{
 			if( this->is_any_child_defined() )
 				throw exception_t< Trait >(
@@ -645,6 +645,14 @@ public:
 	//! Called when tag parsing finished.
 	void on_finish( const parser_info_t< Trait > & info ) override
 	{
+		if( !this->is_defined_member_value() )
+			throw exception_t< Trait >(
+				Trait::from_ascii( "Undefined value of tag: \"" ) +
+				this->name() + Trait::from_ascii( "\". In file \"" ) +
+				info.file_name() + Trait::from_ascii( "\" on line " ) +
+				Trait::to_string( info.line_number() ) +
+				Trait::from_ascii( "." ) );
+
 		if( m_constraint )
 		{
 			if( !m_constraint->check( m_value ) )
@@ -658,14 +666,6 @@ public:
 					Trait::to_string( info.line_number() ) +
 					Trait::from_ascii( "." ) );
 		}
-
-		if( !this->is_defined() )
-			throw exception_t< Trait >(
-				Trait::from_ascii( "Undefined value of tag: \"" ) +
-				this->name() + Trait::from_ascii( "\". In file \"" ) +
-				info.file_name() + Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( info.line_number() ) +
-				Trait::from_ascii( "." ) );
 
 		for( const tag_t< Trait > * tag : this->children() )
 		{
@@ -908,7 +908,7 @@ public:
 					Trait::from_ascii( "." ) );
 		}
 
-		if( !this->is_defined() )
+		if( !this->is_defined_member_value() )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Undefined value of tag: \"" ) +
 				this->name() + Trait::from_ascii( "\". In file \"" ) +

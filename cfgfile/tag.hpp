@@ -217,11 +217,14 @@ protected:
 	//! \return Is any child tag defined?
 	bool is_any_child_defined() const
 	{
-		if( std::any_of( m_child_tags.cbegin(), m_child_tags.cend(),
-			[] ( tag_t< Trait > * tag ) { return ( tag->is_defined() ); } ) )
-				return true;
+		return std::any_of( m_child_tags.cbegin(), m_child_tags.cend(),
+			[] ( tag_t< Trait > * tag ) { return ( tag->is_defined() ); } );
+	}
 
-		return false;
+	//! \return m_is_defined member value.
+	bool is_defined_member_value() const
+	{
+		return m_is_defined;
 	}
 
 private:

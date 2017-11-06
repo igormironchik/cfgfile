@@ -675,6 +675,327 @@ TEST( Parser, test_tag_scalar_vector_wrong_place_for_value )
 	}
 }
 
+TEST( Parser, test_tag_scalar_set_wrong_value )
+{
+	cfgfile::tag_scalar_t< int > tag( "cfg" );
+	cfgfile::constraint_one_of_t< int > c;
+	c.add_value( 100 );
+	tag.set_constraint( &c );
+
+	try {
+		tag.set_value( 400 );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Invalid value: \"400\". "
+			"Value must match to the constraint in tag \"cfg\"." )
+	}
+}
+
+TEST( Parser, test_tag_scalar_undefined )
+{
+	std::stringstream stream( "{cfg}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_scalar_undefined", stream );
+
+	cfgfile::tag_scalar_t< int > tag( "cfg", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_scalar_undefined" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined value of tag: \"cfg\". In file "
+			"\"test_tag_scalar_undefined\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_scalar_undefined_child )
+{
+	std::stringstream stream( "{cfg 100}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_scalar_undefined_child", stream );
+
+	cfgfile::tag_scalar_t< int > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_scalar_undefined_child" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined child mandatory tag: \"child\". "
+			"Where parent is: \"cfg\". In file \"test_tag_scalar_undefined_child\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_scalar_value_in_wrong_place )
+{
+	std::stringstream stream( "{cfg {child} 100}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_scalar_value_in_wrong_place", stream );
+
+	cfgfile::tag_scalar_t< int > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_scalar_value_in_wrong_place" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value \"100\" for tag \"cfg\" "
+			"must be defined before any child tag. In file "
+			"\"test_tag_scalar_value_in_wrong_place\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_scalar_redefinition_of_value )
+{
+	std::stringstream stream( "{cfg 100 {child} 200}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_scalar_redefinition_of_value", stream );
+
+	cfgfile::tag_scalar_t< int > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_scalar_redefinition_of_value" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value for the tag \"cfg\" already "
+			"defined. In file \"test_tag_scalar_redefinition_of_value\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_bool_scalar_undefined )
+{
+	std::stringstream stream( "{cfg}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_bool_scalar_undefined", stream );
+
+	cfgfile::tag_scalar_t< bool > tag( "cfg", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_bool_scalar_undefined" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined value of tag: \"cfg\". In file "
+			"\"test_tag_bool_scalar_undefined\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_bool_scalar_undefined_child )
+{
+	std::stringstream stream( "{cfg true}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_bool_scalar_undefined_child", stream );
+
+	cfgfile::tag_scalar_t< bool > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_bool_scalar_undefined_child" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined child mandatory tag: \"child\". "
+			"Where parent is: \"cfg\". In file \"test_tag_bool_scalar_undefined_child\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_bool_scalar_value_in_wrong_place )
+{
+	std::stringstream stream( "{cfg {child} true}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_bool_scalar_value_in_wrong_place", stream );
+
+	cfgfile::tag_scalar_t< bool > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_bool_scalar_value_in_wrong_place" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value \"true\" for tag \"cfg\" "
+			"must be defined before any child tag. In file "
+			"\"test_tag_bool_scalar_value_in_wrong_place\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_bool_scalar_redefinition_of_value )
+{
+	std::stringstream stream( "{cfg true {child} true}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_bool_scalar_redefinition_of_value", stream );
+
+	cfgfile::tag_scalar_t< bool > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_bool_scalar_redefinition_of_value" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value for the tag \"cfg\" already "
+			"defined. In file \"test_tag_bool_scalar_redefinition_of_value\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_string_scalar_set_wrong_value )
+{
+	cfgfile::tag_scalar_t< std::string > tag( "cfg" );
+	cfgfile::constraint_one_of_t< std::string > c;
+	c.add_value( "one" );
+	tag.set_constraint( &c );
+
+	try {
+		tag.set_value( "400" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Invalid value: \"400\". "
+			"Value must match to the constraint in tag \"cfg\"." )
+	}
+}
+
+TEST( Parser, test_tag_string_scalar_undefined )
+{
+	std::stringstream stream( "{cfg}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_string_scalar_undefined", stream );
+
+	cfgfile::tag_scalar_t< std::string > tag( "cfg", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_string_scalar_undefined" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined value of tag: \"cfg\". In file "
+			"\"test_tag_string_scalar_undefined\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_string_scalar_undefined_child )
+{
+	std::stringstream stream( "{cfg 100}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_string_scalar_undefined_child", stream );
+
+	cfgfile::tag_scalar_t< std::string > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_string_scalar_undefined_child" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined child mandatory tag: \"child\". "
+			"Where parent is: \"cfg\". In file \"test_tag_string_scalar_undefined_child\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_string_scalar_value_in_wrong_place )
+{
+	std::stringstream stream( "{cfg {child} 100}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_string_scalar_value_in_wrong_place", stream );
+
+	cfgfile::tag_scalar_t< std::string > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_string_scalar_value_in_wrong_place" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value \"100\" for tag \"cfg\" "
+			"must be defined before any child tag. In file "
+			"\"test_tag_string_scalar_value_in_wrong_place\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_string_scalar_redefinition_of_value )
+{
+	std::stringstream stream( "{cfg 100 {child} 200}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_string_scalar_redefinition_of_value", stream );
+
+	cfgfile::tag_scalar_t< std::string > tag( "cfg", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_string_scalar_redefinition_of_value" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		auto s = x.desc();
+		CHECK_CONDITION( x.desc() == "Value \"200\" for tag \"cfg\" must be "
+			"defined before any child tag. In file \"test_tag_string_scalar_redefinition_of_value\" "
+			"on line 1." )
+	}
+}
+
 
 int main()
 {
