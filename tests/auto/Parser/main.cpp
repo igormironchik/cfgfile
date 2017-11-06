@@ -989,7 +989,6 @@ TEST( Parser, test_tag_string_scalar_redefinition_of_value )
 	}
 	catch( cfgfile::exception_t<> & x )
 	{
-		auto s = x.desc();
 		CHECK_CONDITION( x.desc() == "Value \"200\" for tag \"cfg\" must be "
 			"defined before any child tag. In file \"test_tag_string_scalar_redefinition_of_value\" "
 			"on line 1." )
@@ -1016,11 +1015,30 @@ TEST( Parser, test_tag_string_scalar_constraint )
 	}
 	catch( cfgfile::exception_t<> & x )
 	{
-		auto s = x.desc();
 		CHECK_CONDITION( x.desc() == "Invalid value: \"200\". Value must match "
 			"to the constraint in tag \"cfg\". In file "
 			"\"test_tag_string_scalar_constraint\" on line 1." )
 	}
+}
+
+TEST( Parser, test_tag_vector_of_tags )
+{
+	std::stringstream stream( "{cfg {vec value1} {vec value2} {child}}" );
+
+	cfgfile::input_stream_t<> input( "test_tag_vector_of_tags", stream );
+
+	cfgfile::tag_no_value_t<> tag( "cfg", true );
+	cfgfile::tag_vector_of_tags_t< cfgfile::tag_scalar_t< std::string > > vec( tag,
+		"vec", true );
+	cfgfile::tag_no_value_t<> c( tag, "child", true );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	parser.parse( "test_tag_vector_of_tags" );
+
+	CHECK_CONDITION( vec.size() == 2 )
+	CHECK_CONDITION( vec.at( 0 ).value() == "value1" )
+	CHECK_CONDITION( vec.at( 1 ).value() == "value2" )
 }
 
 

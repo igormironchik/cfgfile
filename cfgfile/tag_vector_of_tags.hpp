@@ -192,19 +192,6 @@ public:
 		m_tags.push_back( m_current );
 		m_current.reset();
 
-		for( const tag_t< Trait > * tag : children() )
-		{
-			if( tag->is_mandatory() && !tag->is_defined() )
-				throw exception_t< Trait >(
-					Trait::from_ascii( "Undefined child mandatory tag: \"" ) +
-					tag->name() +
-					Trait::from_ascii( "\". Where parent is: \"" ) +
-					this->name() + Trait::from_ascii( "\". In file \"" ) +
-					info.file_name() + Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( info.line_number() ) +
-					Trait::from_ascii( "." ) );
-		}
-
 		this->set_defined();
 	}
 
