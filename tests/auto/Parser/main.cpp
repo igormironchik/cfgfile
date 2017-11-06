@@ -557,6 +557,29 @@ TEST( Parser, test_unexpectedEndOfFile2 )
 	}
 }
 
+TEST( Parser, test_tagNoValueWithValue )
+{
+	std::stringstream stream( "{cfg abc}" );
+
+	cfgfile::input_stream_t<> input( "test_tagNoValueWithValue", stream );
+
+	cfgfile::tag_no_value_t<> tag( "cfg" );
+
+	cfgfile::parser_t<> parser( tag, input );
+
+	try {
+		parser.parse( "test_tagNoValueWithValue" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( x.desc() == "Tag \"cfg\" doesn't allow any values. "
+			"But we've got this: \"abc\". In file \"test_tagNoValueWithValue\" "
+			"on line 1." )
+	}
+}
+
 
 int main()
 {
