@@ -24,6 +24,8 @@ file( COPY undefined_child_mandatory_tag.cfg
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 file( COPY undefined_mandatory_tag.cfg
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file( COPY xml.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
     
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/../../.. )

@@ -35,6 +35,7 @@
 
 // C++ include.
 #include <fstream>
+#include <sstream>
 
 
 Configuration loadConfig( const std::string & fileName )
@@ -170,6 +171,37 @@ TEST( Complex, testEmptyFile )
 			x.desc() );
 	}
 } // testEmptyFile
+
+TEST( Complex, testUnsupportedXML )
+{
+	try {
+		loadConfig( "xml.cfg" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( "XML supported only with Qt. Parsing of file "
+			"\"xml.cfg\" failed." == x.desc() );
+	}
+}
+
+TEST( Complex, testUnsupportedXMLWrite )
+{
+	try {
+		std::stringstream stream;
+		cfgfile::tag_no_value_t<> tag( "cfg" );
+
+		cfgfile::write_cfgfile( tag, stream,
+			cfgfile::file_format_t::xml_format );
+
+		CHECK_CONDITION( false );
+	}
+	catch( const cfgfile::exception_t<> & x )
+	{
+		CHECK_CONDITION( "XML supported only with Qt." == x.desc() );
+	}
+}
 
 int main()
 {
