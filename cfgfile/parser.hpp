@@ -420,6 +420,9 @@ private:
 			}
 			else
 			{
+				if( !n.toComment().isNull() )
+					continue;
+
 				QDomText text = n.toText();
 
 				if( !text.isNull() )
