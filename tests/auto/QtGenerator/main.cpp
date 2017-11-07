@@ -73,13 +73,15 @@ cfg::vector_t load_config( const QString & file_name )
 	return read_tag.get_cfg();
 }
 
-const QString c_dummy_file_name = QLatin1String( "dummy.cfg" );
+const QString c_dummy_file_name_1 = QLatin1String( "dummy_1.cfg" );
+const QString c_dummy_file_name_2 = QLatin1String( "dummy_2.cfg" );
 
-void write_config( const cfg::vector_t & cfg )
+void write_config( const cfg::vector_t & cfg, const QString & file_name,
+	cfgfile::file_format_t fmt )
 {
 	cfg::tag_vector_t< cfgfile::qstring_trait_t > write_tag( cfg );
 
-	QFile file( c_dummy_file_name );
+	QFile file( file_name );
 
 	if( !file.open( QIODevice::WriteOnly ) )
 		return;
@@ -87,8 +89,7 @@ void write_config( const cfg::vector_t & cfg )
 	QTextStream stream( &file );
 
 	try {
-		cfgfile::write_cfgfile(
-			write_tag, stream, cfgfile::file_format_t::xml_format );
+		cfgfile::write_cfgfile( write_tag, stream, fmt );
 
 		file.close();
 	}
@@ -136,9 +137,17 @@ TEST( Generator, testAllIsOk )
 
 	check_config( cfg );
 
-	write_config( cfg );
+	write_config( cfg, c_dummy_file_name_1,
+		cfgfile::file_format_t::xml_format );
 
-	cfg = load_config( c_dummy_file_name );
+	cfg = load_config( c_dummy_file_name_1 );
+
+	check_config( cfg );
+
+	write_config( cfg, c_dummy_file_name_2,
+		cfgfile::file_format_t::cfgfile_format );
+
+	cfg = load_config( c_dummy_file_name_2 );
 
 	check_config( cfg );
 } // testAllIsOk

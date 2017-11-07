@@ -1041,6 +1041,155 @@ TEST( Parser, test_tag_vector_of_tags )
 	CHECK_CONDITION( vec.at( 1 ).value() == "value2" )
 }
 
+TEST( Parser, test_tag_qstring_scalar_set_wrong_value )
+{
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag( "cfg" );
+	cfgfile::constraint_one_of_t< QString > c;
+	c.add_value( "one" );
+	tag.set_constraint( &c );
+
+	try {
+		tag.set_value( "400" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Invalid value: \"400\". "
+			"Value must match to the constraint in tag \"cfg\"." )
+	}
+}
+
+TEST( Parser, test_tag_qstring_scalar_undefined )
+{
+	QTextStream stream( "{cfg}" );
+
+	cfgfile::input_stream_t< cfgfile::qstring_trait_t > input(
+		"test_tag_qstring_scalar_undefined", stream );
+
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag(
+		"cfg", true );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_qstring_scalar_undefined" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined value of tag: \"cfg\". In file "
+			"\"test_tag_qstring_scalar_undefined\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_qstring_scalar_undefined_child )
+{
+	QTextStream stream( "{cfg 100}" );
+
+	cfgfile::input_stream_t< cfgfile::qstring_trait_t > input(
+		"test_tag_qstring_scalar_undefined_child", stream );
+
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag(
+		"cfg", true );
+	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t > c( tag, "child", true );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_qstring_scalar_undefined_child" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Undefined child mandatory tag: \"child\". "
+			"Where parent is: \"cfg\". In file \"test_tag_qstring_scalar_undefined_child\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_qstring_scalar_value_in_wrong_place )
+{
+	QTextStream stream( "{cfg {child} 100}" );
+
+	cfgfile::input_stream_t< cfgfile::qstring_trait_t > input(
+		"test_tag_qstring_scalar_value_in_wrong_place", stream );
+
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag(
+		"cfg", true );
+	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t > c( tag, "child", true );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_qstring_scalar_value_in_wrong_place" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value \"100\" for tag \"cfg\" "
+			"must be defined before any child tag. In file "
+			"\"test_tag_qstring_scalar_value_in_wrong_place\" on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_qstring_scalar_redefinition_of_value )
+{
+	QTextStream stream( "{cfg 100 {child} 200}" );
+
+	cfgfile::input_stream_t< cfgfile::qstring_trait_t > input(
+		"test_tag_qstring_scalar_redefinition_of_value", stream );
+
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag(
+		"cfg", true );
+	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t > c( tag, "child", true );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_qstring_scalar_redefinition_of_value" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Value \"200\" for tag \"cfg\" must be "
+			"defined before any child tag. In file \"test_tag_qstring_scalar_redefinition_of_value\" "
+			"on line 1." )
+	}
+}
+
+TEST( Parser, test_tag_qstring_scalar_constraint )
+{
+	QTextStream stream( "{cfg 200}" );
+
+	cfgfile::input_stream_t< cfgfile::qstring_trait_t > input(
+		"test_tag_qstring_scalar_constraint", stream );
+
+	cfgfile::tag_scalar_t< QString, cfgfile::qstring_trait_t > tag(
+		"cfg", true );
+	cfgfile::constraint_one_of_t< QString > c;
+	c.add_value( "100" );
+	tag.set_constraint( &c );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, input );
+
+	try {
+		parser.parse( "test_tag_qstring_scalar_constraint" );
+
+		CHECK_CONDITION( false );
+	}
+	catch( cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Invalid value: \"200\". Value must match "
+			"to the constraint in tag \"cfg\". In file "
+			"\"test_tag_qstring_scalar_constraint\" on line 1." )
+	}
+}
+
 
 int main()
 {
