@@ -1,0 +1,135 @@
+
+{forGeneration GENERATED
+
+	{relativeInclude custom.hpp}
+
+	{namespace cfg
+
+		{class bool_scalar_t
+			{base tagScalar
+				{valueType bool}
+				{name bool_scalar}
+			}
+
+			{tagScalar
+				{valueType QString}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
+		{class string_scalar_t
+			{base tagScalar
+				{valueType QString}
+				{name string_scalar}
+				{oneOfConstraint "\"string\""}
+			}
+
+			{tagScalar
+				{valueType QString}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\"" "\"\""}
+				{required}
+			}
+		}
+
+		{class int_scalar_t
+			{base tagScalar
+				{valueType int}
+				{name int_scalar}
+				{oneOfConstraint 100 200 300}
+			}
+
+			{tagScalar
+				{valueType QString}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+		}
+
+		{class scalar_vector_t
+			{base tagScalarVector
+				{valueType int}
+				{name int_scalar_vector}
+				{oneOfConstraint 100 200 300}
+			}
+
+			{tagScalar
+				{valueType QString}
+				{name string_field}
+				{oneOfConstraint "\"StringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringStringString\""}
+				{required}
+			}
+		}
+
+		{class tags_t
+			{base tagNoValue
+				{name tags}
+			}
+
+			{tagScalar
+				{valueType QString}
+				{name string_field}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{required}
+			}
+
+			{tagNoValue
+				{name no_value_field}
+				{required}
+			}
+
+			{tagScalarVector
+				{valueType int}
+				{name int_field}
+				{minMaxConstraint {min 0} {max 500}}
+				{required}
+				{defaultValue 100}
+			}
+
+			{tag
+				{valueType custom_t}
+				{name custom_field}
+				{required}
+			}
+
+			{tag
+				{valueType bool_scalar_t}
+				{name bool_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType int_scalar_t}
+				{name int_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType string_scalar_t}
+				{name string_scalar}
+				{required}
+			}
+
+			{tag
+				{valueType scalar_vector_t}
+				{name int_scalar_vector}
+				{required}
+			}
+		}
+
+		{class vector_t
+			{base tagNoValue
+				{name vector}
+			}
+
+			{tagVectorOfTags
+				{valueType tags_t}
+				{name vector}
+				{required}
+			}
+		}
+	}
+}

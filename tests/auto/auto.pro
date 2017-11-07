@@ -6,5 +6,6 @@ SUBDIRS += BoolScalar \
            Parser \
 	   Format \
 	   Generator \
-	   InputStream
+	   InputStream \
+	   QtGenerator
            

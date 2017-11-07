@@ -8,6 +8,9 @@ set( SRC main.cpp
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/../.. )
 
+file( COPY example.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
 find_package( Qt5Core )
 find_package( Qt5Xml )
 

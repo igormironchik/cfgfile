@@ -897,23 +897,22 @@ public:
 }; // class format_t< double >
 #endif // CFGFILE_QT_SUPPORT
 
-
-template<>
-class format_t< std::string, string_trait_t > {
+template< typename Trait >
+class format_t< typename Trait::string_t, Trait > {
 public:
 	//! Format value to string.
-	static string_trait_t::string_t to_string( const std::string & value )
+	static typename Trait::string_t to_string( const typename Trait::string_t & value )
 	{
 		return value;
 	}
 
 	//! Format value from string.
-	static std::string from_string( const parser_info_t< string_trait_t > &,
-		const string_trait_t::string_t & value )
+	static typename Trait::string_t from_string( const parser_info_t< Trait > &,
+		const typename Trait::string_t & value )
 	{
 		return value;
 	}
-}; // class format_t< std::string >
+}; // class format_t< Trait::string_t, Trait >
 
 
 template<>
@@ -980,24 +979,6 @@ public:
 		res.assign( value.cbegin(), value.cend() );
 
 		return res;
-	}
-}; // class format_t< std::wstring >
-
-
-template<>
-class format_t< std::wstring, wstring_trait_t > {
-public:
-	//! Format value to string.
-	static wstring_trait_t::string_t to_string( const std::wstring & value )
-	{
-		return value;
-	}
-
-	//! Format value from string.
-	static std::wstring from_string( const parser_info_t< wstring_trait_t > &,
-		const wstring_trait_t::string_t & value )
-	{
-		return value;
 	}
 }; // class format_t< std::wstring >
 

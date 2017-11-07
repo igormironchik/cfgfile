@@ -385,7 +385,7 @@ public:
 
 			typename Trait::string_t value =
 				format_t< bool, Trait >::to_string( m_value );
-			value = to_cfgfile_format( value );
+			value = to_cfgfile_format< Trait >( value );
 
 			QDomText data = doc.createTextNode( value );
 
