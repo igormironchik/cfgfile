@@ -611,7 +611,7 @@ static inline void generate_cfg_set( std::ostream & stream,
 						<< std::string( "\t\t{\n" )
 						<< std::string( "\t\t\ttypename cfgfile::tag_vector_of_tags_t< " )
 						<< generate_class_name( f.value_type() )
-						<< std::string( "< Trait > >::ptr_to_tag_t p(\n" )
+						<< std::string( "< Trait >, Trait >::ptr_to_tag_t p(\n" )
 						<< std::string( "\t\t\t\tnew " )
 						<< generate_class_name( f.value_type() )
 						<< std::string( "< Trait >( \"" )
