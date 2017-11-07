@@ -56,7 +56,8 @@ cfg::vector_t load_config( const QString & file_name )
 	QTextStream stream( &file );
 
 	try {
-		cfgfile::read_cfgfile( read_tag, stream, file_name );
+		cfgfile::read_cfgfile< cfgfile::qstring_trait_t > (
+			read_tag, stream, file_name );
 
 		file.close();
 	}
@@ -86,8 +87,8 @@ void write_config( const cfg::vector_t & cfg )
 	QTextStream stream( &file );
 
 	try {
-		cfgfile::write_cfgfile( write_tag, stream,
-			cfgfile::file_format_t::xml_format );
+		cfgfile::write_cfgfile< cfgfile::qstring_trait_t > (
+			write_tag, stream, cfgfile::file_format_t::xml_format );
 
 		file.close();
 	}
