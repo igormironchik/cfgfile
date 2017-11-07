@@ -44,7 +44,7 @@
 			{tagScalar
 				{valueType QString}
 				{name string_field}
-				{oneOfConstraint "\"one\"" "\"two\"" "\"three\""}
+				{oneOfConstraint "\"one\"" "\"two\"" "\"three\"" "\"one\n\"\r\t\\\""}
 				{required}
 			}
 		}
