@@ -129,6 +129,35 @@ TEST( QtParser, test_cant_set_xml )
 	}
 }
 
+TEST( QtParser, test_unexpected_xml )
+{
+	cfgfile::tag_no_value_t< cfgfile::qstring_trait_t > tag( "cfg", true );
+
+	QDomDocument doc;
+
+	QDomElement cfg = doc.createElement( "cfg" );
+
+	doc.appendChild( cfg );
+
+	QDomComment c = doc.createComment( "data" );
+
+	cfg.appendChild( c );
+
+	cfgfile::parser_t< cfgfile::qstring_trait_t > parser( tag, doc );
+
+	try {
+		parser.parse( "test_unexpected_xml" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unexpected tag name. "
+			"We expected one child tag of tag \"cfg\", but we've got \"#comment\". "
+			"In file \"test_unexpected_xml\" on line -1." )
+	}
+}
+
 int main()
 {
 	RUN_ALL_TESTS()
