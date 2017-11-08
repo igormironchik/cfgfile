@@ -23,19 +23,29 @@ addons:
     packages:
       - cmake
       - g++-4.9
+  coverity_scan:
+    project:
+      name: "igormironchik/cfgfile"
+      description: "Build submitted via Travis CI"
+    notification_email: igor.mironchik@gmail.com
+    build_command_prepend: "export CXX='g++-4.9' CC='gcc-4.9'; source /opt/qt55/bin/qt55-env.sh; mkdir build; cd build; cmake .."
+    build_command: "make"
+    branch_pattern: coverity_scan
 
 script:
-  - export CXX="g++-4.9" CC="gcc-4.9"
-  - source /opt/qt55/bin/qt55-env.sh
-  - mkdir build
-  - cd build
-  - cmake -DENABLE_COVERAGE=ON ..
-  - make
-  - ctest
-  - cd ..
   - |
-    coveralls --build-root build --gcov-options '\-lp' \
+    if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+      export CXX="g++-4.9" CC="gcc-4.9"; \
+      source /opt/qt55/bin/qt55-env.sh; \
+      mkdir build; \
+      cd build; \
+      cmake -DENABLE_COVERAGE=ON ..; \
+      make; \
+      ctest; \
+      cd ..; \
+      coveralls --build-root build --gcov-options '\-lp' \
       -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
       -e build/example -e Args -e doc -e example \
       -e generator -e UnitTest -e tests \
-      -e build/tests/auto/QtGenerator/test.hpp
+      -e build/tests/auto/QtGenerator/test.hpp; \
+      fi
