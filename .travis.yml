@@ -10,7 +10,10 @@ compiler:
 
 before_install:
   - pip install --user cpp-coveralls
-  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+  - |
+    echo -n | openssl s_client -connect scan.coverity.com:443 | \
+    sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
+    sudo tee -a /etc/ssl/certs/ca-
 
 addons:
   apt:
@@ -25,7 +28,15 @@ addons:
       name: "igormironchik/cfgfile"
       description: "Build submitted via Travis CI"
     notification_email: igor.mironchik@gmail.com
-    build_command_prepend: echo 'Starting prebuild step...'; sudo ln -s -f /usr/bin/g++-4.9 /usr/bin/g++; sudo ln -s -f /usr/bin/gcc-4.9 /usr/bin/gcc; mkdir build; cd build; cmake ..; echo 'Prebuild step finished...';
+    build_command_prepend:
+      - |
+        echo 'Starting prebuild step...'; \
+        sudo ln -s -f /usr/bin/g++-4.9 /usr/bin/g++; \
+        sudo ln -s -f /usr/bin/gcc-4.9 /usr/bin/gcc; \
+        mkdir build; \
+        cd build; \
+        cmake ..; \
+        echo 'Prebuild step finished...';
     build_command: make
     branch_pattern: coverity_scan
 
