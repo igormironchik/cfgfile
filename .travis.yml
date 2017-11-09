@@ -40,26 +40,26 @@ addons:
 
 before_install:
   - |
-    if [ "$TRAVIS_OS_NAME" = "linux" ] && [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+    if [ "$TRAVIS_OS_NAME" == "linux" && ${COVERITY_SCAN_BRANCH} != 1 ]; then \
       pip install --user cpp-coveralls; \
       export CC=gcc-4.9 CXX=g++-4.9 CMAKEOPTS='-DENABLE_COVERAGE=ON'; \
       fi
   - |
-    if [ ${COVERITY_SCAN_BRANCH} = 1 ]; then \
+    if [ ${COVERITY_SCAN_BRANCH} == 1 ]; then \
       echo -n | openssl s_client -connect scan.coverity.com:443 | \
       sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
       sudo tee -a /etc/ssl/certs/ca-; \
       export CC=gcc-4.9 CXX=g++-4.9 CMAKEOPTS=; \
       fi
   - |
-    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       brew update; \
       export CMAKEOPTS=; \
       fi
 
 install:
   - |
-    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       brew install qt cmake; \
       brew link --force qt; \
       fi
@@ -73,7 +73,7 @@ script:
       cmake ${CMAKEOPTS} ..; \
       make; \
       ctest --output-on-failure; \
-      if [ "$TRAVIS_OS_NAME" = "linux" ]; then \
+      if [ ${TRAVIS_OS_NAME} == linux ]; then \
       cd ..; \
       coveralls --build-root build --gcov-options '\-lp' \
       -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
