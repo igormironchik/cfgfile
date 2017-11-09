@@ -2,17 +2,16 @@
 language:
   - cpp
 
-os:
-  - linux
-  - osx
-
-compiler:
-  - gcc
-  - clang
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      dist: trusty
+    - os: osx
+      compiler: clang
+      osx_image: xcode9.1
 
 sudo: required
-dist: trusty
-osx_image: xcode9.1
 
 addons:
   apt:
@@ -41,7 +40,7 @@ addons:
 
 before_install:
   - |
-    if [ ${TRAVIS_OS_NAME} == linux && ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+    if [ "$TRAVIS_OS_NAME" == "linux" && ${COVERITY_SCAN_BRANCH} != 1 ]; then \
       pip install --user cpp-coveralls; \
       export CC=gcc-4.9 CXX=g++-4.9 CMAKEOPTS='-DENABLE_COVERAGE=ON'; \
       fi
@@ -50,16 +49,17 @@ before_install:
       echo -n | openssl s_client -connect scan.coverity.com:443 | \
       sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
       sudo tee -a /etc/ssl/certs/ca-; \
+      export CC=gcc-4.9 CXX=g++-4.9 CMAKEOPTS=; \
       fi
   - |
-    if [ ${TRAVIS_OS_NAME} == osx ]; then
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       brew update; \
       export CMAKEOPTS=; \
       fi
 
 install:
   - |
-    if [ ${TRAVIS_OS_NAME} == osx ]; then
+    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       brew install qt cmake; \
       brew link --force qt; \
       fi
