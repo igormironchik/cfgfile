@@ -40,12 +40,12 @@ addons:
 
 before_install:
   - |
-    if [ "$TRAVIS_OS_NAME" == "linux" ] && [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+    if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$COVERITY_SCAN_BRANCH" != "1" ]; then \
       pip install --user cpp-coveralls; \
       export CC=gcc-4.9 CXX=g++-4.9 CMAKEOPTS='-DENABLE_COVERAGE=ON'; \
       fi
   - |
-    if [ ${COVERITY_SCAN_BRANCH} == 1 ]; then \
+    if [ "$COVERITY_SCAN_BRANCH" == "1" ]; then \
       echo -n | openssl s_client -connect scan.coverity.com:443 | \
       sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
       sudo tee -a /etc/ssl/certs/ca-; \
@@ -67,7 +67,7 @@ install:
 
 script:
   - |
-    if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+    if [ "$COVERITY_SCAN_BRANCH" != "1" ]; then \
       mkdir build; \
       cd build; \
       cmake ${CMAKEOPTS} ..; \
