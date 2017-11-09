@@ -1,47 +1,88 @@
 
-sudo: required
-dist: trusty
-
 language:
   - cpp
 
-compiler:
-  - gcc
+matrix:
+  include:
+    - os: linux
+      sudo: required
+      dist: trusty
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - cmake
+            - g++-4.9
+            - qtbase5-dev
+        coverity_scan:
+          project:
+            name: "igormironchik/cfgfile"
+            description: "Build submitted via Travis CI"
+          notification_email: igor.mironchik@gmail.com
+          build_command_prepend:
+            - |
+              echo 'Starting prebuild step...'; \
+              sudo ln -s -f /usr/bin/g++-4.9 /usr/bin/g++; \
+              sudo ln -s -f /usr/bin/gcc-4.9 /usr/bin/gcc; \
+              mkdir build; \
+              cd build; \
+              cmake ..; \
+              echo 'Prebuild step finished...';
+          build_command: make
+          branch_pattern: coverity_scan
+      env:
+        - CC=gcc-4.9
+        - CXX=g++-4.9
+        - CMAKEOPTS="-DENABLE_COVERAGE=ON"
+      compiler:
+        - gcc
+
+    - os: osx
+      osx_image: xcode9.1
+      compiler:
+        - clang
+      env:
+        - CMAKEOPTS=
 
 before_install:
-  - pip install --user cpp-coveralls
-  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+  - |
+    if [ ${TRAVIS_OS_NAME} == linux && ${COVERITY_SCAN_BRANCH} != 1 ]; then \
+      pip install --user cpp-coveralls;
+      fi
+  - |
+    if [ ${COVERITY_SCAN_BRANCH} == 1 ]; then \
+      echo -n | openssl s_client -connect scan.coverity.com:443 | \
+      sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
+      sudo tee -a /etc/ssl/certs/ca-; \
+      fi
+  - |
+    if [ ${TRAVIS_OS_NAME} == osx ]; then
+      brew update; \
+      fi
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
-      - g++-4.9
-      - qtbase5-dev
-  coverity_scan:
-    project:
-      name: "igormironchik/cfgfile"
-      description: "Build submitted via Travis CI"
-    notification_email: igor.mironchik@gmail.com
-    build_command_prepend: echo 'Starting prebuild step...'; sudo ln -s -f /usr/bin/g++-4.9 /usr/bin/g++; sudo ln -s -f /usr/bin/gcc-4.9 /usr/bin/gcc; mkdir build; cd build; cmake ..; echo 'Prebuild step finished...';
-    build_command: make
-    branch_pattern: coverity_scan
+install:
+  - |
+    if [ ${TRAVIS_OS_NAME} == osx ]; then
+      brew install qt cmake; \
+      brew link --force qt; \
+      fi
+
 
 script:
   - |
     if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
-      export CXX="g++-4.9" CC="gcc-4.9"; \
       mkdir build; \
       cd build; \
-      cmake -DENABLE_COVERAGE=ON ..; \
+      cmake ${CMAKEOPTS} ..; \
       make; \
       ctest --output-on-failure; \
+      if [ ${TRAVIS_OS_NAME} == linux ]; then \
       cd ..; \
       coveralls --build-root build --gcov-options '\-lp' \
       -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
       -e build/example -e Args -e doc -e example \
       -e generator -e UnitTest -e tests \
       -e build/tests/auto/QtGenerator/test.hpp; \
+      fi; \
       fi
