@@ -43,7 +43,7 @@
 #include "exceptions.hpp"
 
 // C++ include.
-#include <list>
+#include <vector>
 #include <algorithm>
 
 
@@ -60,7 +60,7 @@ public:
     template< typename T1 > friend class parser_t;
 
     //! List with children.
-    typedef std::list< tag_t< Trait >* > child_tags_list_t;
+    typedef std::vector< tag_t< Trait >* > child_tags_list_t;
 
 	//! Construct tag.
     explicit tag_t( const typename Trait::string_t & name,
