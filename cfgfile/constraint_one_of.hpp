@@ -50,6 +50,7 @@ class constraint_one_of_t final
 	:	public constraint_t< T >
 {
 public:
+	//! Construct constraint.
 	constraint_one_of_t()
 	{
 	}

@@ -50,6 +50,7 @@ class constraint_min_max_t final
 	:	public constraint_t< T >
 {
 public:
+	//! Construct constraint.
 	constraint_min_max_t( const T & min, const T & max )
 		:	m_min( min )
 		,	m_max( max )

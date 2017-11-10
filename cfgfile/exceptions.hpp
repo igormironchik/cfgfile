@@ -50,6 +50,7 @@ class exception_t final
 	:	public std::logic_error
 {
 public:
+	//! Construct exception.
 	explicit exception_t( typename Trait::string_t what )
 		:	std::logic_error( "Please use desc() method of the exception." )
 		,	m_what( std::move( what ) )
@@ -81,6 +82,7 @@ class exception_t< string_trait_t >
 	:	public std::logic_error
 {
 public:
+	//! Construct exception.
 	explicit exception_t( typename string_trait_t::string_t what )
 		:	std::logic_error( what )
 		,	m_what( std::move( what ) )

@@ -66,12 +66,14 @@ public:
 	//! Type of the vector of subordinate tags.
 	typedef std::vector< ptr_to_tag_t > vector_of_tags_t;
 
+	//! Construct tag.
 	explicit tag_vector_of_tags_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
+	//! Construct tag.
 	tag_vector_of_tags_t( tag_t< Trait > & owner,
 		const typename Trait::string_t & name,
 		bool is_mandatory = false )

@@ -59,6 +59,7 @@ class tag_scalar_t
 	:	public tag_t< Trait >
 {
 public:
+	//! Construct tag.
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
@@ -67,6 +68,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
@@ -286,6 +288,7 @@ class tag_scalar_t< bool, Trait >
 	:	public tag_t< Trait >
 {
 public:
+	//! Construct tag.
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
@@ -293,6 +296,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
@@ -477,6 +481,7 @@ class tag_scalar_t< typename Trait::string_t, Trait >
 	static const typename Trait::pos_t c_max_string_length = 80;
 
 public:
+	//! Construct tag.
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
@@ -485,6 +490,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
@@ -729,6 +735,7 @@ class tag_scalar_t< QString, Trait >
 	static const typename Trait::pos_t c_max_string_length = 80;
 
 public:
+	//! Construct tag.
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
@@ -737,6 +744,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )

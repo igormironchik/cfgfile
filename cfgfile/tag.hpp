@@ -62,6 +62,7 @@ public:
     //! List with children.
     typedef std::list< tag_t< Trait >* > child_tags_list_t;
 
+	//! Construct tag.
     explicit tag_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:   m_name( name )
@@ -73,6 +74,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
     tag_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:   m_name( name )

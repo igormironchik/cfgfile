@@ -56,12 +56,14 @@ class tag_no_value_t
 	:	public tag_t< Trait >
 {
 public:
+	//! Construct tag.
 	explicit tag_no_value_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
 	{
 	}
 
+	//! Construct tag.
 	tag_no_value_t( tag_t< Trait > & owner,
 		const typename Trait::string_t & name, bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )

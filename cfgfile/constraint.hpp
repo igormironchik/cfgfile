@@ -42,6 +42,7 @@ namespace cfgfile {
 template< class T >
 class constraint_t {
 public:
+	//! Construct constraint.
 	constraint_t() {}
 
 	virtual ~constraint_t() {}

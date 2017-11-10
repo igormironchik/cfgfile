@@ -63,8 +63,10 @@ class tag_scalar_vector_t
 	:	public tag_t< Trait >
 {
 public:
+	//! Vector of values.
 	typedef std::vector< T > values_vector_t;
 
+	//! Construct tag.
 	explicit tag_scalar_vector_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
@@ -72,6 +74,7 @@ public:
 	{
 	}
 
+	//! Construct tag.
 	tag_scalar_vector_t( tag_t< Trait > & owner,
 		const typename Trait::string_t & name,
 		bool is_mandatory = false )
