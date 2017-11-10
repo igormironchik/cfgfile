@@ -105,8 +105,6 @@ int main( int argc, char ** argv )
 	out << endl << "And now we will save new configuration to file \"new.cfg\". "
 		"Look at it!" << endl;
 
-	TagConfiguration writeTag( cfg );
-
 	QFile outFile( "new.cfg" );
 
 	if( !outFile.open( QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text ) )
@@ -118,6 +116,8 @@ int main( int argc, char ** argv )
 
 	try {
 		QTextStream stream( &outFile );
+
+		TagConfiguration writeTag( cfg );
 
 		cfgfile::write_cfgfile( writeTag, stream,
 			cfgfile::file_format_t::xml_format );

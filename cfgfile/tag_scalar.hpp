@@ -62,6 +62,7 @@ public:
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
+		,	m_value( T() )
 		,	m_constraint( nullptr )
 	{
 	}
@@ -69,6 +70,7 @@ public:
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
+		,	m_value( T() )
 		,	m_constraint( nullptr )
 	{
 	}
@@ -478,6 +480,7 @@ public:
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
+		,	m_value( typename Trait::string_t() )
 		,	m_constraint( nullptr )
 	{
 	}
@@ -485,6 +488,7 @@ public:
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
+		,	m_value( typename Trait::string_t() )
 		,	m_constraint( nullptr )
 	{
 	}
@@ -728,6 +732,7 @@ public:
 	explicit tag_scalar_t( const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( name, is_mandatory )
+		,	m_value( QString() )
 		,	m_constraint( nullptr )
 	{
 	}
@@ -735,6 +740,7 @@ public:
 	tag_scalar_t( tag_t< Trait > & owner, const typename Trait::string_t & name,
 		bool is_mandatory = false )
 		:	tag_t< Trait >( owner, name, is_mandatory )
+		,	m_value( QString() )
 		,	m_constraint( nullptr )
 	{
 	}

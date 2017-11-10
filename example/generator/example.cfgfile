@@ -12,6 +12,7 @@
 			{base tagScalar
 				{valueType int}
 				{name integer_field}
+				{defaultValue 0}
 			}
 
 			{tagVectorOfTags

@@ -356,7 +356,7 @@ class_t::set_base_value_type( const std::string & t )
 	m_base_value_type = t;
 }
 
-const std::list< field_t > &
+const std::vector< field_t > &
 class_t::fields() const
 {
 	return m_fields;
@@ -368,8 +368,8 @@ class_t::field_by_name( const std::string & n ) const
 	if( n.empty() )
 		return 0;
 
-	std::list< field_t >::const_iterator it = m_fields.cbegin();
-	std::list< field_t >::const_iterator last = m_fields.cend();
+	std::vector< field_t >::const_iterator it = m_fields.cbegin();
+	std::vector< field_t >::const_iterator last = m_fields.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -386,8 +386,8 @@ class_t::field_by_name( const std::string & n )
 	if( n.empty() )
 		return 0;
 
-	std::list< field_t >::iterator it = m_fields.begin();
-	std::list< field_t >::iterator last = m_fields.end();
+	std::vector< field_t >::iterator it = m_fields.begin();
+	std::vector< field_t >::iterator last = m_fields.end();
 
 	for( ; it != last; ++it )
 	{
@@ -506,22 +506,22 @@ namespace_t::set_name( const std::string & n )
 	m_name = n;
 }
 
-const std::list< namespace_t > &
+const std::vector< namespace_t > &
 namespace_t::all_nested() const
 {
 	return m_nested_namespaces;
 }
 
-std::list< const namespace_t* >
+std::vector< const namespace_t* >
 namespace_t::nested( const std::string & n ) const
 {
-	std::list< const namespace_t* > res;
+	std::vector< const namespace_t* > res;
 
 	if( n.empty() )
 		return res;
 
-	std::list< namespace_t >::const_iterator it = m_nested_namespaces.cbegin();
-	std::list< namespace_t >::const_iterator last = m_nested_namespaces.cend();
+	std::vector< namespace_t >::const_iterator it = m_nested_namespaces.cbegin();
+	std::vector< namespace_t >::const_iterator last = m_nested_namespaces.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -532,16 +532,16 @@ namespace_t::nested( const std::string & n ) const
 	return res;
 }
 
-std::list< namespace_t* >
+std::vector< namespace_t* >
 namespace_t::nested( const std::string & n )
 {
-	std::list< namespace_t* > res;
+	std::vector< namespace_t* > res;
 
 	if( n.empty() )
 		return res;
 
-	std::list< namespace_t >::iterator it = m_nested_namespaces.begin();
-	std::list< namespace_t >::iterator last = m_nested_namespaces.end();
+	std::vector< namespace_t >::iterator it = m_nested_namespaces.begin();
+	std::vector< namespace_t >::iterator last = m_nested_namespaces.end();
 
 	for( ; it != last; ++it )
 	{
@@ -558,7 +558,7 @@ namespace_t::add_namespace( const namespace_t & n )
 	m_nested_namespaces.push_back( n );
 }
 
-const std::list< class_t > &
+const std::vector< class_t > &
 namespace_t::classes() const
 {
 	return m_classes;
@@ -570,8 +570,8 @@ namespace_t::class_by_name( const std::string & n ) const
 	if( n.empty() )
 		return 0;
 
-	std::list< class_t >::const_iterator it = m_classes.cbegin();
-	std::list< class_t >::const_iterator last = m_classes.cend();
+	std::vector< class_t >::const_iterator it = m_classes.cbegin();
+	std::vector< class_t >::const_iterator last = m_classes.cend();
 
 	for( ; it != last; ++it )
 	{
@@ -588,8 +588,8 @@ namespace_t::class_by_name( const std::string & n )
 	if( n.empty() )
 		return 0;
 
-	std::list< class_t >::iterator it = m_classes.begin();
-	std::list< class_t >::iterator last = m_classes.end();
+	std::vector< class_t >::iterator it = m_classes.begin();
+	std::vector< class_t >::iterator last = m_classes.end();
 
 	for( ; it != last; ++it )
 	{
@@ -695,14 +695,14 @@ model_t::set_root_namespace( const namespace_t & n )
 	m_root = n;
 }
 
-const std::list< std::string > &
+const std::vector< std::string > &
 model_t::global_includes() const
 {
 	return m_global_includes;
 }
 
 void
-model_t::set_global_includes( const std::list< std::string > & inc )
+model_t::set_global_includes( const std::vector< std::string > & inc )
 {
 	m_global_includes = inc;
 }
@@ -713,14 +713,14 @@ model_t::add_global_include( const std::string & inc )
 	m_global_includes.push_back( inc );
 }
 
-const std::list< std::string > &
+const std::vector< std::string > &
 model_t::relative_includes() const
 {
 	return m_relative_includes;
 }
 
 void
-model_t::set_relative_includes( const std::list< std::string > & inc )
+model_t::set_relative_includes( const std::vector< std::string > & inc )
 {
 	m_relative_includes = inc;
 }
@@ -732,11 +732,11 @@ model_t::add_relative_include( const std::string & inc )
 }
 
 void extract_and_bind_all_classes( const namespace_t & root,
-	std::list< const_class_ptr_t > & data )
+	std::vector< const_class_ptr_t > & data )
 {
 	{
-		std::list< class_t >::const_iterator it = root.classes().cbegin();
-		std::list< class_t >::const_iterator last = root.classes().cend();
+		std::vector< class_t >::const_iterator it = root.classes().cbegin();
+		std::vector< class_t >::const_iterator last = root.classes().cend();
 
 		for( ; it != last; ++it )
 		{
@@ -746,8 +746,8 @@ void extract_and_bind_all_classes( const namespace_t & root,
 	}
 
 	{
-		std::list< namespace_t >::const_iterator it = root.all_nested().cbegin();
-		std::list< namespace_t >::const_iterator last = root.all_nested().cend();
+		std::vector< namespace_t >::const_iterator it = root.all_nested().cbegin();
+		std::vector< namespace_t >::const_iterator last = root.all_nested().cend();
 
 		for( ; it != last; ++it )
 		{
@@ -776,11 +776,11 @@ model_t::prepare()
 {
 	m_indexes.clear();
 
-	std::list< const_class_ptr_t > sorted;
+	std::vector< const_class_ptr_t > sorted;
 
 	extract_and_bind_all_classes( m_root, sorted );
 
-	sorted.sort( const_class_ptr_less() );
+	std::sort( sorted.begin(), sorted.end(), const_class_ptr_less() );
 
 	unsigned long long index = 1;
 
@@ -797,7 +797,7 @@ model_t::prepare()
 void
 model_t::check() const
 {
-	std::list< std::string > classes;
+	std::vector< std::string > classes;
 
 	const_class_ptr_t c = 0;
 
@@ -847,12 +847,12 @@ static inline std::string full_name( const class_t & c,
 static inline bool
 check_is_class_defined( const std::string & class_to_check,
 	const std::string & this_class_name,
-	const std::list< std::string > & prev_defined_classes )
+	const std::vector< std::string > & prev_defined_classes )
 {
 	auto split = [] ( const std::string & what, const std::string & with )
-		-> std::list< std::string >
+		-> std::vector< std::string >
 	{
-		std::list< std::string > res;
+		std::vector< std::string > res;
 
 		std::string::size_type pos = 0;
 		std::string::size_type prev = 0;
@@ -872,19 +872,19 @@ check_is_class_defined( const std::string & class_to_check,
 		return res;
 	};
 
-	const std::list< std::string > to_check =
+	const std::vector< std::string > to_check =
 		split( class_to_check, c_namespace_separator );
 
-	const std::list< std::string > this_class =
+	const std::vector< std::string > this_class =
 		split( this_class_name, c_namespace_separator );
 
 	const std::size_t min = std::min( to_check.size(), this_class.size() );
 
 	for( const std::string & c : prev_defined_classes )
 	{
-		std::list< std::string > to_check_tmp = to_check;
-		std::list< std::string > this_class_tmp = this_class;
-		std::list< std::string > class_tmp =
+		std::vector< std::string > to_check_tmp = to_check;
+		std::vector< std::string > this_class_tmp = this_class;
+		std::vector< std::string > class_tmp =
 			split( c, c_namespace_separator );
 
 		if( to_check_tmp == class_tmp )
@@ -914,7 +914,7 @@ check_is_class_defined( const std::string & class_to_check,
 
 void
 model_t::check_class( const class_t & c,
-	std::list< std::string > & prev_defined_classes, bool included ) const
+	std::vector< std::string > & prev_defined_classes, bool included ) const
 {
 	const std::string class_name = full_name( c );
 
@@ -926,7 +926,7 @@ model_t::check_class( const class_t & c,
 
 	prev_defined_classes.push_back( class_name );
 
-	std::list< std::string > fields;
+	std::vector< std::string > fields;
 
 	for( const field_t & f : c.fields() )
 	{

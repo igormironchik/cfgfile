@@ -302,7 +302,7 @@ public:
 	void set_base_value_type( const std::string & t );
 
 	//! \return all fields.
-	const std::list< field_t > & fields() const;
+	const std::vector< field_t > & fields() const;
 
 	//! \return Field with the given name.
 	const field_t * field_by_name( const std::string & n ) const;
@@ -332,7 +332,7 @@ protected:
 	friend class model_t;
 
 	friend void extract_and_bind_all_classes( const namespace_t & root,
-		std::list< const class_t* > & data );
+		std::vector< const class_t* > & data );
 
 	//! Set parent namespace.
 	void set_parent_namespace( const namespace_t * p ) const;
@@ -350,7 +350,7 @@ private:
 	//! Base value type.
 	std::string m_base_value_type;
 	//! Fields.
-	std::list< field_t > m_fields;
+	std::vector< field_t > m_fields;
 	//! Line number.
 	long long m_line_number;
 	//! Column number.
@@ -382,18 +382,18 @@ public:
 	void set_name( const std::string & n );
 
 	//! \return All nested namespaces.
-	const std::list< namespace_t > & all_nested() const;
+	const std::vector< namespace_t > & all_nested() const;
 
 	//! \return Nested namespace with the given name.
-	std::list< const namespace_t* > nested( const std::string & n ) const;
+	std::vector< const namespace_t* > nested( const std::string & n ) const;
 	//! \return Nested namespace with the given name.
-	std::list< namespace_t* > nested( const std::string & n );
+	std::vector< namespace_t* > nested( const std::string & n );
 
 	//! Add namespace.
 	void add_namespace( const namespace_t & n );
 
 	//! \return all classes.
-	const std::list< class_t > & classes() const;
+	const std::vector< class_t > & classes() const;
 
 	//! \return Class with the given name.
 	const class_t * class_by_name( const std::string & n ) const;
@@ -418,7 +418,7 @@ public:
 
 protected:
 	friend void extract_and_bind_all_classes( const namespace_t & root,
-		std::list< const class_t* > & data );
+		std::vector< const class_t* > & data );
 
 	//! Set parent namespace.
 	void set_parent_namespace( const namespace_t * p ) const;
@@ -427,9 +427,9 @@ private:
 	//! Namespace name.
 	std::string m_name;
 	//! Nested namespaces.
-	std::list< namespace_t > m_nested_namespaces;
+	std::vector< namespace_t > m_nested_namespaces;
 	//! Classes in this namespace.
-	std::list< class_t > m_classes;
+	std::vector< class_t > m_classes;
 	//! Line number.
 	long long m_line_number;
 	//! Column number.
@@ -464,16 +464,16 @@ public:
 	void set_root_namespace( const namespace_t & n );
 
 	//! \return List of global includes.
-	const std::list< std::string > & global_includes() const;
+	const std::vector< std::string > & global_includes() const;
 	//! Set list of global includes.
-	void set_global_includes( const std::list< std::string > & inc );
+	void set_global_includes( const std::vector< std::string > & inc );
 	//! Add global include.
 	void add_global_include( const std::string & inc );
 
 	//! \return List of relative includes.
-	const std::list< std::string > & relative_includes() const;
+	const std::vector< std::string > & relative_includes() const;
 	//! Set list of relative includes.
-	void set_relative_includes( const std::list< std::string > & inc );
+	void set_relative_includes( const std::vector< std::string > & inc );
 	//! Add relative include.
 	void add_relative_include( const std::string & inc );
 
@@ -501,16 +501,16 @@ public:
 private:
 	//! Check class.
 	void check_class( const class_t & c,
-		std::list< std::string > & prev_defined_classes,
+		std::vector< std::string > & prev_defined_classes,
 		bool included ) const;
 
 private:
 	//! Root namespace, i.e. ::
 	namespace_t m_root;
 	//! List of global includes.
-	std::list< std::string > m_global_includes;
+	std::vector< std::string > m_global_includes;
 	//! List of relative includes.
-	std::list< std::string > m_relative_includes;
+	std::vector< std::string > m_relative_includes;
 	//! Include guard.
 	std::string m_include_guard;
 

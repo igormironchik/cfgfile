@@ -100,13 +100,13 @@ int main( int, char ** )
 	std::cout << std::endl << "And now we will save new configuration to file \"new.cfg\". "
 		"Look at it!" << std::endl;
 
-	tag_configuration_t writeTag( cfg );
-
 	std::ofstream out( "new.cfg" );
 
 	try {
 		if( out.good() )
 		{
+			tag_configuration_t writeTag( cfg );
+
 			cfgfile::write_cfgfile( writeTag, out );
 
 			out.close();

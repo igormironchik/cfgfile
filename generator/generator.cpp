@@ -73,7 +73,7 @@ cpp_generator_t::~cpp_generator_t()
 // namespace_stack_t
 //
 
-typedef std::list< const_namespace_ptr_t > namespace_stack_t;
+typedef std::vector< const_namespace_ptr_t > namespace_stack_t;
 
 
 //
@@ -110,8 +110,8 @@ static inline void close_namespace( std::ostream & stream,
 //
 
 static inline void generate_includes( std::ostream & stream,
-	const std::list< std::string > & global_includes,
-	const std::list< std::string > & relative_includes )
+	const std::vector< std::string > & global_includes,
+	const std::vector< std::string > & relative_includes )
 {
 	stream << "// cfgfile include.\n"
 		"#include <cfgfile/all.hpp>\n\n";
