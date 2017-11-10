@@ -91,31 +91,31 @@
 			}
 
 			{tag
-				{valueType custom_t}
+				{valueType cfg::custom_t}
 				{name custom_field}
 				{required}
 			}
 
 			{tag
-				{valueType bool_scalar_t}
+				{valueType cfg::bool_scalar_t}
 				{name bool_scalar}
 				{required}
 			}
 
 			{tag
-				{valueType int_scalar_t}
+				{valueType cfg::int_scalar_t}
 				{name int_scalar}
 				{required}
 			}
 
 			{tag
-				{valueType string_scalar_t}
+				{valueType cfg::string_scalar_t}
 				{name string_scalar}
 				{required}
 			}
 
 			{tag
-				{valueType scalar_vector_t}
+				{valueType cfg::scalar_vector_t}
 				{name int_scalar_vector}
 				{required}
 			}
@@ -127,7 +127,7 @@
 			}
 
 			{tagVectorOfTags
-				{valueType tags_t}
+				{valueType cfg::tags_t}
 				{name vector}
 				{required}
 			}

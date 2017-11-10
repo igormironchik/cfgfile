@@ -16,7 +16,7 @@
 			}
 
 			{tagVectorOfTags
-				{valueType a_t}
+				{valueType generator::a_t}
 				{name a_vector}
 			}
 		}

@@ -846,70 +846,11 @@ static inline std::string full_name( const class_t & c,
 
 static inline bool
 check_is_class_defined( const std::string & class_to_check,
-	const std::string & this_class_name,
 	const std::vector< std::string > & prev_defined_classes )
 {
-	auto split = [] ( const std::string & what, const std::string & with )
-		-> std::vector< std::string >
-	{
-		std::vector< std::string > res;
-
-		std::string::size_type pos = 0;
-		std::string::size_type prev = 0;
-
-		while( ( pos = what.find( with, pos ) ) != std::string::npos )
-		{
-			const std::string value = what.substr( prev, pos - prev );
-
-			if( !value.empty() )
-				res.push_back( value );
-
-			pos += with.length();
-
-			prev = pos;
-		}
-
-		return res;
-	};
-
-	const std::vector< std::string > to_check =
-		split( class_to_check, c_namespace_separator );
-
-	const std::vector< std::string > this_class =
-		split( this_class_name, c_namespace_separator );
-
-	const std::size_t min = std::min( to_check.size(), this_class.size() );
-
-	for( const std::string & c : prev_defined_classes )
-	{
-		std::vector< std::string > to_check_tmp = to_check;
-		std::vector< std::string > this_class_tmp = this_class;
-		std::vector< std::string > class_tmp =
-			split( c, c_namespace_separator );
-
-		if( to_check_tmp == class_tmp )
-		{
-			const std::size_t min_length = std::min( min, class_tmp.size() );
-
-			for( std::size_t i = 1; i < min_length; ++i )
-			{
-				if( to_check_tmp.front() == this_class_tmp.front() &&
-					to_check_tmp.front() == class_tmp.front() )
-				{
-					to_check_tmp.erase( to_check_tmp.begin() );
-					this_class_tmp.erase( this_class_tmp.begin() );
-					class_tmp.erase( class_tmp.begin() );
-				}
-				else
-					break;
-			}
-
-			if( to_check_tmp.size() == 1 || this_class_tmp.size() == 1 )
-				return true;
-		}
-	}
-
-	return false;
+	return ( std::find( prev_defined_classes.cbegin(),
+		prev_defined_classes.cend(), class_to_check ) !=
+			prev_defined_classes.cend() );
 }
 
 void
@@ -920,7 +861,7 @@ model_t::check_class( const class_t & c,
 
 	if( std::find( prev_defined_classes.cbegin(), prev_defined_classes.cend(),
 		class_name ) != prev_defined_classes.cend() )
-			throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Redefinition of class_t \"" ) +
+			throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Redefinition of class \"" ) +
 				class_name + "\". Line " + std::to_string( c.line_number() ) +
 				", column " + std::to_string( c.column_number() ) +	"." );
 
@@ -939,7 +880,7 @@ model_t::check_class( const class_t & c,
 				{
 					if( f.name().empty() )
 						throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string(
-							"Base of class_t field_t's name is empty. Line " ) +
+							"Empty name of base type. Line " ) +
 							std::to_string( f.line_number() ) +
 							", column " + std::to_string( f.column_number() ) +
 							"." );
@@ -952,15 +893,15 @@ model_t::check_class( const class_t & c,
 		}
 		else if( f.name().empty() )
 			throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string(
-				"field_t name of class_t \"" ) + class_name +
-				"\" Line " + std::to_string( f.line_number() ) +
+				"Empty name of field of class \"" ) + class_name +
+				"\". Line " + std::to_string( f.line_number() ) +
 				", column " + std::to_string( f.column_number() ) +
 				"." );
 
 		if( std::find( fields.cbegin(), fields.cend(), f.name() ) !=
 			fields.cend() )
-				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "field_t \"" ) +
-					f.name() + "\" already defined in class_t \"" +
+				throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Field \"" ) +
+					f.name() + "\" already defined in class \"" +
 					class_name + "\". Line " +
 					std::to_string( f.line_number() ) +
 					", column " + std::to_string( f.column_number()  ) + "." );
@@ -969,10 +910,11 @@ model_t::check_class( const class_t & c,
 
 		if( !included )
 		{
-			if( f.type() == field_t::custom_tag_field_type )
+			if( f.type() == field_t::custom_tag_field_type ||
+				f.type() == field_t::vector_of_tags_field_type )
 			{
-				if( !check_is_class_defined( full_name( c, f.value_type() ),
-					class_name, prev_defined_classes ) )
+				if( !check_is_class_defined( f.value_type(),
+					prev_defined_classes ) )
 				{
 					throw cfgfile::exception_t< cfgfile::string_trait_t >( std::string( "Value type \"" ) +
 						f.value_type() + "\" of member \"" +
