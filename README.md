@@ -307,6 +307,8 @@ constraint for the field's value. {minMaxConstraint} require two tags
 For example, {minMaxConstraint {min 0} {max 100}},
 {oneOfConstraint one two three}.
 
+{base} and fields can have {defaultValue} tag to specify default value.
+
 In the above example will be generated similar to the following header file.
 
 ```cpp
