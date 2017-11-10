@@ -38,16 +38,20 @@
 
 int main( int, char ** )
 {
-	tag_configuration_t readTag;
+	configuration_t cfg;
 
 	std::ifstream in( "example.cfg" );
 
 	try {
 		if( in.good() )
 		{
+			tag_configuration_t readTag;
+
 			cfgfile::read_cfgfile( readTag, in, "example.cfg" );
 
 			in.close();
+
+			cfg = readTag.configuration();
 		}
 		else
 		{
@@ -64,8 +68,6 @@ int main( int, char ** )
 
 		return 1;
 	}
-
-	configuration_t cfg = readTag.configuration();
 
 	std::cout << "We've loaded the configuration from file:" << std::endl;
 	std::cout << "stringValue: " << cfg.m_stringValue << std::endl;

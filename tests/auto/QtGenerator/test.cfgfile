@@ -56,7 +56,6 @@
 				{valueType int}
 				{name int_scalar_vector}
 				{oneOfConstraint 100 200 300}
-				{defaultValue 100}
 			}
 
 			{tagScalar
@@ -89,7 +88,6 @@
 				{name int_field}
 				{minMaxConstraint {min 0} {max 500}}
 				{required}
-				{defaultValue 100}
 			}
 
 			{tag

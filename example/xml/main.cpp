@@ -42,7 +42,7 @@ int main( int argc, char ** argv )
 	Q_UNUSED( argc )
 	Q_UNUSED( argv )
 
-	TagConfiguration readTag;
+	Configuration cfg;
 
 	QFile inFile( "example.cfg" );
 
@@ -56,9 +56,13 @@ int main( int argc, char ** argv )
 	try {
 		QTextStream stream( &inFile );
 
+		TagConfiguration readTag;
+
 		cfgfile::read_cfgfile( readTag, stream, "example.cfg" );
 
 		inFile.close();
+
+		cfg = readTag.configuration();
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
@@ -68,8 +72,6 @@ int main( int argc, char ** argv )
 
 		return 1;
 	}
-
-	Configuration cfg = readTag.configuration();
 
 	QTextStream out( stdout );
 	out << "We've loaded the configuration from file:" << endl;
