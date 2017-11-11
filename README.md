@@ -46,7 +46,7 @@ several values. A sample configuration file is shown below:
 ```
           
 String tag's values can be framed in quotation marks if it contains white space
-or special characters. The special characters are: \n, \r, \t, \", \\, is the
+or special characters. The special characters are: ```\n```, ```\r```, ```\t```, ```\"```, ```\\```, is the
 line breaks, tabs, quotes and backslash. Or use ctest...
           
 Parsing of the configuration file is based on a specialized class that inherits
