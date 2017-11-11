@@ -12,7 +12,7 @@
 	For generation generator uses input configuration file in cfgfile format
 	with following format:
 
-	Let's say you need data class with one std::string field then you should write
+	Let's say you need data class with one \c std::string field then you should write
 	following configuration file, for example:
 
 	\code{.unparsed}
@@ -30,40 +30,40 @@
 	}
 	\endcode
 
-	Each configuration file for generator must has one {forGeneration} tag and all
-	nested tags must be defined in this tag. {forGeneration} tag require string for
-	#ifndef directive (include guard). There you can use {namespace} tag for
+	Each configuration file for generator must has one \c {forGeneration} tag and all
+	nested tags must be defined in this tag. \c {forGeneration} tag require string for
+	\c #ifndef directive (include guard). There you can use \c {namespace} tag for
 	generation data classes and tags in the specified C++ namespace. Namespaces can
-	be nested. To declare data class and tag you should use {class} tag.
-	{class} tag can has {base} tag to define base class of the configuration tag.
-	{base} tag can has following values: tagNoValue, tagScalar, tagScalarVector.
-	tagNoValue is not mandatory in this case. To define field in data class you can
-	use following tags: {tagScalar} for scalar tag, {tagNoValue} for no-value tag,
-	{tagScalarVector} for vector of scalar values, {tag} for already defined tag,
-	{tagVectorOfTags} for vector of already defined tags.
+	be nested. To declare data class and tag you should use \c {class} tag.
+	\c {class} tag can has \c {base} tag to define base class of the configuration tag.
+	\c {base} tag can has following values: \c tagNoValue, \c tagScalar, \c tagScalarVector.
+	\c tagNoValue is not mandatory in this case. To define field in data class you can
+	use following tags: \c {tagScalar} for scalar tag, \c {tagNoValue} for no-value tag,
+	\c {tagScalarVector} for vector of scalar values, \c {tag} for already defined tag,
+	\c {tagVectorOfTags} for vector of already defined tags.
 
-	{tagScalar}, {tagScalarVector} require C++ type defined in {valueType} tag.
+	\c {tagScalar}, \c {tagScalarVector} require C++ type defined in \c {valueType} tag.
 	In this situation C++ type should be defined as string, that mean that, for
-	example, unsigned int C++ type should be declared as "unsigned int".
+	example, \c unsigned \c int C++ type should be declared as \c "unsigned int".
 
-	{tag} and {tagVectorOfTags} require class name with namespace if it is exist.
-	Class name should be defined in {valueType} tag.
-	Namespace and class name should be separated with ::
+	\c {tag} and \c {tagVectorOfTags} require class name with namespace if it is exist.
+	Class name should be defined in \c {valueType} tag.
+	Namespace and class name should be separated with \c ::
 
-	All of field tags must have {name} tag with name of the field as value. If
-	{base} defined with tagScalar or tagScalarVector then {valueType} and {name}
-	must be defined. {base tagNoValue} is not necessary, if {base} is not defined
-	then tagNoValue will be used as base class.
+	All of field tags must have \c {name} tag with name of the field as value. If
+	\c {base} defined with \c tagScalar or \c tagScalarVector then \c {valueType} and \c {name}
+	must be defined. \c {base \c tagNoValue} is not necessary, if \c {base} is not defined
+	then \c tagNoValue will be used as base class.
 
-	Fields can have {required} tag to mark field as required.
+	Fields can have \c {required} tag to mark field as required.
 
-	All of field tags can have {minMaxConstraint} or {oneOfConstraint} to define
-	constraint for the field's value. {minMaxConstraint} require two tags
-	{min value} and {max value}, and {oneOfConstraint} require list of values.
-	For example, {minMaxConstraint {min 0} {max 100}},
-	{oneOfConstraint one two three}.
+	All of field tags can have \c {minMaxConstraint} or \c {oneOfConstraint} to define
+	constraint for the field's value. \c {minMaxConstraint} require two tags
+	\c {min \c value} and \c {max \c value}, and \c {oneOfConstraint} require list of values.
+	For example, \c {minMaxConstraint \c {min \c 0} \c {max \c 100}},
+	\c {oneOfConstraint \c one \c two \c three}.
 
-	{base} and fields can have {defaultValue} tag to specify default value.
+	\c {base} and fields can have \c {defaultValue} tag to specify default value.
 
 	In the above example will be generated similar to the following header file.
 
@@ -102,11 +102,11 @@
 	\endcode
 
 	Additionally you can use custom data structures and tags in the generator.
-	For this you can use {globalInclude string} and {relativeInclude string}
+	For this you can use \c {globalInclude \c string} and \c {relativeInclude \c string}
 	tags. When using such includes in C++ code will be added corresponding
 	include directives. And checking of classes' and namespaces' names will be
 	turned off. And one more restriction is that that class's name for tag
-	must be equal to tag_ + Name, i.e. if data structure names Data then class for
-	tag must be named tag_Data and be placed in the same namespace as Data class/
+	must be equal to \c tag_ \c + \c Name, i.e. if data structure names \c Data then class for
+	tag must be named \c tag_Data and be placed in the same namespace as \c Data class/
 	structure.
 */
