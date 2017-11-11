@@ -50,8 +50,8 @@ or special characters. The special characters are: ```\n```, ```\r```, ```\t```,
 line breaks, tabs, quotes and backslash.
           
 Parsing of the configuration file is based on a specialized class that inherits
-from cfgfile::tag_t or any derived class. For each tag in this case, define a
-class member that is the object of a class derived from cfgfile::tag_t.
+from ```cfgfile::tag_t``` or any derived class. For each tag in this case, define a
+class member that is the object of a class derived from ```cfgfile::tag_t```.
 There are finished classes in cfgfile for:
           
  * ```tag_scalar_t< T, Trait >``` - tag with a single value,
