@@ -4,7 +4,7 @@ Library for reading and writing configuration files (cfgfile).
 
 # Compilling
 
-This is header-only library. But if you want to build examples and tests juct
+This is header-only library. But if you want to build examples and tests just
 run qmake and then make, as usually.
 
 To build with Qt support define CFGFILE_QT_SUPPORT. To build with XML support
