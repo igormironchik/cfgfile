@@ -2,6 +2,8 @@
 /*!
 	\page dsl DSL for generation
 
+	\section overview Overview
+
 	To simplify development with cfgfile was implemented cfgfile generator.
 
 	cfgfile generator this is generator of C++ header file from
@@ -12,10 +14,10 @@
 	For generation generator uses input configuration file in cfgfile format
 	with following format:
 
-	Let's say you need data class with one \c std::string field then you should write
+	Let's say you need data class with one \c std::string field then you can write
 	following configuration file, for example:
 
-	\code{.unparsed}
+	\verbatim
 	{forGeneration ifndefMacro
 	  {namespace NamespaceName
 	    {class NameOfTheClass
@@ -28,42 +30,51 @@
 	    }
 	  }
 	}
-	\endcode
+	\endverbatim
 
-	Each configuration file for generator must has one \c {forGeneration} tag and all
-	nested tags must be defined in this tag. \c {forGeneration} tag require string for
-	\c #ifndef directive (include guard). There you can use \c {namespace} tag for
+	Each configuration file for generator must has one \link forgen {forGeneration} \endlink tag and all
+	nested tags must be defined in this tag. \link forgen {forGeneration} \endlink tag require string for
+	\c #ifndef directive (include guard). There you can use \link namespace {namespace} \endlink tag for
 	generation data classes and tags in the specified C++ namespace. Namespaces can
-	be nested. To declare data class and tag you should use \c {class} tag.
-	\c {class} tag can has \c {base} tag to define base class of the configuration tag.
-	\c {base} tag can has following values: \c tagNoValue, \c tagScalar, \c tagScalarVector.
+	be nested. To declare data class and tag you should use \link class {class} \endlink tag.
+	\link class {class} \endlink tag can has \link base {base} \endlink tag to define base class of the configuration tag.
+	\link base {base} \endlink tag can has following values: \c tagNoValue, \c tagScalar, \c tagScalarVector.
 	\c tagNoValue is not mandatory in this case. To define field in data class you can
-	use following tags: \c {tagScalar} for scalar tag, \c {tagNoValue} for no-value tag,
-	\c {tagScalarVector} for vector of scalar values, \c {tag} for already defined tag,
-	\c {tagVectorOfTags} for vector of already defined tags.
+	use following tags: \link tagscalar {tagScalar} \endlink for scalar tag,
+	\link tagnovalue {tagNoValue} \endlink for no-value tag,
+	\link tagscalarvector {tagScalarVector} \endlink for vector of scalar values,
+	\link tag {tag} \endlink for already defined tag,
+	\link tagvectoroftags {tagVectorOfTags} \endlink for vector of already defined tags.
 
-	\c {tagScalar}, \c {tagScalarVector} require C++ type defined in \c {valueType} tag.
+	\link tagscalar {tagScalar} \endlink, \link tagscalarvector {tagScalarVector} \endlink
+	require C++ type defined in \link valuetype {valueType} \endlink tag.
 	In this situation C++ type should be defined as string, that mean that, for
 	example, \c unsigned \c int C++ type should be declared as \c "unsigned int".
 
-	\c {tag} and \c {tagVectorOfTags} require class name with namespace if it is exist.
-	Class name should be defined in \c {valueType} tag.
+	\link tag {tag} \endlink and \link tagvectoroftags {tagVectorOfTags} \endlink
+	require class name with namespace if it is exist.
+	Class name should be defined in \link valuetype {valueType} \endlink tag.
 	Namespace and class name should be separated with \c ::
 
-	All of field tags must have \c {name} tag with name of the field as value. If
-	\c {base} defined with \c tagScalar or \c tagScalarVector then \c {valueType} and \c {name}
-	must be defined. \c {base \c tagNoValue} is not necessary, if \c {base} is not defined
+	All of field tags must have \link name {name} \endlink tag with name of the field as value. If
+	\link base {base} \endlink defined with \c tagScalar or \c tagScalarVector then
+	\link valuetype {valueType} \endlink and \link name {name} \endlink
+	must be defined. \link base {base tagNoValue} \endlink is not necessary, if
+	\link base {base} \endlink is not defined
 	then \c tagNoValue will be used as base class.
 
-	Fields can have \c {required} tag to mark field as required.
+	Fields can have \link required {required} \endlink tag to mark field as required.
 
-	All of field tags can have \c {minMaxConstraint} or \c {oneOfConstraint} to define
-	constraint for the field's value. \c {minMaxConstraint} require two tags
-	\c {min \c value} and \c {max \c value}, and \c {oneOfConstraint} require list of values.
+	All of field tags can have \link minmax {minMaxConstraint} \endlink or
+	\link oneof {oneOfConstraint} \endlink to define
+	constraint for the field's value. \link minmax {minMaxConstraint} \endlink require two tags
+	\link min {min} \endlink and \link max {max} \endlink, and \link oneof {oneOfConstraint} \endlink
+	require list of values.
 	For example, \c {minMaxConstraint \c {min \c 0} \c {max \c 100}},
 	\c {oneOfConstraint \c one \c two \c three}.
 
-	\c {base} and fields can have \c {defaultValue} tag to specify default value.
+	\link base {base} \endlink and fields can have \link default {defaultValue} \endlink
+	tag to specify default value.
 
 	In the above example will be generated similar to the following header file.
 
@@ -102,11 +113,252 @@
 	\endcode
 
 	Additionally you can use custom data structures and tags in the generator.
-	For this you can use \c {globalInclude \c string} and \c {relativeInclude \c string}
+	For this you can use \link globalinc {globalInclude} \endlink and
+	\link relativeinc {relativeInclude} \endlink
 	tags. When using such includes in C++ code will be added corresponding
 	include directives. And checking of classes' and namespaces' names will be
 	turned off. And one more restriction is that that class's name for tag
 	must be equal to \c tag_ \c + \c Name, i.e. if data structure names \c Data then class for
 	tag must be named \c tag_Data and be placed in the same namespace as \c Data class/
 	structure.
+
+	\section details Details
+
+	\subsection forgen {forGeneration}
+
+	Syntax: \verbatim {forGeneration <string>} \endverbatim
+
+	Root tag of the DSL. Requires string argument wich will be used as include
+	guard in C++ header. In the C++ header include guard will be appended with
+	\c __INCLUDED. In this tag should be defined all classes, namespaces.
+
+	Possible child tags are \link namespace {namespace} \endlink,
+	\link class {class} \endlink,
+	\link globalinc {globalInclude} \endlink,
+	\link relativeinc {relativeInclude} \endlink.
+
+	\subsection globalinc {globalInclude}
+
+	Syntax: \verbatim {globalInclude <string>} \endverbatim
+
+	Includes the give file in the C++ header with \c < \c >.
+
+	\subsection relativeinc {relativeInclude}
+
+	Syntax: \verbatim {relativeInclude <string>} \endverbatim
+
+	Includes the given file in the C++ header with \c \" \c \".
+
+	\subsection namespace {namespace}
+
+	Syntax: \verbatim {namespace <string>} \endverbatim
+
+	Generates C++ namespace with the given name in the C++ header.
+
+	Possible child tags are \link namespace {namespace} \endlink,
+	\link class {class} \endlink.
+
+	\subsection class {class}
+
+	Syntax: \verbatim {class <string>} \endverbatim
+
+	Generates C++ classes for the data and tag with the given name. Name of the
+	data class will be as given whereas name of the class for cfgfile tag
+	will be prepended with \c tag_ \note Tag will be generated templated, so
+	you can use this tag with any Trait.
+
+	Possible child tags are \link base {base} \endlink,
+	\link tagscalar {tagScalar} \endlink,
+	\link tagscalarvector {tagScalarVector} \endlink,
+	\link tagnovalue {tagNoValue} \endlink,
+	\link tagvectoroftags {tagVectorOfTags} \endlink,
+	\link tag {tag} \endlink.
+
+	\subsection base {base}
+
+	Syntax: \verbatim {base tagNoValue|tagScalar|tagScalarVector} \endverbatim
+
+	Defines base class for the tag for the data class. This tag is not mandatory,
+	if not defined then \c {base \c tagNoValue} will be used that mean that base
+	class of the tag will be \c cfgfile::tag_no_value_t.
+
+	If value of the tag is \c tagScalar then \c cfgfile::tag_scalar_t will be
+	used as base class.
+
+	If value of the tag is \c tagScalarVector then \c cfgfile::tag_scalar_vector_t
+	will be used as base class.
+
+	Possible child tags are \link name {name} \endlink,
+	\link valuetype {valueType} \endlink,
+	\link default {defaultValue} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link oneof {oneOfConstraint} \endlink.
+
+	\note \link valuetype {valueType} \endlink,
+	\link default {defaultValue} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link oneof {oneOfConstraint} \endlink tags are in use only with \c tagScalar
+	and \c tagScalarVector values.
+
+	\subsection valuetype {valueType}
+
+	Syntax: \verbatim {valueType <string>} \endverbatim
+
+	Defines C++ type of the value. \note If C++ type contains spaces then use
+	quotes to define value, for example, \c \"unsigned \c int\".
+
+	\subsection default {defaultValue}
+
+	Syntax: \verbatim {defaultValue <value>} \endverbatim
+
+	Defines default value for the value. DSL reads value as string but generator
+	makes substitution as is. For example, if C++ type \c int then default value
+	can be defined as \c {defaultValue \c 100}. If, for example, C++ type of the
+	value is \c QString then default value can be defined as \c {defaultValue
+	\c \"\\\"value\\\"\"}.
+
+	\note Possible situations when C++ type of the value is \c std::vector, in
+	this situation default value will be substituted as arguments of constructor
+	of \c std::vector. You should care about it. For \c std::vector you
+	can pass \c std::initializer_list, for example, or use two arguments for the
+	constructor of \c std::vector, where first will be count of elements and
+	second - value.
+
+	\subsection minmax {minMaxConstraint}
+
+	Syntax: \verbatim {minMaxConstraint {min <value>} {max <value>}} \endverbatim
+
+	Defines min-max constraint for the tag.
+
+	Required child tags are \link min {min} \endlink,
+	\link max {max} \endlink.
+
+	\subsection min {min}
+
+	Syntax: \verbatim {min <value>} \endverbatim
+
+	Defines minimum value of the constraint.
+
+	\subsection max {max}
+
+	Syntax: \verbatim {max <value>} \endverbatim
+
+	Defines maximum value of the constraint.
+
+	\subsection oneof {oneOfConstraint}
+
+	Syntax: \verbatim {oneOfConstraint <list of values>} \endverbatim
+
+	Defines one-of constraint for the tag.
+
+	\note If underlying C++ type is string you should quote each value as
+	\c \"\\\"value\\\"\". Values are separated with space.
+
+	\subsection tagscalar {tagScalar}
+
+	Syntax: \verbatim {tagScalar} \endverbatim
+
+	Defines member/field in the data/tag with type of cfgfile::tag_scalar_t in
+	the tag with underlying C++ type defined in \link valuetype {valueType} \endlink.
+
+	Required tags are \link valuetype {valueType} \endlink,
+	\link name {name} \endlink.
+
+	Optional tags are \link required {required} \endlink,
+	\link oneof {oneOfConstraint} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link default {defaultValue} \endlink.
+
+	\subsection name {name}
+
+	Syntax: \verbatim {name <string>} \endverbatim
+
+	Defines name for the data member, tag name. In data class name is in use for
+	generating getter/setter members name for the value. Name of the getter member
+	will be as is whereas name of the setter will be prepended with set_ In the
+	configuration file tag will have the given name as name/tag.
+
+	For example if you define \c {name \c my_value} then:
+
+	in data class you will have three methods:
+
+	\code
+	Type & my_value();
+	const Type & my_value() const;
+	void set_my_value( const Type & value );
+	\endcode
+
+	and in configuration file you will have tag:
+
+	\verbatim {my_value} \endverbatim
+
+	\subsection required {required}
+
+	Syntax: \verbatim {required} \endverbatim
+
+	Marks tag as required in the generated configuration.
+
+	\subsection tagscalarvector {tagScalarVector}
+
+	Syntax: \verbatim {tagScalarVector} \endverbatim
+
+	Defines member/field in the data/tag with type of cfgfile::tag_scalar_vector_t in
+	the tag with underlying C++ type defined in \link valuetype {valueType} \endlink.
+
+	Required tags are \link valuetype {valueType} \endlink,
+	\link name {name} \endlink.
+
+	Optional tags are \link required {required} \endlink,
+	\link oneof {oneOfConstraint} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link default {defaultValue} \endlink.
+
+	\subsection tagnovalue {tagNoValue}
+
+	Syntax: \verbatim {tagNoValue} \endverbatim
+
+	Defines member/field in the data/tag with type of cfgfile::tag_no_value_t in
+	the tag.
+
+	Required tag is \link name {name} \endlink.
+
+	Optional tag is \link required {required} \endlink.
+
+	\subsection tagvectoroftags {tagVectorOfTags}
+
+	Syntax: \verbatim {tagVectorOfTags} \endverbatim
+
+	Defines member/field in the data/tag with type of cfgfile::tag_vector_of_tags_t in
+	the tag with underlying type defined in \link valuetype {valueType} \endlink.
+
+	\note Underlying type should be defined in \"this\" configuration for the
+	generator or should be included with \link globalinc {globalInclude} \endlink
+	or \link relativeinc {relativeInclude} \endlink tags, i.e. child tag can be
+	defined by user in the C++ header or can be previously generated. Type should
+	be defined with all namespaces.
+
+	Required tags are \link valuetype {valueType} \endlink,
+	\link name {name} \endlink.
+
+	Optional tags are \link required {required} \endlink,
+	\link oneof {oneOfConstraint} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link default {defaultValue} \endlink.
+
+	\subsection tag {tag}
+
+	Syntax: \verbatim {tag} \endverbatim
+
+	Defines member/field in the data/tag with type of tag defined in
+	\link valuetype {valueType} \endlink.
+
+	\note Type should be defined with all namespaces.
+
+	Required tags are \link valuetype {valueType} \endlink,
+	\link name {name} \endlink.
+
+	Optional tags are \link required {required} \endlink,
+	\link oneof {oneOfConstraint} \endlink,
+	\link minmax {minMaxConstraint} \endlink,
+	\link default {defaultValue} \endlink.
 */
