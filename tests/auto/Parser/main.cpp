@@ -314,7 +314,7 @@ TEST( Parser, test_unexpectedStartCurlBrace )
 
 TEST( Parser, test_unexpectedTagName1 )
 {
-	std::stringstream stream( "{secondTag \"lexeme1\"}" );
+	std::stringstream stream( "{secondTag\n\n\t\"lexeme1\"}" );
 
 	cfgfile::input_stream_t<> input( "test_unexpectedTagName1", stream );
 

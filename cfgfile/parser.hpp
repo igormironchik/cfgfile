@@ -158,7 +158,7 @@ public:
 					lexeme.value() + Trait::from_ascii( "\". " ) +
 					Trait::from_ascii( "In file \"" ) + file_name +
 					Trait::from_ascii( "\" on line " ) +
-					Trait::to_string( m_lex.input_stream().line_number() ) +
+					Trait::to_string( m_lex.line_number() ) +
 					Trait::from_ascii( "." ) );
 
 
@@ -181,7 +181,7 @@ private:
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 		else if( !this->m_tag.is_mandatory() &&
 			lexeme.type() == lexeme_type_t::null )
@@ -193,7 +193,7 @@ private:
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 
 		lexeme = m_lex.next_lexeme();
@@ -206,7 +206,7 @@ private:
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 
 		return true;
@@ -221,7 +221,7 @@ private:
 					"We expected tag name, but we've got start curl brace. "
 					"In file \"" ) + m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 		else if( lexeme.type() == lexeme_type_t::finish )
 			throw exception_t< Trait >(
@@ -229,14 +229,14 @@ private:
 					"We expected tag name, but we've got finish curl brace. "
 					"In file \"" ) + m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 		else if( lexeme.type() == lexeme_type_t::null )
 			throw exception_t< Trait >(
 				Trait::from_ascii( "Unexpected end of file. "
 					"In file \"" ) + m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 		else if( tag.name() == lexeme.value() )
 		{
@@ -279,7 +279,7 @@ private:
 				Trait::from_ascii( "\". In file \"" ) +
 				m_lex.input_stream().file_name() +
 				Trait::from_ascii( "\" on line " ) +
-				Trait::to_string( m_lex.input_stream().line_number() ) +
+				Trait::to_string( m_lex.line_number() ) +
 				Trait::from_ascii( "." ) );
 	}
 
