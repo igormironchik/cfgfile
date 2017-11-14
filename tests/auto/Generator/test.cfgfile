@@ -30,7 +30,7 @@
 			{tagScalar
 				{valueType std::string}
 				{name string_field}
-				{oneOfConstraint "\"one\"" "\"two\"" "\"three\"" "\"\""}
+				{oneOfConstraint "\"one\"" "\"tw\\\"\\no\"" "\"three\"" "\"\""}
 				{required}
 			}
 		}

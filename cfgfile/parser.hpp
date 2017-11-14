@@ -400,13 +400,29 @@ private:
 						QString( "a" ) + QString::number( i ) ).toAttr();
 
 					if( !attr.isNull() )
+					{
+						typename Trait::string_t value;
+
+						try {
+							value = from_cfgfile_format< Trait >( attr.value()
+								.prepend( const_t< Trait >::c_quotes )
+								.append( const_t< Trait >::c_quotes ) );
+						}
+						catch( const exception_t< Trait > & x )
+						{
+							throw exception_t< Trait > ( x.desc() +
+								Trait::from_ascii( " In file \"" ) + file_name +
+								Trait::from_ascii( "\" on line " ) +
+								Trait::to_string( attr.lineNumber() ) +
+								Trait::from_ascii( "." ) );
+						}
+
 						tag->on_string( parser_info_t< Trait >(
 								file_name,
 								attr.lineNumber(),
 								attr.columnNumber() ),
-							from_cfgfile_format< Trait >( attr.value()
-								.prepend( const_t< Trait >::c_quotes )
-								.append( const_t< Trait >::c_quotes ) ) );
+							value );
+					}
 				}
 
 				parse_tag( child, file_name );
@@ -427,11 +443,25 @@ private:
 
 				if( !text.isNull() )
 				{
+					typename Trait::string_t value;
+
+					try {
+						value = from_cfgfile_format< Trait >( text.data() );
+					}
+					catch( const exception_t< Trait > & x )
+					{
+						throw exception_t< Trait > ( x.desc() +
+							Trait::from_ascii( " In file \"" ) + file_name +
+							Trait::from_ascii( "\" on line " ) +
+							Trait::to_string( text.lineNumber() ) +
+							Trait::from_ascii( "." ) );
+					}
+
 					this->m_stack.top()->on_string( parser_info_t< Trait >(
 							file_name,
 							text.lineNumber(),
 							text.columnNumber() ),
-						from_cfgfile_format< Trait >( text.data() ) );
+						value );
 				}
 				else
 					throw exception_t< Trait >(

@@ -34,6 +34,7 @@
 // cfgfile include.
 #include "types.hpp"
 #include "const.hpp"
+#include "exceptions.hpp"
 
 
 namespace cfgfile {
@@ -103,28 +104,41 @@ static inline typename Trait::string_t from_cfgfile_format(
 	if( what.find( const_t< Trait >::c_quotes ) == 0 &&
 		what.rfind( const_t< Trait >::c_quotes ) == what.length() - 1 )
 	{
-		typename Trait::string_t result = what.substr( 1, what.length() - 2 );
+		typename Trait::string_t tmp = what.substr( 1, what.length() - 2 );
 
-		auto replace = [] ( typename Trait::string_t & str,
-			const typename Trait::string_t & old_value,
-			const typename Trait::string_t & new_value )
+		typename Trait::string_t result;
+
+		for( typename Trait::string_t::size_type i = 0; i < tmp.length(); ++i )
 		{
-			typename Trait::string_t::size_type where = Trait::string_t::npos;
+			if( tmp.at( i ) == const_t< Trait >::c_back_slash )
+			{
+				if( i + 1 < tmp.length() )
+				{
+					if( tmp.at( i + 1 ) == const_t< Trait >::c_quotes )
+						result.push_back( const_t< Trait >::c_quotes );
+					else if( tmp.at( i + 1 ) == const_t< Trait >::c_n )
+						result.push_back( const_t< Trait >::c_carriage_return );
+					else if( tmp.at( i + 1 ) == const_t< Trait >::c_r )
+						result.push_back( const_t< Trait >::c_line_feed );
+					else if( tmp.at( i + 1 ) == const_t< Trait >::c_t )
+						result.push_back( const_t< Trait >::c_tab );
+					else if( tmp.at( i + 1 ) == const_t< Trait >::c_back_slash )
+						result.push_back( const_t< Trait >::c_back_slash );
+					else
+						throw exception_t< Trait > ( Trait::from_ascii(
+								"Unrecognized backslash sequence \"\\" ) +
+							typename Trait::string_t( 1, tmp.at( i + 1 ) ) +
+							Trait::from_ascii( "\"." ) );
 
-			while( ( where = str.find( old_value ) ) != Trait::string_t::npos )
-				str.replace( where, old_value.length(), new_value );
-		};
-
-		replace( result, Trait::from_ascii( "\\n" ),
-			typename Trait::string_t( 1, const_t< Trait >::c_carriage_return ) );
-		replace( result, Trait::from_ascii( "\\\"" ),
-			typename Trait::string_t( 1, const_t< Trait >::c_quotes ) );
-		replace( result, Trait::from_ascii( "\\r" ),
-			typename Trait::string_t( 1, const_t< Trait >::c_line_feed ) );
-		replace( result, Trait::from_ascii( "\\t" ),
-			typename Trait::string_t( 1, const_t< Trait >::c_tab ) );
-		replace( result, Trait::from_ascii( "\\\\" ),
-			typename Trait::string_t( 1, const_t< Trait >::c_back_slash ) );
+					++i;
+				}
+				else
+					throw exception_t< Trait > ( Trait::from_ascii(
+						"Unfinished backslash sequence \"\\\"." ) );
+			}
+			else
+				result.push_back( tmp.at( i ) );
+		}
 
 		return result;
 	}

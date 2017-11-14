@@ -318,6 +318,13 @@ public:
 		return m_str.length();
 	}
 
+
+	inline const QChar at( int position ) const
+	{
+		return m_str.at( position );
+	}
+
+
 	inline qstring_wrapper_t substr( size_type pos, size_type count = npos ) const
 	{
 		return m_str.mid( pos, count );

@@ -584,6 +584,36 @@ TEST( StringFormat, test_to_cfg_file_format )
 		"\"\\\"\\n\\r\\t\\\\a\"" )
 }
 
+TEST( StringFormat, test_from_cfg_file_format )
+{
+	CHECK_CONDITION( from_cfgfile_format< string_trait_t > (
+		to_cfgfile_format< string_trait_t > ( "\"\\\"\n\r\t\\\"" ) ) ==
+		"\"\\\"\n\r\t\\\"" )
+
+	CHECK_CONDITION( from_cfgfile_format< string_trait_t > (
+		to_cfgfile_format< string_trait_t > ( "\\\\n" ) ) == "\\\\n" )
+
+	try {
+		from_cfgfile_format< string_trait_t > ( "\"\\o\"" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const exception_t< string_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unrecognized backslash sequence \"\\o\"." )
+	}
+
+	try {
+		from_cfgfile_format< string_trait_t > ( "\"\\\"" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const exception_t< string_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unfinished backslash sequence \"\\\"." )
+	}
+}
+
 int main()
 {
 	RUN_ALL_TESTS()

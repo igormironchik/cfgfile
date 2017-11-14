@@ -266,50 +266,6 @@ static inline void generate_fields_in_ctor( std::ostream & stream,
 // generate_constraints_in_ctor
 //
 
-static inline std::string format_string_value( const std::string & v )
-{
-	std::string result = v;
-
-	auto replace = [] ( std::string & str,
-		const std::string & old_value, const std::string & new_value,
-		bool skip_first_and_last = false )
-	{
-		typename std::string::size_type where = std::string::npos;
-
-		typename std::string::size_type pos = 0;
-
-		while( ( where = str.find( old_value, pos ) ) != std::string::npos )
-		{
-			if( skip_first_and_last )
-			{
-				if( where != 0 && where != str.length() - 1 )
-				{
-					str.replace( where, old_value.length(), new_value );
-
-					pos = where + new_value.length();
-				}
-				else
-					pos = where + old_value.length();
-
-			}
-			else if( !skip_first_and_last )
-			{
-				str.replace( where, old_value.length(), new_value );
-
-				pos = where + new_value.length();
-			}
-		}
-	};
-
-	replace( result, "\\", "\\\\" );
-	replace( result, "\n", "\\n" );
-	replace( result, "\"", "\\\"", true );
-	replace( result, "\r", "\\r" );
-	replace( result, "\t", "\\t" );
-
-	return result;
-}
-
 static inline void generate_constraints_in_ctor( std::ostream & stream,
 	cfg::const_class_ptr_t c )
 {
@@ -343,7 +299,7 @@ static inline void generate_constraints_in_ctor( std::ostream & stream,
 						stream << std::string( "\t\tm_" )
 							<< f.name()
 							<< std::string( "_constraint.add_value( " )
-							<< format_string_value( s ) << std::string( " );\n" );
+							<< s << std::string( " );\n" );
 					}
 
 					if( !f.is_base() )
