@@ -10,7 +10,7 @@ HEADERS += custom.hpp
 
 SOURCES += main.cpp
 
-TEST_CFG_FILES += test.cfg
+TEST_CFG_FILES += test.cfg test1.cfg test2.cfg
 
 include( ../../test.pri)
 

@@ -13,6 +13,12 @@ set( SRC main.cpp
 file( COPY test.cfg
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
+file( COPY test1.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
+file( COPY test2.cfg
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.hpp
 	PRE_BUILD
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../../generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i test.cfgfile -o ${CMAKE_CURRENT_BINARY_DIR}/test.hpp

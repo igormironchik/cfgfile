@@ -63,8 +63,6 @@ cfg::vector_t load_config( const QString & file_name )
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		qDebug() << x.desc();
-
 		file.close();
 
 		throw;
@@ -151,6 +149,34 @@ TEST( Generator, testAllIsOk )
 
 	check_config( cfg );
 } // testAllIsOk
+
+TEST( Generator, test_wrong_backslash_1 )
+{
+	try {
+		load_config( "test1.cfg" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unrecognized backslash sequence \"\\1\"."
+			" In file \"test1.cfg\" on line -1." )
+	}
+}
+
+TEST( Generator, test_wrong_backslash_2 )
+{
+	try {
+		load_config( "test2.cfg" );
+
+		CHECK_CONDITION( false )
+	}
+	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	{
+		CHECK_CONDITION( x.desc() == "Unfinished backslash sequence \"\\\"."
+			" In file \"test2.cfg\" on line 3." )
+	}
+}
 
 int main()
 {
