@@ -612,6 +612,8 @@ TEST( StringFormat, test_from_cfg_file_format )
 	{
 		CHECK_CONDITION( x.desc() == "Unfinished backslash sequence \"\\\"." )
 	}
+
+	CHECK_CONDITION( from_cfgfile_format< string_trait_t > ( "abc" ) == "abc" )
 }
 
 int main()
