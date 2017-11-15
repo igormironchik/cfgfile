@@ -47,5 +47,5 @@ script:
       -e build/example -e Args -e doc -e example \
       -e generator -e UnitTest -e tests \
       -e build/tests/auto/QtGenerator/test.hpp; \
-      -e 3rdparty
+      -e 3rdparty \
       fi
