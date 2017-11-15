@@ -106,24 +106,15 @@ private:
 
 static inline for_generation_t parse_cli( int argc, char ** argv )
 {
-	Args::Arg input( 'i', "input", true, true );
-	input.setDescription( "Input file name" );
-	Args::Arg output( 'o', "output", true, true );
-	output.setDescription( "Output file name" );
+	Args::CmdLine cmd;
 
-	Args::CmdLine cmd( argc, argv );
+	cmd.addArgWithFlagAndName( 'i', "input", true, true, "Input file name" )
+		.addArgWithFlagAndName( 'o', "output", true, true, "Output file name" )
+		.addHelp( true, argv[ 0 ], "C++ header generator for cfgfile." );
 
-	Args::Help help;
-	help.setAppDescription( "C++ header generator for cfgfile." );
-	help.setExecutable( argv[ 0 ] );
+	cmd.parse( argc, argv );
 
-	cmd.addArg( input );
-	cmd.addArg( output );
-	cmd.addArg( help );
-
-	cmd.parse();
-
-	for_generation_t data( input.value(), output.value() );
+	for_generation_t data( cmd.value( "-i" ), cmd.value( "-o" ) );
 
 	if( data.input_file().empty() )
 	{
