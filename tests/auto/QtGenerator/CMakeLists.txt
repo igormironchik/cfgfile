@@ -27,7 +27,8 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/test.hpp
     
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/../../..
-	${CMAKE_CURRENT_BINARY_DIR} )
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../3rdparty )
 
 add_executable( test.qt_generator ${SRC} )
 	

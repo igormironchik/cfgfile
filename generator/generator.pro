@@ -12,7 +12,7 @@ SOURCES += generator.cpp \
 	main.cpp \
 	cfg.cpp
 
-INCLUDEPATH += $$PWD/.. $$PWD/../Args
-DEPENDPATH += $$PWD/.. $$PWD/../Args
+INCLUDEPATH += $$PWD/.. $$PWD/../3rdparty/Args
+DEPENDPATH += $$PWD/.. $$PWD/../3rdparty/Args
 
 include( ../cfgfile/cfgfile.pri )

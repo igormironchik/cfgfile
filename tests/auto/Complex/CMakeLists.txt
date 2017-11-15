@@ -28,7 +28,8 @@ file( COPY xml.cfg
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
     
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/../../.. )
+	${CMAKE_CURRENT_SOURCE_DIR}/../../..
+	${CMAKE_CURRENT_SOURCE_DIR}/../../../3rdparty )
 
 add_executable( test.complex ${SRC} )
 

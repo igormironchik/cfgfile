@@ -6,5 +6,5 @@ QT -= gui core
 
 SOURCES += main.cpp
 
-INCLUDEPATH += $$PWD/../../..
-DEPENDPATH += $$PWD/../../..
+INCLUDEPATH += $$PWD/../../../3rdparty $$PWD/../../..
+DEPENDPATH += $$PWD/../../../3rdparty $$PWD/../../..

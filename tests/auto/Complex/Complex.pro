@@ -20,5 +20,5 @@ TEST_CFG_FILES += all_is_ok.cfg \
 
 include( ../../test.pri )
 
-INCLUDEPATH += $$PWD/../../..
-DEPENDPATH += $$PWD/../../..
+INCLUDEPATH += $$PWD/../../../3rdparty $$PWD/../../..
+DEPENDPATH += $$PWD/../../../3rdparty $$PWD/../../..

@@ -12,8 +12,8 @@ TEST_CFG_FILES += test.cfg
 
 include( ../../test.pri)
 
-INCLUDEPATH += $$PWD/../../..
-DEPENDPATH += $$PWD/../../..
+INCLUDEPATH += $$PWD/../../../3rdparty $$PWD/../../..
+DEPENDPATH += $$PWD/../../../3rdparty $$PWD/../../..
 
 TO_GENERATE = test.cfgfile
 

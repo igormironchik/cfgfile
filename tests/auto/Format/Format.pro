@@ -7,5 +7,5 @@ DEFINES += CFGFILE_QT_SUPPORT
 
 SOURCES += main.cpp
 
-INCLUDEPATH += $$PWD/../../..
-DEPENDPATH += $$PWD/../../..
+INCLUDEPATH += $$PWD/../../../3rdparty $$PWD/../../..
+DEPENDPATH += $$PWD/../../../3rdparty $$PWD/../../..
