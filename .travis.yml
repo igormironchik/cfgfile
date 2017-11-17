@@ -35,17 +35,17 @@ addons:
 script:
   - |
     if [ ${COVERITY_SCAN_BRANCH} != 1 ]; then \
-      export CXX="g++-4.9" CC="gcc-4.9" || { exit 1; } \
-      mkdir build || { exit 1; } \
-      cd build || { exit 1; } \
-      cmake -DENABLE_COVERAGE=ON .. || { exit 1; } \
-      make || { exit 1; } \
-      ctest --output-on-failure || { exit 1; } \
-      cd .. || { exit 1; } \
+      export CXX="g++-4.9" CC="gcc-4.9" || { exit 1; }; \
+      mkdir build || { exit 1; }; \
+      cd build || { exit 1; }; \
+      cmake -DENABLE_COVERAGE=ON .. || { exit 1; }; \
+      make || { exit 1; }; \
+      ctest --output-on-failure || { exit 1; }; \
+      cd .. || { exit 1; }; \
       coveralls --build-root build --gcov-options '\-lp' \
       -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
       -e build/example -e Args -e doc -e example \
       -e generator -e UnitTest -e tests \
       -e build/tests/auto/QtGenerator/test.hpp \
-      -e 3rdparty || { exit 1; } \
+      -e 3rdparty || { exit 1; }; \
       fi
