@@ -30,8 +30,9 @@
 
 #include "cfg.hpp"
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 // C++ include.
 #include <fstream>
@@ -64,129 +65,129 @@ Configuration loadConfig( const std::string & fileName )
 
 void checkConfig( const Configuration & cfg )
 {
-	CHECK_CONDITION( cfg.m_stringValue == "string" )
-	CHECK_CONDITION( cfg.m_listOfStringValues.size() == 3 )
-	CHECK_CONDITION( cfg.m_listOfStringValues.at( 0 ) == "str1" )
-	CHECK_CONDITION( cfg.m_listOfStringValues.at( 1 ) == "str2" )
-	CHECK_CONDITION( cfg.m_listOfStringValues.at( 2 ) == "str3" )
-	CHECK_CONDITION( cfg.m_intValue == 100 );
-	CHECK_CONDITION( cfg.m_vectorOfTags.size() == 2 );
-	CHECK_CONDITION( cfg.m_vectorOfTags.at( 0 ).m_stringValue ==
-		"string1" )
-	CHECK_CONDITION( cfg.m_vectorOfTags.at( 0 ).m_intValue == 100 );
-	CHECK_CONDITION( cfg.m_vectorOfTags.at( 1 ).m_stringValue ==
-		"string2" )
-	CHECK_CONDITION( cfg.m_vectorOfTags.at( 1 ).m_intValue == 200 );
+	REQUIRE( cfg.m_stringValue == "string" );
+	REQUIRE( cfg.m_listOfStringValues.size() == 3 );
+	REQUIRE( cfg.m_listOfStringValues.at( 0 ) == "str1" );
+	REQUIRE( cfg.m_listOfStringValues.at( 1 ) == "str2" );
+	REQUIRE( cfg.m_listOfStringValues.at( 2 ) == "str3" );
+	REQUIRE( cfg.m_intValue == 100 );
+	REQUIRE( cfg.m_vectorOfTags.size() == 2 );
+	REQUIRE( cfg.m_vectorOfTags.at( 0 ).m_stringValue ==
+		"string1" );
+	REQUIRE( cfg.m_vectorOfTags.at( 0 ).m_intValue == 100 );
+	REQUIRE( cfg.m_vectorOfTags.at( 1 ).m_stringValue ==
+		"string2" );
+	REQUIRE( cfg.m_vectorOfTags.at( 1 ).m_intValue == 200 );
 }
 
-TEST( Complex, testAllIsOk )
+TEST_CASE( "testAllIsOk" )
 {
 	Configuration cfg = loadConfig( "all_is_ok.cfg" );
 
 	checkConfig( cfg );
 } // testAllIsOk
 
-TEST( Complex, testAllIsOkWithComments )
+TEST_CASE( "testAllIsOkWithComments" )
 {
 	Configuration cfg = loadConfig( "all_is_ok_with_comments.cfg" );
 
 	checkConfig( cfg );
 } // testAllIsOkWithComments
 
-TEST( Complex, testIncosistencyToStringConstraint )
+TEST_CASE( "testIncosistencyToStringConstraint" )
 {
 	try {
 		loadConfig( "inconsistency_to_string_constraint.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "Invalid value: \"str4\". Value must match "
+		REQUIRE( "Invalid value: \"str4\". Value must match "
 			"to the constraint in tag \"listOfStringValues\". "
 			"In file \"inconsistency_to_string_constraint.cfg\" "
 			"on line 3." == x.desc() );
 	}
 } // testIncosistencyToStringConstraint
 
-TEST( Complex, testIncosistencyToIntConstraint )
+TEST_CASE( "testIncosistencyToIntConstraint" )
 {
 	try {
 		loadConfig( "inconsistency_to_int_constraint.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "Invalid value: \"200\". Value must match "
+		REQUIRE( "Invalid value: \"200\". Value must match "
 			"to the constraint in tag \"intValue\". "
 			"In file \"inconsistency_to_int_constraint.cfg\" "
 			"on line 4." == x.desc() );
 	}
 } // testIncosistencyToIntConstraint
 
-TEST( Complex, testUndefinedChildMandatoryTag )
+TEST_CASE( "testUndefinedChildMandatoryTag" )
 {
 	try {
 		loadConfig( "undefined_child_mandatory_tag.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
+		REQUIRE( "Undefined child mandatory tag: \"stringValue\". "
 			"Where parent is: \"vecOfTags\". "
 			"In file \"undefined_child_mandatory_tag.cfg\" on line 8." ==
 			x.desc() );
 	}
 } // testUndefinedChildMandatoryTag
 
-TEST( Complex, testUndefinedMandatoryTag )
+TEST_CASE( "testUndefinedMandatoryTag" )
 {
 	try {
 		loadConfig( "undefined_mandatory_tag.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "Undefined child mandatory tag: \"stringValue\". "
+		REQUIRE( "Undefined child mandatory tag: \"stringValue\". "
 			"Where parent is: \"cfg\". "
 			"In file \"undefined_mandatory_tag.cfg\" on line 14." ==
 			x.desc() );
 	}
 } // testUndefinedMandatoryTag
 
-TEST( Complex, testEmptyFile )
+TEST_CASE( "testEmptyFile" )
 {
 	try {
 		loadConfig( "empty_file.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "Unexpected end of file. Undefined "
+		REQUIRE( "Unexpected end of file. Undefined "
 			"mandatory tag \"cfg\". In file \"empty_file.cfg\" on line 1." ==
 			x.desc() );
 	}
 } // testEmptyFile
 
-TEST( Complex, testUnsupportedXML )
+TEST_CASE( "testUnsupportedXML" )
 {
 	try {
 		loadConfig( "xml.cfg" );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "XML supported only with Qt. Parsing of file "
+		REQUIRE( "XML supported only with Qt. Parsing of file "
 			"\"xml.cfg\" failed." == x.desc() );
 	}
 }
 
-TEST( Complex, testUnsupportedXMLWrite )
+TEST_CASE( "testUnsupportedXMLWrite" )
 {
 	try {
 		std::stringstream stream;
@@ -195,17 +196,10 @@ TEST( Complex, testUnsupportedXMLWrite )
 		cfgfile::write_cfgfile( tag, stream,
 			cfgfile::file_format_t::xml_format );
 
-		CHECK_CONDITION( false );
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t<> & x )
 	{
-		CHECK_CONDITION( "XML supported only with Qt." == x.desc() );
+		REQUIRE( "XML supported only with Qt." == x.desc() );
 	}
-}
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
 }

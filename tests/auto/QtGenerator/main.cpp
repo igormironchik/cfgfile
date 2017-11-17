@@ -34,8 +34,9 @@
 
 #include <QDebug>
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 // test include.
 #include "test.hpp"
@@ -101,35 +102,35 @@ void write_config( const cfg::vector_t & cfg, const QString & file_name,
 
 void check_config( const cfg::vector_t & cfg )
 {
-	CHECK_CONDITION( cfg.vector().size() == 1 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).string_field() == "one" )
-	CHECK_CONDITION( cfg.vector().at( 0 ).no_value_field() == true )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_field().size() == 2 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_field().at( 0 ) == 100 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_field().at( 1 ) == 200 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).custom_field().m_value == 300 )
+	REQUIRE( cfg.vector().size() == 1 );
+	REQUIRE( cfg.vector().at( 0 ).string_field() == "one" );
+	REQUIRE( cfg.vector().at( 0 ).no_value_field() == true );
+	REQUIRE( cfg.vector().at( 0 ).int_field().size() == 2 );
+	REQUIRE( cfg.vector().at( 0 ).int_field().at( 0 ) == 100 );
+	REQUIRE( cfg.vector().at( 0 ).int_field().at( 1 ) == 200 );
+	REQUIRE( cfg.vector().at( 0 ).custom_field().m_value == 300 );
 
-	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().bool_scalar() == true )
-	CHECK_CONDITION( cfg.vector().at( 0 ).bool_scalar().string_field() == "one" )
+	REQUIRE( cfg.vector().at( 0 ).bool_scalar().bool_scalar() == true );
+	REQUIRE( cfg.vector().at( 0 ).bool_scalar().string_field() == "one" );
 
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar().int_scalar() == 100 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar().string_field() == "one\n\"\r\t\\" )
+	REQUIRE( cfg.vector().at( 0 ).int_scalar().int_scalar() == 100 );
+	REQUIRE( cfg.vector().at( 0 ).int_scalar().string_field() == "one\n\"\r\t\\" );
 
-	CHECK_CONDITION( cfg.vector().at( 0 ).string_scalar().string_scalar() == "string" )
-	CHECK_CONDITION( cfg.vector().at( 0 ).string_scalar().string_field().isEmpty() )
+	REQUIRE( cfg.vector().at( 0 ).string_scalar().string_scalar() == "string" );
+	REQUIRE( cfg.vector().at( 0 ).string_scalar().string_field().isEmpty() );
 
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().size() == 3 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 0 ) == 100 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 1 ) == 200 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 2 ) == 300 )
-	CHECK_CONDITION( cfg.vector().at( 0 ).int_scalar_vector().string_field() ==
+	REQUIRE( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().size() == 3 );
+	REQUIRE( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 0 ) == 100 );
+	REQUIRE( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 1 ) == 200 );
+	REQUIRE( cfg.vector().at( 0 ).int_scalar_vector().int_scalar_vector().at( 2 ) == 300 );
+	REQUIRE( cfg.vector().at( 0 ).int_scalar_vector().string_field() ==
 		"StringStringStringStringStringStringStringString"
 		"StringStringStringStringStringStringStringString"
-		"StringStringStringString" )
+		"StringStringStringString" );
 }
 
 
-TEST( Generator, testAllIsOk )
+TEST_CASE( "testAllIsOk" )
 {
 	auto cfg = load_config( "test.cfg" );
 
@@ -150,37 +151,30 @@ TEST( Generator, testAllIsOk )
 	check_config( cfg );
 } // testAllIsOk
 
-TEST( Generator, test_wrong_backslash_1 )
+TEST_CASE( "test_wrong_backslash_1" )
 {
 	try {
 		load_config( "test1.cfg" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unrecognized backslash sequence \"\\1\"."
-			" In file \"test1.cfg\" on line -1." )
+		REQUIRE( x.desc() == "Unrecognized backslash sequence \"\\1\"."
+			" In file \"test1.cfg\" on line -1." );
 	}
 }
 
-TEST( Generator, test_wrong_backslash_2 )
+TEST_CASE( "test_wrong_backslash_2" )
 {
 	try {
 		load_config( "test2.cfg" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unfinished backslash sequence \"\\\"."
-			" In file \"test2.cfg\" on line 3." )
+		REQUIRE( x.desc() == "Unfinished backslash sequence \"\\\"."
+			" In file \"test2.cfg\" on line 3." );
 	}
-}
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
 }

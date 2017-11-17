@@ -33,8 +33,9 @@
 // C++ include.
 #include <fstream>
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 
 Configuration loadConfig( const std::string & fileName )
@@ -63,47 +64,40 @@ Configuration loadConfig( const std::string & fileName )
 
 void checkConfig( const Configuration & cfg )
 {
-	CHECK_CONDITION( cfg.m_withTrue == true )
-	CHECK_CONDITION( cfg.m_withFalse == false )
+	REQUIRE( cfg.m_withTrue == true );
+	REQUIRE( cfg.m_withFalse == false );
 }
 
-TEST( BoolScalar, testAllIsOkWithTrueAndFalse )
+TEST_CASE( "testAllIsOkWithTrueAndFalse" )
 {
 	Configuration cfg = loadConfig( "all_is_ok_with_true_and_false.cfg" );
 
 	checkConfig( cfg );
 } // testAllIsOkWithTrueAndFalse
 
-TEST( BoolScalar, testAllIsOkWithOnAndOff )
+TEST_CASE( "testAllIsOkWithOnAndOff" )
 {
 	Configuration cfg = loadConfig( "all_is_ok_with_on_and_off.cfg" );
 
 	checkConfig( cfg );
 } // testAllIsOkWithOnAndOff
 
-TEST( BoolScalar, testAllIsOkWith1And0 )
+TEST_CASE( "testAllIsOkWith1And0" )
 {
 	Configuration cfg = loadConfig( "all_is_ok_with_1_and_0.cfg" );
 
 	checkConfig( cfg );
 } // testAllIsOkWith1And0
 
-TEST( BoolScalar, testFalseInsteadOfTrue )
+TEST_CASE( "testFalseInsteadOfTrue" )
 {
 	Configuration cfg = loadConfig( "false_instead_of_true.cfg" );
 
-	CHECK_CONDITION( cfg.m_withTrue == false )
-	CHECK_CONDITION( cfg.m_withFalse == false )
+	REQUIRE( cfg.m_withTrue == false );
+	REQUIRE( cfg.m_withFalse == false );
 } // testFalseInsteadOfTrue
 
-TEST( BoolScalar, testInvalidValue )
+TEST_CASE( "testInvalidValue" )
 {
-	CHECK_THROW( loadConfig( "invalid_value.cfg" ), cfgfile::exception_t<> );
+	REQUIRE_THROWS_AS( loadConfig( "invalid_value.cfg" ), cfgfile::exception_t<> );
 } // testInvalidValue
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
-}

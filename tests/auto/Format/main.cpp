@@ -28,8 +28,9 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 // cfgfile include.
 #include <cfgfile/all.hpp>
@@ -41,7 +42,7 @@
 using namespace cfgfile;
 
 
-TEST( Format, allIsOk )
+TEST_CASE( "allIsOk" )
 {
 	parser_info_t< string_trait_t > ps( "test.cfg", 1, 1 );
 	parser_info_t< wstring_trait_t > pw( L"test.cfg", 1, 1 );
@@ -53,7 +54,7 @@ TEST( Format, allIsOk )
 			format_t< int, string_trait_t >::to_string(
 				std::numeric_limits< int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< int, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< int >::max()) );
 	}
@@ -63,7 +64,7 @@ TEST( Format, allIsOk )
 			format_t< int, wstring_trait_t >::to_string(
 				std::numeric_limits< int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< int, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< int >::max() ) );
 	}
@@ -73,7 +74,7 @@ TEST( Format, allIsOk )
 			format_t< int, qstring_trait_t >::to_string(
 				std::numeric_limits< int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< int, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< int >::max() ) );
 	}
@@ -84,7 +85,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned int, string_trait_t >::to_string(
 				std::numeric_limits< unsigned int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned int, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< unsigned int >::max() ) );
 	}
@@ -94,7 +95,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned int, wstring_trait_t >::to_string(
 				std::numeric_limits< unsigned int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned int, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< unsigned int >::max() ) );
 	}
@@ -104,7 +105,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned int, qstring_trait_t >::to_string(
 				std::numeric_limits< unsigned int >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned int, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< unsigned int >::max() ) );
 	}
@@ -115,7 +116,7 @@ TEST( Format, allIsOk )
 			format_t< long, string_trait_t >::to_string(
 				std::numeric_limits< long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< long >::max() ) );
 	}
@@ -125,7 +126,7 @@ TEST( Format, allIsOk )
 			format_t< long, wstring_trait_t >::to_string(
 				std::numeric_limits< long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< long >::max() ) );
 	}
@@ -135,7 +136,7 @@ TEST( Format, allIsOk )
 			format_t< long, qstring_trait_t >::to_string(
 				std::numeric_limits< long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< long >::max() ) );
 	}
@@ -146,7 +147,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long, string_trait_t >::to_string(
 				std::numeric_limits< unsigned long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< unsigned long >::max() ) );
 	}
@@ -156,7 +157,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long, wstring_trait_t >::to_string(
 				std::numeric_limits< unsigned long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< unsigned long >::max() ) );
 	}
@@ -166,7 +167,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long, qstring_trait_t >::to_string(
 				std::numeric_limits< unsigned long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< unsigned long >::max() ) );
 	}
@@ -177,7 +178,7 @@ TEST( Format, allIsOk )
 			format_t< long long, string_trait_t >::to_string(
 				std::numeric_limits< long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long long, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< long long >::max() ) );
 	}
@@ -187,7 +188,7 @@ TEST( Format, allIsOk )
 			format_t< long long, wstring_trait_t >::to_string(
 				std::numeric_limits< long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long long, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< long long >::max() ) );
 	}
@@ -197,7 +198,7 @@ TEST( Format, allIsOk )
 			format_t< long long, qstring_trait_t >::to_string(
 				std::numeric_limits< long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< long long, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< long long >::max() ) );
 	}
@@ -208,7 +209,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long long, string_trait_t >::to_string(
 				std::numeric_limits< unsigned long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long long, string_trait_t >::from_string( ps, str ) ==
 				std::numeric_limits< unsigned long long >::max() ) );
 	}
@@ -218,7 +219,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long long, wstring_trait_t >::to_string(
 				std::numeric_limits< unsigned long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long long, wstring_trait_t >::from_string( pw, str ) ==
 				std::numeric_limits< unsigned long long >::max() ) );
 	}
@@ -228,7 +229,7 @@ TEST( Format, allIsOk )
 			format_t< unsigned long long, qstring_trait_t >::to_string(
 				std::numeric_limits< unsigned long long >::max() );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< unsigned long long, qstring_trait_t >::from_string( pq, str ) ==
 				std::numeric_limits< unsigned long long >::max() ) );
 	}
@@ -239,7 +240,7 @@ TEST( Format, allIsOk )
 			format_t< double, string_trait_t >::to_string(
 				1234.9876 );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( std::abs( format_t< double, string_trait_t >::from_string( ps, str ) -
 				1234.9876 ) < 0.00001 ) );
 	}
@@ -249,7 +250,7 @@ TEST( Format, allIsOk )
 			format_t< double, wstring_trait_t >::to_string(
 				1234.9876 );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( std::abs( format_t< double, wstring_trait_t >::from_string( pw, str ) -
 				1234.9876 ) < 0.00001 ) );
 	}
@@ -259,7 +260,7 @@ TEST( Format, allIsOk )
 			format_t< double, qstring_trait_t >::to_string(
 				1234.9876 );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( std::abs( format_t< double, qstring_trait_t >::from_string( pq, str ) -
 				1234.9876 ) < 0.00001 ) );
 	}
@@ -270,7 +271,7 @@ TEST( Format, allIsOk )
 			format_t< std::string, string_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::string, string_trait_t >::from_string( ps, str ) ==
 				"1234.9876" ) );
 	}
@@ -280,7 +281,7 @@ TEST( Format, allIsOk )
 			format_t< std::string, wstring_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::string, wstring_trait_t >::from_string( pw, str ) ==
 				"1234.9876" ) );
 	}
@@ -290,7 +291,7 @@ TEST( Format, allIsOk )
 			format_t< std::string, qstring_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::string, qstring_trait_t >::from_string( pq, str ) ==
 				"1234.9876" ) );
 	}
@@ -301,7 +302,7 @@ TEST( Format, allIsOk )
 			format_t< std::wstring, string_trait_t >::to_string(
 				L"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::wstring, string_trait_t >::from_string( ps, str ) ==
 				L"1234.9876" ) );
 	}
@@ -311,7 +312,7 @@ TEST( Format, allIsOk )
 			format_t< std::wstring, wstring_trait_t >::to_string(
 				L"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::wstring, wstring_trait_t >::from_string( pw, str ) ==
 				L"1234.9876" ) );
 	}
@@ -321,7 +322,7 @@ TEST( Format, allIsOk )
 			format_t< std::wstring, qstring_trait_t >::to_string(
 				L"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< std::wstring, qstring_trait_t >::from_string( pq, str ) ==
 				L"1234.9876" ) );
 	}
@@ -332,7 +333,7 @@ TEST( Format, allIsOk )
 			format_t< QString, string_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< QString, string_trait_t >::from_string( ps, str ) ==
 				"1234.9876" ) );
 	}
@@ -342,7 +343,7 @@ TEST( Format, allIsOk )
 			format_t< QString, wstring_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< QString, wstring_trait_t >::from_string( pw, str ) ==
 				"1234.9876" ) );
 	}
@@ -352,7 +353,7 @@ TEST( Format, allIsOk )
 			format_t< QString, qstring_trait_t >::to_string(
 				"1234.9876" );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< QString, qstring_trait_t >::from_string( pq, str ) ==
 				"1234.9876" ) );
 	}
@@ -362,7 +363,7 @@ TEST( Format, allIsOk )
 		const auto str =
 			format_t< bool, string_trait_t >::to_string( true );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< bool, string_trait_t >::from_string( ps, str ) ==
 				true ) );
 	}
@@ -371,254 +372,247 @@ TEST( Format, allIsOk )
 		const auto str =
 			format_t< bool, string_trait_t >::to_string( false );
 
-		CHECK_CONDITION(
+		REQUIRE(
 			( format_t< bool, string_trait_t >::from_string( ps, str ) ==
 				false ) );
 	}
 } // allIsOk
 
-TEST( Format, Failed )
+TEST_CASE( "Failed" )
 {
 	parser_info_t< string_trait_t > ps( "test.cfg", 1, 1 );
 
-	CHECK_THROW( ( format_t< int, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< int, string_trait_t >::from_string( ps,
 		"9999999999999999999999999999999999" ) ),
 			exception_t< string_trait_t > );
 } // Failed
 
-TEST( Format, test_traits )
+TEST_CASE( "test_traits" )
 {
-	CHECK_CONDITION( wstring_trait_t::from_ascii( "abc" ) ==
-		L"abc" )
+	REQUIRE( wstring_trait_t::from_ascii( "abc" ) ==
+		L"abc" );
 
-	CHECK_CONDITION( qstring_wrapper_t( "str1" ) + qstring_wrapper_t( "str2" ) ==
-		qstring_wrapper_t( "str1str2" ) )
+	REQUIRE( qstring_wrapper_t( "str1" ) + qstring_wrapper_t( "str2" ) ==
+		qstring_wrapper_t( "str1str2" ) );
 
-	CHECK_CONDITION( qstring_trait_t::to_string( 123 ) ==
-		qstring_wrapper_t( "123" ) )
+	REQUIRE( qstring_trait_t::to_string( 123 ) ==
+		qstring_wrapper_t( "123" ) );
 
-	CHECK_CONDITION( qstring_trait_t::from_ascii( "abc" ) ==
-		qstring_wrapper_t( "abc" ) )
+	REQUIRE( qstring_trait_t::from_ascii( "abc" ) ==
+		qstring_wrapper_t( "abc" ) );
 }
 
-TEST( Format, test_exceptions )
+TEST_CASE( "test_exceptions" )
 {
 	parser_info_t< string_trait_t > ps( "test.cfg", 1, 1 );
 	parser_info_t< wstring_trait_t > pw( L"test.cfg", 1, 1 );
 	parser_info_t< qstring_trait_t > pq( "test.cfg", 1, 1 );
 
-	CHECK_THROW( ( format_t< int, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< int, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< int, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< int, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< int, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< int, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< int, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< int, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< int, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< int, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< int, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< int, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned int, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< long, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< long, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< long, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< long, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< long, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< long, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< long long, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< long long, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< long long, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< long long, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< long long, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< long long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< long long, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, string_trait_t >::from_string( ps,
 		"999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, wstring_trait_t >::from_string( pw,
 		L"999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< unsigned long long, qstring_trait_t >::from_string( pq,
 		"999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< double, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< double, string_trait_t >::from_string( ps,
 		"999 999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< double, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< double, wstring_trait_t >::from_string( pw,
 		L"999 999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< double, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< double, qstring_trait_t >::from_string( pq,
 		"999 999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 
-	CHECK_THROW( ( format_t< double, string_trait_t >::from_string( ps,
+	REQUIRE_THROWS_AS( ( format_t< double, string_trait_t >::from_string( ps,
 		"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
-		exception_t< string_trait_t > )
+		exception_t< string_trait_t > );
 
-	CHECK_THROW( ( format_t< double, wstring_trait_t >::from_string( pw,
+	REQUIRE_THROWS_AS( ( format_t< double, wstring_trait_t >::from_string( pw,
 		L"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
-		exception_t< wstring_trait_t > )
+		exception_t< wstring_trait_t > );
 
-	CHECK_THROW( ( format_t< double, qstring_trait_t >::from_string( pq,
+	REQUIRE_THROWS_AS( ( format_t< double, qstring_trait_t >::from_string( pq,
 		"9.9e+999999999999999999999999999999999999999999999999999999999999" ) ),
-		exception_t< qstring_trait_t > )
+		exception_t< qstring_trait_t > );
 }
 
-TEST( StringFormat, test_to_cfg_file_format )
+TEST_CASE( "test_to_cfg_file_format" )
 {
-	CHECK_CONDITION( to_cfgfile_format< string_trait_t > ( "" ) == "\"\"" )
+	REQUIRE( to_cfgfile_format< string_trait_t > ( "" ) == "\"\"" );
 
-	CHECK_CONDITION( to_cfgfile_format< string_trait_t > ( "\"\n\r\t\\a" ) ==
-		"\"\\\"\\n\\r\\t\\\\a\"" )
+	REQUIRE( to_cfgfile_format< string_trait_t > ( "\"\n\r\t\\a" ) ==
+		"\"\\\"\\n\\r\\t\\\\a\"" );
 }
 
-TEST( StringFormat, test_from_cfg_file_format )
+TEST_CASE( "test_from_cfg_file_format" )
 {
-	CHECK_CONDITION( from_cfgfile_format< string_trait_t > (
+	REQUIRE( from_cfgfile_format< string_trait_t > (
 		to_cfgfile_format< string_trait_t > ( "\"\\\"\n\r\t\\\"" ) ) ==
-		"\"\\\"\n\r\t\\\"" )
+		"\"\\\"\n\r\t\\\"" );
 
-	CHECK_CONDITION( from_cfgfile_format< string_trait_t > (
-		to_cfgfile_format< string_trait_t > ( "\\\\n" ) ) == "\\\\n" )
+	REQUIRE( from_cfgfile_format< string_trait_t > (
+		to_cfgfile_format< string_trait_t > ( "\\\\n" ) ) == "\\\\n" );
 
 	try {
 		from_cfgfile_format< string_trait_t > ( "\"\\o\"" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const exception_t< string_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unrecognized backslash sequence \"\\o\"." )
+		REQUIRE( x.desc() == "Unrecognized backslash sequence \"\\o\"." );
 	}
 
 	try {
 		from_cfgfile_format< string_trait_t > ( "\"\\\"" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const exception_t< string_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unfinished backslash sequence \"\\\"." )
+		REQUIRE( x.desc() == "Unfinished backslash sequence \"\\\"." );
 	}
 
-	CHECK_CONDITION( from_cfgfile_format< string_trait_t > ( "abc" ) == "abc" )
-}
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
+	REQUIRE( from_cfgfile_format< string_trait_t > ( "abc" ) == "abc" );
 }

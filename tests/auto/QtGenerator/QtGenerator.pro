@@ -12,7 +12,7 @@ SOURCES += main.cpp
 
 TEST_CFG_FILES += test.cfg test1.cfg test2.cfg
 
-include( ../../test.pri)
+include( ../../test.pri )
 
 INCLUDEPATH += $$PWD/../../../3rdparty $$PWD/../../..
 DEPENDPATH += $$PWD/../../../3rdparty $$PWD/../../..

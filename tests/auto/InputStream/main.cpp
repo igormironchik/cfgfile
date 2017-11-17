@@ -31,8 +31,9 @@
 // C++ include.
 #include <sstream>
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 // cfgfile include.
 #include <cfgfile/input_stream.hpp>
@@ -40,91 +41,84 @@
 using namespace cfgfile;
 
 
-TEST( InputStream, testInputStream )
+TEST_CASE( "testInputStream" )
 {
 	std::stringstream stream( "one\r\rtwo\r\nthree\n" );
 
 	input_stream_t<> in( "test", stream );
 
-	CHECK_CONDITION( in.column_number() == 1 )
-	CHECK_CONDITION( in.line_number() == 1 )
-	CHECK_CONDITION( in.get() == 'o' )
+	REQUIRE( in.column_number() == 1 );
+	REQUIRE( in.line_number() == 1 );
+	REQUIRE( in.get() == 'o' );
 
-	CHECK_CONDITION( in.column_number() == 2 )
-	CHECK_CONDITION( in.line_number() == 1 )
-	CHECK_CONDITION( in.get() == 'n' )
+	REQUIRE( in.column_number() == 2 );
+	REQUIRE( in.line_number() == 1 );
+	REQUIRE( in.get() == 'n' );
 
-	CHECK_CONDITION( in.column_number() == 3 )
-	CHECK_CONDITION( in.line_number() == 1 )
-	CHECK_CONDITION( in.get() == 'e' )
+	REQUIRE( in.column_number() == 3 );
+	REQUIRE( in.line_number() == 1 );
+	REQUIRE( in.get() == 'e' );
 
-	CHECK_CONDITION( in.column_number() == 4 )
-	CHECK_CONDITION( in.line_number() == 1 )
-	CHECK_CONDITION( in.get() == '\r' )
+	REQUIRE( in.column_number() == 4 );
+	REQUIRE( in.line_number() == 1 );
+	REQUIRE( in.get() == '\r' );
 
-	CHECK_CONDITION( in.column_number() == 1 )
-	CHECK_CONDITION( in.line_number() == 2 )
-	CHECK_CONDITION( in.get() == '\r' )
+	REQUIRE( in.column_number() == 1 );
+	REQUIRE( in.line_number() == 2 );
+	REQUIRE( in.get() == '\r' );
 
 	in.put_back( '\r' );
 	in.put_back( '\r' );
 
-	CHECK_CONDITION( in.column_number() == 4 )
-	CHECK_CONDITION( in.line_number() == 1 )
-	CHECK_CONDITION( in.get() == '\r' )
+	REQUIRE( in.column_number() == 4 );
+	REQUIRE( in.line_number() == 1 );
+	REQUIRE( in.get() == '\r' );
 
-	CHECK_CONDITION( in.column_number() == 1 )
-	CHECK_CONDITION( in.line_number() == 2 )
-	CHECK_CONDITION( in.get() == '\r' )
+	REQUIRE( in.column_number() == 1 );
+	REQUIRE( in.line_number() == 2 );
+	REQUIRE( in.get() == '\r' );
 
-	CHECK_CONDITION( in.column_number() == 1 )
-	CHECK_CONDITION( in.line_number() == 3 )
-	CHECK_CONDITION( in.get() == 't' )
+	REQUIRE( in.column_number() == 1 );
+	REQUIRE( in.line_number() == 3 );
+	REQUIRE( in.get() == 't' );
 
-	CHECK_CONDITION( in.column_number() == 2 )
-	CHECK_CONDITION( in.line_number() == 3 )
-	CHECK_CONDITION( in.get() == 'w' )
+	REQUIRE( in.column_number() == 2 );
+	REQUIRE( in.line_number() == 3 );
+	REQUIRE( in.get() == 'w' );
 
-	CHECK_CONDITION( in.column_number() == 3 )
-	CHECK_CONDITION( in.line_number() == 3 )
-	CHECK_CONDITION( in.get() == 'o' )
+	REQUIRE( in.column_number() == 3 );
+	REQUIRE( in.line_number() == 3 );
+	REQUIRE( in.get() == 'o' );
 
-	CHECK_CONDITION( in.column_number() == 4 )
-	CHECK_CONDITION( in.line_number() == 3 )
-	CHECK_CONDITION( in.get() == '\n' )
+	REQUIRE( in.column_number() == 4 );
+	REQUIRE( in.line_number() == 3 );
+	REQUIRE( in.get() == '\n' );
 
-	CHECK_CONDITION( in.column_number() == 1 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == 't' )
+	REQUIRE( in.column_number() == 1 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == 't' );
 
-	CHECK_CONDITION( in.column_number() == 2 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == 'h' )
+	REQUIRE( in.column_number() == 2 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == 'h' );
 
-	CHECK_CONDITION( in.column_number() == 3 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == 'r' )
+	REQUIRE( in.column_number() == 3 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == 'r' );
 
-	CHECK_CONDITION( in.column_number() == 4 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == 'e' )
+	REQUIRE( in.column_number() == 4 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == 'e' );
 
-	CHECK_CONDITION( in.column_number() == 5 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == 'e' )
+	REQUIRE( in.column_number() == 5 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == 'e' );
 
-	CHECK_CONDITION( !in.at_end() )
+	REQUIRE( !in.at_end() );
 
-	CHECK_CONDITION( in.column_number() == 6 )
-	CHECK_CONDITION( in.line_number() == 4 )
-	CHECK_CONDITION( in.get() == '\n' )
+	REQUIRE( in.column_number() == 6 );
+	REQUIRE( in.line_number() == 4 );
+	REQUIRE( in.get() == '\n' );
 
-	CHECK_CONDITION( in.at_end() )
-}
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
+	REQUIRE( in.at_end() );
 }

@@ -28,14 +28,15 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// UnitTest include.
-#include <UnitTest/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+// doctest include.
+#include <doctest/doctest.h>
 
 // cfgfile include.
 #include <cfgfile/all.hpp>
 
 
-TEST( QtParser, test_undefined_first_mandatory_tag )
+TEST_CASE( "test_undefined_first_mandatory_tag" )
 {
 	QDomDocument doc;
 
@@ -46,17 +47,17 @@ TEST( QtParser, test_undefined_first_mandatory_tag )
 	try {
 		parser.parse( "test_undefined_first_mandatory_tag" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unexpected end of file. "
+		REQUIRE( x.desc() == "Unexpected end of file. "
 			"Undefined mandatory tag \"cfg\". In file "
-			"\"test_undefined_first_mandatory_tag\" on line -1." )
+			"\"test_undefined_first_mandatory_tag\" on line -1." );
 	}
 }
 
-TEST( QtParser, test_unexpected_tag )
+TEST_CASE( "test_unexpected_tag" )
 {
 	QDomDocument doc;
 	QString error;
@@ -73,17 +74,17 @@ TEST( QtParser, test_unexpected_tag )
 	try {
 		parser.parse( "test_unexpected_tag" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unexpected tag name. "
+		REQUIRE( x.desc() == "Unexpected tag name. "
 			"We expected \"cfg\", but we've got \"wrong\". In file "
-			"\"test_unexpected_tag\" on line 1." )
+			"\"test_unexpected_tag\" on line 1." );
 	}
 }
 
-TEST( QtParser, test_unexpected_child_tag )
+TEST_CASE( "test_unexpected_child_tag" )
 {
 	QDomDocument doc;
 	QString error;
@@ -100,17 +101,17 @@ TEST( QtParser, test_unexpected_child_tag )
 	try {
 		parser.parse( "test_unexpected_child_tag" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unexpected tag name. "
+		REQUIRE( x.desc() == "Unexpected tag name. "
 			"We expected one child tag of tag \"cfg\", but we've got \"wrong\". "
-			"In file \"test_unexpected_child_tag\" on line 1." )
+			"In file \"test_unexpected_child_tag\" on line 1." );
 	}
 }
 
-TEST( QtParser, test_cant_set_xml )
+TEST_CASE( "test_cant_set_xml" )
 {
 	QTextStream s( "<a>abc" );
 
@@ -119,19 +120,12 @@ TEST( QtParser, test_cant_set_xml )
 	try {
 		cfgfile::read_cfgfile( tag, s, "test_cant_set_xml" );
 
-		CHECK_CONDITION( false )
+		REQUIRE( false );
 	}
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
-		CHECK_CONDITION( x.desc() == "Unable to parse XML "
+		REQUIRE( x.desc() == "Unable to parse XML "
 			"from file: \"test_cant_set_xml\". \"unexpected end of file\" "
-			"On line 1, column 7." )
+			"On line 1, column 7." );
 	}
-}
-
-int main()
-{
-	RUN_ALL_TESTS()
-
-	return 0;
 }
