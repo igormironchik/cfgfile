@@ -16,6 +16,10 @@ file( COPY runtests.rb
 
 project( cfgfile )
 
+add_library( cfgfile INTERFACE )
+
+target_include_directories( cfgfile INTERFACE . )
+
 add_subdirectory( generator )
 add_subdirectory( example )
 
