@@ -133,22 +133,33 @@ public:
 		{
 			if( !this->m_stack.empty() )
 			{
-				if( lexeme.type() == lexeme_type_t::start )
-					start_tag_parsing( *this->m_stack.top(),
-						this->m_stack.top()->children() );
-				else if( lexeme.type() == lexeme_type_t::string )
-					this->m_stack.top()->on_string( parser_info_t< Trait >(
+				switch( lexeme.type() )
+				{
+					case lexeme_type_t::start :
+						start_tag_parsing( *this->m_stack.top(),
+							this->m_stack.top()->children() );
+						break;
+
+					case lexeme_type_t::string :
+						this->m_stack.top()->on_string( parser_info_t< Trait >(
+								file_name,
+								m_lex.line_number(),
+								m_lex.column_number() ),
+							lexeme.value() );
+						break;
+
+					case lexeme_type_t::finish :
+					{
+						this->m_stack.top()->on_finish( parser_info_t< Trait >(
 							file_name,
 							m_lex.line_number(),
-							m_lex.column_number() ),
-						lexeme.value() );
-				else if( lexeme.type() == lexeme_type_t::finish )
-				{
-					this->m_stack.top()->on_finish( parser_info_t< Trait >(
-						file_name,
-						m_lex.line_number(),
-						m_lex.column_number() ) );
-					this->m_stack.pop();
+							m_lex.column_number() ) );
+						this->m_stack.pop();
+					}
+						break;
+
+					default:
+						break;
 				}
 			}
 			else
