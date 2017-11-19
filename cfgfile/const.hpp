@@ -67,6 +67,8 @@ struct const_t {
 	static const typename Trait::string_t c_false;
 	static const typename Trait::string_t c_1;
 	static const typename Trait::string_t c_0;
+	static const typename Trait::string_t c_yes;
+	static const typename Trait::string_t c_no;
 }; // struct const_t
 
 template< typename Trait >
@@ -156,6 +158,14 @@ const typename Trait::string_t const_t< Trait >::c_1 =
 template< typename Trait >
 const typename Trait::string_t const_t< Trait >::c_0 =
 	Trait::from_ascii( "0" );
+
+template< typename Trait >
+const typename Trait::string_t const_t< Trait >::c_yes =
+	Trait::from_ascii( "yes" );
+
+template< typename Trait >
+const typename Trait::string_t const_t< Trait >::c_no =
+	Trait::from_ascii( "no" );
 
 } /* namespace cfgfile */
 

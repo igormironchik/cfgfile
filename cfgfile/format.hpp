@@ -1075,11 +1075,13 @@ public:
 	{
 		if( value == const_t< Trait >::c_on ||
 			value == const_t< Trait >::c_true ||
-			value == const_t< Trait >::c_1 )
+			value == const_t< Trait >::c_1 ||
+			value == const_t< Trait >::c_yes )
 			return true;
 		else if( value == const_t< Trait >::c_off ||
 			value == const_t< Trait >::c_false ||
-			value == const_t< Trait >::c_0 )
+			value == const_t< Trait >::c_0 ||
+			value == const_t< Trait >::c_no )
 			return false;
 		else
 			throw exception_t< Trait >(
