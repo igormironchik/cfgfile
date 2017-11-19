@@ -62,7 +62,7 @@ cfg::vector_t load_config( const QString & file_name )
 
 		file.close();
 	}
-	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & )
 	{
 		file.close();
 
