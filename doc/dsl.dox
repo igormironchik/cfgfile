@@ -211,7 +211,7 @@
 
 	Syntax: \verbatim {defaultValue <value>} \endverbatim
 
-	Defines default value for the value. DSL reads value as string but generator
+	Defines default value for the tag. DSL reads value as string but generator
 	makes substitution as is. For example, if C++ type \c int then default value
 	can be defined as \c {defaultValue \c 100}. If, for example, C++ type of the
 	value is \c QString then default value can be defined as \c {defaultValue
