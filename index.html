@@ -8,6 +8,14 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -18,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">cfgfile
-   &#160;<span id="projectnumber">0.2.7</span>
+   &#160;<span id="projectnumber">0.2.8</span>
    </div>
   </td>
  </tr>
@@ -36,6 +44,20 @@
     </ul>
   </div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('index.html','');});
+</script>
+<div id="doc-content">
 <div class="header">
   <div class="headertitle">
 <div class="title">cfgfile Documentation</div>  </div>
@@ -48,11 +70,14 @@
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt; <span class="keyword">typename</span> Trait &gt;</div><div class="line"><span class="keyword">class </span>tag_data_t</div><div class="line">  :  <span class="keyword">public</span> <a class="code" href="classcfgfile_1_1tag__no__value__t.html">cfgfile::tag_no_value_t</a>&lt; Trait &gt;</div><div class="line">{</div><div class="line"><span class="keyword">public</span>:</div><div class="line">  tag_data_t()</div><div class="line">    :  <a class="code" href="namespacecfgfile.html">cfgfile</a>::tag_no_value_t&lt; Trait &gt; ( <span class="stringliteral">&quot;data&quot;</span>, true )</div><div class="line">    ,  m_value( *this, <span class="stringliteral">&quot;value&quot;</span>, true )</div><div class="line">  {}</div><div class="line"></div><div class="line">  tag_data_t( <span class="keyword">const</span> data_t &amp; cfg )</div><div class="line">    :  <a class="code" href="namespacecfgfile.html">cfgfile</a>::tag_no_value_t&lt; Trait &gt; ( <span class="stringliteral">&quot;data&quot;</span>, true )</div><div class="line">    ,  m_value( *this, <span class="stringliteral">&quot;value&quot;</span>, true )</div><div class="line">  {</div><div class="line">    m_value.set_value( cfg.m_value );</div><div class="line"></div><div class="line">    <a class="code" href="classcfgfile_1_1tag__t.html#a2a0496bb1cff31c335e91c5faf3cedcb">set_defined</a>();</div><div class="line">  }</div><div class="line"></div><div class="line">  data_t cfg()<span class="keyword"> const</span></div><div class="line"><span class="keyword">  </span>{</div><div class="line">    data_t d;</div><div class="line">    d.m_value = m_value.value();</div><div class="line"></div><div class="line">    <span class="keywordflow">return</span> d;</div><div class="line">  }</div><div class="line"></div><div class="line"><span class="keyword">private</span>:</div><div class="line">  <a class="code" href="classcfgfile_1_1tag__scalar__t.html">cfgfile::tag_scalar_t&lt; std::string, Trait &gt;</a> m_value;</div><div class="line">};</div></div><!-- fragment --><p>Once you defined data structure and tag you can read and write configuration.</p>
 <div class="fragment"><div class="line">data_t cfg;</div><div class="line">cfg.m_value = <span class="stringliteral">&quot;value&quot;</span>;</div><div class="line"></div><div class="line">std::ofstream stream( <span class="stringliteral">&quot;conf.cfg&quot;</span> );</div><div class="line"></div><div class="line"><span class="keywordflow">try</span> {</div><div class="line">  tag_data_t&lt; cfgfile::string_trait_t &gt; tag( cfg );</div><div class="line"></div><div class="line">  cfgfile::write_cfgfile( tag, stream );</div><div class="line"></div><div class="line">  stream.close();</div><div class="line">}</div><div class="line"><span class="keywordflow">catch</span>( <span class="keyword">const</span> <a class="code" href="classcfgfile_1_1exception__t.html">cfgfile::exception_t&lt; cfgfile::string_trait_t &gt;</a> &amp; x )</div><div class="line">{</div><div class="line">  stream.close();</div><div class="line"></div><div class="line">  std::cout &lt;&lt; x.<a class="code" href="classcfgfile_1_1exception__t.html#a5f76943794528ed1f3bf60466df2b0bb">desc</a>() &lt;&lt; std::endl;</div><div class="line">}</div></div><!-- fragment --><p>And</p>
 <div class="fragment"><div class="line">data_t cfg;</div><div class="line"></div><div class="line">std::ifstream stream( <span class="stringliteral">&quot;conf.cfg&quot;</span> );</div><div class="line"></div><div class="line"><span class="keywordflow">try</span> {</div><div class="line">  tag_data_t&lt; cfgfile::string_trait_t &gt; tag;</div><div class="line"></div><div class="line">  cfgfile::read_cfgfile( tag, stream, <span class="stringliteral">&quot;conf.cfg&quot;</span> );</div><div class="line"></div><div class="line">  stream.close();</div><div class="line"></div><div class="line">  cfg = tag.cfg();</div><div class="line">}</div><div class="line"><span class="keywordflow">catch</span>( <span class="keyword">const</span> <a class="code" href="classcfgfile_1_1exception__t.html">cfgfile::exception_t&lt; cfgfile::string_trait_t &gt;</a> &amp; x )</div><div class="line">{</div><div class="line">  stream.close();</div><div class="line"></div><div class="line">  std::cout &lt;&lt; x.<a class="code" href="classcfgfile_1_1exception__t.html#a5f76943794528ed1f3bf60466df2b0bb">desc</a>() &lt;&lt; std::endl;</div><div class="line">}</div></div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
+  </ul>
+</div>
 </body>
 </html>

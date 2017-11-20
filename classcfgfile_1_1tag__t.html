@@ -8,6 +8,14 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+  $(window).load(resizeHeight);
+</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -18,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">cfgfile
-   &#160;<span id="projectnumber">0.2.7</span>
+   &#160;<span id="projectnumber">0.2.8</span>
    </div>
   </td>
  </tr>
@@ -38,15 +46,25 @@
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
-      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="inherits.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><b>cfgfile</b></li><li class="navelem"><a class="el" href="classcfgfile_1_1tag__t.html">tag_t</a></li>  </ul>
-</div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('classcfgfile_1_1tag__t.html','');});
+</script>
+<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
@@ -62,21 +80,14 @@
  <a href="classcfgfile_1_1tag__t.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="tag_8hpp_source.html">tag.hpp</a>&gt;</code></p>
-<div class="dynheader">
-Inheritance diagram for cfgfile::tag_t&lt; Trait &gt;:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="classcfgfile_1_1tag__t.png" usemap="#cfgfile::tag_5Ft_3C_20Trait_20_3E_map" alt=""/>
-  <map id="cfgfile::tag_5Ft_3C_20Trait_20_3E_map" name="cfgfile::tag_t&lt; Trait &gt;_map">
-<area href="classcfgfile_1_1tag__no__value__t.html" title="Tag without a value. " alt="cfgfile::tag_no_value_t&lt; Trait &gt;" shape="rect" coords="0,56,311,80"/>
-<area href="classcfgfile_1_1tag__scalar__t.html" title="Tag with scalar value. " alt="cfgfile::tag_scalar_t&lt; T, Trait &gt;" shape="rect" coords="321,56,632,80"/>
-<area href="classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html" title="Tag with bool value. " alt="cfgfile::tag_scalar_t&lt; bool, Trait &gt;" shape="rect" coords="642,56,953,80"/>
-<area href="classcfgfile_1_1tag__scalar__t_3_01_q_string_00_01_trait_01_4.html" title="Tag with QString value. " alt="cfgfile::tag_scalar_t&lt; QString, Trait &gt;" shape="rect" coords="963,56,1274,80"/>
-<area href="classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html" title="Tag with string value. " alt="cfgfile::tag_scalar_t&lt; typename Trait::string_t, Trait &gt;" shape="rect" coords="1284,56,1595,80"/>
-<area href="classcfgfile_1_1tag__scalar__vector__t.html" title="Tag with multiple scalar values. " alt="cfgfile::tag_scalar_vector_t&lt; T, Trait &gt;" shape="rect" coords="1605,56,1916,80"/>
-<area href="classcfgfile_1_1tag__vector__of__tags__t.html" title="Tag with multiple instancies of the given tag. " alt="cfgfile::tag_vector_of_tags_t&lt; T, Trait &gt;" shape="rect" coords="1926,56,2237,80"/>
-</map>
- </div></div>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for cfgfile::tag_t&lt; Trait &gt;:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="classcfgfile_1_1tag__t__inherit__graph.svg" width="336" height="458"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -399,11 +410,15 @@ template&lt;typename Trait = string_trait_t&gt; </div>
 <li><a class="el" href="tag_8hpp_source.html">tag.hpp</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.11
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><b>cfgfile</b></li><li class="navelem"><a class="el" href="classcfgfile_1_1tag__t.html">tag_t</a></li>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
+  </ul>
+</div>
 </body>
 </html>
