@@ -1,6 +1,9 @@
 
 cmake_minimum_required( VERSION 2.8.11 )
 
+option( BUILD_EXAMPLES "Build examples? Default ON." ON )
+option( BUILD_TESTS "Build tests? Default ON." ON )
+
 if( NOT CMAKE_BUILD_TYPE )
 	set( CMAKE_BUILD_TYPE "Release"
 		CACHE STRING "Choose the type of build."
@@ -16,15 +19,25 @@ file( COPY runtests.rb
 
 project( cfgfile )
 
-add_library( cfgfile INTERFACE )
-
-target_include_directories( cfgfile INTERFACE ${CMAKE_CURRENT_SOURCE_DIR} )
-
-set( cfgfile_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE )
-
 add_subdirectory( generator )
-add_subdirectory( example )
 
-enable_testing()
+if( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
 
-add_subdirectory( tests )
+	if( BUILD_EXAMPLES )
+		add_subdirectory( example )
+	endif()
+
+	if( BUILD_TESTS )
+		enable_testing()
+
+		add_subdirectory( tests )
+	endif()
+
+else()
+
+	add_library( cfgfile INTERFACE )
+
+	set( cfgfile_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE )
+
+endif( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
+
