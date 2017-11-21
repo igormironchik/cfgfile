@@ -18,7 +18,9 @@ project( cfgfile )
 
 add_library( cfgfile INTERFACE )
 
-target_include_directories( cfgfile INTERFACE . )
+target_include_directories( cfgfile INTERFACE ${CMAKE_CURRENT_SOURCE_DIR} )
+
+set( cfgfile_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE )
 
 add_subdirectory( generator )
 add_subdirectory( example )
