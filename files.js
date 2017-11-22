@@ -1,7 +1,9 @@
 var files =
 [
     [ "all.hpp", "all_8hpp.html", null ],
-    [ "const.hpp", "const_8hpp.html", null ],
+    [ "const.hpp", "const_8hpp.html", [
+      [ "const_t", "structcfgfile_1_1const__t.html", null ]
+    ] ],
     [ "constraint.hpp", "constraint_8hpp.html", [
       [ "constraint_t", "classcfgfile_1_1constraint__t.html", "classcfgfile_1_1constraint__t" ]
     ] ],
@@ -12,10 +14,41 @@ var files =
       [ "constraint_one_of_t", "classcfgfile_1_1constraint__one__of__t.html", "classcfgfile_1_1constraint__one__of__t" ]
     ] ],
     [ "exceptions.hpp", "exceptions_8hpp.html", [
-      [ "exception_t", "classcfgfile_1_1exception__t.html", "classcfgfile_1_1exception__t" ]
+      [ "exception_t", "classcfgfile_1_1exception__t.html", "classcfgfile_1_1exception__t" ],
+      [ "exception_t< string_trait_t >", "classcfgfile_1_1exception__t_3_01string__trait__t_01_4.html", "classcfgfile_1_1exception__t_3_01string__trait__t_01_4" ]
     ] ],
     [ "format.hpp", "format_8hpp.html", [
-      [ "format_t", "classcfgfile_1_1format__t.html", null ]
+      [ "format_t", "classcfgfile_1_1format__t.html", null ],
+      [ "format_t< int, string_trait_t >", "classcfgfile_1_1format__t_3_01int_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< int, wstring_trait_t >", "classcfgfile_1_1format__t_3_01int_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< int, qstring_trait_t >", "classcfgfile_1_1format__t_3_01int_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned int, string_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01int_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< unsigned int, wstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01int_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned int, qstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01int_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< long, string_trait_t >", "classcfgfile_1_1format__t_3_01long_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< long, wstring_trait_t >", "classcfgfile_1_1format__t_3_01long_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< long, qstring_trait_t >", "classcfgfile_1_1format__t_3_01long_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long, string_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long, wstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long, qstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< long long, string_trait_t >", "classcfgfile_1_1format__t_3_01long_01long_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< long long, wstring_trait_t >", "classcfgfile_1_1format__t_3_01long_01long_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< long long, qstring_trait_t >", "classcfgfile_1_1format__t_3_01long_01long_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long long, string_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_01long_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long long, wstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_01long_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< unsigned long long, qstring_trait_t >", "classcfgfile_1_1format__t_3_01unsigned_01long_01long_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< double, string_trait_t >", "classcfgfile_1_1format__t_3_01double_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< double, wstring_trait_t >", "classcfgfile_1_1format__t_3_01double_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< double, qstring_trait_t >", "classcfgfile_1_1format__t_3_01double_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< typename Trait::string_t, Trait >", "classcfgfile_1_1format__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html", null ],
+      [ "format_t< std::string, wstring_trait_t >", "classcfgfile_1_1format__t_3_01std_1_1string_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< std::string, qstring_trait_t >", "classcfgfile_1_1format__t_3_01std_1_1string_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< std::wstring, string_trait_t >", "classcfgfile_1_1format__t_3_01std_1_1wstring_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< std::wstring, qstring_trait_t >", "classcfgfile_1_1format__t_3_01std_1_1wstring_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< QString, string_trait_t >", "classcfgfile_1_1format__t_3_01_q_string_00_01string__trait__t_01_4.html", null ],
+      [ "format_t< QString, wstring_trait_t >", "classcfgfile_1_1format__t_3_01_q_string_00_01wstring__trait__t_01_4.html", null ],
+      [ "format_t< QString, qstring_trait_t >", "classcfgfile_1_1format__t_3_01_q_string_00_01qstring__trait__t_01_4.html", null ],
+      [ "format_t< bool, Trait >", "classcfgfile_1_1format__t_3_01bool_00_01_trait_01_4.html", null ]
     ] ],
     [ "input_stream.hpp", "input__stream_8hpp.html", [
       [ "input_stream_t", "classcfgfile_1_1input__stream__t.html", "classcfgfile_1_1input__stream__t" ]
@@ -49,11 +82,6 @@ var files =
     [ "tag_vector_of_tags.hpp", "tag__vector__of__tags_8hpp.html", [
       [ "tag_vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html", "classcfgfile_1_1tag__vector__of__tags__t" ]
     ] ],
-    [ "types.hpp", "types_8hpp.html", [
-      [ "wstring_trait_t", "structcfgfile_1_1wstring__trait__t.html", "structcfgfile_1_1wstring__trait__t" ],
-      [ "string_trait_t", "structcfgfile_1_1string__trait__t.html", "structcfgfile_1_1string__trait__t" ],
-      [ "qstring_wrapper_t", "classcfgfile_1_1qstring__wrapper__t.html", null ],
-      [ "qstring_trait_t", "structcfgfile_1_1qstring__trait__t.html", "structcfgfile_1_1qstring__trait__t" ]
-    ] ],
+    [ "types.hpp", "types_8hpp.html", "types_8hpp" ],
     [ "utils.hpp", "utils_8hpp.html", "utils_8hpp" ]
 ];

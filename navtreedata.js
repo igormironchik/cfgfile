@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "cfgfile", "index.html", [
+    [ "Q/A", "index.html#qa", null ],
     [ "DSL for generation", "dsl.html", [
       [ "Overview", "dsl.html#overview", null ],
       [ "Details", "dsl.html#details", [
@@ -25,25 +26,38 @@ var NAVTREE =
         [ "{tag}", "dsl.html#tag", null ]
       ] ]
     ] ],
+    [ "Namespaces", null, [
+      [ "Namespace List", "namespaces.html", "namespaces" ],
+      [ "Namespace Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
+      ] ]
+    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ],
+        [ "All", "functions.html", "functions_dup" ],
+        [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Related Functions", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", null, [
-      [ "File List", "files.html", "files" ]
+      [ "File List", "files.html", "files" ],
+      [ "File Members", "globals.html", [
+        [ "All", "globals.html", null ],
+        [ "Macros", "globals_defs.html", null ]
+      ] ]
     ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-".html"
+"all_8hpp.html",
+"classcfgfile_1_1tag__vector__of__tags__t.html#abb3d897eee83ed84f1b602d48d40bff2"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

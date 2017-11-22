@@ -2,6 +2,7 @@ var classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trai
 [
     [ "tag_scalar_t", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#a3893e854142fa421743537c5be37a042", null ],
     [ "tag_scalar_t", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#abb1394add1c4811c89e4ec652f29537d", null ],
+    [ "~tag_scalar_t", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#a16dc7ce9b0065dc77548f5c347a9655a", null ],
     [ "on_finish", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#ae032dfafa5cb6a546790801f9e96728b", null ],
     [ "on_string", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#aab144e7420dbf852587629fba3571007", null ],
     [ "print", "classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html#af8423b8b283ef860b954f96d48bb00ba", null ],

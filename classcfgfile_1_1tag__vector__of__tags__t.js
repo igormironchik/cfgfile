@@ -4,6 +4,7 @@ var classcfgfile_1_1tag__vector__of__tags__t =
     [ "vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html#a62da4e8bd6b0c56811fdf4b652b08809", null ],
     [ "tag_vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html#af4d712707e4eb3ab734c80915a5ee8ca", null ],
     [ "tag_vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html#a945205bb0b2cea17cc611aadcaec36f8", null ],
+    [ "~tag_vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html#abb3d897eee83ed84f1b602d48d40bff2", null ],
     [ "at", "classcfgfile_1_1tag__vector__of__tags__t.html#acdfa69941f85d5bba8fe7748a19a3577", null ],
     [ "children", "classcfgfile_1_1tag__vector__of__tags__t.html#a5e78bcee6f70b7edd3f7e87aba50ac77", null ],
     [ "on_finish", "classcfgfile_1_1tag__vector__of__tags__t.html#a4ad5abf38805bd04c063a8a55e8a0c1c", null ],

@@ -1,5 +1,7 @@
 var classcfgfile_1_1input__stream__t =
 [
+    [ "input_stream_t", "classcfgfile_1_1input__stream__t.html#a91d5533f27f36d5f780784bf46727850", null ],
+    [ "~input_stream_t", "classcfgfile_1_1input__stream__t.html#a271c3dd8320aebdeb00d3afadec384fe", null ],
     [ "at_end", "classcfgfile_1_1input__stream__t.html#a223a0557c6b1e178f76ed9212a85b4ec", null ],
     [ "column_number", "classcfgfile_1_1input__stream__t.html#a4bb5d4cba0970130da231a2a0bf7b57b", null ],
     [ "file_name", "classcfgfile_1_1input__stream__t.html#aa576912390690bceed08cab4582e777c", null ],

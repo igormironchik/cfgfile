@@ -3,6 +3,7 @@ var classcfgfile_1_1tag__t =
     [ "child_tags_list_t", "classcfgfile_1_1tag__t.html#ac58d9cf7433d31c523b91cab2fcbe110", null ],
     [ "tag_t", "classcfgfile_1_1tag__t.html#a776ab55519ba7e898b985d82b4f86f0e", null ],
     [ "tag_t", "classcfgfile_1_1tag__t.html#a1e842f6f2d7a7e7a5e4ac93e68534194", null ],
+    [ "~tag_t", "classcfgfile_1_1tag__t.html#a5a62a5df016eb45409f7581bf3a567b9", null ],
     [ "add_child", "classcfgfile_1_1tag__t.html#a29ee601165bffba8acf0b7d073dc33e6", null ],
     [ "children", "classcfgfile_1_1tag__t.html#a826e9a617b5b61590209241406de5822", null ],
     [ "column_number", "classcfgfile_1_1tag__t.html#a238f1d18eac5c457e1f52a7bc95a102e", null ],
@@ -20,5 +21,7 @@ var classcfgfile_1_1tag__t =
     [ "print", "classcfgfile_1_1tag__t.html#afc6f1da207d51e046b36d8ba406fedbc", null ],
     [ "remove_child", "classcfgfile_1_1tag__t.html#a6b2ac2a4d073210f5f4ad86d475d5905", null ],
     [ "set_defined", "classcfgfile_1_1tag__t.html#a2a0496bb1cff31c335e91c5faf3cedcb", null ],
-    [ "set_parent", "classcfgfile_1_1tag__t.html#afd160a6ac5db467b6ec5df07290408fe", null ]
+    [ "set_parent", "classcfgfile_1_1tag__t.html#afd160a6ac5db467b6ec5df07290408fe", null ],
+    [ "parser_t", "classcfgfile_1_1tag__t.html#ab2144aa06edaaf37822ec0a7b6f8ab50", null ],
+    [ "tag_vector_of_tags_t", "classcfgfile_1_1tag__t.html#ad33939b4c9604b05d85f4c8b689c1d3c", null ]
 ];

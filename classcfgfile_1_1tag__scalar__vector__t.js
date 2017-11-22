@@ -3,6 +3,7 @@ var classcfgfile_1_1tag__scalar__vector__t =
     [ "values_vector_t", "classcfgfile_1_1tag__scalar__vector__t.html#a9d9b626bb0587d7664b88e481dcfe644", null ],
     [ "tag_scalar_vector_t", "classcfgfile_1_1tag__scalar__vector__t.html#a5e589528a6371d6ecdf0b49e92fc1714", null ],
     [ "tag_scalar_vector_t", "classcfgfile_1_1tag__scalar__vector__t.html#aa650ab192056c2a3625d9fb71f2c58af", null ],
+    [ "~tag_scalar_vector_t", "classcfgfile_1_1tag__scalar__vector__t.html#af1f716941385cab596e5512aace8935d", null ],
     [ "at", "classcfgfile_1_1tag__scalar__vector__t.html#a3c4c3ae5d5773f4cef613b238d87387e", null ],
     [ "on_finish", "classcfgfile_1_1tag__scalar__vector__t.html#a5148eabe380134546ee285fe2ed53a3c", null ],
     [ "on_string", "classcfgfile_1_1tag__scalar__vector__t.html#a0c5e3da32a2809f528b87fdcf7f0dd4d", null ],
