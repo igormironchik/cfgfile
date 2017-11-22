@@ -110,4 +110,15 @@
 	  std::cout << x.desc() << std::endl;
 	}
 	\endcode
+
+	\section qa Q/A
+
+	How can I add cfgfile to my project?
+
+	\li The simplest way is just copy cfgfile directory with headers to any location in
+	your project. With CMake you can clone entire cfgfile project somewhere in your
+	project and just do \c add_subdirectory(), if you will do so you have to
+	add include directory path to your project with
+	\c include_directories( \c ${cfgfile_INCLUDE_DIRECTORIES} \c ). With QMake you can
+	use \c cfgfile/cfgfile.pri.
 */

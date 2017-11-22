@@ -21,6 +21,17 @@ executables place in debug/release subfolders whereas *.cfg files of tests
 copy into the build directory so you have to copy *.cfg files by hands into
 the debug/release subfolders.
 
+# Q/A
+
+How can I add cfgfile to my project?
+
+ * The simplest way is just copy cfgfile directory with headers to any location in
+your project. With CMake you can clone entire cfgfile project somewhere in your
+project and just do ```add_subdirectory()```, if you will do so you have to
+add include directory path to your project with
+```include_directories( ${cfgfile_INCLUDE_DIRECTORIES} )```. With QMake you can
+use ```cfgfile/cfgfile.pri```.
+
 # About
 
 Configuration file format is a set of tags, which are surrounded by curly
