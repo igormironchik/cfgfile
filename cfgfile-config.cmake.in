@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+set( CMAKE_CXX_STANDARD 14 )
+
+include( "${CMAKE_CURRENT_LIST_DIR}/cfgfile-targets.cmake" )
