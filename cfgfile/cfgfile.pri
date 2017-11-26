@@ -1,4 +1,8 @@
 
+INCLUDEPATH += $$PWD $$PWD/..
+DEPENDPATH += $$PWD $$PWD/..
+CONFIG += c++14
+
 HEADERS += $$PWD/constraint.hpp \
 	$$PWD/format.hpp \
 	$$PWD/input_stream.hpp \

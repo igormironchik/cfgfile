@@ -12,6 +12,7 @@ OTHER_FILES = runtests.rb \
 	doc/dsl.dox \
 	doc/mainpage.dox \
 	.travis.yml \
-	doc/Doxyfile
+	doc/Doxyfile \
+	cfgfile-config.cmake.in
 
 include( cfgfile/cfgfile.pri )
