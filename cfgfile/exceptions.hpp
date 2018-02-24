@@ -83,7 +83,7 @@ class exception_t< string_trait_t >
 {
 public:
 	//! Construct exception.
-	explicit exception_t( typename string_trait_t::string_t what )
+	explicit exception_t( string_trait_t::string_t what )
 		:	std::logic_error( what )
 		,	m_what( std::move( what ) )
 	{
@@ -94,14 +94,14 @@ public:
 	}
 
 	//! \return Reason of the exception.
-	const typename string_trait_t::string_t & desc() const noexcept
+	const string_trait_t::string_t & desc() const noexcept
 	{
 		return m_what;
 	}
 
 private:
 	//! Reason of the exception.
-	typename string_trait_t::string_t m_what;
+	string_trait_t::string_t m_what;
 }; // class exception_t< string_trait_t >
 
 } /* namespace cfgfile */
