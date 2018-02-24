@@ -108,7 +108,7 @@ struct wstring_trait_t final {
 
 	static inline bool is_space( char_t ch )
 	{
-		return std::iswspace( ch );
+		return ( std::iswspace( ch ) != 0 );
 	}
 
 	static inline void to_begin( istream_t & stream )
@@ -177,7 +177,7 @@ struct string_trait_t final {
 
 	static inline bool is_space( char_t ch )
 	{
-		return std::isspace( (unsigned char) ch );
+		return ( std::isspace( (int) ch ) != 0 );
 	}
 
 	static inline void to_begin( istream_t & stream )
