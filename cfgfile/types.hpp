@@ -31,11 +31,13 @@
 #ifndef CFGFILE__TYPES_HPP__INCLUDED
 #define CFGFILE__TYPES_HPP__INCLUDED
 
+#ifndef CFGFILE_DISABLE_STL
 // C++ include.
 #include <string>
 #include <iostream>
 #include <cwctype>
 #include <cctype>
+#endif // CFGFILE_DISABLE_STL
 
 #ifdef CFGFILE_QT_SUPPORT
 // Qt include.
@@ -45,6 +47,8 @@
 
 
 namespace cfgfile {
+
+#ifndef CFGFILE_DISABLE_STL
 
 //
 // wstring_trait_t
@@ -185,6 +189,8 @@ struct string_trait_t final {
 		stream.seekg( 0 );
 	}
 }; // struct string_trait_t
+
+#endif // CFGFILE_DISABLE_STL
 
 
 #ifdef CFGFILE_QT_SUPPORT
@@ -466,6 +472,11 @@ struct qstring_trait_t final {
 }; // struct qstring_trait_t
 
 #endif // CFGFILE_QT_SUPPORT
+
+
+#if defined(CFGFILE_DISABLE_STL) && defined(CFGFILE_QT_SUPPORT)
+using string_trait_t = qstring_trait_t;
+#endif
 
 
 //

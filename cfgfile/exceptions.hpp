@@ -73,6 +73,8 @@ private:
 }; // class exception_t
 
 
+#ifndef CFGFILE_DISABLE_STL
+
 //
 // exception_t< string_trait_t >
 //
@@ -103,6 +105,8 @@ private:
 	//! Reason of the exception.
 	string_trait_t::string_t m_what;
 }; // class exception_t< string_trait_t >
+
+#endif // CFGFILE_DISABLE_STL
 
 } /* namespace cfgfile */
 

@@ -10,6 +10,9 @@ run qmake and then make, as usually.
 To build with Qt support define ```CFGFILE_QT_SUPPORT```. To build with XML support
 define ```CFGFILE_QT_SUPPORT``` and ```CFGFILE_XML_SUPPORT```. XML supported only with Qt.
 
+To disable STL strings define ```CFGFILE_DISABLE_STL```. It can be useful in collaboration
+with defined ```CFGFILE_QT_SUPPORT``` on Android.
+
 # Run tests
 
 With CMake just run runtests.rb or ctest in the build directory. This script will be

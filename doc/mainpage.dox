@@ -121,4 +121,10 @@
 	add include directory path to your project with
 	\c include_directories( \c ${cfgfile_INCLUDE_DIRECTORIES} \c ). With QMake you can
 	use \c cfgfile/cfgfile.pri.
+
+	Is it possible to disable STL strings/streams and use Qt only.
+
+	\li Yes. You can define \c CFGFILE_DISABLE_STL and \c CFGFILE_QT_SUPPORT together.
+	Additionally to \c CFGFILE_QT_SUPPORT you can define \c CFGFILE_XML_SUPPORT to
+	enable XML format support.
 */

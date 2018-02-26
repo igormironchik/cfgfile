@@ -71,6 +71,8 @@ public:
 }; // class format_t
 
 
+#ifndef CFGFILE_DISABLE_STL
+
 template<>
 class format_t< int, string_trait_t > {
 public:
@@ -155,6 +157,8 @@ public:
 	}
 }; // class format_t< int >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -187,6 +191,8 @@ public:
 }; // class format_t< int >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< unsigned int, string_trait_t > {
@@ -275,6 +281,8 @@ public:
 	}
 }; // class format_t< unsigned int >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -307,6 +315,8 @@ public:
 }; // class format_t< unsigned int >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< long, string_trait_t > {
@@ -393,6 +403,8 @@ public:
 	}
 }; // class format_t< long >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -425,6 +437,8 @@ public:
 }; // class format_t< long >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< unsigned long, string_trait_t > {
@@ -511,6 +525,8 @@ public:
 	}
 }; // class format_t< unsigned long >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -543,6 +559,8 @@ public:
 }; // class format_t< unsigned long >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< long long, string_trait_t > {
@@ -629,6 +647,8 @@ public:
 	}
 }; // class format_t< long long >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -661,6 +681,8 @@ public:
 }; // class format_t< long long >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< unsigned long long, string_trait_t > {
@@ -747,6 +769,8 @@ public:
 	}
 }; // class format_t< unsigned long long >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -779,6 +803,8 @@ public:
 }; // class format_t< unsigned long long >
 #endif // CFGFILE_QT_SUPPORT
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< double, string_trait_t > {
@@ -865,6 +891,8 @@ public:
 	}
 }; // class format_t< double >
 
+#endif // CFGFILE_DISABLE_STL
+
 
 #ifdef CFGFILE_QT_SUPPORT
 template<>
@@ -897,6 +925,7 @@ public:
 }; // class format_t< double >
 #endif // CFGFILE_QT_SUPPORT
 
+
 template< typename Trait >
 class format_t< typename Trait::string_t, Trait > {
 public:
@@ -914,6 +943,8 @@ public:
 	}
 }; // class format_t< Trait::string_t, Trait >
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< std::string, wstring_trait_t > {
@@ -938,8 +969,10 @@ public:
 	}
 }; // class format_t< std::string >
 
+#endif // CFGFILE_DISABLE_STL
 
-#ifdef CFGFILE_QT_SUPPORT
+
+#if defined(CFGFILE_QT_SUPPORT) && !defined(CFGFILE_DISABLE_STL)
 template<>
 class format_t< std::string, qstring_trait_t > {
 public:
@@ -956,8 +989,10 @@ public:
 		return ((QString)value).toStdString();
 	}
 }; // class format_t< std::string >
-#endif // CFGFILE_QT_SUPPORT
+#endif
 
+
+#ifndef CFGFILE_DISABLE_STL
 
 template<>
 class format_t< std::wstring, string_trait_t > {
@@ -982,8 +1017,10 @@ public:
 	}
 }; // class format_t< std::wstring >
 
+#endif // CFGFILE_DISABLE_STL
 
-#ifdef CFGFILE_QT_SUPPORT
+
+#if defined(CFGFILE_QT_SUPPORT) && !defined(CFGFILE_DISABLE_STL)
 template<>
 class format_t< std::wstring, qstring_trait_t > {
 public:
@@ -1000,10 +1037,10 @@ public:
 		return ((QString)value).toStdWString();
 	}
 }; // class format_t< std::wstring >
-#endif // CFGFILE_QT_SUPPORT
+#endif
 
 
-#ifdef CFGFILE_QT_SUPPORT
+#if defined(CFGFILE_QT_SUPPORT) && !defined(CFGFILE_DISABLE_STL)
 template<>
 class format_t< QString, string_trait_t > {
 public:
@@ -1038,8 +1075,10 @@ public:
 		return QString::fromStdWString( value );
 	}
 }; // class format_t< QString >
+#endif
 
 
+#ifdef CFGFILE_QT_SUPPORT
 template<>
 class format_t< QString, qstring_trait_t > {
 public:
