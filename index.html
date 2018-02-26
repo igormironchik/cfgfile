@@ -32,7 +32,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">cfgfile
-   &#160;<span id="projectnumber">0.2.8</span>
+   &#160;<span id="projectnumber">0.2.9</span>
    </div>
   </td>
  </tr>
@@ -113,7 +113,11 @@ $(document).ready(function(){initNavTree('index.html','');});
 Q/A</h1>
 <p>How can I add cfgfile to my project?</p>
 <ul>
-<li>The simplest way is just copy cfgfile directory with headers to any location in your project. With CMake you can clone entire cfgfile project somewhere in your project and just do <code>add_subdirectory()</code>, if you will do so you have to add include directory path to your project with <code>include_directories</code>( <code>${cfgfile_INCLUDE_DIRECTORIES}</code> <code></code>). With QMake you can use <code>cfgfile/cfgfile.pri</code>. </li>
+<li>The simplest way is just copy cfgfile directory with headers to any location in your project. With CMake you can clone entire cfgfile project somewhere in your project and just do <code>add_subdirectory()</code>, if you will do so you have to add include directory path to your project with <code>include_directories</code>( <code>${cfgfile_INCLUDE_DIRECTORIES}</code> <code></code>). With QMake you can use <code>cfgfile/cfgfile.pri</code>.</li>
+</ul>
+<p>Is it possible to disable STL strings/streams and use Qt only.</p>
+<ul>
+<li>Yes. You can define <code>CFGFILE_DISABLE_STL</code> and <code>CFGFILE_QT_SUPPORT</code> together. Additionally to <code>CFGFILE_QT_SUPPORT</code> you can define <code>CFGFILE_XML_SUPPORT</code> to enable XML format support. </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
