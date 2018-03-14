@@ -662,6 +662,9 @@ static inline void generate_cfg_set( std::ostream & stream,
 		}
 	}
 
+	if( c->fields().empty() )
+		stream << std::string( "\t(void) cfg;" );
+
 	stream << std::string( "\n\t\tthis->set_defined();\n" );
 } // generate_cfg_set
 
