@@ -9,7 +9,6 @@ compiler:
   - gcc
 
 before_install:
-  - pip install --user cpp-coveralls
   - |
     echo -n | openssl s_client -connect scan.coverity.com:443 | \
     sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | \
@@ -31,6 +30,13 @@ addons:
     build_command_prepend: echo 'Starting prebuild step...'; sudo ln -s -f /usr/bin/g++-4.9 /usr/bin/g++; sudo ln -s -f /usr/bin/gcc-4.9 /usr/bin/gcc; mkdir build; cd build; cmake ..; echo 'Prebuild step finished...';
     build_command: make
     branch_pattern: coverity_scan
+    
+after_success:
+  - cd ${TRAVIS_BUILD_DIR}
+  - lcov --directory . --capture --output-file coverage.info coverage info
+  - lcov --remove coverage.info '/usr/*' --output-file coverage.info
+  - lcov --list coverage.info
+  - bash <(curl -s https://codecov.io/bash)
 
 script:
   - |
@@ -38,14 +44,7 @@ script:
       export CXX="g++-4.9" CC="gcc-4.9" || { exit 1; }; \
       mkdir build || { exit 1; }; \
       cd build || { exit 1; }; \
-      cmake -DENABLE_COVERAGE=ON .. || { exit 1; }; \
+      cmake -DENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=Debug .. || { exit 1; }; \
       make || { exit 1; }; \
       ctest --output-on-failure || { exit 1; }; \
-      cd .. || { exit 1; }; \
-      coveralls --build-root build --gcov-options '\-lp' \
-      -e build/CMakeFiles -e build/tests/auto/Generator/test.hpp \
-      -e build/example -e Args -e doc -e example \
-      -e generator -e UnitTest -e tests \
-      -e build/tests/auto/QtGenerator/test.hpp \
-      -e 3rdparty || { exit 1; }; \
       fi
