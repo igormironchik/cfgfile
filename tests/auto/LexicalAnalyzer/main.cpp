@@ -406,3 +406,41 @@ TEST_CASE( "test_vertBar2" )
 
 	REQUIRE( lex4.type() == cfgfile::lexeme_type_t::null );
 }
+
+TEST_CASE( "test_unfinishedMmultiComment" )
+{
+	std::stringstream stream( "{cfg |#" );
+
+	cfgfile::input_stream_t<> input( "test_unfinishedMmultiComment", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	REQUIRE( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	REQUIRE( lex2.type() == cfgfile::lexeme_type_t::string );
+	REQUIRE( lex2.value() == "cfg" );
+
+	auto lex4 = analyzer.next_lexeme();
+
+	REQUIRE( lex4.type() == cfgfile::lexeme_type_t::null );
+}
+
+TEST_CASE( "test_finishedMmultiComment" )
+{
+	std::stringstream stream( "{cfg |##|" );
+
+	cfgfile::input_stream_t<> input( "test_unfinishedMmultiComment", stream );
+	cfgfile::lexical_analyzer_t<> analyzer( input );
+
+	auto lex1 = analyzer.next_lexeme();
+	REQUIRE( lex1.type() == cfgfile::lexeme_type_t::start );
+
+	auto lex2 = analyzer.next_lexeme();
+	REQUIRE( lex2.type() == cfgfile::lexeme_type_t::string );
+	REQUIRE( lex2.value() == "cfg" );
+
+	auto lex4 = analyzer.next_lexeme();
+
+	REQUIRE( lex4.type() == cfgfile::lexeme_type_t::null );
+}

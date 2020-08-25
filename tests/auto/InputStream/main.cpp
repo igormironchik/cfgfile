@@ -121,4 +121,10 @@ TEST_CASE( "testInputStream" )
 	REQUIRE( in.get() == '\n' );
 
 	REQUIRE( in.at_end() );
+
+	REQUIRE( in.get() == '\0' );
+	REQUIRE( in.get() == '\0' );
+	REQUIRE( in.get() == '\0' );
+
+	REQUIRE( in.at_end() );
 }
