@@ -1341,3 +1341,30 @@ TEST_CASE( "test_tag_qstring_scalar_constraint" )
 			"\"test_tag_qstring_scalar_constraint\" on line 1." );
 	}
 }
+
+TEST_CASE( "test_determineFormat" )
+{
+	{
+		std::stringstream stream( "{firstTag \"lexeme1\"}" );
+
+		cfgfile::details::determine_format_t<> fmt( stream );
+
+		REQUIRE( fmt.format() == cfgfile::file_format_t::cfgfile_format );
+	}
+
+	{
+		std::stringstream stream( "<cfg>" );
+
+		cfgfile::details::determine_format_t<> fmt( stream );
+
+		REQUIRE( fmt.format() == cfgfile::file_format_t::xml_format );
+	}
+
+	{
+		std::stringstream stream( "   {firstTag \"lexeme1\"}" );
+
+		cfgfile::details::determine_format_t<> fmt( stream );
+
+		REQUIRE( fmt.format() == cfgfile::file_format_t::cfgfile_format );
+	}
+} // test_determineFormat

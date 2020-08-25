@@ -177,9 +177,6 @@ static inline void read_cfgfile(
 #endif // CFGFILE_QT_SUPPORT
 		}
 			break;
-
-		default :
-			break;
 	}
 }
 
@@ -227,9 +224,6 @@ static inline void write_cfgfile(
 				Trait::from_ascii( "XML supported only with Qt." ) );
 #endif // CFGFILE_QT_SUPPORT
 		}
-			break;
-
-		default :
 			break;
 	}
 }
