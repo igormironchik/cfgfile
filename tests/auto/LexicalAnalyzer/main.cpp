@@ -409,7 +409,7 @@ TEST_CASE( "test_vertBar2" )
 
 TEST_CASE( "test_unfinishedMmultiComment" )
 {
-	std::stringstream stream( "{cfg |#" );
+	std::stringstream stream( "{cfg |##" );
 
 	cfgfile::input_stream_t<> input( "test_unfinishedMmultiComment", stream );
 	cfgfile::lexical_analyzer_t<> analyzer( input );

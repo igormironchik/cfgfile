@@ -160,6 +160,70 @@ private:
 }; // class SecondTag
 
 
+class SecondMandatoryTag
+	:	public cfgfile::tag_t<>
+{
+public:
+	explicit SecondMandatoryTag( tag_t<> & owner )
+		:	cfgfile::tag_t<>( owner, "secondTag", true )
+		,	m_started( false )
+		,	m_finished( false )
+		,	m_withString( false )
+		,	m_child( *this )
+	{
+	}
+
+	const ThirdTag & thirdTag() const
+	{
+		return m_child;
+	}
+
+	bool isStarted() const
+	{
+		return m_started;
+	}
+
+	bool isFinished() const
+	{
+		return m_finished;
+	}
+
+	bool isWithString() const
+	{
+		return m_withString;
+	}
+
+	std::string print( int indent = 0 ) const override
+	{
+		(void) indent;
+		return std::string();
+	}
+
+protected:
+	void on_start( const cfgfile::parser_info_t<> & ) override
+	{
+		m_started = true;
+	}
+
+	void on_finish( const cfgfile::parser_info_t<> & ) override
+	{
+		m_finished = true;
+	}
+
+	void on_string( const cfgfile::parser_info_t<> &,
+		const std::string & ) override
+	{
+		m_withString = true;
+	}
+
+private:
+	bool m_started;
+	bool m_finished;
+	bool m_withString;
+	ThirdTag m_child;
+}; // class SecondMandatoryTag
+
+
 class FirstTag
 	:	public cfgfile::tag_t<>
 {
@@ -223,6 +287,71 @@ private:
 	SecondTag m_child;
 }; // class FirstTag
 
+
+class FirstTagWithMandatory
+	:	public cfgfile::tag_t<>
+{
+public:
+	FirstTagWithMandatory()
+		:	cfgfile::tag_t<>( "firstTag", false )
+		,	m_started( false )
+		,	m_finished( false )
+		,	m_withString( false )
+		,	m_child( *this )
+	{
+	}
+
+	const SecondMandatoryTag & secondTag() const
+	{
+		return m_child;
+	}
+
+	bool isStarted() const
+	{
+		return m_started;
+	}
+
+	bool isFinished() const
+	{
+		return m_finished;
+	}
+
+	bool isWithString() const
+	{
+		return m_withString;
+	}
+
+	std::string print( int indent = 0 ) const override
+	{
+		(void) indent;
+		return std::string();
+	}
+
+protected:
+	void on_start( const cfgfile::parser_info_t<> & ) override
+	{
+		m_started = true;
+	}
+
+	void on_finish( const cfgfile::parser_info_t<> & ) override
+	{
+		m_finished = true;
+	}
+
+	void on_string( const cfgfile::parser_info_t<> &,
+		const std::string & ) override
+	{
+		m_withString = true;
+	}
+
+private:
+	bool m_started;
+	bool m_finished;
+	bool m_withString;
+	SecondMandatoryTag m_child;
+}; // class FirstTagWithMandatory
+
+
 TEST_CASE( "test_configWithOneTag" )
 {
 	std::stringstream stream( "{firstTag \"lexeme1\"}" );
@@ -252,6 +381,28 @@ TEST_CASE( "test_configWithOneTag" )
 	REQUIRE( firstTag.secondTag().thirdTag().isFinished() == false );
 	REQUIRE( firstTag.secondTag().thirdTag().isWithString() == false );
 } // test_configWithOneTag
+
+TEST_CASE( "test_undefinedMandatoryChild" )
+{
+	std::stringstream stream( "{firstTag \"lexeme1\"}" );
+
+	cfgfile::input_stream_t<> input( "test_undefinedMandatoryChild", stream );
+
+	FirstTagWithMandatory firstTag;
+
+	cfgfile::parser_t<> parser( firstTag, input );
+
+	try {
+		parser.parse( "test_undefinedMandatoryChild" );
+	}
+	catch( cfgfile::exception_t<> & x )
+	{
+		REQUIRE( x.desc() ==
+			"Undefined mandatory tag: \"firstTag\"." );
+	}
+
+	REQUIRE( !firstTag.is_defined() );
+} // test_undefinedMandatoryChild
 
 TEST_CASE( "test_configWithThreeTags" )
 {
