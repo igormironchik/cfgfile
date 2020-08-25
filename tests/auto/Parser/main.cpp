@@ -1363,6 +1363,8 @@ TEST_CASE( "test_determineFormat" )
 	{
 		std::stringstream stream( "   {firstTag \"lexeme1\"}" );
 
+		cfgfile::string_trait_t::noskipws( stream );
+
 		cfgfile::details::determine_format_t<> fmt( stream );
 
 		REQUIRE( fmt.format() == cfgfile::file_format_t::cfgfile_format );
