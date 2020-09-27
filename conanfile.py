@@ -3,7 +3,7 @@ from conans import ConanFile
 
 class ArgsConan(ConanFile):
     name = "cfgfile"
-    version = "0.2.8.1"
+    version = "0.2.8.2"
     url = "https://github.com/igormironchik/cfgfile.git"
     license = "MIT"
     description = "Header-only library for reading/saving configuration files with schema defined in sources."

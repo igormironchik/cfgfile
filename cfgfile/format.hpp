@@ -57,17 +57,11 @@ template< class T, class Trait >
 class format_t {
 public:
 	//! Format value to string.
-	static typename Trait::string_t to_string( const T & )
-	{
-		return typename Trait::string_t();
-	}
+	static typename Trait::string_t to_string( const T & );
 
 	//! Format value from string.
 	static T from_string( const parser_info_t< Trait > &,
-		const typename Trait::string_t & )
-	{
-		return T();
-	}
+		const typename Trait::string_t & );
 }; // class format_t
 
 
