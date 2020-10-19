@@ -1,4 +1,4 @@
-[![Build](https://github.com/igormironchik/cfgfile/workflows/build/badge.svg)](https://github.com/igormironchik/cfgfile/actions)[![Build status](https://ci.appveyor.com/api/projects/status/cnbd2a60dyj25qcj/branch/master?svg=true)](https://ci.appveyor.com/project/igormironchik/cfgfile/branch/master)[![codecov](https://codecov.io/gh/igormironchik/cfgfile/branch/master/graph/badge.svg)](https://codecov.io/gh/igormironchik/cfgfile)[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build](https://github.com/igormironchik/cfgfile/workflows/build/badge.svg)](https://github.com/igormironchik/cfgfile/actions)[![codecov](https://codecov.io/gh/igormironchik/cfgfile/branch/master/graph/badge.svg)](https://codecov.io/gh/igormironchik/cfgfile)[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Library for reading and writing configuration files (cfgfile).
 
