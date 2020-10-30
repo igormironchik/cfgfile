@@ -5,7 +5,7 @@ Library for reading and writing configuration files (cfgfile).
 # Compilling
 
 This is header-only library. But if you want to build examples and tests just
-run qmake and then make, as usually.
+run qmake and then make, as usually, or you can use CMake.
 
 To build with Qt support define `CFGFILE_QT_SUPPORT`. To build with XML support
 define `CFGFILE_QT_SUPPORT` and `CFGFILE_XML_SUPPORT`. XML supported only with Qt.
@@ -370,3 +370,29 @@ generate_cfg.commands = $$shell_path( $$absolute_path( path/to/cfgfile.generator
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 ```
+
+# Why to use `cfgfile`?
+
+... whereas there are a lot of another solutions with less coding
+for example ...
+
+Very good question. As you can see `cfgfile` uses non-standard format of file, I use
+curly braces for each tag in the file. I have XML support with Qt, but it's non-standard
+too. So why people should have a look at `cfgfile`? Look for example at `json_dto` by
+Stiffstream. It's JSON, it's standard, so little coding is necessary, just one method
+in struct and serialization/deserialization is done, just a few line of code...
+I position `cfgfile` as for configurations that can be read by human, that easy to
+navigate and look at the text files. What about very verbose coding necessary with
+`cfgfile` I can say that I implemented generator for `cfgfile`, so coding comes
+down to simple config file for generator.
+
+Look at the example of configuration file for `cfgfile` generator in a real project.
+[This file](https://github.com/igormironchik/prototyper/blob/master/src/Core/project_cfg.qtconf)
+describes very complicated configuration of the project for some kind of vector graphics
+editor.
+
+[Look at this file](https://github.com/igormironchik/prototyper/blob/master/example/gif-editor.prototyper)
+that include a lot of images, look how it's simple to see the block of data of the image.
+
+I want to say that my main idea was to make configuration files easy to read by
+human.
