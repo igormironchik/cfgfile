@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class ArgsConan(ConanFile):
     name = "cfgfile"
-    version = "0.2.8.2"
+    version = "0.2.8.2.1"
     url = "https://github.com/igormironchik/cfgfile.git"
     license = "MIT"
     description = "Header-only library for reading/saving configuration files with schema defined in sources."
