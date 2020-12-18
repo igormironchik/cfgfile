@@ -8,11 +8,13 @@ class ArgsConan(ConanFile):
     license = "MIT"
     description = "Header-only library for reading/saving configuration files with schema defined in sources."
     exports = "cfgfile/*", "COPYING", "generator/*", "3rdparty/Args/Args/*.hpp"
+    generators = "cmake"
     
     def build(self):
         cmake = CMake(self)
         cmake.configure(source_folder="generator")
         cmake.build()
+        cmake.install()
 
     def package(self):
         self.copy("COPYING", src=".", dst=".")
