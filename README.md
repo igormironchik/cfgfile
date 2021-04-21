@@ -349,27 +349,6 @@ structure.
 ## Example
 
 Look at example/generator and tests/auto/Generator
-            
-# Integration of Generator with QMake
-            
-To integrate cfgfile generator with qmake you need to add lines to the
-qmake's pro file similar to the next:
-            
-```
-TO_GENERATE = example.cfgfile
-
-QMAKE_EXTRA_COMPILERS += generate_cfg
-generate_cfg.name = CONF_GEN
-generate_cfg.input = TO_GENERATE
-generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
-generate_cfg.CONFIG = no_link
-generate_cfg.variable_out = HEADERS
-
-generate_cfg.commands = $$shell_path( $$absolute_path( path/to/cfgfile.generator ) ) \
--i ${QMAKE_FILE_IN} -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
-
-PRE_TARGETDEPS += compiler_generate_cfg_make_all
-```
 
 # Why to use `cfgfile`?
 
