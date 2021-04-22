@@ -16,7 +16,7 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = HEADERS
 
-generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../cfgfile.generator ) ) \
+generate_cfg.commands = $$system_path( $$absolute_path( $${OUT_PWD}/../../cfgfile.generator ) ) \
 -i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
