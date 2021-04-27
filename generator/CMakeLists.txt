@@ -1,4 +1,8 @@
 
+set( CMAKE_CXX_STANDARD 14 )
+
+set( CMAKE_CXX_STANDARD_REQUIRED ON )
+
 project( cfgfile.generator )
 
 set( SRC cfg.hpp
