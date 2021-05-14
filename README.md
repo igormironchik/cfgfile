@@ -5,24 +5,13 @@ Library for reading and writing configuration files (cfgfile).
 # Compilling
 
 This is header-only library. But if you want to build examples and tests just
-run qmake and then make, as usually, or you can use CMake.
+use CMake.
 
 To build with Qt support define `CFGFILE_QT_SUPPORT`. To build with XML support
 define `CFGFILE_QT_SUPPORT` and `CFGFILE_XML_SUPPORT`. XML supported only with Qt.
 
 To disable STL strings define `CFGFILE_DISABLE_STL`. It can be useful in collaboration
 with defined `CFGFILE_QT_SUPPORT` on Android.
-
-# Run tests
-
-With CMake just run runtests.rb or ctest in the build directory. This script will be
-copied there during the build process.
-
-With QMake use QtCreator IDE to run tests manually. You can use runtests.rb too
-but you should copy the script manually into the build directory. And on Windows
-executables place in debug/release subfolders whereas *.cfg files of tests
-copy into the build directory so you have to copy *.cfg files by hands into
-the debug/release subfolders.
 
 # Q/A
 
@@ -32,8 +21,7 @@ How can I add cfgfile to my project?
 your project. With CMake you can clone entire cfgfile project somewhere in your
 project and just do `add_subdirectory()`, if you will do so you have to
 add include directory path to your project with
-`include_directories( ${cfgfile_INCLUDE_DIRECTORIES} )`. With QMake you can
-use `cfgfile/cfgfile.pri`.
+`include_directories( ${cfgfile_INCLUDE_DIRECTORIES} )`.
 
 # About
 
@@ -41,48 +29,48 @@ Configuration file format is a set of tags, which are surrounded by curly
 brackets, with values. Tags can be without values, can have one, and can have
 several values. A sample configuration file is shown below:
 
-```          
+```
 {cfg
   {stringValue string}
   {listOfStringValues str1 str2 str3}
   {intValue 100}
-              
+
   {vecOfTags
     {stringValue string1}
     {intValue 100}
   }
-              
+
   {vecOfTags
     {stringValue string2}
     {intValue 200}
   }
 }
 ```
-          
+
 String tag's values can be framed in quotation marks if it contains white space
 or special characters. The special characters are: `\n`, `\r`, `\t`, `\"`, `\\`, is the
 line breaks, tabs, quotes and backslash.
-          
+
 Parsing of the configuration file is based on a specialized class that inherits
 from `cfgfile::tag_t` or any derived class. For each tag in this case, define a
 class member that is the object of a class derived from `cfgfile::tag_t`.
 There are finished classes in cfgfile for:
-          
+
  * `tag_scalar_t< T, Trait >` - tag with a single value,
  * `tag_scalar_vector_t< T, Trait >` - tag with a set of values,
  * `tag_no_value_t< Trait >` - tag with no value,
  * `tag_vector_of_tags_t< T, Trait >` - tag with multiple entries of subordinate tag.
-          
+
 Each tag can have nested tags. Nesting is not limited, except your needs for
 this. You must inherit from the appropriate class tag and provide the required
 number of members representing the nested tags.
-          
+
 # Example
-            
+
 Let's say we need ability to read and write configuration file of the following
 format:
 
-```            
+```
 {configuration
   {ourCoolValue <std::string>}
 }
@@ -91,7 +79,7 @@ format:
 I.e. we want to have parent tag `{configuration}` and child tag `{ourCoolValue}`
 that will have one value of type std::string. It's very simple to define such
 configuration with cfgfile. Let's see:
-            
+
 ```cpp
 #include <cfgfile/all.hpp>
 
@@ -105,22 +93,22 @@ public:
   Configuration()
   {
   }
-  
+
   explicit Configuration( const std::string & value )
     :  m_ourCoolValue( value )
   {
   }
-  
+
   ~Configuration()
   {
   }
-  
+
   //! \return Our cool value.
   const std::string & ourCoolValue() const
   {
     return m_ourCoolValue;
   }
-  
+
 private:
   //! Our cool value.
   std::string m_ourCoolValue;
@@ -141,32 +129,32 @@ public:
     ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
   }
-  
+
   explicit TagConfiguration( const Configuration & cfg )
     :  cfgfile::tag_no_value_t<>( "configuration", true )
     ,  m_ourCoolValue( *this, "ourCoolValue", true )
   {
     m_ourCoolValue.set_value( cfg.ourCoolValue() );
-    
+
     set_defined();
   }
-  
+
   ~TagConfiguration()
   {
   }
-  
+
   //! \return Configuration read from file.
   Configuration cfg() const
   {
     return Configuration( m_ourCoolValue.value() );
   }
-  
+
 private:
   //! Our cool value.
   cfgfile::tag_scalar_t< std::string > m_ourCoolValue;
 }; // class TagConfiguration
 ```
-            
+
 We need some struct/class to store data of configuration in the application,
 so we defined class `Configuration`. But this is only data class. To
 work with files (i.e. read and write configuration from/to file) we need to
@@ -174,32 +162,32 @@ define class derived from `cfgfile::tag_t`. As our parent tag `{configuration}`
 doesn't have any values we derived our tag class from `cfgfile::tag_no_value_t`.
 Our parent tag should have child tag with one value of type `std::string`,
 so we can use `cfgfile::tag_scalar_t< std::string >` for it
-            
+
 Child tags must receive parent tag as argument in constructor. Second argument
 is the name of the tag, and third is the flag required our child tag or not.
-            
+
 Second constructor uses to save configuration, and first - for reading.
-            
+
 We defined method for constructing Configuration from parsed tag.
 As all tags are required we did not do any checks. But if you have not required
 tag in the configuration then you can use `cfgfile::tag_t::is_defined()` method to
 check if tag was defined.
-            
+
 When we have data class and tag class, so it's very simple to read and write
 configuration. Let's see:
-            
+
 ```cpp
 Configuration cfg;
 
 std::ifstream stream( "fileName.cfg" );
-            
+
 try {
   TagConfiguration readTag;
-  
+
   cfgfile::read_cfgfile( readTag, stream, "fileName.cfg" );
 
   stream.close();
-  
+
   cfg = readTag.cfg();
 }
 catch( const cfgfile::exception_t<> & x )
@@ -211,15 +199,15 @@ catch( const cfgfile::exception_t<> & x )
 ```
 
 And:
-            
+
 ```cpp
 Configuration cfg( "value" );
 
 std::ofstream stream( "fileName.cfg" );
-            
+
 try {
   TagConfiguration writeTag( cfg );
-  
+
   cfgfile::write_cfgfile( writeTag, stream );
 
   stream.close();
@@ -233,9 +221,9 @@ catch( const cfgfile::exception_t<> & x )
 ```
 
 # Generator
-            
+
 To simplify development with cfgfile was implemented cfgfile generator.
-            
+
 cfgfile generator this is generator of C++ header file from
 declarative description of the configuration file. By configuration file
 assumes configuration file in cfgfile format. In generated header will
@@ -252,7 +240,7 @@ following configuration file, for example:
   {namespace NamespaceName
     {class NameOfTheClass
       {base tagNoValue}
-      
+
       {tagScalar
         {valueType std::string}
         {name fieldWithString}
@@ -305,19 +293,19 @@ namespace NamespaceName {
 //
 // NameOfTheClass
 //
-  
+
 class NameOfTheClass {
 public:
   c_tors();
   ~d_tor();
-    
+
   //! \return fieldWithQString value.
   const std::string & fieldWithString() const;
   //! Set fieldWithString value.
   void set_fieldWithString( const std::string & value );
 }; // class NameOfTheClass
-  
-  
+
+
 //
 // tag_NameOfTheClass
 //
@@ -329,11 +317,11 @@ class tag_NameOfTheClass
 public:
   c_tors();
   ~d_tor();
-    
+
   //! \return Configuration.
   NameOfTheClass get_cfg() const;
 }; // class tag_NameOfTheClass
-  
+
 } // namespace NamespaceName
 ```
 

@@ -119,8 +119,7 @@
 	your project. With CMake you can clone entire cfgfile project somewhere in your
 	project and just do \c add_subdirectory(), if you will do so you have to
 	add include directory path to your project with
-	\c include_directories( \c ${cfgfile_INCLUDE_DIRECTORIES} \c ). With QMake you can
-	use \c cfgfile/cfgfile.pri.
+	\c include_directories( \c ${cfgfile_INCLUDE_DIRECTORIES} \c ).
 
 	Is it possible to disable STL strings/streams and use Qt only.
 

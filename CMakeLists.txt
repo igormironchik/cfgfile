@@ -16,9 +16,6 @@ SET( CMAKE_CXX_STANDARD 14 )
 
 SET( CMAKE_CXX_STANDARD_REQUIRED ON )
 
-file( COPY runtests.rb
-	DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
-
 project( cfgfile )
 
 add_subdirectory( generator )
@@ -36,33 +33,15 @@ if( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
 	endif()
 	
 	add_library( cfgfile INTERFACE )
+	add_library( cfgfile::cfgfile ALIAS cfgfile )
+
+	target_include_directories( cfgfile INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+    )
 
 	install( DIRECTORY cfgfile
 		DESTINATION include
-	)
-
-	install( FILES
-			cfgfile/all.hpp
-			cfgfile/const.hpp
-			cfgfile/constraint.hpp
-			cfgfile/constraint_min_max.hpp
-			cfgfile/constraint_one_of.hpp
-			cfgfile/exceptions.hpp
-			cfgfile/format.hpp
-			cfgfile/input_stream.hpp
-			cfgfile/lex.hpp
-			cfgfile/parser.hpp
-			cfgfile/parser_info.hpp
-			cfgfile/string_format.hpp
-			cfgfile/tag.hpp
-			cfgfile/tag_no_value.hpp
-			cfgfile/tag_scalar.hpp
-			cfgfile/tag_scalar_vector.hpp
-			cfgfile/tag_vector_of_tags.hpp
-			cfgfile/types.hpp
-			cfgfile/utils.hpp
-		DESTINATION
-			include/cfgfile
 	)
 
 	install( TARGETS cfgfile
@@ -75,6 +54,7 @@ if( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
 
 	install( EXPORT cfgfile-targets
 		DESTINATION lib/cmake/cfgfile
+		NAMESPACE cfgfile::
 	)
 
 	include( CMakePackageConfigHelpers )
