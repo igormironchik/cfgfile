@@ -9,5 +9,5 @@ var classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4 =
     [ "print", "classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html#af21e8c1cc20aed0399a32d1ddbf65656", null ],
     [ "query_opt_value", "classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html#ad9e92f1e89b6726feb329bff97400341", null ],
     [ "set_value", "classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html#ad4f5280254e5325b1b174d2638d32ade", null ],
-    [ "value", "classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html#a0a0e947875af30c4feb1ba6511f4f613", null ]
+    [ "value", "classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html#a8adae73d33da724fc9596adde73c8bd2", null ]
 ];

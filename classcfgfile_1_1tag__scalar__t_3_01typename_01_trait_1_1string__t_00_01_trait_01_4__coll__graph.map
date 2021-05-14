@@ -1,3 +1,4 @@
 <map id="cfgfile::tag_scalar_t&lt; typename Trait::string_t, Trait &gt;" name="cfgfile::tag_scalar_t&lt; typename Trait::string_t, Trait &gt;">
-<area shape="rect" id="node2" href="$classcfgfile_1_1tag__t.html" title="Base class for the tags in the configuration file. " alt="" coords="5,5,149,32"/>
+<area shape="rect" id="node1" title="Tag with string value." alt="" coords="9,80,163,136"/>
+<area shape="rect" id="node2" href="$classcfgfile_1_1tag__t.html" title="Base class for the tags in the configuration file." alt="" coords="5,5,167,32"/>
 </map>

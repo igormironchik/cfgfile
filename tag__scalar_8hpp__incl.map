@@ -1,10 +1,24 @@
 <map id="tag_scalar.hpp" name="tag_scalar.hpp">
-<area shape="rect" id="node2" href="$tag_8hpp.html" title="tag.hpp" alt="" coords="369,80,434,107"/>
-<area shape="rect" id="node13" href="$exceptions_8hpp.html" title="exceptions.hpp" alt="" coords="515,155,626,181"/>
-<area shape="rect" id="node17" href="$constraint_8hpp.html" title="constraint.hpp" alt="" coords="509,80,613,107"/>
-<area shape="rect" id="node18" href="$format_8hpp.html" title="format.hpp" alt="" coords="835,80,919,107"/>
-<area shape="rect" id="node19" href="$const_8hpp.html" title="const.hpp" alt="" coords="837,155,915,181"/>
-<area shape="rect" id="node21" href="$string__format_8hpp.html" title="string_format.hpp" alt="" coords="637,80,760,107"/>
-<area shape="rect" id="node5" href="$parser__info_8hpp.html" title="parser_info.hpp" alt="" coords="702,155,813,181"/>
-<area shape="rect" id="node6" href="$types_8hpp.html" title="types.hpp" alt="" coords="718,229,797,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="538,5,654,32"/>
+<area shape="rect" id="node2" href="$tag_8hpp.html" title=" " alt="" coords="393,80,463,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,155,136,181"/>
+<area shape="rect" id="node4" title=" " alt="" coords="160,155,277,181"/>
+<area shape="rect" id="node13" href="$exceptions_8hpp.html" title=" " alt="" coords="550,155,671,181"/>
+<area shape="rect" id="node17" href="$constraint_8hpp.html" title=" " alt="" coords="539,80,653,107"/>
+<area shape="rect" id="node18" href="$format_8hpp.html" title=" " alt="" coords="891,80,986,107"/>
+<area shape="rect" id="node19" href="$const_8hpp.html" title=" " alt="" coords="893,155,979,181"/>
+<area shape="rect" id="node21" href="$string__format_8hpp.html" title=" " alt="" coords="677,80,816,107"/>
+<area shape="rect" id="node22" title=" " alt="" coords="1011,80,1101,107"/>
+<area shape="rect" id="node5" href="$parser__info_8hpp.html" title=" " alt="" coords="747,155,869,181"/>
+<area shape="rect" id="node6" href="$types_8hpp.html" title=" " alt="" coords="765,229,851,256"/>
+<area shape="rect" id="node15" title=" " alt="" coords="302,155,365,181"/>
+<area shape="rect" id="node16" title=" " alt="" coords="389,155,475,181"/>
+<area shape="rect" id="node7" title=" " alt="" coords="779,304,837,331"/>
+<area shape="rect" id="node8" title=" " alt="" coords="861,304,941,331"/>
+<area shape="rect" id="node9" title=" " alt="" coords="966,304,1042,331"/>
+<area shape="rect" id="node10" title=" " alt="" coords="558,304,623,331"/>
+<area shape="rect" id="node11" title=" " alt="" coords="1090,304,1161,331"/>
+<area shape="rect" id="node12" title=" " alt="" coords="648,304,755,331"/>
+<area shape="rect" id="node14" title=" " alt="" coords="567,229,654,256"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1053,155,1112,181"/>
 </map>

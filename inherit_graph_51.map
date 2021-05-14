@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classcfgfile_1_1tag__t.html" title=" " alt="" coords="5,104,160,145"/>
+<area shape="rect" id="node2" href="$classcfgfile_1_1tag__no__value__t.html" title="Tag without a value." alt="" coords="211,5,368,47"/>
+<area shape="rect" id="node3" href="$classcfgfile_1_1tag__scalar__t.html" title="Tag with scalar value." alt="" coords="221,71,358,112"/>
+<area shape="rect" id="node4" href="$classcfgfile_1_1tag__scalar__vector__t.html" title="Tag with multiple scalar values." alt="" coords="211,136,367,177"/>
+<area shape="rect" id="node5" href="$classcfgfile_1_1tag__vector__of__tags__t.html" title="Tag with multiple instancies of the given tag." alt="" coords="208,201,371,243"/>
+</map>

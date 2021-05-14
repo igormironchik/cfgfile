@@ -1,9 +1,10 @@
 <map id="tag.hpp" name="tag.hpp">
-<area shape="rect" id="node2" href="$parser_8hpp.html" title="parser.hpp" alt="" coords="5,80,88,107"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title="all.hpp" alt="" coords="246,229,306,256"/>
-<area shape="rect" id="node4" href="$utils_8hpp.html" title="utils.hpp" alt="" coords="67,155,138,181"/>
-<area shape="rect" id="node5" href="$tag__no__value_8hpp.html" title="tag_no_value.hpp" alt="" coords="214,155,338,181"/>
-<area shape="rect" id="node6" href="$tag__scalar_8hpp.html" title="tag_scalar.hpp" alt="" coords="363,155,469,181"/>
-<area shape="rect" id="node7" href="$tag__scalar__vector_8hpp.html" title="tag_scalar_vector.hpp" alt="" coords="315,80,466,107"/>
-<area shape="rect" id="node8" href="$tag__vector__of__tags_8hpp.html" title="tag_vector_of_tags.hpp" alt="" coords="490,80,649,107"/>
+<area shape="rect" id="node1" title=" " alt="" coords="199,5,270,32"/>
+<area shape="rect" id="node2" href="$parser_8hpp.html" title=" " alt="" coords="5,80,96,107"/>
+<area shape="rect" id="node3" href="$all_8hpp.html" title=" " alt="" coords="257,229,324,256"/>
+<area shape="rect" id="node4" href="$utils_8hpp.html" title=" " alt="" coords="67,155,146,181"/>
+<area shape="rect" id="node5" href="$tag__no__value_8hpp.html" title=" " alt="" coords="222,155,359,181"/>
+<area shape="rect" id="node6" href="$tag__scalar_8hpp.html" title=" " alt="" coords="383,155,499,181"/>
+<area shape="rect" id="node7" href="$tag__scalar__vector_8hpp.html" title=" " alt="" coords="323,80,487,107"/>
+<area shape="rect" id="node8" href="$tag__vector__of__tags_8hpp.html" title=" " alt="" coords="511,80,686,107"/>
 </map>

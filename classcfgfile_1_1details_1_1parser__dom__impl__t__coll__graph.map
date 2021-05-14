@@ -1,3 +1,5 @@
 <map id="cfgfile::details::parser_dom_impl_t&lt; Trait &gt;" name="cfgfile::details::parser_dom_impl_t&lt; Trait &gt;">
-<area shape="rect" id="node2" href="$classcfgfile_1_1details_1_1parser__base__t.html" title="Base implementation of parser. " alt="" coords="5,5,152,47"/>
+<area shape="rect" id="node1" title="Implementation of parser in XML format." alt="" coords="20,200,184,241"/>
+<area shape="rect" id="node2" href="$classcfgfile_1_1details_1_1parser__base__t.html" title=" " alt="" coords="5,109,199,151"/>
+<area shape="rect" id="node3" href="$classcfgfile_1_1tag__t.html" title=" " alt="" coords="21,5,183,47"/>
 </map>
