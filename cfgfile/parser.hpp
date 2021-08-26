@@ -122,7 +122,7 @@ public:
 	}
 
 	//! Do parsing.
-	void parse( const typename Trait::string_t & file_name )
+	void parse( const typename Trait::string_t & file_name ) override
 	{
 		if( !start_first_tag_parsing() )
 			return;

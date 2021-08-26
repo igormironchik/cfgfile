@@ -126,7 +126,7 @@ public:
 	virtual ~min_max_constraint_t();
 
 	//! \return Constraint type.
-	virtual constraint_type_t type() const;
+	constraint_type_t type() const override;
 
 	//! \return Min value.
 	const std::string & min() const;
@@ -154,7 +154,7 @@ public:
 	virtual ~one_of_constraint_t();
 
 	//! \return Constraint type.
-	virtual constraint_type_t type() const;
+	constraint_type_t type() const override;
 
 	//! \return List of values.
 	const std::vector< std::string > & values() const;
@@ -577,7 +577,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info );
+	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info ) override;
 
 private:
 	//! Name.
@@ -617,7 +617,7 @@ public:
 	field_t cfg() const;
 
 	//! Called when tag parsing finished.
-	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info );
+	void on_finish( const parser_info_t< cfgfile::string_trait_t > & info ) override;
 
 private:
 	//! Value type.
