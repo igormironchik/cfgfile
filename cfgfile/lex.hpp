@@ -157,7 +157,7 @@ public:
 			}
 			else if( ch == const_t< Trait >::c_back_slash )
 			{
-				typename Trait::char_t new_char = 0x00;
+				typename Trait::char_t new_char( 0x00 );
 
 				if( !quoted_lexeme )
 					result.push_back( ch );

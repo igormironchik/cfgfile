@@ -80,7 +80,7 @@ public:
 	{
 		static const typename Trait::char_t xml = Trait::from_ascii( '<' );
 
-		typename Trait::char_t ch = 0x00;
+		typename Trait::char_t ch( 0x00 );
 
 		while( !Trait::is_at_end( m_stream ) )
 		{

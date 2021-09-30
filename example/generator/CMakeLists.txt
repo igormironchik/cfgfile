@@ -15,3 +15,5 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR} )
 
 add_executable( example.generator ${SRC} )
+
+add_dependencies( example.generator cfgfile.generator )

@@ -14,9 +14,9 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
 
 add_executable( test.format ${SRC} )
 
-find_package( Qt5Core )
+find_package( Qt6Core )
 
-target_link_libraries( test.format Qt5::Core )
+target_link_libraries( test.format Qt6::Core )
 
 target_compile_definitions( test.format PRIVATE CFGFILE_QT_SUPPORT )
 
