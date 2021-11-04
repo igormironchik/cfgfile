@@ -125,7 +125,7 @@ TEST_CASE( "test_cant_set_xml" )
 	catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 	{
 		REQUIRE( x.desc() == "Unable to parse XML "
-			"from file: \"test_cant_set_xml\". \"unexpected end of file\" "
-			"On line 1, column 7." );
+			"from file: \"test_cant_set_xml\". \"Premature end of document.\" "
+			"On line 1, column 6." );
 	}
 }

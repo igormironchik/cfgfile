@@ -72,7 +72,7 @@ public:
 
 			m_column_number += 1;
 
-			typename Trait::char_t ch = 0x00;
+			typename Trait::char_t ch( 0x00 );
 
 			if( !m_returned_char.empty() )
 			{
@@ -100,7 +100,7 @@ public:
 			return ch;
 		}
 		else
-			return 0x00;
+			return typename Trait::char_t( 0x00 );
 	}
 
 	//! Put symbol back in the stream.
@@ -152,7 +152,7 @@ private:
 			return true;
 		else if( ch == const_t< Trait >::c_line_feed )
 		{
-			typename Trait::char_t next_char = 0x00;
+			typename Trait::char_t next_char( 0x00 );
 
 			next_char = simple_get();
 
@@ -185,7 +185,7 @@ private:
 		}
 		else
 		{
-			typename Trait::char_t ch = 0x00;
+			typename Trait::char_t ch( 0x00 );
 
 			m_stream >> ch;
 

@@ -74,8 +74,8 @@ int main( int argc, char ** argv )
 	}
 
 	QTextStream out( stdout );
-	out << "We've loaded the configuration from file:" << endl;
-	out << "stringValue: " << cfg.m_stringValue << endl;
+	out << "We've loaded the configuration from file:\n";
+	out << "stringValue: " << cfg.m_stringValue << "\n";
 
 	if( !cfg.m_listOfStringValues.empty() )
 	{
@@ -84,28 +84,28 @@ int main( int argc, char ** argv )
 		foreach( QString str, cfg.m_listOfStringValues )
 			out << str << " ";
 
-		out << endl;
+		out << "\n";
 	}
 
-	out << "intValue: " << cfg.m_intValue << endl;
+	out << "intValue: " << cfg.m_intValue << "\n";
 
 	if( !cfg.m_vectorOfTags.empty() )
 	{
 		int i = 1;
 
-		out << "vecOfTags:" << endl;
+		out << "vecOfTags:" << "\n";
 
 		foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
 		{
-			out << "Pair " << i << ":" << endl;
-			out << "stringValue: " << pair.m_stringValue << endl;
-			out << "intValue: " << pair.m_intValue << endl;
+			out << "Pair " << i << ":\n";
+			out << "stringValue: " << pair.m_stringValue << "\n";
+			out << "intValue: " << pair.m_intValue << "\n";
 			++i;
 		}
 	}
 
-	out << endl << "And now we will save new configuration to file \"new.cfg\". "
-		"Look at it!" << endl;
+	out << "\nAnd now we will save new configuration to file \"new.cfg\". "
+		"Look at it!\n";
 
 	QFile outFile( "new.cfg" );
 
@@ -135,5 +135,5 @@ int main( int argc, char ** argv )
 		return 1;
 	}
 
-	out << "All have been done!" << endl;
+	out << "All have been done!\n";
 }
