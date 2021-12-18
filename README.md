@@ -363,7 +363,3 @@ that include a lot of images, look how it's simple to see the block of data of t
 
 I want to say that my main idea was to make configuration files easy to read by
 human.
-
-# Donate
-
-[![](bitcoin-btc-logo-full.png)](https://github.com/igormironchik)
