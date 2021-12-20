@@ -31,8 +31,10 @@ if( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
 
 		add_subdirectory( tests )
 	endif()
+
+	file( GLOB_RECURSE SRC cfgfile/* )
 	
-	add_library( cfgfile INTERFACE )
+	add_library( cfgfile INTERFACE ${SRC} )
 	add_library( cfgfile::cfgfile ALIAS cfgfile )
 
 	target_include_directories( cfgfile INTERFACE
