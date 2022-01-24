@@ -157,7 +157,7 @@ struct wstring_trait_t final {
 		if( skip > 0 )
 			buf.resize( actual_size - skip );
 
-		pos += actual_size - skip;
+		pos += actual_size;
 	}
 }; // struct wstring_trait_t
 
@@ -265,7 +265,7 @@ struct string_trait_t final {
 		if( skip > 0 )
 			buf.resize( actual_size - skip );
 
-		pos += actual_size - skip;
+		pos += actual_size;
 	}
 }; // struct string_trait_t
 
