@@ -14,9 +14,9 @@ file( COPY example.cfg
 find_package( Qt6Core )
 find_package( Qt6Xml )
 
-add_executable( example.xml ${SRC} )
+add_executable( xml.example ${SRC} )
 
-target_link_libraries( example.xml Qt6::Core Qt6::Xml )
+target_link_libraries( xml.example Qt6::Core Qt6::Xml )
 
-target_compile_definitions( example.xml PRIVATE
+target_compile_definitions( xml.example PRIVATE
 	CFGFILE_QT_SUPPORT CFGFILE_XML_SUPPORT )

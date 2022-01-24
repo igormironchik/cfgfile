@@ -37,6 +37,7 @@
 #include <iostream>
 #include <cwctype>
 #include <cctype>
+#include <vector>
 #endif // CFGFILE_DISABLE_STL
 
 #ifdef CFGFILE_QT_SUPPORT
@@ -70,6 +71,9 @@ struct wstring_trait_t final {
 
 	//! Type of pos in stream.
 	using pos_t = std::streamoff;
+
+	//! Type of the buffer.
+	using buf_t = std::vector< char_t >;
 
 	static inline string_t to_string( pos_t pos )
 	{
@@ -119,6 +123,30 @@ struct wstring_trait_t final {
 	{
 		stream.seekg( 0 );
 	}
+
+	static inline pos_t size_of_file( istream_t & stream )
+	{
+		stream.seekg( 0, std::ios::end );
+
+		const auto s = stream.tellg();
+
+		stream.seekg( 0 );
+
+		return s;
+	}
+
+	static inline void fill_buf( istream_t & stream, buf_t & buf, pos_t buf_size, pos_t & pos, pos_t size )
+	{
+		pos_t actual_size = ( size - pos < buf_size ? size - pos : buf_size );
+
+		if( buf.size() != actual_size )
+			buf.resize( actual_size );
+
+		if( buf.size() > 0 )
+			stream.read( &buf[ 0 ], actual_size );
+
+		pos += actual_size;
+	}
 }; // struct wstring_trait_t
 
 
@@ -142,6 +170,9 @@ struct string_trait_t final {
 
 	//! Output stream type.
 	using ostream_t = std::ostream;
+
+	//! Type of the buffer.
+	using buf_t = std::vector< char_t >;
 
 	static inline string_t to_string( pos_t pos )
 	{
@@ -187,6 +218,30 @@ struct string_trait_t final {
 	static inline void to_begin( istream_t & stream )
 	{
 		stream.seekg( 0 );
+	}
+
+	static inline pos_t size_of_file( istream_t & stream )
+	{
+		stream.seekg( 0, std::ios::end );
+
+		const auto s = stream.tellg();
+
+		stream.seekg( 0 );
+
+		return s;
+	}
+
+	static inline void fill_buf( istream_t & stream, buf_t & buf, pos_t buf_size, pos_t & pos, pos_t size )
+	{
+		pos_t actual_size = ( size - pos < buf_size ? size - pos : buf_size );
+
+		if( buf.size() != actual_size )
+			buf.resize( actual_size );
+
+		if( buf.size() > 0 )
+			stream.read( &buf[ 0 ], actual_size );
+
+		pos += actual_size;
 	}
 }; // struct string_trait_t
 
@@ -436,6 +491,9 @@ struct qstring_trait_t final {
 	//! Type of pos in stream.
 	using pos_t = qint64;
 
+	//! Type of the buffer.
+	using buf_t = QString;
+
 	static inline string_t to_string( pos_t pos )
 	{
 		return QString::number( pos );
@@ -468,6 +526,17 @@ struct qstring_trait_t final {
 	static inline void to_begin( istream_t & stream )
 	{
 		stream.seek( 0 );
+	}
+
+	static inline pos_t size_of_file( istream_t & stream )
+	{
+		return 0;
+	}
+
+	static inline void fill_buf( istream_t & stream, buf_t & buf, pos_t buf_size, pos_t & pos, pos_t size )
+	{
+		buf = stream.read( buf_size );
+		pos += buf.size();
 	}
 }; // struct qstring_trait_t
 

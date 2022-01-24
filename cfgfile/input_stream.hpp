@@ -41,6 +41,10 @@
 
 namespace cfgfile {
 
+//! Size of the buffer.
+static const std::size_t c_buff_size = 512;
+
+
 //
 // input_stream_t
 //
@@ -55,8 +59,17 @@ public:
 		,	m_line_number( 1 )
 		,	m_column_number( 1 )
 		,	m_file_name( file_name )
+		,	m_buf_pos( 0 )
+		,	m_stream_pos( 0 )
 	{
 		Trait::noskipws( m_stream );
+
+		m_stream_size = Trait::size_of_file( m_stream );
+
+		if( m_stream_size < 0 )
+			m_stream_size = 0;
+
+		Trait::fill_buf( m_stream, m_buf, c_buff_size, m_stream_pos, m_stream_size );
 	}
 
 	~input_stream_t()
@@ -89,7 +102,15 @@ public:
 				return ch;
 			}
 
-			m_stream >> ch;
+			if( m_buf_pos == c_buff_size )
+			{
+				Trait::fill_buf( m_stream, m_buf, c_buff_size, m_stream_pos, m_stream_size );
+				m_buf_pos = 0;
+			}
+
+			ch = m_buf[ m_buf_pos ];
+
+			++m_buf_pos;
 
 			if( is_new_line( ch ) )
 			{
@@ -134,7 +155,7 @@ public:
 	bool at_end() const
 	{
 		if( m_returned_char.empty() )
-			return Trait::is_at_end( m_stream );
+			return ( Trait::is_at_end( m_stream ) && m_buf_pos == m_buf.size() );
 		else
 			return false;
 	}
@@ -187,7 +208,15 @@ private:
 		{
 			typename Trait::char_t ch( 0x00 );
 
-			m_stream >> ch;
+			if( m_buf_pos == c_buff_size )
+			{
+				Trait::fill_buf( m_stream, m_buf, c_buff_size, m_stream_pos, m_stream_size );
+				m_buf_pos = 0;
+			}
+
+			ch = m_buf[ m_buf_pos ];
+
+			++m_buf_pos;
 
 			return ch;
 		}
@@ -213,6 +242,14 @@ private:
 	typename Trait::string_t m_file_name;
 	//! Returned char.
 	std::stack< typename Trait::char_t > m_returned_char;
+	//! Buffer.
+	typename Trait::buf_t m_buf;
+	//! Buffer position.
+	std::size_t m_buf_pos;
+	//! Size of the stream.
+	typename Trait::pos_t m_stream_size;
+	//! Current position in the stream.
+	typename Trait::pos_t m_stream_pos;
 }; // class input_stream_t
 
 } /* namespace cfgfile */
