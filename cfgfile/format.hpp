@@ -957,7 +957,9 @@ public:
 		const wstring_trait_t::string_t & value )
 	{
 		std::string res;
-		res.assign( value.cbegin(), value.cend() );
+
+		for( const auto & ch : value )
+			res.push_back( static_cast< char > ( ch ) );
 
 		return res;
 	}
@@ -995,7 +997,9 @@ public:
 	static string_trait_t::string_t to_string( const std::wstring & value )
 	{
 		std::string res;
-		res.assign( value.cbegin(), value.cend() );
+
+		for( const auto & ch : value )
+			res.push_back( static_cast< char > ( ch ) );
 
 		return res;
 	}

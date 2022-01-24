@@ -135,12 +135,12 @@ TagConfiguration::TagConfiguration( const Configuration & cfg )
 
 	m_stringValue.set_value( cfg.m_stringValue );
 
-	foreach( QString str, cfg.m_listOfStringValues )
+	for( const auto & str : cfg.m_listOfStringValues )
 		m_listOfStringValues.set_value( str );
 
 	m_intValue.set_value( cfg.m_intValue );
 
-	foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
+	for( const auto & pair : cfg.m_vectorOfTags )
 	{
 		std::shared_ptr< TagVecOfTags > p( new TagVecOfTags( pair ) );
 		m_vecOfTags.set_value( p );
@@ -158,7 +158,7 @@ TagConfiguration::configuration() const
 	cfg.m_listOfStringValues = m_listOfStringValues.values();
 	cfg.m_intValue = m_intValue.value();
 
-	foreach( auto p, m_vecOfTags.values() )
+	for( const auto & p : m_vecOfTags.values() )
 		cfg.m_vectorOfTags.push_back( p->pair() );
 
 	return cfg;

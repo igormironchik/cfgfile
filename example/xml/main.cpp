@@ -81,7 +81,7 @@ int main( int argc, char ** argv )
 	{
 		out << "listOfStringValues: ";
 
-		foreach( QString str, cfg.m_listOfStringValues )
+		for( const auto & str : cfg.m_listOfStringValues )
 			out << str << " ";
 
 		out << "\n";
@@ -95,7 +95,7 @@ int main( int argc, char ** argv )
 
 		out << "vecOfTags:" << "\n";
 
-		foreach( Configuration::Pair pair, cfg.m_vectorOfTags )
+		for( const auto & pair : cfg.m_vectorOfTags )
 		{
 			out << "Pair " << i << ":\n";
 			out << "stringValue: " << pair.m_stringValue << "\n";

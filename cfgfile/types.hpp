@@ -139,13 +139,25 @@ struct wstring_trait_t final {
 	{
 		pos_t actual_size = ( size - pos < buf_size ? size - pos : buf_size );
 
-		if( buf.size() != actual_size )
-			buf.resize( actual_size );
+		buf = buf_t( actual_size, 0x00 );
 
 		if( buf.size() > 0 )
 			stream.read( &buf[ 0 ], actual_size );
 
-		pos += actual_size;
+		std::size_t skip = 0;
+
+		for( auto it = buf.crbegin(), last = buf.crend(); it != last; ++it )
+		{
+			if( *it == 0x00 )
+				++skip;
+			else
+				break;
+		}
+
+		if( skip > 0 )
+			buf.resize( actual_size - skip );
+
+		pos += actual_size - skip;
 	}
 }; // struct wstring_trait_t
 
@@ -235,13 +247,25 @@ struct string_trait_t final {
 	{
 		pos_t actual_size = ( size - pos < buf_size ? size - pos : buf_size );
 
-		if( buf.size() != actual_size )
-			buf.resize( actual_size );
+		buf = buf_t( actual_size, 0x00 );
 
 		if( buf.size() > 0 )
 			stream.read( &buf[ 0 ], actual_size );
 
-		pos += actual_size;
+		std::size_t skip = 0;
+
+		for( auto it = buf.crbegin(), last = buf.crend(); it != last; ++it )
+		{
+			if( *it == 0x00 )
+				++skip;
+			else
+				break;
+		}
+
+		if( skip > 0 )
+			buf.resize( actual_size - skip );
+
+		pos += actual_size - skip;
 	}
 }; // struct string_trait_t
 
