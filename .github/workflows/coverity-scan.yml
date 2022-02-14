@@ -41,7 +41,7 @@ jobs:
       with:
         version: '6.2.0'
         
-    - run: sudo apt install cmake wget curl
+    - run: sudo apt install wget curl
     
     - name: Download Coverity Build Tool
       run: |
