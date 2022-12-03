@@ -1,7 +1,7 @@
 
 cmake_minimum_required( VERSION 3.19 )
 
-set( CFGFILE_VERSION "0.2.10" )
+set( CFGFILE_VERSION "0.2.11" )
 
 option( BUILD_EXAMPLES "Build examples? Default ON." ON )
 option( BUILD_TESTS "Build tests? Default ON." ON )
