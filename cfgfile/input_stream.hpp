@@ -155,7 +155,7 @@ public:
 	bool at_end() const
 	{
 		if( m_returned_char.empty() )
-			return ( Trait::is_at_end( m_stream ) && m_buf_pos == m_buf.size() );
+			return ( Trait::is_at_end( m_stream ) && m_buf_pos == (size_t) m_buf.size() );
 		else
 			return false;
 	}
