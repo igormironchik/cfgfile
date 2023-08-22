@@ -1,24 +1,24 @@
 [![Build](https://github.com/igormironchik/cfgfile/workflows/build/badge.svg)](https://github.com/igormironchik/cfgfile/actions)[![codecov](https://codecov.io/gh/igormironchik/cfgfile/branch/master/graph/badge.svg)](https://codecov.io/gh/igormironchik/cfgfile)[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Library for reading and writing configuration files (cfgfile).
+Library for reading and writing configuration files (`cfgfile`).
 
 # Compilling
 
 This is header-only library. But if you want to build examples and tests just
-use CMake.
+use `CMake`.
 
-To build with Qt support define `CFGFILE_QT_SUPPORT`. To build with XML support
-define `CFGFILE_QT_SUPPORT` and `CFGFILE_XML_SUPPORT`. XML supported only with Qt.
+To build with `Qt` support define `CFGFILE_QT_SUPPORT`. To build with `XML` support
+define `CFGFILE_QT_SUPPORT` and `CFGFILE_XML_SUPPORT`. `XML` supported only with `Qt`.
 
-To disable STL strings define `CFGFILE_DISABLE_STL`. It can be useful in collaboration
-with defined `CFGFILE_QT_SUPPORT` on Android.
+To disable `STL` strings define `CFGFILE_DISABLE_STL`. It can be useful in collaboration
+with defined `CFGFILE_QT_SUPPORT` on `Android`.
 
 # Q/A
 
-How can I add cfgfile to my project?
+How can I add `cfgfile` to my project?
 
- * The simplest way is just copy cfgfile directory with headers to any location in
-your project. With CMake you can clone entire cfgfile project somewhere in your
+ * The simplest way is just copy `cfgfile` directory with headers to any location in
+your project. With `CMake` you can clone entire `cfgfile` project somewhere in your
 project and just do `add_subdirectory()`, if you will do so you have to
 add include directory path to your project with
 `include_directories( ${cfgfile_INCLUDE_DIRECTORIES} )`.
@@ -77,8 +77,8 @@ format:
 ```
 
 I.e. we want to have parent tag `{configuration}` and child tag `{ourCoolValue}`
-that will have one value of type std::string. It's very simple to define such
-configuration with cfgfile. Let's see:
+that will have one value of type `std::string`. It's very simple to define such
+configuration with `cfgfile`. Let's see:
 
 ```cpp
 #include <cfgfile/all.hpp>
@@ -161,14 +161,14 @@ work with files (i.e. read and write configuration from/to file) we need to
 define class derived from `cfgfile::tag_t`. As our parent tag `{configuration}`
 doesn't have any values we derived our tag class from `cfgfile::tag_no_value_t`.
 Our parent tag should have child tag with one value of type `std::string`,
-so we can use `cfgfile::tag_scalar_t< std::string >` for it
+so we can use `cfgfile::tag_scalar_t< std::string >` for it.
 
 Child tags must receive parent tag as argument in constructor. Second argument
 is the name of the tag, and third is the flag required our child tag or not.
 
 Second constructor uses to save configuration, and first - for reading.
 
-We defined method for constructing Configuration from parsed tag.
+We defined method for constructing `Configuration` from parsed tag.
 As all tags are required we did not do any checks. But if you have not required
 tag in the configuration then you can use `cfgfile::tag_t::is_defined()` method to
 check if tag was defined.
@@ -222,14 +222,14 @@ catch( const cfgfile::exception_t<> & x )
 
 # Generator
 
-To simplify development with cfgfile was implemented cfgfile generator.
+To simplify development with `cfgfile` was implemented `cfgfile` generator.
 
-cfgfile generator this is generator of C++ header file from
+`cfgfile` generator this is generator of C++ header file from
 declarative description of the configuration file. By configuration file
-assumes configuration file in cfgfile format. In generated header will
+assumes configuration file in `cfgfile` format. In generated header will
 be declared all necessary classes of data and configuration tags.
 
-For generation generator uses input configuration file in cfgfile format
+For generation generator uses input configuration file in `cfgfile` format
 with following format:
 
 Let's say you need data class with one `std::string` field then you should write
@@ -344,9 +344,9 @@ Look at example/generator and tests/auto/Generator
 for example ...
 
 Very good question. As you can see `cfgfile` uses non-standard format of file, I use
-curly braces for each tag in the file. I have XML support with Qt, but it's non-standard
+curly braces for each tag in the file. I have `XML` support with `Qt`, but it's non-standard
 too. So why people should have a look at `cfgfile`? Look for example at `json_dto` by
-Stiffstream. It's JSON, it's standard, so little coding is necessary, just one method
+`Stiffstream`. It's `JSON`, it's standard, so little coding is necessary, just one method
 in struct and serialization/deserialization is done, just a few line of code...
 I position `cfgfile` as for configurations that can be read by human, that easy to
 navigate and look at the text files. What about very verbose coding necessary with
