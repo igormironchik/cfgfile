@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['values_5fvector_5ft_434',['values_vector_t',['../classcfgfile_1_1tag__scalar__vector__t.html#a9d9b626bb0587d7664b88e481dcfe644',1,'cfgfile::tag_scalar_vector_t']]],
-  ['vector_5fof_5ftags_5ft_435',['vector_of_tags_t',['../classcfgfile_1_1tag__vector__of__tags__t.html#a62da4e8bd6b0c56811fdf4b652b08809',1,'cfgfile::tag_vector_of_tags_t']]]
+  ['size_5ftype_0',['size_type',['../classcfgfile_1_1qstring__wrapper__t.html#a8551b84bc07534f98c49cdddbae8e6c9',1,'cfgfile::qstring_wrapper_t']]],
+  ['string_5ft_1',['string_t',['../structcfgfile_1_1wstring__trait__t.html#a8a06674745ba1e5d9159cb1cb2417fe9',1,'cfgfile::wstring_trait_t::string_t'],['../structcfgfile_1_1string__trait__t.html#a699f83bee110d76ca5ab8c6eae46699b',1,'cfgfile::string_trait_t::string_t'],['../structcfgfile_1_1qstring__trait__t.html#ae8c464183487720708e4d33cf14e8570',1,'cfgfile::qstring_trait_t::string_t']]]
 ];

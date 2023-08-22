@@ -1,6 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcfgfile_1_1tag__t.html" title="Base class for the tags in the configuration file." alt="" coords="5,78,167,105"/>
-<area shape="rect" id="node2" href="$classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html" title="Tag with bool value." alt="" coords="223,5,361,47"/>
-<area shape="rect" id="node3" href="$classcfgfile_1_1tag__scalar__t_3_01_q_string_00_01_trait_01_4.html" title="Tag with QString value." alt="" coords="218,71,366,112"/>
-<area shape="rect" id="node4" href="$classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html" title="Tag with string value." alt="" coords="215,137,369,193"/>
+<area shape="rect" id="Node000000" href="$classcfgfile_1_1tag__t.html" title=" " alt="" coords="5,77,167,102"/>
+<area shape="rect" id="Node000001" href="$classcfgfile_1_1tag__scalar__t_3_01_q_string_00_01_trait_01_4.html" title="Tag with QString value." alt="" coords="218,5,366,45"/>
+<area shape="poly" id="edge9_Node000000_Node000001" title=" " alt="" coords="140,70,226,43,228,48,142,75"/>
+<area shape="rect" id="Node000002" href="$classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html" title="Tag with bool value." alt="" coords="223,69,361,109"/>
+<area shape="poly" id="edge10_Node000000_Node000002" title=" " alt="" coords="181,87,223,87,223,92,181,92"/>
+<area shape="rect" id="Node000003" href="$classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html" title="Tag with string value." alt="" coords="215,134,369,189"/>
+<area shape="poly" id="edge11_Node000000_Node000003" title=" " alt="" coords="137,104,215,132,213,137,135,109"/>
 </map>

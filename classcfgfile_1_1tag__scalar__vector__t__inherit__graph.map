@@ -1,4 +1,5 @@
 <map id="cfgfile::tag_scalar_vector_t&lt; T, Trait &gt;" name="cfgfile::tag_scalar_vector_t&lt; T, Trait &gt;">
-<area shape="rect" id="node1" title="Tag with multiple scalar values." alt="" coords="5,95,161,136"/>
-<area shape="rect" id="node2" href="$classcfgfile_1_1tag__t.html" title=" " alt="" coords="6,5,161,47"/>
+<area shape="rect" id="Node000001" title="Tag with multiple scalar values." alt="" coords="8,79,164,119"/>
+<area shape="rect" id="Node000002" href="$classcfgfile_1_1tag__t.html" title="Base class for the tags in the configuration file." alt="" coords="5,5,167,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,44,89,79,83,79,83,44"/>
 </map>

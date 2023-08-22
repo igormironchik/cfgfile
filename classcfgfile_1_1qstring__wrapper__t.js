@@ -9,8 +9,8 @@ var classcfgfile_1_1qstring__wrapper__t =
     [ "qstring_wrapper_t", "classcfgfile_1_1qstring__wrapper__t.html#a7e7c9757c35f97ce333266b08a249ea5", null ],
     [ "qstring_wrapper_t", "classcfgfile_1_1qstring__wrapper__t.html#ae20d22bb5a36446c9e57f59d79bb75f4", null ],
     [ "qstring_wrapper_t", "classcfgfile_1_1qstring__wrapper__t.html#abca6bb792b45072e995a84f0380bddf4", null ],
-    [ "append", "classcfgfile_1_1qstring__wrapper__t.html#a436dc4d9f428a41976e563bbe98cce37", null ],
-    [ "append", "classcfgfile_1_1qstring__wrapper__t.html#a20773b744a776660c779b4da47ecf3f4", null ],
+    [ "append", "classcfgfile_1_1qstring__wrapper__t.html#a3158195ffdf8d146d5571f779fb89748", null ],
+    [ "append", "classcfgfile_1_1qstring__wrapper__t.html#a87b56ca55cf01c202a85336f763d7539", null ],
     [ "at", "classcfgfile_1_1qstring__wrapper__t.html#aac0e721d15b8165015354f422b478fa1", null ],
     [ "begin", "classcfgfile_1_1qstring__wrapper__t.html#aae7eb9cc09a671c0736b6bd9e5d0c372", null ],
     [ "begin", "classcfgfile_1_1qstring__wrapper__t.html#a16119530c7875ba9fd1e015b29e75f21", null ],
@@ -27,7 +27,7 @@ var classcfgfile_1_1qstring__wrapper__t =
     [ "operator QString", "classcfgfile_1_1qstring__wrapper__t.html#ac2a0c1190e8f1b9bf83e4413c731df21", null ],
     [ "operator[]", "classcfgfile_1_1qstring__wrapper__t.html#a1eeaa65e4af2c84a71860ec1a84b0dbb", null ],
     [ "push_back", "classcfgfile_1_1qstring__wrapper__t.html#a72c6d20b14508becd393c9bf638158fe", null ],
-    [ "replace", "classcfgfile_1_1qstring__wrapper__t.html#a3d34003697eb6c8469438a0ccb921541", null ],
+    [ "replace", "classcfgfile_1_1qstring__wrapper__t.html#a8968a32f05e9e58a1f17d7abc0b426b3", null ],
     [ "rfind", "classcfgfile_1_1qstring__wrapper__t.html#ad7a3d502dfbebb86ddf05b2d963dd0bb", null ],
     [ "rfind", "classcfgfile_1_1qstring__wrapper__t.html#a2765f4bd2e0978bb3cfc70fb28f24e25", null ],
     [ "substr", "classcfgfile_1_1qstring__wrapper__t.html#ad42ec22de168dfa34b6b4533c962f24a", null ],
@@ -36,6 +36,6 @@ var classcfgfile_1_1qstring__wrapper__t =
     [ "operator+", "classcfgfile_1_1qstring__wrapper__t.html#adeb65841ceb0aae5974a3b4d0915d4f2", null ],
     [ "operator+", "classcfgfile_1_1qstring__wrapper__t.html#a73464e203dbfea6e1d027acb80dabf27", null ],
     [ "operator+", "classcfgfile_1_1qstring__wrapper__t.html#a69a51efe16b28769450347ed6782e9db", null ],
-    [ "operator<<", "classcfgfile_1_1qstring__wrapper__t.html#ab66f7d66557ef3c7a554e2a05475dff5", null ],
+    [ "operator<<", "classcfgfile_1_1qstring__wrapper__t.html#a6cd8217da3b65305214f099169dba05c", null ],
     [ "operator==", "classcfgfile_1_1qstring__wrapper__t.html#abad0f7a9f8c64040b9affdd4c873cfdc", null ]
 ];

@@ -1,8 +1,16 @@
 <map id="string_format.hpp" name="string_format.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="90,5,229,32"/>
-<area shape="rect" id="node2" href="$parser_8hpp.html" title=" " alt="" coords="17,80,107,107"/>
-<area shape="rect" id="node5" href="$tag__scalar_8hpp.html" title=" " alt="" coords="125,155,241,181"/>
-<area shape="rect" id="node6" href="$tag__scalar__vector_8hpp.html" title=" " alt="" coords="197,80,361,107"/>
-<area shape="rect" id="node3" href="$all_8hpp.html" title=" " alt="" coords="89,229,155,256"/>
-<area shape="rect" id="node4" href="$utils_8hpp.html" title=" " alt="" coords="23,155,101,181"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="90,5,229,31"/>
+<area shape="rect" id="Node000002" href="$parser_8hpp.html" title=" " alt="" coords="17,79,107,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,41,79,81,76,76,131,37"/>
+<area shape="rect" id="Node000005" href="$tag__scalar_8hpp.html" title=" " alt="" coords="125,152,241,177"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="166,44,184,151,179,152,161,45"/>
+<area shape="rect" id="Node000006" href="$tag__scalar__vector_8hpp.html" title=" " alt="" coords="197,79,361,104"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="192,35,261,76,258,81,189,40"/>
+<area shape="rect" id="Node000003" href="$all_8hpp.html" title=" " alt="" coords="89,225,155,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="38,115,24,129,13,144,8,160,12,176,27,194,47,208,89,227,87,231,44,213,24,198,8,179,3,160,8,142,20,125,34,111"/>
+<area shape="rect" id="Node000004" href="$utils_8hpp.html" title=" " alt="" coords="23,152,101,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="65,118,65,152,59,152,59,118"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="83,186,114,223,110,227,79,190"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="166,190,134,227,130,223,162,186"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="280,119,272,149,256,179,233,199,207,214,156,232,154,227,205,209,230,195,252,176,267,148,275,118"/>
 </map>

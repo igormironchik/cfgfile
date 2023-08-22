@@ -1,6 +1,11 @@
 <map id="cfgfile::tag_t&lt; Trait &gt;" name="cfgfile::tag_t&lt; Trait &gt;">
-<area shape="rect" id="node1" title="Base class for the tags in the configuration file." alt="" coords="5,78,167,105"/>
-<area shape="rect" id="node2" href="$classcfgfile_1_1tag__scalar__t_3_01bool_00_01_trait_01_4.html" title="Tag with bool value." alt="" coords="223,5,361,47"/>
-<area shape="rect" id="node3" href="$classcfgfile_1_1tag__scalar__t_3_01_q_string_00_01_trait_01_4.html" title="Tag with QString value." alt="" coords="218,71,366,112"/>
-<area shape="rect" id="node4" href="$classcfgfile_1_1tag__scalar__t_3_01typename_01_trait_1_1string__t_00_01_trait_01_4.html" title="Tag with string value." alt="" coords="215,137,369,193"/>
+<area shape="rect" id="Node000001" title="Base class for the tags in the configuration file." alt="" coords="5,109,167,134"/>
+<area shape="rect" id="Node000002" href="$classcfgfile_1_1tag__no__value__t.html" title="Tag without a value." alt="" coords="217,5,375,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,100,214,55,242,43,244,48,216,60,125,105"/>
+<area shape="rect" id="Node000003" href="$classcfgfile_1_1tag__scalar__t.html" title="Tag with scalar value." alt="" coords="227,69,365,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,104,227,97,228,102,180,110"/>
+<area shape="rect" id="Node000004" href="$classcfgfile_1_1tag__scalar__vector__t.html" title="Tag with multiple scalar values." alt="" coords="218,133,374,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="181,133,218,139,217,144,180,138"/>
+<area shape="rect" id="Node000005" href="$classcfgfile_1_1tag__vector__of__tags__t.html" title="Tag with multiple instancies of the given tag." alt="" coords="215,197,377,237"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="125,138,216,183,244,195,242,200,214,188,122,143"/>
 </map>

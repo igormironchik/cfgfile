@@ -6,12 +6,12 @@ var indexSectionsWithContent =
   3: "acdefilmpstu",
   4: "abcdefgilnopqrstv~",
   5: "cmn",
-  6: "ciopsv",
+  6: "bciopsv",
   7: "fl",
   8: "cfnsx",
   9: "opt",
   10: "d",
-  11: "d"
+  11: "cdfg"
 };
 
 var indexSectionNames =

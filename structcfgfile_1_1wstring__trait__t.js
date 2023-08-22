@@ -1,5 +1,6 @@
 var structcfgfile_1_1wstring__trait__t =
 [
+    [ "buf_t", "structcfgfile_1_1wstring__trait__t.html#a7196269a57dc6cb1821fa843aa04358e", null ],
     [ "char_t", "structcfgfile_1_1wstring__trait__t.html#acc732a9287ce9da671bc9a4d99510e52", null ],
     [ "istream_t", "structcfgfile_1_1wstring__trait__t.html#a9048867fdb8922161764132267165a9c", null ],
     [ "ostream_t", "structcfgfile_1_1wstring__trait__t.html#a6dc0355f9b370d0bf3025414138a9672", null ],

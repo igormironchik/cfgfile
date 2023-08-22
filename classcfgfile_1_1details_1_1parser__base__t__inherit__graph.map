@@ -1,0 +1,7 @@
+<map id="cfgfile::details::parser_base_t&lt; Trait &gt;" name="cfgfile::details::parser_base_t&lt; Trait &gt;">
+<area shape="rect" id="Node000001" title="Base implementation of parser." alt="" coords="5,37,168,77"/>
+<area shape="rect" id="Node000002" href="$classcfgfile_1_1details_1_1parser__conffile__impl__t.html" title="Implementation of parser in cfgfile format." alt="" coords="216,5,399,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,41,215,36,216,41,182,46"/>
+<area shape="rect" id="Node000003" href="$classcfgfile_1_1details_1_1parser__dom__impl__t.html" title="Implementation of parser in XML format." alt="" coords="225,69,389,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="183,69,225,75,225,80,182,74"/>
+</map>

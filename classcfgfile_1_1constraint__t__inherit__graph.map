@@ -1,5 +1,7 @@
 <map id="cfgfile::constraint_t&lt; T &gt;" name="cfgfile::constraint_t&lt; T &gt;">
-<area shape="rect" id="node1" title="Base class for constraints." alt="" coords="88,5,223,47"/>
-<area shape="rect" id="node2" href="$classcfgfile_1_1constraint__min__max__t.html" title="Constraint that allowed values to be in the given range: min &lt;= value &lt;= max." alt="" coords="5,95,145,136"/>
-<area shape="rect" id="node3" href="$classcfgfile_1_1constraint__one__of__t.html" title="Constraint that allowed values to be in the given list of values." alt="" coords="169,95,304,136"/>
+<area shape="rect" id="Node000001" title="Base class for constraints." alt="" coords="88,5,223,45"/>
+<area shape="rect" id="Node000002" href="$classcfgfile_1_1constraint__min__max__t.html" title="Constraint that allowed values to be in the given range: min &lt;= value &lt;= max." alt="" coords="5,93,145,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,57,95,95,91,91,126,54"/>
+<area shape="rect" id="Node000003" href="$classcfgfile_1_1constraint__one__of__t.html" title="Constraint that allowed values to be in the given list of values." alt="" coords="169,93,304,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,54,221,91,217,95,181,57"/>
 </map>

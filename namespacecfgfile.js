@@ -54,5 +54,15 @@ var namespacecfgfile =
     [ "tag_scalar_vector_t", "classcfgfile_1_1tag__scalar__vector__t.html", "classcfgfile_1_1tag__scalar__vector__t" ],
     [ "tag_t", "classcfgfile_1_1tag__t.html", "classcfgfile_1_1tag__t" ],
     [ "tag_vector_of_tags_t", "classcfgfile_1_1tag__vector__of__tags__t.html", "classcfgfile_1_1tag__vector__of__tags__t" ],
-    [ "wstring_trait_t", "structcfgfile_1_1wstring__trait__t.html", "structcfgfile_1_1wstring__trait__t" ]
+    [ "wstring_trait_t", "structcfgfile_1_1wstring__trait__t.html", "structcfgfile_1_1wstring__trait__t" ],
+    [ "file_format_t", "namespacecfgfile.html#aba4daa2da83a45fdbb5a26836f4ff0f5", [
+      [ "cfgfile_format", "namespacecfgfile.html#aba4daa2da83a45fdbb5a26836f4ff0f5aee6dcfaca40fd5acb953ee39cfcee573", null ],
+      [ "xml_format", "namespacecfgfile.html#aba4daa2da83a45fdbb5a26836f4ff0f5a497cac45f7d9cd21359b33098f69fd08", null ]
+    ] ],
+    [ "lexeme_type_t", "namespacecfgfile.html#a5c94c92061430fa6717a05e9cb6407a6", [
+      [ "null", "namespacecfgfile.html#a5c94c92061430fa6717a05e9cb6407a6a37a6259cc0c1dae299a7866489dff0bd", null ],
+      [ "start", "namespacecfgfile.html#a5c94c92061430fa6717a05e9cb6407a6aea2b2676c28c0db26d39331a336c6b92", null ],
+      [ "finish", "namespacecfgfile.html#a5c94c92061430fa6717a05e9cb6407a6a3248bc7547ce97b2a197b2a06cf7283d", null ],
+      [ "string", "namespacecfgfile.html#a5c94c92061430fa6717a05e9cb6407a6ab45cffe084dd3d20d928bee85e7b0f21", null ]
+    ] ]
 ];
