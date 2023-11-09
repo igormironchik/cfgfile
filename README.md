@@ -2,6 +2,15 @@
 
 Library for reading and writing configuration files (`cfgfile`).
 
+* [Compilling](#compilling)
+* [Q/A](#qa)
+  * [How can I add `cfgfile` to my project?](#how-can-i-add-cfgfile-to-my-project)
+* [About](#about)
+* [Example](#example)
+* [Generator](#generator)
+  * [Example](#example)
+* [Why to use `cfgfile`?](#why-to-use-cfgfile-)
+
 # Compilling
 
 This is header-only library. But if you want to build examples and tests just
@@ -16,6 +25,7 @@ with defined `CFGFILE_QT_SUPPORT` on `Android`.
 # Q/A
 
 How can I add `cfgfile` to my project?
+---
 
  * The simplest way is just copy `cfgfile` directory with headers to any location in
 your project. With `CMake` you can clone entire `cfgfile` project somewhere in your
