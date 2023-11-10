@@ -9,7 +9,7 @@ Library for reading and writing configuration files (`cfgfile`).
 * [Example](#example)
 * [Generator](#generator)
   * [Example](#example)
-* [Why to use `cfgfile`?](#why-to-use-cfgfile-)
+* [Why to use `cfgfile`?](#why-to-use-cfgfile)
 
 # Compilling
 
