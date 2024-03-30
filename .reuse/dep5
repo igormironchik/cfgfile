@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: cfgfile
+Upstream-Contact: Igor Mironchik <igor.mironchik@gmail.com>
+Source: https://github.com/igormironchik/cfgfile
+
+Files: 3rdparty/doctest/*
+Copyright: 2016-2021 Viktor Kirilov
+License: MIT
+
+Files: .github/* .gitignore .gitmodules codecov.yml doc/* example/*.txt example/*.cfg generator/*.txt tests/*.txt tests/*.cfg tests/*.cfgfile CMakeLists.txt README.md cfgfile-config.cmake.in generator/README
+Copyright: 2017-2024 Igor Mironchik <igor.mironchik@gmail.com>
+License: MIT
