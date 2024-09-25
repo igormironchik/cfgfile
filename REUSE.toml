@@ -10,7 +10,7 @@ SPDX-FileCopyrightText = "2016-2021 Viktor Kirilov"
 SPDX-License-Identifier = "MIT"
 
 [[annotations]]
-path = [".github/**", ".gitignore", ".gitmodules", "codecov.yml", "doc/**", "example/**.txt", "example/**.cfg", "generator/**.txt", "tests/**.txt", "tests/**.cfg", "tests/**.cfgfile", "CMakeLists.txt", "README.md", "cfgfile-config.cmake.in", "generator/README", "REUSE.toml"]
+path = [".github/**", ".gitignore", ".gitmodules", "codecov.yml", "doc/**", "example/**.txt", "example/**.cfg", "generator/**.txt", "tests/**.txt", "tests/**.cfg", "tests/**.cfgfile", "CMakeLists.txt", "README.md", "cfgfile-config.cmake.in", "generator/README", "REUSE.toml", "example/generator/example.cfgfile"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2017-2024 Igor Mironchik <igor.mironchik@gmail.com>"
 SPDX-License-Identifier = "MIT"
