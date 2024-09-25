@@ -1,0 +1,16 @@
+version = 1
+SPDX-PackageName = "cfgfile"
+SPDX-PackageSupplier = "Igor Mironchik <igor.mironchik@gmail.com>"
+SPDX-PackageDownloadLocation = "https://github.com/igormironchik/cfgfile"
+
+[[annotations]]
+path = "3rdparty/doctest/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016-2021 Viktor Kirilov"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [".github/**", ".gitignore", ".gitmodules", "codecov.yml", "doc/**", "example/**.txt", "example/**.cfg", "generator/**.txt", "tests/**.txt", "tests/**.cfg", "tests/**.cfgfile", "CMakeLists.txt", "README.md", "cfgfile-config.cmake.in", "generator/README", "REUSE.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017-2024 Igor Mironchik <igor.mironchik@gmail.com>"
+SPDX-License-Identifier = "MIT"
